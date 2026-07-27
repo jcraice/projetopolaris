@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:projetopolaris.notion.site)",
+      "Bash(curl -sL \"https://projetopolaris.notion.site/Projeto-Polaris-2b0dfe0591a980b2b817d4ae82599cd4\")",
+      "mcp__claude_ai_Notion__notion-fetch"
+    ]
+  }
+}

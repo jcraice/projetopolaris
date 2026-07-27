@@ -1,0 +1,19 @@
+# dependências
+node_modules/
+
+# build do Astro
+dist/
+.astro/
+
+# companion visual do brainstorming
+.superpowers/
+
+# ambiente
+.env
+.env.*
+!.env.example
+
+# sistema operacional
+Thumbs.db
+desktop.ini
+.DS_Store
