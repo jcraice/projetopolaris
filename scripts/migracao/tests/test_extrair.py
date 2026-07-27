@@ -53,3 +53,34 @@ def test_itens_encontra_vinte_e_um_arquetipos_na_space_opera():
     resultado = itens(texto_dos_blocos(carregar(), RAIZ))
     assert len(resultado) == 21
     assert sum(1 for i in resultado if i.felino) == 1
+
+
+def test_texto_dos_blocos_nao_desce_em_subpaginas():
+    record_map = {
+        "block": {
+            "raiz": {"value": {
+                "type": "page",
+                "content": ["texto1", "subpagina", "texto2"],
+            }},
+            "texto1": {"value": {
+                "type": "text",
+                "properties": {"title": [["Primeiro texto"]]},
+            }},
+            "subpagina": {"value": {
+                "type": "page",
+                "properties": {"title": [["Não deveria aparecer"]]},
+                "content": ["texto_interno"],
+            }},
+            "texto_interno": {"value": {
+                "type": "text",
+                "properties": {"title": [["Texto dentro da subpágina"]]},
+            }},
+            "texto2": {"value": {
+                "type": "text",
+                "properties": {"title": [["Segundo texto"]]},
+            }},
+        }
+    }
+    linhas = texto_dos_blocos(record_map, "raiz")
+    assert linhas == ["Primeiro texto", "Segundo texto"]
+    assert "Não deveria aparecer" not in linhas
