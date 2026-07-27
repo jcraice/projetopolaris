@@ -5,7 +5,16 @@ import {
   esquemaLivro, esquemaPagina, esquemaSubgenero,
 } from './lib/schemas';
 
-const colecao = (pasta: string, schema: any) =>
+type EsquemaPorPasta = {
+  subgeneros: typeof esquemaSubgenero;
+  arquetipos: typeof esquemaArquetipo;
+  cenarios: typeof esquemaCenario;
+  elementos: typeof esquemaElemento;
+  livros: typeof esquemaLivro;
+  paginas: typeof esquemaPagina;
+};
+
+const colecao = <Pasta extends keyof EsquemaPorPasta>(pasta: Pasta, schema: EsquemaPorPasta[Pasta]) =>
   defineCollection({ loader: glob({ pattern: '**/*.md', base: `./src/content/${pasta}` }), schema });
 
 export const collections = {

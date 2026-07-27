@@ -20,6 +20,11 @@ describe('esquemaSubgenero', () => {
     });
     expect(r.mundo).toBe(true);
   });
+
+  it('recusa quando mundo e aurora são omitidos', () => {
+    const r = esquemaSubgenero.safeParse({ nome: 'Cyberpunk', ordem: 3 });
+    expect(r.success).toBe(false);
+  });
 });
 
 describe('esquemaArquetipo', () => {
