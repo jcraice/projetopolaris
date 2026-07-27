@@ -11,7 +11,7 @@ esqueleto — publicação automática em pé, ainda sem conteúdo.
 
 ## Como rodar
 
-Requisitos: Node 20 ou superior e `npm`.
+Requisitos: Node 22.12 ou superior e `npm`.
 
 ```bash
 npm install
