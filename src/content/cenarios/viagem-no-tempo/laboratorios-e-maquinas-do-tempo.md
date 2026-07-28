@@ -1,6 +1,6 @@
 ---
 titulo: "Laboratórios e máquinas do tempo"
-singular: "um laboratório e máquinas do tempo"
+singular: "uma máquina do tempo"
 subgenero: viagem-no-tempo
 ordem: 6
 ---

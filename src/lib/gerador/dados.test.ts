@@ -33,7 +33,7 @@ describe('MOLDES', () => {
   it('todo molde usa as quatro peças', () => {
     for (const molde of MOLDES) {
       expect(molde).toMatch(/\{(em:|a:)?cenario\}/);
-      expect(molde).toContain('{elemento}');
+      expect(molde).toMatch(/\{(impera:)?elemento\}/);
       expect(molde).toContain('{arquetipo}');
       expect(molde).toContain('{complicacao}');
     }

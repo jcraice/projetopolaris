@@ -19,6 +19,31 @@ EXCECOES: dict[str, str] = {
     "Cidades em ruínas": "uma cidade em ruínas",
     "Oásis de elite": "um oásis de elite",
     "Bairros dominados por facções": "um bairro dominado por facções",
+    # As três abaixo foram descobertas depois da migração inicial, ao ler
+    # premissas geradas com o acervo real (Task 12). A regra geral produzia
+    # formas gramaticalmente quebradas para os três; a autora aprovou estas
+    # formas exatas e elas ficam aqui para que uma reexecução futura da
+    # migração não regrida o conserto feito diretamente no conteúdo.
+    #
+    # "Campos de batalha globais": a regra para de singularizar na primeira
+    # preposição ("de"), então "globais" — que é o adjetivo do substantivo
+    # antes da preposição, não parte do complemento — nunca é alcançado e
+    # fica no plural. Limitação conhecida: a regra assume que tudo depois da
+    # preposição é complemento a preservar, mas aqui o adjetivo do núcleo
+    # vem DEPOIS do complemento preposicionado ("campo de batalha globais",
+    # não "campo global de batalha"). Não há tentativa de resolver o caso
+    # geral — cobrimos só esta instância via EXCECOES.
+    "Campos de batalha globais": "um campo de batalha global",
+    # "Laboratórios e máquinas do tempo": composto por "e" com dois núcleos
+    # de gênero diferente ("laboratório" masculino, "máquinas" feminino) e
+    # sentidos redundantes — a autora preferiu reduzir ao segundo núcleo em
+    # vez de manter os dois.
+    "Laboratórios e máquinas do tempo": "uma máquina do tempo",
+    # "Memoriais e ruínas temporais": mesmo padrão do caso acima — composto
+    # por "e" que a regra geral não separa corretamente (o artigo "um" só
+    # concordava com o primeiro núcleo, deixando o segundo substantivo, no
+    # plural, solto na frase). Reduzido ao segundo núcleo.
+    "Memoriais e ruínas temporais": "uma ruína temporal",
 }
 
 

@@ -1,6 +1,6 @@
 ---
 titulo: "Memoriais e ruínas temporais"
-singular: "um memorial e ruínas temporais"
+singular: "uma ruína temporal"
 subgenero: viagem-no-tempo
 ordem: 10
 ---

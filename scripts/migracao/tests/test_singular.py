@@ -32,6 +32,11 @@ EXCECOES = [
     ("Bairros dominados por facções", "um bairro dominado por facções"),
     ("Praças de doutrinação", "uma praça de doutrinação"),
     ("Espaços de vício e fuga", "um espaço de vício e fuga"),
+    # Descobertos ao ler premissas geradas com o acervo real (Task 12):
+    # a regra geral produzia formas quebradas para os três.
+    ("Campos de batalha globais", "um campo de batalha global"),
+    ("Laboratórios e máquinas do tempo", "uma máquina do tempo"),
+    ("Memoriais e ruínas temporais", "uma ruína temporal"),
 ]
 
 # Invariáveis fora de EXCECOES: "Oásis de elite" casa por igualdade exata

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { contrair, emMinuscula, generoDe, redigir } from './redacao';
+import { contrair, emMinuscula, generoDe, numeroDe, redigir } from './redacao';
 import type { Sorteio } from './tipos';
 
 const sorteio: Sorteio = {
@@ -38,6 +38,33 @@ describe('emMinuscula', () => {
   });
 });
 
+describe('numeroDe', () => {
+  it('reconhece núcleo singular sem artigo', () => {
+    expect(numeroDe('Vigilância onipresente')).toBe('singular');
+  });
+
+  it('reconhece núcleo plural sem artigo', () => {
+    expect(numeroDe('Comunidades de sobreviventes')).toBe('plural');
+  });
+
+  it('pula o artigo inicial antes de olhar o núcleo — singular', () => {
+    expect(numeroDe('A busca por autenticidade')).toBe('singular');
+    expect(numeroDe('O medo invisível')).toBe('singular');
+  });
+
+  it('pula o artigo inicial antes de olhar o núcleo — plural', () => {
+    expect(numeroDe('As ameaças cósmicas desconhecidas')).toBe('plural');
+    expect(numeroDe('Os conflitos de identidade')).toBe('plural');
+  });
+
+  it('não confunde o artigo "A"/"O" com o núcleo', () => {
+    // Sem pular o artigo, "A" seria lido como núcleo e sairia singular por
+    // acidente (e "As" sairia plural pelo motivo errado, não pelo núcleo).
+    expect(numeroDe('A busca por autenticidade')).toBe(numeroDe('Busca por autenticidade'));
+    expect(numeroDe('As ameaças cósmicas desconhecidas')).toBe(numeroDe('Ameaças cósmicas desconhecidas'));
+  });
+});
+
 describe('redigir', () => {
   it('monta a frase com contração e artigo em minúscula', () => {
     const frase = redigir(sorteio, '{em:cenario}, sob {elemento}, {arquetipo} descobre que {complicacao}.');
@@ -45,6 +72,17 @@ describe('redigir', () => {
       'Numa ruína antiga, sob busca por artefatos ancestrais, ' +
         'a Colecionadora de Artefatos descobre que a cura existe, e é fabricada com a própria doença.',
     );
+  });
+
+  it('conjuga "impera" no singular quando o elemento é singular', () => {
+    const frase = redigir(sorteio, '{em:cenario}, onde {impera:elemento}, {arquetipo} descobre que {complicacao}.');
+    expect(frase).toContain('onde impera busca por artefatos ancestrais');
+  });
+
+  it('conjuga "impera" no plural quando o elemento é plural', () => {
+    const plural = { ...sorteio, elemento: { id: 'e2', nome: 'Comunidades de sobreviventes', subgenero: 'pos-apocaliptico' } };
+    const frase = redigir(plural, '{em:cenario}, onde {impera:elemento}, {arquetipo} descobre que {complicacao}.');
+    expect(frase).toContain('onde imperam comunidades de sobreviventes');
   });
 
   it('resolve o pronome pelo gênero do arquétipo', () => {
@@ -65,7 +103,9 @@ describe('redigir', () => {
   });
 
   it('não deixa marcador por resolver', () => {
-    for (const molde of ['{em:cenario} {elemento} {arquetipo} {complicacao} {pronome} {a:cenario}.']) {
+    for (const molde of [
+      '{em:cenario} {elemento} {arquetipo} {complicacao} {pronome} {a:cenario} {impera:elemento}.',
+    ]) {
       expect(redigir(sorteio, molde)).not.toMatch(/\{|\}/);
     }
   });

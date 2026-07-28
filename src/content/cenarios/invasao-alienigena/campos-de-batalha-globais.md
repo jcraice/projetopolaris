@@ -1,6 +1,6 @@
 ---
 titulo: "Campos de batalha globais"
-singular: "um campo de batalha globais"
+singular: "um campo de batalha global"
 subgenero: invasao-alienigena
 ordem: 9
 ---
