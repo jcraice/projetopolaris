@@ -1,0 +1,26 @@
+---
+import { gradienteConico } from '../lib/aurora';
+interface Props { cores?: readonly [string, string, string] }
+const { cores } = Astro.props;
+---
+<div class="aurora" style={`--gradiente: ${gradienteConico(cores)}`} aria-hidden="true"></div>
+
+<style>
+  .aurora {
+    position: fixed;
+    inset: -45%;
+    z-index: -1;
+    background: var(--gradiente);
+    filter: blur(58px);
+    opacity: 0.42;
+    animation: girar 90s linear infinite;
+  }
+
+  @keyframes girar {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .aurora { animation: none; }
+  }
+</style>

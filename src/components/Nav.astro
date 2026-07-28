@@ -1,0 +1,63 @@
+---
+const base = import.meta.env.BASE_URL;
+const raiz = base.endsWith('/') ? base : `${base}/`;
+
+const links = [
+  { rotulo: 'Arquétipos', href: `${raiz}arquetipos` },
+  { rotulo: 'Cenários', href: `${raiz}cenarios` },
+  { rotulo: 'Elementos', href: `${raiz}elementos` },
+  { rotulo: 'Estilos', href: `${raiz}estilos` },
+  { rotulo: 'Livros', href: `${raiz}livros` },
+  { rotulo: 'Gerador', href: `${raiz}gerador` },
+  { rotulo: 'Sobre', href: `${raiz}sobre` },
+];
+---
+<header class="nav">
+  <a class="nav__marca" href={base}>POLARIS</a>
+  <nav class="nav__links" aria-label="Navegação principal">
+    {links.map((link) => (
+      <a href={link.href}>{link.rotulo}</a>
+    ))}
+  </nav>
+</header>
+
+<style>
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 2px solid var(--borda-suave);
+    background: var(--painel);
+    backdrop-filter: blur(9px);
+  }
+
+  .nav__marca {
+    font-weight: 900;
+    font-size: 1.3rem;
+    letter-spacing: 0.08em;
+    color: var(--papel);
+    text-decoration: none;
+  }
+
+  .nav__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+
+  .nav__links a {
+    color: var(--texto);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .nav__links a:hover {
+    color: var(--ouro);
+  }
+</style>

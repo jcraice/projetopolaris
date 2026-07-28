@@ -1,6 +1,13 @@
 ---
-interface Props { titulo: string }
-const { titulo } = Astro.props;
+import '../styles/global.css';
+import Aurora from '../components/Aurora.astro';
+import Nav from '../components/Nav.astro';
+
+interface Props {
+  titulo: string;
+  aurora?: readonly [string, string, string];
+}
+const { titulo, aurora } = Astro.props;
 ---
 <!doctype html>
 <html lang="pt-BR">
@@ -10,6 +17,29 @@ const { titulo } = Astro.props;
     <title>{titulo} · Projeto Polaris</title>
   </head>
   <body>
-    <slot />
+    <Aurora cores={aurora} />
+    <Nav />
+    <main>
+      <slot />
+    </main>
+    <footer class="rodape">
+      <p>
+        Código sob licença MIT. Conteúdo editorial sob licença Creative
+        Commons Atribuição 4.0 Internacional (CC BY 4.0).
+      </p>
+    </footer>
   </body>
 </html>
+
+<style>
+  main {
+    padding: 24px 20px;
+  }
+
+  .rodape {
+    padding: 20px;
+    border-top: 2px solid var(--borda-suave);
+    color: var(--apagado);
+    font-size: 0.8rem;
+  }
+</style>
