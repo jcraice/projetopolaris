@@ -26,24 +26,3 @@ const elementos = (await getCollection('elementos', (e) => e.data.subgenero === 
     <blockquote>{subgenero.data.citacao}<cite>{subgenero.data.citacaoAutor}</cite></blockquote>
   )}
 </Base>
-
-<style>
-  .abertura {
-    max-width: 68ch;
-  }
-
-  blockquote {
-    border-left: 3px solid var(--ouro);
-    padding-left: 14px;
-    margin-inline-start: 0;
-    font-style: italic;
-    color: var(--papel);
-  }
-
-  blockquote cite {
-    display: block;
-    margin-top: 6px;
-    font-style: normal;
-    color: var(--apagado);
-  }
-</style>

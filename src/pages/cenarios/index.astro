@@ -23,28 +23,3 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
     ))}
   </ul>
 </Base>
-
-<style>
-  .lista-subgeneros {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    list-style: none;
-    padding: 0;
-  }
-
-  .lista-subgeneros a {
-    display: inline-block;
-    border: 2px solid var(--violeta);
-    padding: 8px 14px;
-    font-weight: 800;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: var(--texto);
-  }
-
-  .lista-subgeneros a:hover {
-    color: var(--ouro);
-    border-color: var(--ouro);
-  }
-</style>

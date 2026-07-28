@@ -28,6 +28,15 @@ const { etiqueta, titulo, ancora } = Astro.props;
     font-size: 1.1rem;
   }
 
+  /* .etiqueta é inline-block em global.css para abraçar só o texto, mas
+     .cartao é flex column e align-items: stretch estica os filhos por
+     padrão — sem isto, a etiqueta vira uma barra dourada do tamanho do
+     cartão. align-self aqui, nunca align-items no .cartao (isso encolheria
+     o .corpo, que precisa da largura toda para a barra lateral violeta). */
+  .etiqueta {
+    align-self: flex-start;
+  }
+
   /* A barra lateral violeta cerca o conjunto do conteúdo, não cada parágrafo —
      necessário porque o corpo pode vir de render() com múltiplos <p> (livros). */
   .corpo {

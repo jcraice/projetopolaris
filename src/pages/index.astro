@@ -1,6 +1,101 @@
 ---
+import { getCollection, getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import { paragrafoComPrefixo } from '../lib/texto';
+
+// Reaproveita dois parágrafos já escritos em Sobre (src/content/paginas/sobre.md)
+// em vez de redigir uma apresentação nova — ver relatório da Task 8 para a origem.
+const sobre = await getEntry('paginas', 'sobre');
+const apresentacao = paragrafoComPrefixo(sobre.body ?? '', 'Meu desejo');
+const chamadaGerador = paragrafoComPrefixo(sobre.body ?? '', 'Hoje, este');
+
+const mundos = (await getCollection('subgeneros', (s) => s.data.mundo)).sort(
+  (a, b) => a.data.ordem - b.data.ordem,
+);
+
+const base = import.meta.env.BASE_URL;
+const raiz = base.endsWith('/') ? base : `${base}/`;
+
+const pilares = [
+  { titulo: 'Arquétipos', href: `${raiz}arquetipos` },
+  { titulo: 'Cenários', href: `${raiz}cenarios` },
+  { titulo: 'Elementos Narrativos', href: `${raiz}elementos` },
+];
 ---
-<Base titulo="Arquétipos da Ficção Científica">
+<Base titulo="Projeto Polaris">
   <h1>Projeto Polaris</h1>
+  {apresentacao && <p class="abertura">{apresentacao}</p>}
+  <p><a href={`${raiz}sobre`}>Leia a história completa em Sobre →</a></p>
+
+  <section aria-labelledby="pilares-titulo">
+    <h2 id="pilares-titulo">Comece por aqui</h2>
+    <div class="pilares">
+      {pilares.map((p) => (
+        <a class="pilar" href={p.href}>
+          <span class="etiqueta">Pilar</span>
+          <h3>{p.titulo}</h3>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section aria-labelledby="mundos-titulo">
+    <h2 id="mundos-titulo">Os mundos</h2>
+    <ul class="lista-subgeneros">
+      {mundos.map((m) => (
+        <li>
+          <a href={`${raiz}mundos/${m.id}/`}>{m.data.nome}</a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="cta-gerador" aria-labelledby="gerador-titulo">
+    <h2 id="gerador-titulo">Gerador de Enredos</h2>
+    {chamadaGerador && <p>{chamadaGerador}</p>}
+    <a class="botao botao--principal" href={`${raiz}gerador`}>Ir para o Gerador</a>
+  </section>
 </Base>
+
+<style>
+  section + section {
+    margin-block-start: 40px;
+  }
+
+  .pilares {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .pilar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    min-width: 220px;
+    flex: 1 1 220px;
+    background: var(--painel);
+    border: 2px solid var(--ouro);
+    padding: 16px;
+    text-decoration: none;
+  }
+
+  .pilar h3 {
+    margin: 0;
+    color: var(--texto);
+  }
+
+  .pilar:hover h3 {
+    color: var(--ouro);
+  }
+
+  .cta-gerador {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    border-left: 3px solid var(--violeta);
+    padding-left: 16px;
+  }
+</style>

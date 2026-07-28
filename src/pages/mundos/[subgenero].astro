@@ -1,0 +1,153 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Cartao from '../../components/Cartao.astro';
+import { paraAncora } from '../../lib/texto';
+
+// O pool "20 Arquétipos Comuns" tem mundo: false — não é um mundo, então não
+// entra aqui. As seis páginas de mundo são as únicas geradas por esta rota.
+export async function getStaticPaths() {
+  const subgeneros = await getCollection('subgeneros', (s) => s.data.mundo);
+  return subgeneros.map((s) => ({ params: { subgenero: s.id }, props: { subgenero: s } }));
+}
+
+const { subgenero } = Astro.props;
+
+const arquetipos = (await getCollection('arquetipos', (a) => a.data.subgenero === subgenero.id))
+  .sort((a, b) => a.data.ordem - b.data.ordem);
+const arquetiposComuns = arquetipos.filter((f) => !f.data.felino);
+const arquetipoFelino = arquetipos.find((f) => f.data.felino);
+
+const cenarios = (await getCollection('cenarios', (c) => c.data.subgenero === subgenero.id))
+  .sort((a, b) => a.data.ordem - b.data.ordem);
+
+const elementos = (await getCollection('elementos', (e) => e.data.subgenero === subgenero.id))
+  .sort((a, b) => a.data.ordem - b.data.ordem);
+
+const livros = (await getCollection('livros', (l) => l.data.subgenero === subgenero.id))
+  .sort((a, b) => a.data.ordem - b.data.ordem);
+// Cada livro tem vários parágrafos (edição, comentário, sinopse) — precisa de render()
+// de verdade, diferente das outras coleções, que são prosa de um parágrafo só.
+const livrosRenderizados = await Promise.all(
+  livros.map(async (l) => ({ entrada: l, Content: (await render(l)).Content })),
+);
+
+const base = import.meta.env.BASE_URL;
+const raiz = base.endsWith('/') ? base : `${base}/`;
+---
+<Base titulo={`Mundo ${subgenero.data.nome}`} aurora={subgenero.data.aurora}>
+  <h1>{subgenero.data.nome}</h1>
+  <p class="abertura">{subgenero.body}</p>
+
+  <nav class="sumario" aria-label="Sumário do mundo">
+    <a href="#arquetipos">Arquétipos</a>
+    <a href="#cenarios">Cenários</a>
+    <a href="#elementos">Elementos Narrativos</a>
+    <a href="#livros">Livros</a>
+  </nav>
+
+  <section id="arquetipos" aria-labelledby="arquetipos-titulo">
+    <h2 id="arquetipos-titulo">
+      Arquétipos <a class="ver-tudo" href={`${raiz}arquetipos/${subgenero.id}/`}>Ver todos →</a>
+    </h2>
+    {arquetiposComuns.map((f) => (
+      <Cartao etiqueta={subgenero.data.nome} titulo={f.data.nome} ancora={`arquetipos-${paraAncora(f.data.nome)}`}>
+        <p>{f.body}</p>
+      </Cartao>
+    ))}
+    {arquetipoFelino && (
+      <Cartao
+        etiqueta="Arquétipo Felino"
+        titulo={arquetipoFelino.data.nome}
+        ancora={`arquetipos-${paraAncora(arquetipoFelino.data.nome)}`}
+      >
+        <p>{arquetipoFelino.body}</p>
+      </Cartao>
+    )}
+  </section>
+
+  <section id="cenarios" aria-labelledby="cenarios-titulo">
+    <h2 id="cenarios-titulo">
+      Cenários <a class="ver-tudo" href={`${raiz}cenarios/${subgenero.id}/`}>Ver todos →</a>
+    </h2>
+    {cenarios.map((c) => (
+      <Cartao etiqueta={subgenero.data.nome} titulo={c.data.titulo} ancora={`cenarios-${paraAncora(c.data.titulo)}`}>
+        <p>{c.body}</p>
+      </Cartao>
+    ))}
+  </section>
+
+  <section id="elementos" aria-labelledby="elementos-titulo">
+    <h2 id="elementos-titulo">
+      Elementos Narrativos <a class="ver-tudo" href={`${raiz}elementos/${subgenero.id}/`}>Ver todos →</a>
+    </h2>
+    {elementos.map((e) => (
+      <Cartao etiqueta={subgenero.data.nome} titulo={e.data.titulo} ancora={`elementos-${paraAncora(e.data.titulo)}`}>
+        <p>{e.body}</p>
+      </Cartao>
+    ))}
+  </section>
+
+  <section id="livros" aria-labelledby="livros-titulo">
+    <h2 id="livros-titulo">
+      Livros <a class="ver-tudo" href={`${raiz}livros/${subgenero.id}/`}>Ver todos →</a>
+    </h2>
+    {livrosRenderizados.map(({ entrada, Content }) => (
+      <Cartao etiqueta={subgenero.data.nome} titulo={entrada.data.titulo} ancora={`livros-${paraAncora(entrada.data.titulo)}`}>
+        <p class="autor">{entrada.data.autor}</p>
+        <Content />
+      </Cartao>
+    ))}
+  </section>
+
+  {subgenero.data.citacao && (
+    <blockquote>{subgenero.data.citacao}<cite>{subgenero.data.citacaoAutor}</cite></blockquote>
+  )}
+</Base>
+
+<style>
+  .sumario {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-block: 20px 32px;
+  }
+
+  .sumario a {
+    color: var(--texto);
+    text-decoration: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    border-bottom: 2px solid var(--violeta);
+  }
+
+  .sumario a:hover {
+    color: var(--ouro);
+    border-color: var(--ouro);
+  }
+
+  section + section {
+    margin-block-start: 40px;
+  }
+
+  h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .ver-tudo {
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--apagado);
+    text-transform: none;
+    font-weight: 700;
+  }
+
+  .ver-tudo:hover {
+    color: var(--ouro);
+  }
+</style>
