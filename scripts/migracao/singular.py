@@ -42,6 +42,15 @@ PREPOSICOES = {"de", "do", "da", "dos", "das", "em", "por", "para", "com", "sem"
 # ainda não existem no acervo.
 FEMININAS = ("a", "ã", "ade", "agem", "ção", "são", "xão", "ise", "ie")
 
+# Terminações gregas que também são regra de verdade, na direção oposta:
+# substantivos gregos em "-ema"/"-oma"/"-grama" são masculinos como classe
+# ("sistema", "problema", "tema", "esquema", "dilema", "poema"; "aroma",
+# "diploma", "idioma", "sintoma"; "programa", "diagrama", "telegrama"),
+# apesar de terminarem em "-a" — a mesma letra que faz FEMININAS decidir
+# feminino para a maioria das palavras. Checada antes de FEMININAS (ver
+# _genero), então vence o "-a" genérico nesses casos.
+MASCULINAS = ("ema", "oma", "grama")
+
 # Núcleos femininos que terminam em "-e", terminação ambígua em português:
 # não existe regra de sufixo que separe "o parque"/"o monte"/"o peixe"
 # (masculinos) de "a metrópole"/"a ponte"/"a chave" (femininos), então cada
@@ -67,6 +76,12 @@ FEMININAS = ("a", "ã", "ade", "agem", "ção", "são", "xão", "ise", "ie")
 #   margem    — "à margem da sociedade", cenário de exclusão social.
 #   corrente  — correntes de dados/energia, tema recorrente em cenários
 #               tecnológicos.
+#
+# Também aqui, apesar de terminarem em "-o": exceções reais à regra "-o é
+# masculino" (ver _genero mais abaixo), que senão as classificaria mal.
+#
+#   foto, moto, tribo, libido — femininas apesar de terminarem em "-o"; sem
+#   isto, a regra "-o" (item B da revisão) as classificaria como masculinas.
 NUCLEOS_FEMININOS = {
     "metrópole",
     "nave",
@@ -79,6 +94,43 @@ NUCLEOS_FEMININOS = {
     "rede",
     "margem",
     "corrente",
+    "foto",
+    "moto",
+    "tribo",
+    "libido",
+    # Contraexemplos reais às regras MASCULINAS acima: terminam em "-ema"/
+    # "-grama" mas são femininas, então precisam ser checadas antes da
+    # regra de sufixo para vencê-la.
+    "gema",   # "a gema do ovo" — não é o "-ema" grego de sistema/problema.
+    "grama",  # "a grama" (capim) — não é o "-grama" de programa/telegrama;
+              # "grama" como unidade de massa ("um grama de...") é
+              # masculino, um caso de gênero duplo genuíno que a lista não
+              # tenta resolver — feminino é o sentido mais plausível num
+              # catálogo de cenários (vegetação, paisagem).
+}
+
+# Núcleos masculinos de origem grega em "-a"/"-eta"/"-ima" que não têm
+# sufixo comum o bastante para virar regra (diferente de "-ema"/"-oma"/
+# "-grama" acima): "-eta" também aparece em diminutivos femininos comuns
+# ("bicicleta", "borboleta", "chaveta", "seta"), e "-ima" é raro demais para
+# generalizar. Cada palavra entra individualmente, espelhando
+# NUCLEOS_FEMININOS.
+NUCLEOS_MASCULINOS = {
+    "planeta",
+    "cometa",
+    "mapa",
+    "enigma",
+    "clima",
+    "dia",
+    # "oásis" é de uma classe morfológica totalmente diferente (invariável
+    # em "-is", nada a ver com o grupo grego em "-a" acima), mas seu gênero
+    # já é conhecido com certeza: "Oásis" é categoria estabelecida no acervo
+    # e aparece em EXCECOES como masculino ("um oásis de elite"). Sem esta
+    # entrada, qualquer título com "Oásis" fora daquele título exato (ex.:
+    # "Oásis raros") caía no padrão não confiável por pura falta de regra,
+    # apesar do gênero já ser sabido — o oposto do que a lista de duvidosos
+    # deveria mostrar.
+    "oásis",
 }
 
 
@@ -127,8 +179,38 @@ def _singularizar_palavra(palavra: str) -> str:
     return palavra
 
 
-def _e_feminina(palavra: str) -> bool:
-    return palavra.endswith(FEMININAS) or palavra in NUCLEOS_FEMININOS
+def _genero(nucleo: str) -> tuple[str, bool]:
+    """Decide o artigo indefinido do núcleo e se a decisão é confiável.
+
+    Ordem de prioridade, do mais para o menos específico:
+
+    1. NUCLEOS_FEMININOS / NUCLEOS_MASCULINOS — exceções de palavra isolada.
+       Vêm primeiro porque existem exatamente para vencer uma regra de
+       sufixo que erraria ("gema" termina em "-ema" como "sistema", mas é
+       feminina; "planeta" termina em "-a" como "ruína", mas é masculino).
+    2. MASCULINAS ("-ema"/"-oma"/"-grama") — classe grega masculina, apesar
+       de terminar em "-a".
+    3. FEMININAS ("-a" genérico e as demais terminações femininas).
+    4. "-o" — regra positiva de masculino: verdadeira para a esmagadora
+       maioria das palavras em "-o" do português, e sem essa regra todo
+       núcleo em "-o" (a maior parte do acervo: "corpo", "vazio", "espaço"…)
+       saía como masculino apenas por padrão, marcado como não confiável —
+       um falso alarme constante na revisão humana da Task 5.
+    5. Nenhuma das anteriores: masculino por padrão, não confiável — é o
+       caso genuinamente ambíguo (terminação em consoante, "-e" fora da
+       lista, estrangeirismo).
+    """
+    if nucleo in NUCLEOS_FEMININOS:
+        return "uma", True
+    if nucleo in NUCLEOS_MASCULINOS:
+        return "um", True
+    if nucleo.endswith(MASCULINAS):
+        return "um", True
+    if nucleo.endswith(FEMININAS):
+        return "uma", True
+    if nucleo.endswith("o"):
+        return "um", True
+    return "um", False
 
 
 def _singularizar_titulo(titulo: str) -> list[str] | None:
@@ -151,12 +233,11 @@ def _resolver(titulo: str) -> tuple[str, bool]:
     """Devolve (forma singular completa, gênero_confiável).
 
     gênero_confiável é True quando uma entrada de EXCECOES ou uma regra/
-    exceção de gênero decidiu ativamente o artigo (feminino, via FEMININAS
-    ou NUCLEOS_FEMININOS; ou o que quer que EXCECOES tenha decidido). É
-    False quando nenhuma delas se aplicou e o "um" masculino saiu por
-    padrão, na ausência de qualquer evidência — o caso em que a forma pode
-    estar gramaticalmente errada sem nenhum sinal (ex.: um núcleo feminino
-    em "-e" que ainda não entrou em NUCLEOS_FEMININOS).
+    exceção de gênero (ver _genero) decidiu ativamente o artigo — feminino
+    ou masculino. É False quando nenhuma delas se aplicou e o "um" masculino
+    saiu por padrão, na ausência de qualquer evidência — o caso em que a
+    forma pode estar gramaticalmente errada sem nenhum sinal (ex.: um núcleo
+    feminino em "-e" que ainda não entrou em NUCLEOS_FEMININOS).
     """
     chave = _chave_normalizada(titulo)
     if chave in _EXCECOES_NORMALIZADAS:
@@ -168,8 +249,7 @@ def _resolver(titulo: str) -> tuple[str, bool]:
         return "", True
 
     nucleo = saida[0]
-    confiavel = _e_feminina(nucleo)
-    artigo = "uma" if confiavel else "um"
+    artigo, confiavel = _genero(nucleo)
     return f"{artigo} {' '.join(saida)}", confiavel
 
 

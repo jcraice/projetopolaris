@@ -56,10 +56,46 @@ NUCLEOS_FEMININOS_CASOS = [
     ("Naves perdidas", "uma nave perdida"),
 ]
 
+# Masculinos gregos em "-a" que a regra ingênua "-a é feminino" atropelava:
+# 40 títulos reais do acervo expuseram 12 casos assim. Seis são cobertos
+# pela regra "-ema/-oma/-grama" (MASCULINAS); os outros seis não têm sufixo
+# comum e foram para NUCLEOS_MASCULINOS.
+MASCULINOS_GREGOS = [
+    ("Sistemas Estelares Exóticos", "um sistema estelar exótico"),  # -ema
+    ("Problemas Insolúveis", "um problema insolúvel"),  # -ema
+    ("Temas Recorrentes", "um tema recorrente"),  # -ema
+    ("Esquemas Ocultos", "um esquema oculto"),  # -ema
+    ("Dilemas Morais", "um dilema moral"),  # -ema
+    ("Programas Secretos", "um programa secreto"),  # -grama
+    ("Diagramas Antigos", "um diagrama antigo"),  # -grama
+    ("Climas Extremos", "um clima extremo"),  # NUCLEOS_MASCULINOS
+    ("Planetas Distantes", "um planeta distante"),  # NUCLEOS_MASCULINOS
+    ("Cometas Errantes", "um cometa errante"),  # NUCLEOS_MASCULINOS
+    ("Mapas Perdidos", "um mapa perdido"),  # NUCLEOS_MASCULINOS
+    ("Enigmas Profundos", "um enigma profundo"),  # NUCLEOS_MASCULINOS
+]
+
+# Contraexemplos reais às regras acima: terminam em "-ema"/"-grama" ou em
+# "-o" mas não seguem a regra geral daquela terminação.
+CONTRAEXEMPLOS_DE_GENERO = [
+    ("Gemas raras", "uma gema rara"),  # "-ema" pareceria masculino; não é
+    ("Gramas altas", "uma grama alta"),  # "-grama" pareceria masculino; não é
+    ("Fotos antigas", "uma foto antiga"),  # "-o" pareceria masculino; não é
+    ("Motos abandonadas", "uma moto abandonada"),  # idem
+    ("Tribos nômades", "uma tribo nômade"),  # idem
+    ("Libido reprimida", "uma libido reprimida"),  # idem, sem plural comum
+]
+
 
 @pytest.mark.parametrize(
     "titulo,esperado",
-    REGULARES + IRREGULARES + EXCECOES + INVARIAVEIS_FORA_DE_EXCECOES + NUCLEOS_FEMININOS_CASOS,
+    REGULARES
+    + IRREGULARES
+    + EXCECOES
+    + INVARIAVEIS_FORA_DE_EXCECOES
+    + NUCLEOS_FEMININOS_CASOS
+    + MASCULINOS_GREGOS
+    + CONTRAEXEMPLOS_DE_GENERO,
 )
 def test_forma_singular(titulo, esperado):
     assert forma_singular(titulo) == esperado
@@ -75,6 +111,15 @@ def test_forma_singular_nucleos_com_res_ses_conhecidos(titulo, esperado):
     # estão em NUCLEOS_FEMININOS, a exceção é checada antes dessa regra e
     # resolve corretamente sem precisar de um dicionário completo.
     assert forma_singular(titulo) == esperado
+
+
+def test_forma_singular_oasis_fora_do_titulo_exato_de_excecoes():
+    # "Oásis raros" não casa com a entrada exata de EXCECOES ("Oásis de
+    # elite"), mas "oásis" já é gênero conhecido (masculino) na categoria
+    # estabelecida do acervo — por isso está em NUCLEOS_MASCULINOS, e não
+    # deveria sair como duvidoso.
+    assert forma_singular("Oásis raros") == "um oásis raro"
+    assert genero_confiavel("Oásis raros") is True
 
 
 def test_forma_singular_titulo_vazio_nao_estoura():
@@ -105,8 +150,13 @@ def test_forma_singular_excecao_tolera_espaco_e_caixa(titulo):
         ("Pontes interdimensionais", True),  # NUCLEOS_FEMININOS decidiu
         ("Naves e frotas nômades", True),  # EXCECOES decidiu
         ("Oásis de elite", True),  # EXCECOES decidiu (mesmo sendo masculino)
-        ("Vazios cósmicos", False),  # nenhuma regra decidiu; "um" é só o padrão
-        ("Corpos celestes perigosos", False),  # idem
+        ("Vazios cósmicos", True),  # regra positiva "-o" decidiu (masculino)
+        ("Abrigos subterrâneos", True),  # idem
+        ("Sistemas Estelares Exóticos", True),  # regra "-ema" decidiu (masculino)
+        ("Planetas Distantes", True),  # NUCLEOS_MASCULINOS decidiu
+        ("Gemas raras", True),  # NUCLEOS_FEMININOS venceu a regra "-ema"
+        ("Habitats artificiais", False),  # nenhuma regra decidiu; "um" é só o padrão
+        ("Setores industriais opressivos", False),  # idem — terminação em consoante
     ],
 )
 def test_genero_confiavel(titulo, esperado):
