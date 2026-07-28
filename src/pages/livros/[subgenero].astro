@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Cartao from '../../components/Cartao.astro';
 import { paraAncora } from '../../lib/texto';
@@ -13,13 +13,18 @@ const { subgenero } = Astro.props;
 const livros = (await getCollection('livros', (l) => l.data.subgenero === subgenero.id)).sort(
   (a, b) => a.data.ordem - b.data.ordem,
 );
+// Cada livro tem vários parágrafos (edição, comentário, sinopse) — precisa de render()
+// de verdade, diferente das outras coleções, que são prosa de um parágrafo só.
+const livrosRenderizados = await Promise.all(
+  livros.map(async (l) => ({ entrada: l, Content: (await render(l)).Content })),
+);
 ---
 <Base titulo={`Livros ${subgenero.data.nome}`} aurora={subgenero.data.aurora}>
   <h1>Livros {subgenero.data.nome}</h1>
-  {livros.map((l) => (
-    <Cartao etiqueta={subgenero.data.nome} titulo={l.data.titulo} ancora={paraAncora(l.data.titulo)}>
-      <p class="autor">{l.data.autor}</p>
-      <p>{l.body}</p>
+  {livrosRenderizados.map(({ entrada, Content }) => (
+    <Cartao etiqueta={subgenero.data.nome} titulo={entrada.data.titulo} ancora={paraAncora(entrada.data.titulo)}>
+      <p class="autor">{entrada.data.autor}</p>
+      <Content />
     </Cartao>
   ))}
   {subgenero.data.citacao && (

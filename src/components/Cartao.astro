@@ -9,7 +9,9 @@ const { etiqueta, titulo, ancora } = Astro.props;
 <article class="cartao" id={ancora}>
   <span class="etiqueta">{etiqueta}</span>
   <h3>{titulo}</h3>
-  <slot />
+  <div class="corpo">
+    <slot />
+  </div>
 </article>
 
 <style>
@@ -24,5 +26,21 @@ const { etiqueta, titulo, ancora } = Astro.props;
   .cartao h3 {
     margin: 0;
     font-size: 1.1rem;
+  }
+
+  /* A barra lateral violeta cerca o conjunto do conteúdo, não cada parágrafo —
+     necessário porque o corpo pode vir de render() com múltiplos <p> (livros). */
+  .corpo {
+    border-left: 3px solid var(--violeta);
+    padding-left: 10px;
+  }
+
+  .corpo :global(p) {
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  .corpo :global(p + p) {
+    margin-top: 10px;
   }
 </style>
