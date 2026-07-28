@@ -34,6 +34,34 @@ def _titulo(valor: dict) -> str:
     return "".join(str(p[0]) for p in partes if isinstance(p, list) and p)
 
 
+def _link_da_anotacao(anotacoes) -> str | None:
+    """Numa lista de anotações de um trecho de texto rico do Notion, devolve
+    a URL se alguma anotação for um link (`["a", "url"]`); senão, None."""
+    if not isinstance(anotacoes, list):
+        return None
+    for anotacao in anotacoes:
+        if isinstance(anotacao, list) and len(anotacao) > 1 and anotacao[0] == "a":
+            return str(anotacao[1])
+    return None
+
+
+def _titulo_com_links(valor: dict) -> str:
+    """Como _titulo, mas um trecho de texto rico com anotação de link vira
+    `[texto](url)` em Markdown em vez de perder o link silenciosamente.
+    Usado só onde um link no meio do texto importa de verdade (a página
+    Sobre tem um mailto: de contato) — em todo o resto do projeto,
+    _titulo/texto_dos_blocos continuam suficientes e mais baratos."""
+    partes = (valor.get("properties") or {}).get("title") or []
+    pedacos = []
+    for parte in partes:
+        if not isinstance(parte, list) or not parte:
+            continue
+        texto = str(parte[0])
+        url = _link_da_anotacao(parte[1]) if len(parte) > 1 else None
+        pedacos.append(f"[{texto}]({url})" if url else texto)
+    return "".join(pedacos)
+
+
 def texto_dos_blocos(record_map: dict, raiz: str) -> list[str]:
     """Texto de cada bloco filho da raiz, em ordem, sem descer em subpáginas."""
     valor = _valor(record_map, raiz)
@@ -48,6 +76,46 @@ def texto_dos_blocos(record_map: dict, raiz: str) -> list[str]:
         if texto:
             linhas.append(texto)
     return linhas
+
+
+def texto_dos_blocos_com_links(record_map: dict, raiz: str) -> list[str]:
+    """Como texto_dos_blocos, mas preservando links de texto rico (ver
+    _titulo_com_links). Mesma regra de não descer em subpáginas."""
+    valor = _valor(record_map, raiz)
+    if not valor:
+        return []
+    linhas = []
+    for filho_id in valor.get("content") or []:
+        filho = _valor(record_map, filho_id)
+        if not filho or filho.get("type") == "page":
+            continue
+        texto = _titulo_com_links(filho).strip()
+        if texto:
+            linhas.append(texto)
+    return linhas
+
+
+def texto_dos_callouts(record_map: dict, raiz: str) -> list[str]:
+    """Texto de dentro de cada bloco `callout` filho direto da raiz.
+
+    Um `callout` tem `properties.title` vazio — o texto real mora num
+    bloco `text` filho dele. `texto_dos_blocos` só lê o título dos filhos
+    diretos da raiz, então nunca vê esse texto (ele "existe", só que com
+    título vazio, e é descartado pelo `if texto:` de texto_dos_blocos).
+    Esta função é o complemento: ignora tudo que não for callout, e desce
+    um nível dentro de cada callout encontrado (via _textos_recursivos) para
+    resgatar o texto de verdade. Preserva a ordem tanto dos callouts quanto
+    dos parágrafos dentro de cada um."""
+    valor = _valor(record_map, raiz)
+    if not valor:
+        return []
+    textos: list[str] = []
+    for filho_id in valor.get("content") or []:
+        filho = _valor(record_map, filho_id)
+        if not filho or filho.get("type") != "callout":
+            continue
+        textos.extend(_textos_recursivos(record_map, filho_id))
+    return textos
 
 
 def _textos_recursivos(record_map: dict, bloco_id: str) -> list[str]:
@@ -142,3 +210,20 @@ def citacao_da_pagina(linhas: list[str]) -> tuple[str, str] | None:
     if not citacao or not autor:
         return None
     return citacao, autor
+
+
+MARCADOR_COMO_USAR = "como usar esta página?"
+
+
+def secao_como_usar(linhas: list[str]) -> list[str] | None:
+    """Procura, entre as linhas de uma página-guia (Arquétipos, Cenários,
+    Elementos Narrativos, Livros), o cabeçalho "COMO USAR ESTA PÁGINA?" e
+    devolve ele junto com tudo que vem depois (os itens da lista de uso).
+    `linhas` é o resultado de texto_dos_blocos na raiz da página — como o
+    cabeçalho e os itens são blocos de texto simples, filhos diretos da
+    raiz, texto_dos_blocos já os enxerga sem precisar descer em nada.
+    Devolve None se a página não tiver essa seção (a de livros não tem)."""
+    for indice, linha in enumerate(linhas):
+        if linha.strip().lower() == MARCADOR_COMO_USAR:
+            return linhas[indice:]
+    return None

@@ -25,6 +25,19 @@ describe('esquemaSubgenero', () => {
     const r = esquemaSubgenero.safeParse({ nome: 'Cyberpunk', ordem: 3 });
     expect(r.success).toBe(false);
   });
+
+  it('aceita aberturaArquetipos, mas ele é opcional', () => {
+    const comAbertura = esquemaSubgenero.safeParse({
+      nome: 'Cyberpunk', ordem: 3, aurora: ['#ff2d92', '#7c3aed', '#00e5ff'],
+      aberturaArquetipos: 'Nesse subgênero, os arquétipos vivem entre conspirações e aprimoramentos.',
+    });
+    expect(comAbertura.success).toBe(true);
+
+    const semAbertura = esquemaSubgenero.safeParse({
+      nome: 'Cyberpunk', ordem: 3, aurora: ['#ff2d92', '#7c3aed', '#00e5ff'],
+    });
+    expect(semAbertura.success).toBe(true);
+  });
 });
 
 describe('esquemaArquetipo', () => {

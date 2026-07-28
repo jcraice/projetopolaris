@@ -1,6 +1,6 @@
 ---
 titulo: "Estilos & Combinações"
-ordem: 2
+ordem: 6
 ---
 
 Estilos

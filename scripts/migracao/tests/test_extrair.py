@@ -1,7 +1,15 @@
 import json
 from pathlib import Path
 
-from migracao.extrair import citacao_da_pagina, itens, livros_da_pagina, texto_dos_blocos
+from migracao.extrair import (
+    citacao_da_pagina,
+    itens,
+    livros_da_pagina,
+    secao_como_usar,
+    texto_dos_blocos,
+    texto_dos_blocos_com_links,
+    texto_dos_callouts,
+)
 
 FIXTURE = Path(__file__).parent / "fixtures" / "arquetipos_space_opera.json"
 RAIZ = "2b0dfe05-91a9-8019-8fc1-eb1d998fc6bd"
@@ -184,3 +192,106 @@ def test_citacao_da_pagina_devolve_none_para_pagina_vazia():
 def test_citacao_da_pagina_devolve_none_sem_padrao_de_citacao():
     linhas = ["O Herói Audaz: descrição", "Um comentário qualquer sem aspas nem traço"]
     assert citacao_da_pagina(linhas) is None
+
+
+def _pagina_com_callout_fixture():
+    """Reflete a estrutura real de uma página de arquétipos/elementos de
+    subgênero: um callout de abertura (texto real só aparece no filho, o
+    callout em si tem título vazio) seguido dos itens de verdade."""
+    return {
+        "block": {
+            "raiz": _texto("page", content=["antes", "callout1", "depois", "item1", "subpagina"]),
+            "antes": _texto("text"),
+            "callout1": _texto("callout", content=["callout_texto"]),
+            "callout_texto": _texto("text", "Nesse subgênero, os arquétipos orbitam entre grandiosas batalhas."),
+            "depois": _texto("text"),
+            "item1": _texto("text", "O Herói Audaz: descrição"),
+            "subpagina": {"value": {
+                "type": "page",
+                "properties": {"title": [["Não deveria aparecer"]]},
+                "content": [],
+            }},
+        }
+    }
+
+
+def test_texto_dos_callouts_resgata_texto_do_filho_do_callout():
+    textos = texto_dos_callouts(_pagina_com_callout_fixture(), "raiz")
+    assert textos == ["Nesse subgênero, os arquétipos orbitam entre grandiosas batalhas."]
+
+
+def test_texto_dos_callouts_ignora_blocos_que_nao_sao_callout():
+    textos = texto_dos_callouts(_pagina_com_callout_fixture(), "raiz")
+    assert "O Herói Audaz: descrição" not in textos
+
+
+def test_texto_dos_callouts_devolve_lista_vazia_sem_callout():
+    record_map = {
+        "block": {
+            "raiz": _texto("page", content=["item1"]),
+            "item1": _texto("text", "O Herói Audaz: descrição"),
+        }
+    }
+    assert texto_dos_callouts(record_map, "raiz") == []
+
+
+def test_texto_dos_callouts_preserva_ordem_de_varios_paragrafos():
+    record_map = {
+        "block": {
+            "raiz": _texto("page", content=["callout1"]),
+            "callout1": _texto("callout", content=["p1", "p2"]),
+            "p1": _texto("text", "Primeiro parágrafo."),
+            "p2": _texto("text", "Segundo parágrafo."),
+        }
+    }
+    assert texto_dos_callouts(record_map, "raiz") == ["Primeiro parágrafo.", "Segundo parágrafo."]
+
+
+def test_secao_como_usar_encontra_marcador_e_devolve_resto():
+    linhas = [
+        "Arquétipos por Subgênero:",
+        "COMO USAR ESTA PÁGINA?",
+        "Escolha um subgênero",
+        "Analise os arquétipos",
+    ]
+    assert secao_como_usar(linhas) == [
+        "COMO USAR ESTA PÁGINA?",
+        "Escolha um subgênero",
+        "Analise os arquétipos",
+    ]
+
+
+def test_secao_como_usar_devolve_none_sem_marcador():
+    assert secao_como_usar(["Só um texto qualquer.", "Outro parágrafo."]) is None
+
+
+def test_secao_como_usar_devolve_none_para_lista_vazia():
+    assert secao_como_usar([]) is None
+
+
+def test_texto_dos_blocos_com_links_preserva_link_no_meio_do_texto():
+    record_map = {
+        "block": {
+            "raiz": _texto("page", content=["p1"]),
+            "p1": {"value": {
+                "type": "text",
+                "properties": {"title": [
+                    ["Fique à vontade para enviar um "],
+                    ["e-mail", [["a", "mailto:contato@example.com"], ["b"]]],
+                    [" ."],
+                ]},
+            }},
+        }
+    }
+    linhas = texto_dos_blocos_com_links(record_map, "raiz")
+    assert linhas == ["Fique à vontade para enviar um [e-mail](mailto:contato@example.com) ."]
+
+
+def test_texto_dos_blocos_com_links_sem_anotacao_fica_texto_plano():
+    record_map = {
+        "block": {
+            "raiz": _texto("page", content=["p1"]),
+            "p1": _texto("text", "Texto simples sem link."),
+        }
+    }
+    assert texto_dos_blocos_com_links(record_map, "raiz") == ["Texto simples sem link."]

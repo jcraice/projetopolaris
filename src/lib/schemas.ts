@@ -10,6 +10,7 @@ export const esquemaSubgenero = z
     aurora: z.tuple([cor, cor, cor]).optional(),
     citacao: z.string().optional(),
     citacaoAutor: z.string().optional(),
+    aberturaArquetipos: z.string().optional(),
   })
   .refine((d) => !d.mundo || d.aurora !== undefined, {
     message: 'subgênero com mundo verdadeiro precisa de aurora',
