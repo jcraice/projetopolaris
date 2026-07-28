@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Cartao from '../../components/Cartao.astro';
+import { paraAncora } from '../../lib/texto';
+
+export async function getStaticPaths() {
+  const subgeneros = await getCollection('subgeneros');
+  return subgeneros.map((s) => ({ params: { subgenero: s.id }, props: { subgenero: s } }));
+}
+
+const { subgenero } = Astro.props;
+const fichas = (await getCollection('arquetipos', (a) => a.data.subgenero === subgenero.id))
+  .sort((a, b) => a.data.ordem - b.data.ordem);
+const comuns = fichas.filter((f) => !f.data.felino);
+const felino = fichas.find((f) => f.data.felino);
+---
+<Base titulo={`Arquétipos ${subgenero.data.nome}`} aurora={subgenero.data.aurora}>
+  <h1>Arquétipos {subgenero.data.nome}</h1>
+  {subgenero.data.aberturaArquetipos && <p class="abertura">{subgenero.data.aberturaArquetipos}</p>}
+  {comuns.map((f) => (
+    <Cartao etiqueta={subgenero.data.nome} titulo={f.data.nome} ancora={paraAncora(f.data.nome)}>
+      <p>{f.body}</p>
+    </Cartao>
+  ))}
+  {felino && (
+    <section aria-label="Arquétipo felino">
+      <Cartao etiqueta="Arquétipo Felino" titulo={felino.data.nome} ancora={paraAncora(felino.data.nome)}>
+        <p>{felino.body}</p>
+      </Cartao>
+    </section>
+  )}
+  {subgenero.data.citacao && (
+    <blockquote>{subgenero.data.citacao}<cite>{subgenero.data.citacaoAutor}</cite></blockquote>
+  )}
+</Base>
+
+<style>
+  .abertura {
+    max-width: 68ch;
+  }
+
+  blockquote {
+    border-left: 3px solid var(--ouro);
+    padding-left: 14px;
+    margin-inline-start: 0;
+    font-style: italic;
+    color: var(--papel);
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    color: var(--apagado);
+  }
+</style>

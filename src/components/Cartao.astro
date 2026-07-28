@@ -1,0 +1,28 @@
+---
+interface Props {
+  etiqueta: string;
+  titulo: string;
+  ancora: string;
+}
+const { etiqueta, titulo, ancora } = Astro.props;
+---
+<article class="cartao" id={ancora}>
+  <span class="etiqueta">{etiqueta}</span>
+  <h3>{titulo}</h3>
+  <slot />
+</article>
+
+<style>
+  .cartao {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-block-end: 16px;
+    scroll-margin-top: 96px;
+  }
+
+  .cartao h3 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+</style>

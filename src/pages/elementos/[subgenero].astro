@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Cartao from '../../components/Cartao.astro';
+import { paraAncora } from '../../lib/texto';
+
+export async function getStaticPaths() {
+  const subgeneros = await getCollection('subgeneros', (s) => s.data.mundo);
+  return subgeneros.map((s) => ({ params: { subgenero: s.id }, props: { subgenero: s } }));
+}
+
+const { subgenero } = Astro.props;
+const elementos = (await getCollection('elementos', (e) => e.data.subgenero === subgenero.id)).sort(
+  (a, b) => a.data.ordem - b.data.ordem,
+);
+---
+<Base titulo={`Elementos ${subgenero.data.nome}`} aurora={subgenero.data.aurora}>
+  <h1>Elementos {subgenero.data.nome}</h1>
+  <p class="abertura">{subgenero.body}</p>
+  {elementos.map((e) => (
+    <Cartao etiqueta={subgenero.data.nome} titulo={e.data.titulo} ancora={paraAncora(e.data.titulo)}>
+      <p>{e.body}</p>
+    </Cartao>
+  ))}
+  {subgenero.data.citacao && (
+    <blockquote>{subgenero.data.citacao}<cite>{subgenero.data.citacaoAutor}</cite></blockquote>
+  )}
+</Base>
+
+<style>
+  .abertura {
+    max-width: 68ch;
+  }
+
+  blockquote {
+    border-left: 3px solid var(--ouro);
+    padding-left: 14px;
+    margin-inline-start: 0;
+    font-style: italic;
+    color: var(--papel);
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 6px;
+    font-style: normal;
+    color: var(--apagado);
+  }
+</style>
