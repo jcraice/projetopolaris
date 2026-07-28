@@ -63,6 +63,40 @@ describe('numeroDe', () => {
     expect(numeroDe('A busca por autenticidade')).toBe(numeroDe('Busca por autenticidade'));
     expect(numeroDe('As ameaças cósmicas desconhecidas')).toBe(numeroDe('Ameaças cósmicas desconhecidas'));
   });
+
+  it('reconhece sujeito composto quando "e" aparece antes de qualquer preposição', () => {
+    // "Propaganda e desinformação" — o "e" liga dois núcleos, nenhuma
+    // preposição antes dele: sujeito composto, plural.
+    expect(numeroDe('Propaganda e desinformação')).toBe('plural');
+  });
+
+  it('não confunde coordenação dentro do complemento com sujeito composto', () => {
+    // "Formação de novas leis e códigos morais" — a preposição "de" vem
+    // antes do "e": a coordenação está dentro do complemento, não no
+    // sujeito. O núcleo sozinho ("formação") decide, e é singular.
+    expect(numeroDe('Formação de novas leis e códigos morais')).toBe('singular');
+  });
+
+  it('não muda o resultado quando o núcleo isolado já é plural', () => {
+    // "Sistemas de troca e escambo" — mesmo padrão do caso acima (a
+    // preposição "de" vem antes do "e"), mas o núcleo "sistemas" já é
+    // plural por sufixo, então o resultado final não muda.
+    expect(numeroDe('Sistemas de troca e escambo')).toBe('plural');
+  });
+
+  it('reclassifica como plural os oito casos duvidosos da rodada anterior', () => {
+    const casos = [
+      'Cativeiro e experimentação humana',
+      'Desespero e colapso social',
+      'Diplomacia e acordos interespécies',
+      'Hacktivismo e subversão digital',
+      'Infiltração e disfarce alienígena',
+      'Propaganda e desinformação',
+      'Realidade virtual e espaços digitais',
+      'Reeducação e doutrinação ideológica',
+    ];
+    for (const caso of casos) expect(numeroDe(caso)).toBe('plural');
+  });
 });
 
 describe('redigir', () => {
@@ -85,6 +119,17 @@ describe('redigir', () => {
     expect(frase).toContain('onde imperam comunidades de sobreviventes');
   });
 
+  it('conjuga "é" no singular quando o elemento é singular', () => {
+    const frase = redigir(sorteio, '{em:cenario}, {elemento} {ser:elemento} a regra — e {arquetipo} descobre que {complicacao}.');
+    expect(frase).toContain('busca por artefatos ancestrais é a regra');
+  });
+
+  it('conjuga "são" no plural quando o elemento é plural', () => {
+    const plural = { ...sorteio, elemento: { id: 'e2', nome: 'Comunidades de sobreviventes', subgenero: 'pos-apocaliptico' } };
+    const frase = redigir(plural, '{em:cenario}, {elemento} {ser:elemento} a regra — e {arquetipo} descobre que {complicacao}.');
+    expect(frase).toContain('comunidades de sobreviventes são a regra');
+  });
+
   it('resolve o pronome pelo gênero do arquétipo', () => {
     const frase = redigir(sorteio, '{arquetipo} some {em:cenario} com {elemento} até {pronome} ver que {complicacao}.');
     expect(frase).toContain('até ela ver que');
@@ -104,7 +149,7 @@ describe('redigir', () => {
 
   it('não deixa marcador por resolver', () => {
     for (const molde of [
-      '{em:cenario} {elemento} {arquetipo} {complicacao} {pronome} {a:cenario} {impera:elemento}.',
+      '{em:cenario} {elemento} {arquetipo} {complicacao} {pronome} {a:cenario} {impera:elemento} {ser:elemento}.',
     ]) {
       expect(redigir(sorteio, molde)).not.toMatch(/\{|\}/);
     }

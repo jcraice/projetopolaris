@@ -32,14 +32,33 @@ const ARTIGOS = new Set(['a', 'o', 'as', 'os', 'um', 'uma']);
 // palavras — mesmo espírito de NUCLEOS_FEMININOS em singular.py.
 const NUCLEOS_SINGULARES_TERMINADOS_EM_S = new Set(['lápis', 'vírus', 'ônibus', 'atlas', 'tênis', 'país']);
 
+// Preposições que marcam o início de um complemento. Usadas para decidir se
+// um "e" encontrado no título liga dois núcleos do sujeito (sujeito
+// composto, plural: "Propaganda e desinformação") ou se está dentro do
+// complemento de um único núcleo já fechado por uma preposição antes dele
+// ("Formação de novas leis e códigos morais" — o "de" vem antes do "e", e a
+// coordenação fica presa ao complemento, não ao sujeito).
+const PREPOSICOES = new Set([
+  'de', 'do', 'da', 'dos', 'das', 'em', 'no', 'na', 'por', 'para', 'com', 'sem', 'a', 'ao', 'à',
+]);
+
+function limpar(palavra: string): string {
+  return palavra.toLowerCase().replace(/[.,;:!?"'）)]+$/, '');
+}
+
 export function numeroDe(nome: string): 'singular' | 'plural' {
   const palavras = nome.trim().split(/\s+/);
-  const primeira = palavras[0] ?? '';
-  const nucleo = ARTIGOS.has(primeira.toLowerCase()) ? (palavras[1] ?? '') : primeira;
-  const chave = nucleo.toLowerCase().replace(/[.,;:!?"'）)]+$/, '');
+  const inicio = ARTIGOS.has((palavras[0] ?? '').toLowerCase()) ? 1 : 0;
 
-  if (NUCLEOS_SINGULARES_TERMINADOS_EM_S.has(chave)) return 'singular';
-  return chave.endsWith('s') ? 'plural' : 'singular';
+  for (let i = inicio; i < palavras.length; i++) {
+    const palavra = limpar(palavras[i] ?? '');
+    if (PREPOSICOES.has(palavra)) break;
+    if (palavra === 'e') return 'plural';
+  }
+
+  const nucleo = limpar(palavras[inicio] ?? '');
+  if (NUCLEOS_SINGULARES_TERMINADOS_EM_S.has(nucleo)) return 'singular';
+  return nucleo.endsWith('s') ? 'plural' : 'singular';
 }
 
 export function redigir(sorteio: Sorteio, molde: string): string {
@@ -50,6 +69,7 @@ export function redigir(sorteio: Sorteio, molde: string): string {
     .replaceAll('{a:cenario}', contrair('a', cenario.singular))
     .replaceAll('{cenario}', cenario.singular)
     .replaceAll('{impera:elemento}', `${numeroDe(elemento.nome) === 'plural' ? 'imperam' : 'impera'} ${emMinuscula(elemento.nome)}`)
+    .replaceAll('{ser:elemento}', numeroDe(elemento.nome) === 'plural' ? 'são' : 'é')
     .replaceAll('{elemento}', emMinuscula(elemento.nome))
     .replaceAll('{arquetipo}', emMinuscula(arquetipo.nome))
     .replaceAll('{pronome}', generoDe(arquetipo.nome) === 'f' ? 'ela' : 'ele')
