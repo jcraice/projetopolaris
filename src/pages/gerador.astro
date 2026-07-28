@@ -1,0 +1,266 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const subgeneros = await getCollection('subgeneros');
+const mundos = subgeneros.filter((s) => s.data.mundo).sort((a, b) => a.data.ordem - b.data.ordem);
+
+// Os pools inteiros (146 arquétipos, 60 cenários, 120 elementos) são lidos
+// aqui em build e injetados como JSON estático na página — a interatividade
+// do gerador não faz nenhuma requisição em tempo de execução.
+const pools = {
+  arquetipos: (await getCollection('arquetipos')).map((a) => ({
+    id: a.id, nome: a.data.nome, subgenero: a.data.subgenero,
+  })),
+  cenarios: (await getCollection('cenarios')).map((c) => ({
+    id: c.id, nome: c.data.titulo, subgenero: c.data.subgenero, singular: c.data.singular,
+  })),
+  elementos: (await getCollection('elementos')).map((e) => ({
+    id: e.id, nome: e.data.titulo, subgenero: e.data.subgenero,
+  })),
+};
+
+// Rótulo fixo de cada carta — não depende do sorteio, por isso é escrito em
+// build, diferente de {etiqueta} e {nome}, que o script preenche a cada rolagem.
+const CARTAS = [
+  { tipo: 'arquetipo', rotulo: 'Arquétipo' },
+  { tipo: 'cenario', rotulo: 'Cenário' },
+  { tipo: 'elemento', rotulo: 'Elemento narrativo' },
+] as const;
+---
+<Base titulo="Gerador">
+  <h1>Gerador de combinações</h1>
+
+  <form id="opcoes">
+    <fieldset>
+      <legend>Opções do sorteio</legend>
+      <label for="opcoes-mundo">
+        Mundo
+        <select id="opcoes-mundo" name="subgenero">
+          {mundos.map((m) => <option value={m.id}>{m.data.nome}</option>)}
+        </select>
+      </label>
+      <label><input type="checkbox" name="misturarMundos" /> Misturar mundos</label>
+      <label><input type="checkbox" name="incluirComuns" /> Incluir os 20 arquétipos comuns</label>
+    </fieldset>
+  </form>
+
+  <section id="cartas" class="pilha-cartas" aria-live="polite" aria-label="Peças sorteadas">
+    {CARTAS.map(({ tipo, rotulo }) => (
+      <article class="cartao carta" data-carta={tipo}>
+        <div class="carta__topo">
+          <h2 class="carta__papel">{rotulo}</h2>
+          <span class="etiqueta" data-papel="etiqueta"></span>
+        </div>
+        <p class="carta__nome" data-papel="nome"></p>
+        <button type="button" class="botao" data-travar={tipo} aria-pressed="false">Travar</button>
+      </article>
+    ))}
+  </section>
+
+  <section class="bloco-premissa" aria-live="polite" aria-label="Premissa gerada">
+    <p id="premissa" class="abertura"></p>
+    <div class="acoes">
+      <button type="button" class="botao botao--principal" id="sortear">Sortear tudo</button>
+      <button type="button" class="botao" id="reescrever">Reescrever</button>
+      <button type="button" class="botao" id="copiar">Copiar</button>
+    </div>
+    <span id="aviso" role="status"></span>
+  </section>
+
+  <script type="application/json" id="pools" set:html={JSON.stringify(pools)}></script>
+</Base>
+
+<style>
+  fieldset {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 18px;
+    border: 2px solid var(--borda-suave);
+    padding: 14px 18px;
+    margin: 0 0 24px;
+  }
+
+  legend {
+    padding: 0 6px;
+    font-weight: 900;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--apagado);
+  }
+
+  #opcoes label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+  }
+
+  #opcoes select {
+    background: var(--tinta);
+    color: var(--texto);
+    border: 2px solid var(--borda-suave);
+    padding: 6px 10px;
+    font-family: inherit;
+    font-size: 0.9rem;
+  }
+
+  #opcoes select:focus-visible,
+  #opcoes input:focus-visible {
+    outline: 3px solid var(--violeta);
+    outline-offset: 3px;
+  }
+
+  /* Decisão de projeto: os cartões ficam empilhados em coluna, não em grade. */
+  .pilha-cartas {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .carta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 0.15s ease;
+  }
+
+  .carta__topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .carta__papel {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .carta__nome {
+    margin: 0;
+    min-height: 1.5em;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--papel);
+  }
+
+  /* Estado de trava: a borda muda de dourado (padrão de .cartao) para violeta,
+     reforçando visualmente o que o aria-pressed do botão já diz a quem usa
+     leitor de tela. */
+  .carta--travada {
+    border-color: var(--violeta);
+  }
+
+  .bloco-premissa #premissa {
+    min-height: 1.6em;
+    font-size: 1.15rem;
+    color: var(--papel);
+  }
+
+  .acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 16px 0 10px;
+  }
+
+  #aviso {
+    display: inline-block;
+    min-height: 1.2em;
+    color: var(--apagado);
+    font-size: 0.85rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .carta {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { sortear, redigir, MOLDES } from '../lib/gerador';
+  import type { Opcoes, Pools, Sorteio, Travas } from '../lib/gerador';
+
+  const pools: Pools = JSON.parse(document.getElementById('pools')!.textContent!);
+  const form = document.getElementById('opcoes') as HTMLFormElement;
+  const premissa = document.getElementById('premissa')!;
+  const aviso = document.getElementById('aviso')!;
+
+  const travas: Travas = { arquetipo: false, cenario: false, elemento: false };
+
+  // Único estado guardado do gerador, e vive só em memória: nada é escrito no
+  // navegador (sem localStorage, sem conta, sem link compartilhável), por
+  // decisão de projeto de gerador efêmero.
+  let atual: Sorteio | null = null;
+
+  const lerOpcoes = (): Opcoes => {
+    const dados = new FormData(form);
+    return {
+      subgenero: String(dados.get('subgenero')),
+      misturarMundos: dados.get('misturarMundos') === 'on',
+      incluirComuns: dados.get('incluirComuns') === 'on',
+    };
+  };
+
+  const moldeAoAcaso = () => MOLDES[Math.floor(Math.random() * MOLDES.length)];
+
+  function pintar(sorteio: Sorteio, molde: string) {
+    for (const tipo of ['arquetipo', 'cenario', 'elemento'] as const) {
+      const carta = document.querySelector(`[data-carta="${tipo}"]`)!;
+      const peca = sorteio[tipo];
+      carta.querySelector('[data-papel="nome"]')!.textContent = peca.nome;
+      carta.querySelector('[data-papel="etiqueta"]')!.textContent = peca.subgenero.replace(/-/g, ' ');
+    }
+    premissa.textContent = redigir(sorteio, molde);
+  }
+
+  function rolar() {
+    atual = sortear(pools, lerOpcoes(), travas, atual, Math.random);
+    pintar(atual, moldeAoAcaso());
+  }
+
+  document.getElementById('sortear')!.addEventListener('click', rolar);
+
+  // Reescrever mantém as peças e troca apenas molde e complicação, por isso
+  // sorteia com as três travas ligadas independente do estado real dos botões.
+  document.getElementById('reescrever')!.addEventListener('click', () => {
+    if (!atual) return rolar();
+    atual = sortear(pools, lerOpcoes(), { arquetipo: true, cenario: true, elemento: true }, atual, Math.random);
+    pintar(atual, moldeAoAcaso());
+  });
+
+  document.getElementById('copiar')!.addEventListener('click', async () => {
+    if (!premissa.textContent) return;
+    try {
+      await navigator.clipboard.writeText(premissa.textContent);
+      aviso.textContent = 'Premissa copiada.';
+    } catch {
+      aviso.textContent = 'Não foi possível copiar automaticamente.';
+    }
+    setTimeout(() => { aviso.textContent = ''; }, 2000);
+  });
+
+  for (const botao of document.querySelectorAll<HTMLButtonElement>('[data-travar]')) {
+    botao.addEventListener('click', () => {
+      const tipo = botao.dataset.travar as keyof Travas;
+      travas[tipo] = !travas[tipo];
+      botao.setAttribute('aria-pressed', String(travas[tipo]));
+      botao.textContent = travas[tipo] ? 'Destravar' : 'Travar';
+      botao.closest<HTMLElement>('.carta')!.classList.toggle('carta--travada', travas[tipo]);
+    });
+  }
+
+  // Trocar de mundo (ou qualquer opção do formulário) zera o sorteio
+  // anterior: sem isto, uma peça travada do mundo antigo sobreviveria e
+  // contradiria a opção recém-escolhida. Como sortear() só respeita uma
+  // trava quando existe um sorteio anterior, zerar `atual` força as três
+  // peças a serem redesenhadas dentro do novo filtro.
+  form.addEventListener('change', () => { atual = null; rolar(); });
+
+  rolar();
+</script>
