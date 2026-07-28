@@ -1,4 +1,6 @@
 ---
+import Busca from './Busca.astro';
+
 const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : `${base}/`;
 
@@ -19,6 +21,7 @@ const links = [
       <a href={link.href}>{link.rotulo}</a>
     ))}
   </nav>
+  <Busca />
 </header>
 
 <style>
