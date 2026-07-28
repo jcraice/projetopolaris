@@ -3,9 +3,14 @@ import type { Sorteio } from './tipos';
 const CONTRACOES: Record<string, Record<string, string>> = {
   em: { um: 'num', uma: 'numa', o: 'no', a: 'na', os: 'nos', as: 'nas' },
   a: {},
+  // Só os artigos definidos contraem com "de" (de+a=da, de+o=do, de+as=das,
+  // de+os=dos). Indefinidos ("um"/"uma") ficam de fora de propósito: "de um"/
+  // "de uma" são a forma padrão escrita — "dum"/"duma" existem, mas são
+  // informais e não é o registro do site.
+  de: { o: 'do', a: 'da', os: 'dos', as: 'das' },
 };
 
-export function contrair(preposicao: 'em' | 'a', sintagma: string): string {
+export function contrair(preposicao: 'em' | 'a' | 'de', sintagma: string): string {
   const [artigo, ...resto] = sintagma.split(' ');
   const fundido = CONTRACOES[preposicao][artigo];
   return fundido ? `${fundido} ${resto.join(' ')}` : `${preposicao} ${sintagma}`;
@@ -115,6 +120,7 @@ export function redigir(sorteio: Sorteio, molde: string): string {
     .replaceAll('{cenario}', cenario.singular)
     .replaceAll('{impera:elemento}', `${numeroDe(elemento.nome) === 'plural' ? 'imperam' : 'impera'} ${emMinuscula(elemento.nome)}`)
     .replaceAll('{ser:elemento}', numeroDe(elemento.nome) === 'plural' ? 'são' : 'é')
+    .replaceAll('{de:elemento}', contrair('de', emMinuscula(elemento.nome)))
     .replaceAll('{elemento}', emMinuscula(elemento.nome))
     .replaceAll('{arquetipo}', emMinuscula(arquetipo.nome))
     .replaceAll('{pronome}', generoDe(arquetipo.nome) === 'f' ? 'ela' : 'ele')

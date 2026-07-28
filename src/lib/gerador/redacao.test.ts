@@ -22,6 +22,31 @@ describe('contrair', () => {
   it('não funde a + uma', () => {
     expect(contrair('a', 'uma ruína antiga')).toBe('a uma ruína antiga');
   });
+
+  it('funde de + a em da', () => {
+    expect(contrair('de', 'a busca por autenticidade')).toBe('da busca por autenticidade');
+  });
+
+  it('funde de + o em do', () => {
+    expect(contrair('de', 'o medo invisível')).toBe('do medo invisível');
+  });
+
+  it('funde de + as em das', () => {
+    expect(contrair('de', 'as ameaças cósmicas desconhecidas')).toBe('das ameaças cósmicas desconhecidas');
+  });
+
+  it('funde de + os em dos', () => {
+    expect(contrair('de', 'os conflitos de identidade')).toBe('dos conflitos de identidade');
+  });
+
+  it('não funde de + um/uma — "de um"/"de uma" ficam por extenso', () => {
+    expect(contrair('de', 'um abrigo subterrâneo')).toBe('de um abrigo subterrâneo');
+    expect(contrair('de', 'uma ruína antiga')).toBe('de uma ruína antiga');
+  });
+
+  it('não funde de quando o elemento não começa com artigo', () => {
+    expect(contrair('de', 'vigilância onipresente')).toBe('de vigilância onipresente');
+  });
 });
 
 describe('generoDe', () => {
@@ -157,6 +182,21 @@ describe('redigir', () => {
     expect(frase).toContain('até ele ver que');
   });
 
+  it('contrai {de:elemento} quando o elemento começa com artigo — molde 4', () => {
+    const comArtigo = { ...sorteio, elemento: { id: 'e3', nome: 'A busca por autenticidade', subgenero: 'comuns' } };
+    // Fragmento antes de {de:elemento} para não sofrer a capitalização de
+    // início de frase — o molde 4 real também nunca abre a frase assim,
+    // vem sempre depois de {em:cenario}.
+    const frase = redigir(comArtigo, 'tudo bem, num mundo {de:elemento}: {arquetipo} descobre que {complicacao}.');
+    expect(frase).toContain('num mundo da busca por autenticidade');
+    expect(frase).not.toContain('de a busca');
+  });
+
+  it('{de:elemento} não contrai quando o elemento não começa com artigo', () => {
+    const frase = redigir(sorteio, 'tudo bem, num mundo {de:elemento}: {arquetipo} descobre que {complicacao}.');
+    expect(frase).toContain('num mundo de busca por artefatos ancestrais');
+  });
+
   it('capitaliza somente a primeira letra da frase', () => {
     const frase = redigir(sorteio, '{em:cenario}, sob {elemento}, {arquetipo} descobre que {complicacao}.');
     expect(frase[0]).toBe('N');
@@ -165,7 +205,7 @@ describe('redigir', () => {
 
   it('não deixa marcador por resolver', () => {
     for (const molde of [
-      '{em:cenario} {elemento} {arquetipo} {complicacao} {pronome} {a:cenario} {impera:elemento} {ser:elemento}.',
+      '{em:cenario} {elemento} {arquetipo} {complicacao} {pronome} {a:cenario} {impera:elemento} {ser:elemento} {de:elemento}.',
     ]) {
       expect(redigir(sorteio, molde)).not.toMatch(/\{|\}/);
     }
