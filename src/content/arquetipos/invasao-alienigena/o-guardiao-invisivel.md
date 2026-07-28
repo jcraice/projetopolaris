@@ -1,0 +1,8 @@
+---
+nome: "O guardião invisível"
+subgenero: invasao-alienigena
+ordem: 21
+felino: true
+---
+
+Um gato que ignora os humanos, mas sua ação e postura sugerem um poder secreto sobre os invasores. Talvez ele não seja um felino, mas uma forma de vida superior, muito mais antiga e perigosa que qualquer um dos lados em conflito.

@@ -1,8 +1,8 @@
 ---
-nome: A Transumana
+nome: "A Transumana"
 subgenero: cyberpunk
 ordem: 14
+felino: false
 ---
 
-Trocou tanto de si que já não sabe dizer onde termina a pessoa e começa o
-projeto. Defende a própria transformação com a fé de quem não pode voltar atrás.
+Uma personagem cujo corpo foi significativamente modificado com aprimoramentos cibernéticos ou alterações genéticas, tornando-a "diferente" e muitas vezes poderosa.
