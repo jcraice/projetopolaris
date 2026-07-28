@@ -97,6 +97,22 @@ describe('numeroDe', () => {
     ];
     for (const caso of casos) expect(numeroDe(caso)).toBe('plural');
   });
+
+  it('reconhece "entre" como preposição — o "e" fica preso ao complemento, não ao sujeito', () => {
+    // Antes de "entre" entrar na lista de preposições, o laço não parava
+    // nela, chegava ao "e" primeiro e classificava (errado) como composto.
+    expect(numeroDe('Conflito entre destino e livre-arbítrio')).toBe('singular');
+    expect(numeroDe('Conflito entre segurança e liberdade')).toBe('singular');
+  });
+
+  it('trata coordenação de adjetivos como singular via exceção nomeada', () => {
+    // "governamental e corporativa" e "centralizada e controlada" são dois
+    // adjetivos do mesmo núcleo único — não dois núcleos coordenados. Não há
+    // regra de superfície que separe isto de "Propaganda e desinformação"
+    // (substantivo e substantivo, plural); por isso a exceção nomeada.
+    expect(numeroDe('Corrupção governamental e corporativa')).toBe('singular');
+    expect(numeroDe('Economia centralizada e controlada')).toBe('singular');
+  });
 });
 
 describe('redigir', () => {
