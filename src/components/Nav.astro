@@ -24,7 +24,7 @@ const links = [
     id="abrir-menu"
     hidden
     aria-expanded="false"
-    aria-controls="nav-links"
+    aria-controls="nav-links busca"
     aria-label="Abrir e fechar o menu"
   >
     <svg class="nav__icone-abrir" viewBox="0 0 24 24" width="22" height="22"
@@ -153,16 +153,25 @@ const links = [
     display: block;
   }
 
-  /* 768px é onde a fileira de sete links deixa de caber ao lado da marca, da
-     busca e do botão de tema sem quebrar em três linhas. */
-  @media (max-width: 767px) {
+  /* O ponto de quebra é 1080px, e não uma medida redonda de tablet, porque quem
+     manda aqui é a soma do conteúdo: a marca, os sete links, a busca e o botão
+     de tema pedem cerca de 1030px. Abaixo disso o header começava a se desfazer
+     item a item — primeiro o botão de tema caía para a segunda linha, depois a
+     busca — que é exatamente o que este recolhimento evita.
+
+     A busca entra no menu junto com os links. Ela sozinha pede 180px, e marca
+     mais busca mais dois ícones não cabem na largura de um celular: mantê-la
+     fora obrigaria a segunda linha a voltar em tela estreita. */
+  @media (max-width: 1079px) {
     .nav__abrir:not([hidden]) {
       display: flex;
+      order: 3;
     }
 
     /* O `:not([hidden])` é o que amarra as duas coisas: a lista só se esconde
        se existir um botão capaz de trazê-la de volta. */
-    .nav__abrir:not([hidden]) ~ .nav__links {
+    .nav__abrir:not([hidden]) ~ .nav__links,
+    .nav__abrir:not([hidden]) ~ :global(.busca) {
       display: none;
     }
 
@@ -174,13 +183,27 @@ const links = [
       order: 5;
     }
 
+    .nav__abrir[aria-expanded='true'] ~ :global(.busca) {
+      display: flex;
+      width: 100%;
+      max-width: none;
+      order: 4;
+    }
+
     .nav__abrir[aria-expanded='true'] ~ .nav__links a {
       padding: 10px 0;
       border-bottom: 2px solid var(--borda-suave);
     }
 
+    /* A marca empurra o resto para a direita e os dois ícones ficam colados,
+       como um par só, em vez de espalhados pela linha. */
     .nav__marca {
       margin-right: auto;
+      order: 1;
+    }
+
+    .tema {
+      order: 2;
     }
   }
 
