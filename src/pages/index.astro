@@ -8,19 +8,24 @@ import { paragrafoComPrefixo } from '../lib/texto';
 const sobre = await getEntry('paginas', 'sobre');
 if (!sobre) throw new Error("página 'sobre' não encontrada em src/content/paginas");
 const apresentacao = paragrafoComPrefixo(sobre.body ?? '', 'Meu desejo');
-const chamadaGerador = paragrafoComPrefixo(sobre.body ?? '', 'O gerador, que já foi só um plano');
 
-// A busca é por prefixo, então basta alguém reescrever a primeira linha de um
+// A busca é por prefixo, então basta alguém reescrever a primeira linha do
 // parágrafo em sobre.md para a home perder o texto sem avisar ninguém. Quebrar
 // o build é melhor que publicar uma seção vazia.
-for (const [nome, paragrafo] of Object.entries({ apresentacao, chamadaGerador })) {
-  if (!paragrafo) {
-    throw new Error(
-      `parágrafo "${nome}" não encontrado em src/content/paginas/sobre.md — ` +
-        'confira se o prefixo procurado em index.astro ainda casa com o texto',
-    );
-  }
+if (!apresentacao) {
+  throw new Error(
+    'parágrafo "Meu desejo..." não encontrado em src/content/paginas/sobre.md — ' +
+      'confira se o prefixo procurado em index.astro ainda casa com o texto',
+  );
 }
+
+// Texto próprio da home, escrito pela autora para esta chamada. Não sai de
+// sobre.md como o parágrafo acima: lá o gerador é contado em primeira pessoa,
+// dentro da história do projeto, e aqui o que se quer é o convite direto.
+const chamadaGerador =
+  'Dê vida a novas tramas. O sistema alinha um arquétipo, um cenário e um ' +
+  'elemento narrativo do universo da sua escolha, criando a centelha inicial ' +
+  'para a sua história.';
 
 const mundos = (await getCollection('subgeneros', (s) => s.data.mundo)).sort(
   (a, b) => a.data.ordem - b.data.ordem,
@@ -92,7 +97,7 @@ const pilares = [
 
   <section class="cta-gerador" aria-labelledby="gerador-titulo">
     <h2 id="gerador-titulo">Gerador de Combinações</h2>
-    {chamadaGerador && <p>{chamadaGerador}</p>}
+    <p>{chamadaGerador}</p>
     <a class="botao botao--principal" href={`${raiz}gerador`}>Ir para o Gerador</a>
   </section>
 </Base>
