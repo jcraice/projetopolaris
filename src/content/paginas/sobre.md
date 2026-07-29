@@ -9,7 +9,9 @@ Em 2014, mergulhei no universo das fanfics, aproveitava personagens e cenários 
 
 Foram anos de pequenos avanços. Sempre que tinha um tempo livre, voltava ao projeto, mesmo depois de me desanimar com as IAs que prometiam criar tramas inteiras num clique. Não que eu seja contra, pelo contrário, o ChatGPT foi um aliado valioso nas minhas pesquisas. Enfim, aos poucos, o foco mudou do gerador para algo mais sólido: os arquétipos.
 
-Hoje, este é um projeto em andamento: no momento são 6 subgêneros de ficção científica, cada um com 20 arquétipos listados, cada arquétipo com seu nome e descrição detalhada. O gerador de enredos ainda faz parte dos planos: quem sabe no futuro ele ressurja, mas agora como complemento a esse acervo de arquétipos.
+Hoje, este é um projeto no ar: são 6 subgêneros de ficção científica, cada um com 20 arquétipos listados e um arquétipo felino de bônus, além de cenários, elementos narrativos e livros de referência, cada um com seu nome e descrição detalhada.
+
+O gerador, que já foi só um plano, ressurgiu — agora como complemento a esse acervo. Ele sorteia um arquétipo, um cenário e um elemento narrativo do mundo que você escolher e devolve uma premissa pronta para começar. Se a combinação não servir, trave o que gostou e gere de novo.
 
 Meu desejo é que este espaço seja o ponto de partida para quem trava na página em branco. Criar personagens do zero pode ser tão desafiador: você tem a ideia, mas não sabe por onde começar. Aqui, você encontra ferramentas práticas, uma vasta biblioteca de arquétipos, cenários e elementos narrativos que funcionam como guias de missão. Com dicas de aplicação e inspiração visual, você não precisa mais partir do nada, basta escolher um ponto de partida e deixar a criatividade decolar. Seja autor, mestre de RPG ou artista, este é o seu laboratório.
 
