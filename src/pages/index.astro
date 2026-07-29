@@ -17,10 +17,25 @@ const mundos = (await getCollection('subgeneros', (s) => s.data.mundo)).sort(
 const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : `${base}/`;
 
+// As descrições são resumos das aberturas de src/content/paginas/{arquetipos,
+// cenarios,elementos}.md — curtas o bastante para caber num cartão, e escritas
+// para dizer o que cada pilar é a quem chega pela primeira vez.
 const pilares = [
-  { titulo: 'Arquétipos', href: `${raiz}arquetipos` },
-  { titulo: 'Cenários', href: `${raiz}cenarios` },
-  { titulo: 'Elementos Narrativos', href: `${raiz}elementos` },
+  {
+    titulo: 'Arquétipos',
+    descricao: 'Personagens de partida: papéis, conflitos e riscos para roubar e vestir com o seu estilo.',
+    href: `${raiz}arquetipos`,
+  },
+  {
+    titulo: 'Cenários',
+    descricao: 'Mais que pano de fundo: espaços que moldam a trama, os personagens e os dilemas.',
+    href: `${raiz}cenarios`,
+  },
+  {
+    titulo: 'Elementos Narrativos',
+    descricao: 'Temas, conflitos, tecnologias e estruturas sociais que definem o tom de cada subgênero.',
+    href: `${raiz}elementos`,
+  },
 ];
 ---
 <Base titulo="Projeto Polaris">
@@ -33,8 +48,8 @@ const pilares = [
     <div class="pilares">
       {pilares.map((p) => (
         <a class="pilar" href={p.href}>
-          <span class="etiqueta">Pilar</span>
           <h3>{p.titulo}</h3>
+          <p>{p.descricao}</p>
         </a>
       ))}
     </div>
@@ -99,26 +114,30 @@ const pilares = [
     color: var(--texto);
   }
 
+  .pilar p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: var(--texto);
+  }
+
   .pilar:hover h3 {
     color: var(--destaque);
   }
 
   /* No claro o pilar é preenchido com --destaque, que já era a cor da borda
-     dele. A etiqueta de dentro é da mesma cor e sumiria no próprio fundo, então
-     troca para --apoio; no hover as duas invertem, o que mantém a troca de cor
-     que o tema escuro faz no título. */
+     dele, e o hover inverte para --apoio. Título e descrição ficam na cor do
+     fundo da página nos dois estados: 5,52:1 sobre o ciano e 13,24:1 sobre o
+     azul-tinta. */
   :global(html[data-tema='claro']) .pilar {
     background: var(--destaque);
     border-color: var(--destaque);
   }
 
   :global(html[data-tema='claro']) .pilar h3,
+  :global(html[data-tema='claro']) .pilar p,
   :global(html[data-tema='claro']) .pilar:hover h3 {
     color: var(--fundo);
-  }
-
-  :global(html[data-tema='claro']) .pilar .etiqueta {
-    background: var(--apoio);
   }
 
   :global(html[data-tema='claro']) .pilar:hover {
@@ -126,13 +145,13 @@ const pilares = [
     border-color: var(--apoio);
   }
 
-  :global(html[data-tema='claro']) .pilar:hover .etiqueta {
-    background: var(--destaque);
-  }
+  /* Os seis retângulos de mundo viram uma lista que abre em tela estreita.
 
-  /* Os seis retângulos de mundo ocupam quase uma tela inteira no celular, antes
-     de o visitante chegar ao resto da home. Abaixo do mesmo ponto de quebra da
-     navegação, viram uma lista que abre. */
+     O ponto de quebra é o mesmo 1079px da navegação, e não por simetria: os
+     seis nomes somam cerca de 1060px com o espaço entre eles — "Invasão
+     Alienígena" e "Pós Apocalíptico" são largos — então é por volta daí que
+     eles passariam para uma segunda linha. Recolher antes disso é o que evita
+     vê-los quebrados no caminho até o celular. */
   .abrir-mundos {
     display: none;
     align-items: center;
@@ -174,7 +193,7 @@ const pilares = [
     display: none;
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 1079px) {
     .abrir-mundos:not([hidden]) {
       display: inline-flex;
     }
