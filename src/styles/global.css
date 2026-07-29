@@ -29,10 +29,27 @@
   --borda-suave: rgba(22, 21, 28, 0.18);
 }
 
-/* A sombra deslocada é um recurso de pôster: funciona sobre o céu escuro e
-   pesa sobre fundo claro, onde o tema é liso e minimalista por escolha. */
+/* No escuro os botões são de contorno: o traço violeta brilha sobre o céu e o
+   preenchimento estragaria isso. Sobre fundo claro o mesmo contorno fica
+   apagado, então aqui eles são preenchidos — violeta nos secundários, âmbar no
+   principal, os dois com o texto na cor do fundo da página (8,23:1 e 5,13:1).
+
+   A sombra deslocada sai junto: é um recurso de pôster que funciona sobre o
+   céu escuro e pesa no claro, onde o tema é liso por escolha. */
 :root[data-tema='claro'] .botao {
+  background: var(--violeta);
+  border-color: var(--violeta);
+  color: var(--fundo);
   box-shadow: none;
+}
+
+/* Precisa vir depois e com a mesma especificidade da regra acima: o
+   .botao--principal de cima sozinho perde para `:root[data-tema] .botao` e o
+   botão principal sairia violeta como os outros. */
+:root[data-tema='claro'] .botao--principal {
+  background: var(--ouro);
+  border-color: var(--ouro);
+  color: var(--fundo);
 }
 
 * { box-sizing: border-box; }

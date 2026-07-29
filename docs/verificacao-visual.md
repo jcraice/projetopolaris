@@ -138,8 +138,14 @@ números só, igual nas seis páginas de mundo.
 | `--ouro` | `#8a6300` | 5,13 | 4,64 |
 | `--violeta` | `#6b21a8` | 8,23 | 7,44 |
 
-A etiqueta dourada e o botão principal invertem o par — âmbar de fundo com o
-texto na cor do fundo da página — e dão os mesmos 5,13:1.
+Os botões são preenchidos aqui, e não de contorno como no escuro, onde o traço
+brilha sobre o céu e sobre fundo claro ficaria apagado. Junto com a etiqueta,
+invertem o par — cor de fundo, texto na cor do fundo da página:
+
+| Elemento | Fundo | Texto | Razão |
+|---|---|---|---|
+| botão principal, etiqueta | `--ouro` `#8a6300` | `--fundo` | 5,13 |
+| botões secundários | `--violeta` `#6b21a8` | `--fundo` | 8,23 |
 
 **Os dois acentos mudam de valor aqui, e isso é deliberado.** No escuro eles são
 fixos por decisão de projeto, mas os mesmos `#ffc300` e `#b07cff` sobre fundo
