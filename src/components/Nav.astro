@@ -16,7 +16,29 @@ const links = [
 ---
 <header class="nav">
   <a class="nav__marca" href={base}>POLARIS</a>
-  <nav class="nav__links" aria-label="Navegação principal">
+  {/* Nasce escondido e só aparece por JavaScript — ver ligarExpansivel. Sem
+      script, este botão não existe e os links ficam sempre visíveis. */}
+  <button
+    type="button"
+    class="nav__abrir"
+    id="abrir-menu"
+    hidden
+    aria-expanded="false"
+    aria-controls="nav-links"
+    aria-label="Abrir e fechar o menu"
+  >
+    <svg class="nav__icone-abrir" viewBox="0 0 24 24" width="22" height="22"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" aria-hidden="true">
+      <path d="M4 7h16M4 12h16M4 17h16" />
+    </svg>
+    <svg class="nav__icone-fechar" viewBox="0 0 24 24" width="22" height="22"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" aria-hidden="true">
+      <path d="M6 6l12 12M18 6L6 18" />
+    </svg>
+  </button>
+  <nav class="nav__links" id="nav-links" aria-label="Navegação principal">
     {links.map((link) => (
       <a href={link.href}>{link.rotulo}</a>
     ))}
@@ -88,6 +110,80 @@ const links = [
     color: var(--destaque);
   }
 
+  /* O botão do menu só existe abaixo do ponto de quebra; acima, os sete links
+     cabem na fileira e um menu recolhido só atrapalharia. */
+  .nav__abrir {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--texto);
+    cursor: pointer;
+  }
+
+  .nav__abrir:hover {
+    color: var(--destaque);
+  }
+
+  .nav__abrir:focus-visible {
+    outline: 3px solid var(--apoio);
+    outline-offset: 2px;
+  }
+
+  /* [hidden] precisa ser reafirmado: a regra de display acima venceria o
+     display:none que o navegador dá ao atributo, e o botão apareceria mesmo
+     sem JavaScript, sem abrir nada. */
+  .nav__abrir[hidden] {
+    display: none;
+  }
+
+  .nav__icone-fechar {
+    display: none;
+  }
+
+  .nav__abrir[aria-expanded='true'] .nav__icone-abrir {
+    display: none;
+  }
+
+  .nav__abrir[aria-expanded='true'] .nav__icone-fechar {
+    display: block;
+  }
+
+  /* 768px é onde a fileira de sete links deixa de caber ao lado da marca, da
+     busca e do botão de tema sem quebrar em três linhas. */
+  @media (max-width: 767px) {
+    .nav__abrir:not([hidden]) {
+      display: flex;
+    }
+
+    /* O `:not([hidden])` é o que amarra as duas coisas: a lista só se esconde
+       se existir um botão capaz de trazê-la de volta. */
+    .nav__abrir:not([hidden]) ~ .nav__links {
+      display: none;
+    }
+
+    .nav__abrir[aria-expanded='true'] ~ .nav__links {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      width: 100%;
+      order: 5;
+    }
+
+    .nav__abrir[aria-expanded='true'] ~ .nav__links a {
+      padding: 10px 0;
+      border-bottom: 2px solid var(--borda-suave);
+    }
+
+    .nav__marca {
+      margin-right: auto;
+    }
+  }
+
   .tema {
     display: flex;
     align-items: center;
@@ -133,6 +229,10 @@ const links = [
 </style>
 
 <script>
+  import { ligarExpansivel } from '../lib/expansivel';
+
+  ligarExpansivel(document.getElementById('abrir-menu'));
+
   const botao = document.getElementById('alternar-tema');
   const preferenciaClara = window.matchMedia('(prefers-color-scheme: light)');
 

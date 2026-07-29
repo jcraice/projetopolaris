@@ -42,7 +42,19 @@ const pilares = [
 
   <section aria-labelledby="mundos-titulo">
     <h2 id="mundos-titulo">Os mundos</h2>
-    <ul class="lista-subgeneros">
+    {/* Mesmo mecanismo do menu da navegação: nasce escondido, só aparece por
+        JavaScript, e sem script a lista dos seis fica visível como antes. */}
+    <button
+      type="button"
+      class="abrir-mundos"
+      id="abrir-mundos"
+      hidden
+      aria-expanded="false"
+      aria-controls="lista-mundos"
+    >
+      Escolher um mundo
+    </button>
+    <ul class="lista-subgeneros" id="lista-mundos">
       {mundos.map((m) => (
         <li>
           <a href={`${raiz}mundos/${m.id}/`}>{m.data.nome}</a>
@@ -118,6 +130,66 @@ const pilares = [
     background: var(--destaque);
   }
 
+  /* Os seis retângulos de mundo ocupam quase uma tela inteira no celular, antes
+     de o visitante chegar ao resto da home. Abaixo do mesmo ponto de quebra da
+     navegação, viram uma lista que abre. */
+  .abrir-mundos {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    border: 2px solid var(--apoio);
+    background: transparent;
+    /* Mesmo par dos retângulos que este botão abre: traço de --apoio, rótulo em
+       --texto. Escrever o rótulo em --apoio, como fazem os outros botões,
+       daria 2,34:1 sobre o céu — o traço pode ser discreto, o rótulo não. */
+    color: var(--texto);
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 10px 14px;
+    cursor: pointer;
+  }
+
+  :global(html[data-tema='claro']) .abrir-mundos {
+    background: var(--apoio);
+    color: var(--fundo);
+  }
+
+  .abrir-mundos::after {
+    content: '▾';
+  }
+
+  .abrir-mundos[aria-expanded='true']::after {
+    content: '▴';
+  }
+
+  .abrir-mundos:focus-visible {
+    outline: 3px solid var(--apoio);
+    outline-offset: 3px;
+  }
+
+  .abrir-mundos[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 767px) {
+    .abrir-mundos:not([hidden]) {
+      display: inline-flex;
+    }
+
+    .abrir-mundos:not([hidden]) ~ .lista-subgeneros {
+      display: none;
+    }
+
+    .abrir-mundos[aria-expanded='true'] ~ .lista-subgeneros {
+      display: flex;
+      flex-direction: column;
+      margin-top: 12px;
+    }
+  }
+
   .cta-gerador {
     display: flex;
     flex-direction: column;
@@ -127,3 +199,9 @@ const pilares = [
     padding-left: 16px;
   }
 </style>
+
+<script>
+  import { ligarExpansivel } from '../lib/expansivel';
+
+  ligarExpansivel(document.getElementById('abrir-mundos'));
+</script>
