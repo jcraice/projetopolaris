@@ -48,7 +48,10 @@ const links = [
   .nav__links {
     display: flex;
     flex-wrap: wrap;
-    gap: 18px;
+    /* Era 18px. Encolheu porque o padding dos links agora separa um do outro
+       por conta própria — sem isso, padding somado ao intervalo antigo faria
+       a navegação quebrar em mais fileiras no celular. */
+    gap: 12px;
   }
 
   .nav__links a {
@@ -58,6 +61,12 @@ const links = [
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.06em;
+    /* Sem padding estes links eram texto nu de ~16px de altura, os menores
+       alvos de toque do site. Com 8px em cima e embaixo passam de 30px, acima
+       dos 24px que o WCAG 2.2 AA pede em "Target Size (Minimum)". O padding
+       lateral é pequeno de propósito: alargar demais empurraria a navegação
+       para mais uma fileira em tela estreita. */
+    padding: 8px 4px;
   }
 
   .nav__links a:hover {

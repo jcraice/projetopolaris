@@ -106,7 +106,9 @@ const CARTAS = [
     border: 2px solid var(--borda-suave);
     padding: 6px 10px;
     font-family: inherit;
-    font-size: 0.9rem;
+    /* 1rem pelo mesmo motivo do campo de busca: abaixo de 16px o Safari do
+       iPhone amplia a página ao abrir o seletor. */
+    font-size: 1rem;
   }
 
   #opcoes select:focus-visible,

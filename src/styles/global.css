@@ -21,7 +21,17 @@ body {
   background: var(--tinta);
   color: var(--texto);
   font-family: 'Segoe UI', system-ui, sans-serif;
-  min-height: 100vh;
+  /* dvh, não vh: no celular, 100vh conta a barra de endereço como se ela nunca
+     existisse, e a página pula quando a barra recolhe. 100dvh acompanha a
+     altura que de fato sobra.
+
+     Sem par de fallback `min-height: 100vh` antes desta linha porque o
+     minificador do build descarta a primeira das duas declarações — o par
+     existia no código-fonte e sumia do CSS publicado. O suporte a dvh é
+     universal desde 2022 (Safari 15.4, Chrome 108, Firefox 101) e o que se
+     perde antes disso é só o piso de altura numa página mais curta que a
+     tela, com a aurora fixa cobrindo o fundo de qualquer jeito. */
+  min-height: 100dvh;
 }
 
 h1, h2, h3 {
