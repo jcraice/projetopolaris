@@ -110,8 +110,16 @@ o WCAG trata o texto como grande e o mínimo cai para 3:1, que o dourado cumpre
 em todos os seis mundos. Encolher esses títulos de volta reprova o contraste.
 
 **Cadeado do gerador.** Usa `--texto` no estado destravado (4,71 no pior mundo)
-e `--ouro` no travado (4,27) — os dois acima dos 3:1 que o WCAG 1.4.11 pede de
-elemento de interface. `--apagado` foi descartado justamente por ficar em 2,12.
+e `--destaque` no travado (4,27) — os dois acima dos 3:1 que o WCAG 1.4.11 pede
+de elemento de interface. `--apagado` foi descartado por ficar em 2,12.
+
+**Os dois blocos do gerador** — as peças sorteadas e a dica de enredo — têm
+fundo `--bloco`, e ali o texto não fica mais direto sobre o céu. A primeira
+tentativa foi o acento puro a 8% por cima, e ela **reprovava**: `--apoio` é mais
+claro que o céu, então clareava o fundo e derrubava o corpo de texto para
+4,45:1. O valor em uso é o acento misturado a 20% no fundo da página e aplicado
+a 45% — escurece em vez de clarear, e o texto sobe de 4,71 para **6,90**, o
+destaque para **6,78** e o apagado de 2,12 para 3,38.
 
 Nenhum ajuste de opacidade resolve: para `--apagado` passar em 4,5:1 sobre o
 céu, a aurora teria que cair para 0,135, o que apaga a identidade visual do
@@ -153,6 +161,10 @@ página:
 | botão principal, etiqueta, pilares | `--destaque` | `--fundo` | 5,52 |
 | botões secundários, retângulos de mundo | `--apoio` | `--fundo` | 13,24 |
 | os mesmos, no hover | trocam entre si | `--fundo` | 5,52 / 13,24 |
+
+Sobre `--bloco`, o véu de `--apoio` a 6% que agrupa as peças e a dica de enredo
+no gerador, o corpo de texto fica em 10,28:1 e o destaque em 4,94:1 — aqui não
+há céu para escurecer, então o bloco só precisa ser sutil.
 
 Dentro de um pilar preenchido a etiqueta troca de `--destaque` para `--apoio`, e
 volta no hover, quando o pilar inverte — sem isso ela sumiria dentro do próprio

@@ -29,6 +29,14 @@
   --apagado: #8e8e9c;
   --painel: rgba(11, 11, 14, 0.8);
   --borda-suave: rgba(255, 255, 255, 0.16);
+
+  /* Fundo dos dois blocos do gerador. É --apoio misturado a 20% no fundo da
+     página e aplicado a 45% — ou seja, escurece o céu em vez de clarear.
+     A tentativa óbvia (o violeta puro a 8% por cima) derruba o corpo de texto
+     para 4,45:1 no mundo Invasão Alienígena, porque o violeta é mais claro que
+     o céu: a cor que deveria dar destaque tirava legibilidade. Assim o texto
+     sobe de 4,71 para 6,90. */
+  --bloco: rgba(44, 34, 62, 0.45);
 }
 
 /* O claro não é o escuro clareado: é outra paleta, escolhida pela autora
@@ -45,6 +53,9 @@
   --apagado: #5b6472;
   --painel: rgba(20, 24, 31, 0.05);
   --borda-suave: rgba(20, 24, 31, 0.18);
+  /* Sem céu para escurecer, aqui basta um véu de --apoio quase transparente
+     sobre o branco: o corpo de texto fica em 10,28:1 e o destaque em 4,94:1. */
+  --bloco: rgba(27, 42, 74, 0.06);
 }
 
 /* No escuro os botões são de contorno: o traço de --apoio brilha sobre o céu e o
@@ -181,6 +192,13 @@ a {
 .lista-subgeneros a:hover {
   color: var(--destaque);
   border-color: var(--destaque);
+}
+
+/* Agrupa sem emoldurar: cor quase transparente e espaço interno, nenhum traço.
+   É o que separa as peças sorteadas da dica de enredo no gerador. */
+.bloco {
+  background: var(--bloco);
+  padding: 20px;
 }
 
 .abertura {

@@ -45,7 +45,7 @@ const CARTAS = [
     </fieldset>
   </form>
 
-  <section id="cartas" class="pilha-cartas" aria-live="polite" aria-label="Peças sorteadas">
+  <section id="cartas" class="pilha-cartas bloco" aria-live="polite" aria-label="Peças sorteadas">
     {CARTAS.map(({ tipo, rotulo }) => (
       <article class="carta" data-carta={tipo}>
         <div class="carta__topo">
@@ -81,11 +81,13 @@ const CARTAS = [
     ))}
   </section>
 
-  <section class="bloco-premissa" aria-live="polite" aria-label="Premissa gerada">
-    <p id="premissa" class="abertura"></p>
+  <section class="bloco bloco-premissa" aria-labelledby="dica-titulo">
+    <h2 id="dica-titulo">Dica de enredo</h2>
+    {/* aria-live no parágrafo, e não na seção inteira: na seção, cada clique
+        em Gerar faria o leitor de tela reler também o título e os botões. */}
+    <p id="premissa" class="abertura" aria-live="polite"></p>
     <div class="acoes">
-      <button type="button" class="botao botao--principal" id="sortear">Sortear tudo</button>
-      <button type="button" class="botao" id="reescrever">Reescrever</button>
+      <button type="button" class="botao botao--principal" id="sortear">Gerar</button>
       <button type="button" class="botao" id="copiar">Copiar</button>
     </div>
     <span id="aviso" role="status"></span>
@@ -229,6 +231,12 @@ const CARTAS = [
     color: var(--texto-forte);
   }
 
+  /* O espaço interno do bloco já afasta o título da borda; a margem que o
+     navegador dá ao h2 empilharia em cima dela. */
+  .bloco-premissa h2 {
+    margin-top: 0;
+  }
+
   .bloco-premissa #premissa {
     min-height: 1.6em;
     font-size: 1.15rem;
@@ -299,14 +307,6 @@ const CARTAS = [
   }
 
   document.getElementById('sortear')!.addEventListener('click', rolar);
-
-  // Reescrever mantém as peças e troca apenas molde e complicação, por isso
-  // sorteia com as três travas ligadas independente do estado real dos botões.
-  document.getElementById('reescrever')!.addEventListener('click', () => {
-    if (!atual) return rolar();
-    atual = sortear(pools, lerOpcoes(), { arquetipo: true, cenario: true, elemento: true }, atual, Math.random);
-    pintar(atual, moldeAoAcaso());
-  });
 
   document.getElementById('copiar')!.addEventListener('click', async () => {
     if (!premissa.textContent) return;
