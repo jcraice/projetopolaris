@@ -5,9 +5,16 @@ gerador de combinações de premissas que roda inteiramente no navegador. O
 acervo cobre arquétipos de personagem, cenários, elementos narrativos e
 livros de referência, e é publicado como site estático no GitHub Pages.
 
-Este repositório está em construção incremental: cada etapa do plano de
-implementação entrega uma fatia funcional do site, começando por este
-esqueleto — publicação automática em pé, ainda sem conteúdo.
+O site está no ar em **https://jcraice.github.io/projetopolaris/**, com 146
+arquétipos, 60 cenários, 120 elementos narrativos e 36 livros divididos em seis
+mundos, mais um pool de 20 arquétipos comuns. Tem busca em todo o acervo, tema
+claro e escuro, e um gerador que combina as peças em premissas prontas para
+começar uma história.
+
+Nada é carregado de fora e nada é guardado sobre quem visita: o gerador roda
+inteiramente no navegador, a partir de dados embutidos na página em tempo de
+build, e a única coisa que fica no navegador é a escolha entre tema claro e
+escuro.
 
 ## Como rodar
 
