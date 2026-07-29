@@ -86,12 +86,13 @@ const CARTAS = [
     {/* aria-live no parágrafo, e não na seção inteira: na seção, cada clique
         em Gerar faria o leitor de tela reler também o título e os botões. */}
     <p id="premissa" class="abertura" aria-live="polite"></p>
-    <div class="acoes">
-      <button type="button" class="botao botao--principal" id="sortear">Gerar</button>
-      <button type="button" class="botao" id="copiar">Copiar</button>
-    </div>
-    <span id="aviso" role="status"></span>
   </section>
+
+  <div class="acoes">
+    <button type="button" class="botao botao--principal" id="sortear">Gerar</button>
+    <button type="button" class="botao" id="copiar">Copiar</button>
+  </div>
+  <span id="aviso" role="status"></span>
 
   {/* is:inline porque isto é dado, não código: sem a diretiva o Astro trata o
       bloco como script a processar e emite um aviso em `npm run check`. */}
@@ -218,9 +219,18 @@ const CARTAS = [
     gap: 12px;
   }
 
+  /* O papel da peça troca de acento entre os temas, em vez de usar o mesmo
+     token nos dois: no escuro é o amarelo do destaque, no claro o azul escuro
+     do apoio. Sobre o fundo do bloco isso dá 6,78:1 no pior mundo escuro e
+     mais de 12:1 no claro — folgado para um texto de 15px em negrito. */
   .carta__papel {
     margin: 0;
     font-size: 0.95rem;
+    color: var(--destaque);
+  }
+
+  :global(html[data-tema='claro']) .carta__papel {
+    color: var(--apoio);
   }
 
   .carta__nome {

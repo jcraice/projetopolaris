@@ -17,11 +17,13 @@ const elementos = (await getCollection('elementos', (e) => e.data.subgenero === 
 <Base titulo={`Elementos ${subgenero.data.nome}`} aurora={subgenero.data.aurora}>
   <h1>Elementos {subgenero.data.nome}</h1>
   <p class="abertura">{subgenero.body}</p>
-  {elementos.map((e) => (
-    <Cartao titulo={e.data.titulo} ancora={paraAncora(e.data.titulo)}>
-      <p>{e.body}</p>
-    </Cartao>
-  ))}
+  <div class="bloco">
+    {elementos.map((e) => (
+      <Cartao titulo={e.data.titulo} ancora={paraAncora(e.data.titulo)}>
+        <p>{e.body}</p>
+      </Cartao>
+    ))}
+  </div>
   {subgenero.data.citacao && (
     <blockquote>{subgenero.data.citacao}<cite>{subgenero.data.citacaoAutor}</cite></blockquote>
   )}

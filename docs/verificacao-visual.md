@@ -113,8 +113,11 @@ em todos os seis mundos. Encolher esses títulos de volta reprova o contraste.
 e `--destaque` no travado (4,27) — os dois acima dos 3:1 que o WCAG 1.4.11 pede
 de elemento de interface. `--apagado` foi descartado por ficar em 2,12.
 
-**Os dois blocos do gerador** — as peças sorteadas e a dica de enredo — têm
-fundo `--bloco`, e ali o texto não fica mais direto sobre o céu. A primeira
+**Onde `--bloco` é usado.** No gerador, nas peças sorteadas e na dica de enredo;
+no catálogo, envolvendo os verbetes de `/arquetipos/`, `/cenarios/` e
+`/elementos/` por subgênero. Nesses lugares o texto não fica mais direto sobre
+o céu, e as razões da tabela acima sobem. Ficaram de fora, ainda sobre o céu:
+`/livros/` e as páginas de mundo, que reúnem os quatro tipos. A primeira
 tentativa foi o acento puro a 8% por cima, e ela **reprovava**: `--apoio` é mais
 claro que o céu, então clareava o fundo e derrubava o corpo de texto para
 4,45:1. O valor em uso é o acento misturado a 20% no fundo da página e aplicado

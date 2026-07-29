@@ -18,18 +18,20 @@ const felino = fichas.find((f) => f.data.felino);
 <Base titulo={`Arquétipos ${subgenero.data.nome}`} aurora={subgenero.data.aurora}>
   <h1>Arquétipos {subgenero.data.nome}</h1>
   {subgenero.data.aberturaArquetipos && <p class="abertura">{subgenero.data.aberturaArquetipos}</p>}
-  {comuns.map((f) => (
-    <Cartao titulo={f.data.nome} ancora={paraAncora(f.data.nome)}>
-      <p>{f.body}</p>
-    </Cartao>
-  ))}
-  {felino && (
-    <section aria-label="Arquétipo felino">
-      <Cartao marcador="Arquétipo Felino" titulo={felino.data.nome} ancora={paraAncora(felino.data.nome)}>
-        <p>{felino.body}</p>
+  <div class="bloco">
+    {comuns.map((f) => (
+      <Cartao titulo={f.data.nome} ancora={paraAncora(f.data.nome)}>
+        <p>{f.body}</p>
       </Cartao>
-    </section>
-  )}
+    ))}
+    {felino && (
+      <section aria-label="Arquétipo felino">
+        <Cartao marcador="Arquétipo Felino" titulo={felino.data.nome} ancora={paraAncora(felino.data.nome)}>
+          <p>{felino.body}</p>
+        </Cartao>
+      </section>
+    )}
+  </div>
   {subgenero.data.citacao && (
     <blockquote>{subgenero.data.citacao}<cite>{subgenero.data.citacaoAutor}</cite></blockquote>
   )}
