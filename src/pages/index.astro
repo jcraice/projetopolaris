@@ -91,6 +91,34 @@ const pilares = [
     color: var(--ouro);
   }
 
+  /* No claro o pilar é preenchido, e o âmbar é a escolha natural porque já era
+     a cor da borda dele. A etiqueta de dentro precisa trocar para violeta ou
+     desapareceria no próprio fundo — ela também é âmbar. No hover as duas
+     invertem, o que mantém a troca âmbar ↔ violeta que o tema escuro faz com
+     a cor do título. */
+  :global(html[data-tema='claro']) .pilar {
+    background: var(--ouro);
+    border-color: var(--ouro);
+  }
+
+  :global(html[data-tema='claro']) .pilar h3,
+  :global(html[data-tema='claro']) .pilar:hover h3 {
+    color: var(--fundo);
+  }
+
+  :global(html[data-tema='claro']) .pilar .etiqueta {
+    background: var(--violeta);
+  }
+
+  :global(html[data-tema='claro']) .pilar:hover {
+    background: var(--violeta);
+    border-color: var(--violeta);
+  }
+
+  :global(html[data-tema='claro']) .pilar:hover .etiqueta {
+    background: var(--ouro);
+  }
+
   .cta-gerador {
     display: flex;
     flex-direction: column;

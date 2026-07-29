@@ -52,6 +52,22 @@
   color: var(--fundo);
 }
 
+/* Os retângulos de mundo — na home e no topo de cada índice de seção — seguem
+   os botões: preenchidos no claro, de contorno no escuro. A troca violeta →
+   âmbar no hover é a mesma de sempre, só que agora acontece no preenchimento
+   em vez de no traço. */
+:root[data-tema='claro'] .lista-subgeneros a {
+  background: var(--violeta);
+  border-color: var(--violeta);
+  color: var(--fundo);
+}
+
+:root[data-tema='claro'] .lista-subgeneros a:hover {
+  background: var(--ouro);
+  border-color: var(--ouro);
+  color: var(--fundo);
+}
+
 * { box-sizing: border-box; }
 
 html {

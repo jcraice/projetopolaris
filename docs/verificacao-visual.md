@@ -146,6 +146,14 @@ invertem o par — cor de fundo, texto na cor do fundo da página:
 |---|---|---|---|
 | botão principal, etiqueta | `--ouro` `#8a6300` | `--fundo` | 5,13 |
 | botões secundários | `--violeta` `#6b21a8` | `--fundo` | 8,23 |
+| retângulos de mundo | `--violeta` | `--fundo` | 8,23 |
+| retângulos de mundo, hover | `--ouro` | `--fundo` | 5,13 |
+| pilares da home | `--ouro` | `--fundo` | 5,13 |
+| pilares da home, hover | `--violeta` | `--fundo` | 8,23 |
+
+Dentro de um pilar preenchido a etiqueta troca de âmbar para violeta, e volta
+para âmbar no hover, quando o pilar fica violeta — sem isso ela sumiria dentro
+do próprio fundo, que é da mesma cor.
 
 **Os dois acentos mudam de valor aqui, e isso é deliberado.** No escuro eles são
 fixos por decisão de projeto, mas os mesmos `#ffc300` e `#b07cff` sobre fundo
