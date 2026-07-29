@@ -13,19 +13,32 @@ export async function getStaticPaths() {
 
 const { subgenero } = Astro.props;
 
-const arquetipos = (await getCollection('arquetipos', (a) => a.data.subgenero === subgenero.id))
-  .sort((a, b) => a.data.ordem - b.data.ordem);
-const arquetiposComuns = arquetipos.filter((f) => !f.data.felino);
-const arquetipoFelino = arquetipos.find((f) => f.data.felino);
+// Esta página é a porta de entrada de um mundo, não o catálogo dele: mostra uma
+// amostra de cada tipo e manda para a página completa. Antes listava tudo, o
+// que deixava o "Ver todos" sem sentido — ele levava para a mesma coisa que já
+// estava na tela, depois de dezenas de verbetes de rolagem.
+const PREVIA = 3;
+
+const porOrdem = (a: { data: { ordem: number } }, b: { data: { ordem: number } }) =>
+  a.data.ordem - b.data.ordem;
+
+// O arquétipo felino fica de fora da amostra e aparece só na página completa:
+// ele é o vigésimo primeiro de cada mundo, não um dos três primeiros.
+const arquetipos = (await getCollection('arquetipos', (a) => a.data.subgenero === subgenero.id && !a.data.felino))
+  .sort(porOrdem)
+  .slice(0, PREVIA);
 
 const cenarios = (await getCollection('cenarios', (c) => c.data.subgenero === subgenero.id))
-  .sort((a, b) => a.data.ordem - b.data.ordem);
+  .sort(porOrdem)
+  .slice(0, PREVIA);
 
 const elementos = (await getCollection('elementos', (e) => e.data.subgenero === subgenero.id))
-  .sort((a, b) => a.data.ordem - b.data.ordem);
+  .sort(porOrdem)
+  .slice(0, PREVIA);
 
 const livros = (await getCollection('livros', (l) => l.data.subgenero === subgenero.id))
-  .sort((a, b) => a.data.ordem - b.data.ordem);
+  .sort(porOrdem)
+  .slice(0, PREVIA);
 // Cada livro tem vários parágrafos (edição, comentário, sinopse) — precisa de render()
 // de verdade, diferente das outras coleções, que são prosa de um parágrafo só.
 const livrosRenderizados = await Promise.all(
@@ -50,20 +63,11 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
     <h2 id="arquetipos-titulo">
       Arquétipos <a class="ver-tudo" href={`${raiz}arquetipos/${subgenero.id}/`}>Ver todos →</a>
     </h2>
-    {arquetiposComuns.map((f) => (
+    {arquetipos.map((f) => (
       <Cartao titulo={f.data.nome} ancora={`arquetipos-${paraAncora(f.data.nome)}`}>
         <p>{f.body}</p>
       </Cartao>
     ))}
-    {arquetipoFelino && (
-      <Cartao
-        marcador="Arquétipo Felino"
-        titulo={arquetipoFelino.data.nome}
-        ancora={`arquetipos-${paraAncora(arquetipoFelino.data.nome)}`}
-      >
-        <p>{arquetipoFelino.body}</p>
-      </Cartao>
-    )}
   </section>
 
   <section id="cenarios" aria-labelledby="cenarios-titulo">
