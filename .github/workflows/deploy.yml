@@ -24,6 +24,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx vitest run
+      - run: npm run check
       - uses: withastro/action@v6
         with:
           node-version: 22

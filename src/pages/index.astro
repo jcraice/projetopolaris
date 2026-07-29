@@ -6,6 +6,7 @@ import { paragrafoComPrefixo } from '../lib/texto';
 // Reaproveita dois parágrafos já escritos em Sobre (src/content/paginas/sobre.md)
 // em vez de redigir uma apresentação nova — ver relatório da Task 8 para a origem.
 const sobre = await getEntry('paginas', 'sobre');
+if (!sobre) throw new Error("página 'sobre' não encontrada em src/content/paginas");
 const apresentacao = paragrafoComPrefixo(sobre.body ?? '', 'Meu desejo');
 const chamadaGerador = paragrafoComPrefixo(sobre.body ?? '', 'Hoje, este');
 

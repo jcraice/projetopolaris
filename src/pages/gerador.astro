@@ -68,7 +68,9 @@ const CARTAS = [
     <span id="aviso" role="status"></span>
   </section>
 
-  <script type="application/json" id="pools" set:html={JSON.stringify(pools)}></script>
+  {/* is:inline porque isto é dado, não código: sem a diretiva o Astro trata o
+      bloco como script a processar e emite um aviso em `npm run check`. */}
+  <script type="application/json" id="pools" is:inline set:html={JSON.stringify(pools)}></script>
 </Base>
 
 <style>
@@ -259,8 +261,23 @@ const CARTAS = [
   // anterior: sem isto, uma peça travada do mundo antigo sobreviveria e
   // contradiria a opção recém-escolhida. Como sortear() só respeita uma
   // trava quando existe um sorteio anterior, zerar `atual` força as três
-  // peças a serem redesenhadas dentro do novo filtro.
-  form.addEventListener('change', () => { atual = null; rolar(); });
+  // peças a serem redesenhadas dentro do novo filtro. As travas em si
+  // também precisam zerar aqui: sortear() já ignora travas.* quando não
+  // há `anterior`, então as três peças saem corretas mesmo sem este
+  // trecho — mas sem ele os botões continuavam dizendo "Destravar" com
+  // aria-pressed="true" para peças que na verdade não estão mais travadas,
+  // o que confunde tanto visualmente quanto para quem usa leitor de tela.
+  form.addEventListener('change', () => {
+    atual = null;
+    for (const tipo of ['arquetipo', 'cenario', 'elemento'] as const) {
+      travas[tipo] = false;
+      const botao = document.querySelector<HTMLButtonElement>(`[data-travar="${tipo}"]`)!;
+      botao.setAttribute('aria-pressed', 'false');
+      botao.textContent = 'Travar';
+      botao.closest<HTMLElement>('.carta')!.classList.remove('carta--travada');
+    }
+    rolar();
+  });
 
   rolar();
 </script>

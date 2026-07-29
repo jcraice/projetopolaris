@@ -163,7 +163,17 @@
     // O índice só é baixado na primeira digitação (não no carregamento da
     // página) e nunca duas vezes: a promessa em andamento é reaproveitada
     // por quem digita rápido, em vez de disparar um novo fetch.
-    async function obterIndice(): Promise<ItemIndice[]> {
+    //
+    // As funções abaixo são expressões (`const nome = () => …`), não
+    // declarações (`function nome() {}`): o TypeScript só propaga o
+    // estreitamento de tipo do `instanceof` acima (campo, lista, status
+    // deixam de ser `HTMLElement | null`) para dentro de funções que já
+    // existem no momento em que a checagem roda — funções aninhadas
+    // declaradas com `function` são hoisted e, por poderem em tese ser
+    // chamadas de qualquer ponto do escopo, o TypeScript descarta o
+    // estreitamento dentro delas. Expressões atribuídas a `const` não têm
+    // esse problema.
+    const obterIndice = async (): Promise<ItemIndice[]> => {
       if (indice) return indice;
       if (!carregando) {
         carregando = fetch(`${raiz}indice-busca.json`)
@@ -175,18 +185,18 @@
       }
       indice = await carregando;
       return indice;
-    }
+    };
 
-    function fecharLista() {
+    const fecharLista = () => {
       lista.hidden = true;
       lista.innerHTML = '';
       campo.setAttribute('aria-expanded', 'false');
       campo.removeAttribute('aria-activedescendant');
       resultados = [];
       indiceAtivo = -1;
-    }
+    };
 
-    function atualizarAtivo() {
+    const atualizarAtivo = () => {
       const opcoes = lista.querySelectorAll('li');
       opcoes.forEach((opcao, i) => {
         const ativa = i === indiceAtivo;
@@ -198,9 +208,9 @@
         }
       });
       if (indiceAtivo === -1) campo.removeAttribute('aria-activedescendant');
-    }
+    };
 
-    function renderizarResultados() {
+    const renderizarResultados = () => {
       lista.innerHTML = '';
       indiceAtivo = -1;
       campo.removeAttribute('aria-activedescendant');
@@ -240,9 +250,9 @@
       lista.hidden = false;
       campo.setAttribute('aria-expanded', 'true');
       status.textContent = `${resultados.length} resultado${resultados.length === 1 ? '' : 's'} encontrado${resultados.length === 1 ? '' : 's'}.`;
-    }
+    };
 
-    async function tratarDigitacao() {
+    const tratarDigitacao = async () => {
       const consulta = campo.value;
       if (!consulta.trim()) {
         fecharLista();
@@ -264,7 +274,7 @@
 
       resultados = buscar(indiceCarregado, campo.value).slice(0, 10);
       renderizarResultados();
-    }
+    };
 
     campo.addEventListener('input', () => {
       void tratarDigitacao();

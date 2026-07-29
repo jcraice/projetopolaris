@@ -3,6 +3,7 @@ import { getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 
 const pagina = await getEntry('paginas', 'sobre');
+if (!pagina) throw new Error("página 'sobre' não encontrada em src/content/paginas");
 const { Content } = await render(pagina);
 ---
 <Base titulo={pagina.data.titulo}>

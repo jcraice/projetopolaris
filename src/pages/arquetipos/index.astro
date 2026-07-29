@@ -3,6 +3,7 @@ import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 
 const pagina = await getEntry('paginas', 'arquetipos');
+if (!pagina) throw new Error("página 'arquetipos' não encontrada em src/content/paginas");
 const { Content } = await render(pagina);
 
 const subgeneros = (await getCollection('subgeneros')).sort((a, b) => a.data.ordem - b.data.ordem);

@@ -1,20 +1,12 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import type { BaseSchema } from 'astro/content/config';
 import {
   esquemaArquetipo, esquemaCenario, esquemaElemento,
   esquemaLivro, esquemaPagina, esquemaSubgenero,
 } from './lib/schemas';
 
-type EsquemaPorPasta = {
-  subgeneros: typeof esquemaSubgenero;
-  arquetipos: typeof esquemaArquetipo;
-  cenarios: typeof esquemaCenario;
-  elementos: typeof esquemaElemento;
-  livros: typeof esquemaLivro;
-  paginas: typeof esquemaPagina;
-};
-
-const colecao = <Pasta extends keyof EsquemaPorPasta>(pasta: Pasta, schema: EsquemaPorPasta[Pasta]) =>
+const colecao = <S extends BaseSchema>(pasta: string, schema: S) =>
   defineCollection({ loader: glob({ pattern: '**/*.md', base: `./src/content/${pasta}` }), schema });
 
 export const collections = {
