@@ -201,11 +201,16 @@ a {
   padding: 20px;
 }
 
-/* O último verbete de um bloco somaria sua margem de 32px ao espaço interno de
-   20px e deixaria o rodapé do bloco visivelmente maior que o topo. O segundo
-   seletor existe por causa do arquétipo felino, que vem embrulhado numa
-   <section> própria e por isso não é o `.verbete:last-child` do bloco. */
-.bloco > .verbete:last-child,
+/* As margens do primeiro e do último filho somariam ao espaço interno do bloco
+   e deixariam topo e rodapé desiguais. Vale para qualquer conteúdo — verbete,
+   título, parágrafo. O último seletor existe por causa do arquétipo felino,
+   que vem embrulhado numa <section> própria e por isso não é ele mesmo o
+   último filho do bloco. */
+.bloco > :first-child {
+  margin-block-start: 0;
+}
+
+.bloco > :last-child,
 .bloco > :last-child > .verbete:last-child {
   margin-block-end: 0;
 }

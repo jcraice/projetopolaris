@@ -8,5 +8,21 @@ const { Content } = await render(pagina);
 ---
 <Base titulo={pagina.data.titulo}>
   <h1>{pagina.data.titulo}</h1>
-  <Content />
+  <div class="conteudo">
+    <Content />
+  </div>
 </Base>
+
+<style>
+  /* O HTML vem de render() do Markdown e não recebe o atributo de escopo do
+     Astro, então o alcance tem que ser dado pelo contêiner: a classe .conteudo
+     é escopada, e :global() alcança o que está dentro dela. */
+  .conteudo :global(h2) {
+    color: var(--destaque);
+  }
+
+  .conteudo :global(p) {
+    max-width: 68ch;
+    line-height: 1.55;
+  }
+</style>
