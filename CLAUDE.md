@@ -37,8 +37,20 @@ Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md]
   biblioteca nenhuma; o único `fetch` em tempo de execução é o da busca, que
   pega `indice-busca.json` gerado no build.
 - **Node ≥ 22.12** (exigência do Astro 7). TypeScript estrito.
-- **Tema escuro apenas**, acentos fixos: dourado `#ffc300`, violeta `#b07cff`.
-  A "aurora" é o único elemento que muda de cor, por subgênero.
+- **Dois temas.** O escuro é o padrão e o único que existe sem JavaScript;
+  o claro entra por `data-tema="claro"` na raiz, escrito por um script embutido
+  no `<head>` de [Base.astro](src/layouts/Base.astro) antes da primeira pintura.
+  Toda cor vem de token em `:root` — nunca escrever cor literal em componente,
+  senão ela só funciona num dos dois temas.
+- **Acentos fixos no escuro**: dourado `#ffc300`, violeta `#b07cff`. No claro
+  eles escurecem por necessidade de contraste (`#8a6300` e `#6b21a8`); os
+  valores originais dão 1,6:1 e 2,6:1 sobre fundo claro.
+- A "aurora" muda de cor por subgênero e **não existe no tema claro**, onde o
+  fundo é liso.
+- **Mexeu em cor, tamanho de fonte ou opacidade da aurora?** Refaça as contas de
+  [docs/verificacao-visual.md](docs/verificacao-visual.md) e atualize o
+  documento. Vários valores estão no limite: os títulos dos verbetes só passam
+  porque têm 1.2rem, e a aurora só pode ir até 0,37.
 - **`prefers-reduced-motion` respeitado** por qualquer animação.
 - **Tudo em português do Brasil**: identificadores, nomes de arquivo, interface,
   comentários e mensagens de commit (imperativo — "Adiciona busca global").

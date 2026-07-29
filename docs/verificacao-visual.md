@@ -119,6 +119,38 @@ site. As saídas reais são dar fundo de painel a esses trechos (rodapé, legend
 aviso), ou trocar o papel da cor nesses lugares específicos. **Decisão de
 desenho, da autora.**
 
+## Tema claro
+
+Acrescentado depois, contra a decisão original de tema escuro único, a pedido
+da autora. Vale por atributo `data-tema="claro"` na raiz do documento, escrito
+por um script embutido no `<head>` antes da primeira pintura. Sem JavaScript o
+site fica escuro, que era o único tema até então.
+
+**Não há céu aqui**: a aurora é removida por completo (`display: none`) e o
+fundo é liso. Por isso a medição não depende de mundo nenhum — é um par de
+números só, igual nas seis páginas de mundo.
+
+| Papel | Valor | Sobre o fundo `#faf8f5` | Sobre o painel (navegação, pilares) |
+|---|---|---|---|
+| `--texto-forte` | `#16151c` | 17,11 | 15,47 |
+| `--texto` | `#34313f` | 11,95 | 10,81 |
+| `--apagado` | `#605d6d` | 6,03 | 5,46 |
+| `--ouro` | `#8a6300` | 5,13 | 4,64 |
+| `--violeta` | `#6b21a8` | 8,23 | 7,44 |
+
+A etiqueta dourada e o botão principal invertem o par — âmbar de fundo com o
+texto na cor do fundo da página — e dão os mesmos 5,13:1.
+
+**Os dois acentos mudam de valor aqui, e isso é deliberado.** No escuro eles são
+fixos por decisão de projeto, mas os mesmos `#ffc300` e `#b07cff` sobre fundo
+claro dão 1,6:1 e 2,6:1 — ilegíveis. Escurecem mantendo o matiz: o dourado vira
+âmbar, o violeta vira roxo.
+
+**Tudo passa, inclusive o que reprova no escuro.** As três pendências da seção
+anterior — `--apagado`, links violeta e o dourado de texto pequeno — deixam de
+existir no tema claro, onde o pior número da tabela inteira é 4,64:1. A
+pendência continua valendo só para o tema escuro.
+
 ## Movimento reduzido
 
 Três animações existem no site, e as três têm guarda `prefers-reduced-motion`.
@@ -129,6 +161,7 @@ Confirmado no CSS gerado por `npm run build`:
 | giro da aurora, 90s | `Aurora.astro` | `.aurora { animation: none }` |
 | surgir da lista de busca | `Busca.astro` | `.busca__lista { animation: none }` |
 | transição de cor do cadeado | `gerador.astro` | `.cadeado { transition: none }` |
+| transição de cor do botão de tema | `Nav.astro` | `.tema { transition: none }` |
 
 Como a aurora vive no layout `Base.astro`, a guarda vale para todas as 39
 páginas. Falta só a confirmação visual com "reduzir movimento" ligado no

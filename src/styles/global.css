@@ -1,12 +1,38 @@
+/* O tema escuro é o padrão e o que vale sem JavaScript: o atributo data-tema
+   é escrito por um script embutido no <head> de Base.astro, antes da primeira
+   pintura, e sem ele o site fica escuro — que era o único tema até aqui. */
 :root {
+  color-scheme: dark;
   --ouro: #ffc300;
   --violeta: #b07cff;
-  --tinta: #0b0b0e;
-  --papel: #ffffff;
+  --fundo: #0b0b0e;
+  --texto-forte: #ffffff;
   --texto: #d5d5df;
   --apagado: #8e8e9c;
   --painel: rgba(11, 11, 14, 0.8);
   --borda-suave: rgba(255, 255, 255, 0.16);
+}
+
+/* Dourado e violeta são fixos no escuro por decisão de projeto, mas não podem
+   ser os mesmos aqui: #ffc300 sobre fundo claro dá 1,6:1 e #b07cff dá 2,6:1,
+   ilegíveis. As duas cores escurecem mantendo o matiz — o dourado vira âmbar
+   (5,13:1) e o violeta, roxo (8,23:1). Medições em docs/verificacao-visual.md. */
+:root[data-tema='claro'] {
+  color-scheme: light;
+  --ouro: #8a6300;
+  --violeta: #6b21a8;
+  --fundo: #faf8f5;
+  --texto-forte: #16151c;
+  --texto: #34313f;
+  --apagado: #605d6d;
+  --painel: rgba(22, 21, 28, 0.05);
+  --borda-suave: rgba(22, 21, 28, 0.18);
+}
+
+/* A sombra deslocada é um recurso de pôster: funciona sobre o céu escuro e
+   pesa sobre fundo claro, onde o tema é liso e minimalista por escolha. */
+:root[data-tema='claro'] .botao {
+  box-shadow: none;
 }
 
 * { box-sizing: border-box; }
@@ -18,7 +44,7 @@ html {
 body {
   margin: 0;
   overflow-x: hidden;
-  background: var(--tinta);
+  background: var(--fundo);
   color: var(--texto);
   font-family: 'Segoe UI', system-ui, sans-serif;
   /* dvh, não vh: no celular, 100vh conta a barra de endereço como se ela nunca
@@ -35,7 +61,7 @@ body {
 }
 
 h1, h2, h3 {
-  color: var(--papel);
+  color: var(--texto-forte);
   font-weight: 900;
   letter-spacing: -0.04em;
   text-transform: uppercase;
@@ -49,7 +75,7 @@ a {
 .etiqueta {
   display: inline-block;
   background: var(--ouro);
-  color: var(--tinta);
+  color: var(--fundo);
   font-weight: 900;
   font-size: 0.7rem;
   letter-spacing: 0.16em;
@@ -71,7 +97,7 @@ a {
 .botao--principal {
   background: var(--ouro);
   border-color: var(--ouro);
-  color: var(--tinta);
+  color: var(--fundo);
   box-shadow: 3px 3px 0 color-mix(in srgb, var(--ouro) 30%, transparent);
 }
 
@@ -123,7 +149,7 @@ blockquote {
   padding-left: 14px;
   margin-inline-start: 0;
   font-style: italic;
-  color: var(--papel);
+  color: var(--texto-forte);
 }
 
 blockquote cite {

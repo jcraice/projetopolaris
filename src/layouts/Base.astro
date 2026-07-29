@@ -15,6 +15,23 @@ const { titulo, aurora } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{titulo} · Projeto Polaris</title>
+    {/* is:inline e aqui no <head> de propósito: este script precisa rodar antes
+        da primeira pintura, senão a página aparece escura por um instante antes
+        de virar clara. Um script processado pelo Astro seria adiado e piscaria.
+        localStorage dentro de try porque ele lança em algumas configurações de
+        privacidade — nesse caso o site simplesmente segue o sistema. */}
+    <script is:inline>
+      (() => {
+        let escolhido = null;
+        try {
+          escolhido = localStorage.getItem('polaris-tema');
+        } catch {}
+        const claro = escolhido
+          ? escolhido === 'claro'
+          : window.matchMedia('(prefers-color-scheme: light)').matches;
+        document.documentElement.dataset.tema = claro ? 'claro' : 'escuro';
+      })();
+    </script>
   </head>
   <body>
     <Aurora cores={aurora} />

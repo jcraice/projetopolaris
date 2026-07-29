@@ -29,4 +29,12 @@ const { cores } = Astro.props;
   @media (prefers-reduced-motion: reduce) {
     .aurora { animation: none; }
   }
+
+  /* No tema claro não existe céu: o fundo é liso e a cor de cada mundo aparece
+     só nos detalhes. Some a camada inteira em vez de clarear o gradiente —
+     assim o navegador não fica compondo e girando uma superfície desfocada
+     enorme à toa, que era o maior custo do site em celular fraco. */
+  :global(html[data-tema='claro']) .aurora {
+    display: none;
+  }
 </style>
