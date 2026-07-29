@@ -22,9 +22,9 @@ const { titulo, ancora, marcador } = Astro.props;
 <style>
   /* Sem moldura e sem painel de propósito: os verbetes de uma seção formam um
      bloco contínuo, separado por espaço em branco, e não uma fileira de caixas
-     emolduradas de dourado. A classe .cartao de global.css continua existindo
+     emolduradas. A classe .cartao de global.css continua existindo
      para as cartas do gerador, onde a moldura carrega significado — ela vira
-     violeta quando a peça está travada. */
+     outra cor quando a peça está travada. */
   .verbete {
     display: flex;
     flex-direction: column;
@@ -47,23 +47,23 @@ const { titulo, ancora, marcador } = Astro.props;
   .verbete h3 {
     margin: 0;
     font-size: 1.2rem;
-    color: var(--ouro);
+    color: var(--destaque);
   }
 
   /* .etiqueta é inline-block em global.css para abraçar só o texto, mas
      .verbete é flex column e align-items: stretch estica os filhos por
-     padrão — sem isto, o marcador vira uma barra dourada da largura toda.
+     padrão — sem isto, o marcador vira uma barra da largura toda do verbete.
      align-self aqui, nunca align-items no .verbete (isso encolheria o .corpo,
-     que precisa da largura toda para a barra lateral violeta). */
+     que precisa da largura toda para a barra lateral). */
   .etiqueta {
     align-self: flex-start;
   }
 
-  /* A barra lateral violeta cerca o conjunto do conteúdo, não cada parágrafo —
+  /* A barra lateral de --apoio cerca o conjunto do conteúdo, não cada parágrafo —
      necessário porque o corpo pode vir de render() com múltiplos <p> (livros).
      Com a moldura fora, é ela que marca onde um verbete começa e termina. */
   .corpo {
-    border-left: 3px solid var(--violeta);
+    border-left: 3px solid var(--apoio);
     padding-left: 10px;
   }
 

@@ -42,9 +42,12 @@ Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md]
   no `<head>` de [Base.astro](src/layouts/Base.astro) antes da primeira pintura.
   Toda cor vem de token em `:root` — nunca escrever cor literal em componente,
   senão ela só funciona num dos dois temas.
-- **Acentos fixos no escuro**: dourado `#ffc300`, violeta `#b07cff`. No claro
-  eles escurecem por necessidade de contraste (`#8a6300` e `#6b21a8`); os
-  valores originais dão 1,6:1 e 2,6:1 sobre fundo claro.
+- **Cor de acento sempre por papel, nunca por nome de cor.** `--destaque` é o
+  que chama o olho (títulos de verbete, botão principal, etiqueta, pilares) e
+  `--apoio` é a interface em volta (links, botões secundários, foco, barras).
+  `--ouro` e `--violeta` existem só como origem dos dois no tema escuro —
+  componente nenhum deve consumi-los direto, porque no claro a paleta é outra
+  (ciano `#0e6e7d` e azul-tinta `#1b2a4a`, sem relação com dourado e violeta).
 - A "aurora" muda de cor por subgênero e **não existe no tema claro**, onde o
   fundo é liso.
 - **Mexeu em cor, tamanho de fonte ou opacidade da aurora?** Refaça as contas de

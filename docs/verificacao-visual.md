@@ -127,43 +127,42 @@ por um script embutido no `<head>` antes da primeira pintura. Sem JavaScript o
 site fica escuro, que era o único tema até então.
 
 **Não há céu aqui**: a aurora é removida por completo (`display: none`) e o
-fundo é liso. Por isso a medição não depende de mundo nenhum — é um par de
-números só, igual nas seis páginas de mundo.
+fundo é liso. Por isso a medição não depende de mundo nenhum — é uma tabela só,
+igual em todas as páginas.
 
-| Papel | Valor | Sobre o fundo `#faf8f5` | Sobre o painel (navegação, pilares) |
+**A paleta é outra, não o escuro clareado.** A primeira tentativa escureceu
+dourado e violeta para caberem em fundo claro; a autora recusou o par e
+escolheu, entre três propostas, um destaque ciano profundo com apoio azul-tinta.
+Dourado e violeta ficaram só no tema escuro.
+
+| Papel | Valor | Sobre o fundo `#f5f7f9` | Sobre o painel (navegação) |
 |---|---|---|---|
-| `--texto-forte` | `#16151c` | 17,11 | 15,47 |
-| `--texto` | `#34313f` | 11,95 | 10,81 |
-| `--apagado` | `#605d6d` | 6,03 | 5,46 |
-| `--ouro` | `#8a6300` | 5,13 | 4,64 |
-| `--violeta` | `#6b21a8` | 8,23 | 7,44 |
+| `--texto-forte` | `#14181f` | 16,57 | 15,00 |
+| `--texto` | `#2f3540` | 11,47 | 10,39 |
+| `--apagado` | `#5b6472` | 5,57 | 5,04 |
+| `--destaque` | `#0e6e7d` ciano | 5,52 | 4,99 |
+| `--apoio` | `#1b2a4a` azul-tinta | 13,24 | 11,99 |
 
-Os botões são preenchidos aqui, e não de contorno como no escuro, onde o traço
-brilha sobre o céu e sobre fundo claro ficaria apagado. Junto com a etiqueta,
-invertem o par — cor de fundo, texto na cor do fundo da página:
+Os botões e os retângulos são preenchidos aqui, e não de contorno como no
+escuro, onde o traço brilha sobre o céu e sobre fundo claro ficaria apagado.
+Junto com a etiqueta, invertem o par — cor de fundo, texto na cor do fundo da
+página:
 
-| Elemento | Fundo | Texto | Razão |
+| Elemento | Preenchimento | Texto | Razão |
 |---|---|---|---|
-| botão principal, etiqueta | `--ouro` `#8a6300` | `--fundo` | 5,13 |
-| botões secundários | `--violeta` `#6b21a8` | `--fundo` | 8,23 |
-| retângulos de mundo | `--violeta` | `--fundo` | 8,23 |
-| retângulos de mundo, hover | `--ouro` | `--fundo` | 5,13 |
-| pilares da home | `--ouro` | `--fundo` | 5,13 |
-| pilares da home, hover | `--violeta` | `--fundo` | 8,23 |
+| botão principal, etiqueta, pilares | `--destaque` | `--fundo` | 5,52 |
+| botões secundários, retângulos de mundo | `--apoio` | `--fundo` | 13,24 |
+| os mesmos, no hover | trocam entre si | `--fundo` | 5,52 / 13,24 |
 
-Dentro de um pilar preenchido a etiqueta troca de âmbar para violeta, e volta
-para âmbar no hover, quando o pilar fica violeta — sem isso ela sumiria dentro
-do próprio fundo, que é da mesma cor.
-
-**Os dois acentos mudam de valor aqui, e isso é deliberado.** No escuro eles são
-fixos por decisão de projeto, mas os mesmos `#ffc300` e `#b07cff` sobre fundo
-claro dão 1,6:1 e 2,6:1 — ilegíveis. Escurecem mantendo o matiz: o dourado vira
-âmbar, o violeta vira roxo.
+Dentro de um pilar preenchido a etiqueta troca de `--destaque` para `--apoio`, e
+volta no hover, quando o pilar inverte — sem isso ela sumiria dentro do próprio
+fundo, que é da mesma cor. Os dois acentos separam um do outro em 2,40:1, o
+bastante para a etiqueta se destacar do pilar.
 
 **Tudo passa, inclusive o que reprova no escuro.** As três pendências da seção
-anterior — `--apagado`, links violeta e o dourado de texto pequeno — deixam de
-existir no tema claro, onde o pior número da tabela inteira é 4,64:1. A
-pendência continua valendo só para o tema escuro.
+anterior — `--apagado`, links e o acento em texto pequeno — deixam de existir no
+tema claro, onde o pior número da tabela inteira é 4,99:1. A pendência continua
+valendo só para o tema escuro.
 
 ## Movimento reduzido
 

@@ -3,8 +3,26 @@
    pintura, e sem ele o site fica escuro — que era o único tema até aqui. */
 :root {
   color-scheme: dark;
+
+  /* Os dois acentos fixos do tema escuro, com os nomes que o documento de
+     design usa. Nenhum componente deve consumir estes dois direto: eles são a
+     origem dos papéis logo abaixo, e no tema claro nem sequer são as cores em
+     uso. */
   --ouro: #ffc300;
   --violeta: #b07cff;
+
+  /* Os papéis. É por aqui que todo componente pede cor de acento, porque só o
+     papel sobrevive à troca de tema — no claro a paleta é outra e "ouro"
+     guardaria um ciano, que é exatamente a confusão que --tinta causava antes
+     de virar --fundo.
+
+     --destaque  o que chama o olho: títulos dos verbetes, botão principal,
+                 etiqueta, pilares da home, cadeado travado
+     --apoio     a interface em volta: links, botões secundários, contorno de
+                 foco, barra lateral dos verbetes, retângulos de mundo */
+  --destaque: var(--ouro);
+  --apoio: var(--violeta);
+
   --fundo: #0b0b0e;
   --texto-forte: #ffffff;
   --texto: #d5d5df;
@@ -13,58 +31,58 @@
   --borda-suave: rgba(255, 255, 255, 0.16);
 }
 
-/* Dourado e violeta são fixos no escuro por decisão de projeto, mas não podem
-   ser os mesmos aqui: #ffc300 sobre fundo claro dá 1,6:1 e #b07cff dá 2,6:1,
-   ilegíveis. As duas cores escurecem mantendo o matiz — o dourado vira âmbar
-   (5,13:1) e o violeta, roxo (8,23:1). Medições em docs/verificacao-visual.md. */
+/* O claro não é o escuro clareado: é outra paleta, escolhida pela autora
+   depois de ver a primeira tentativa. Dourado e violeta ficaram só no escuro.
+   Aqui o destaque é um ciano profundo e o apoio, azul-tinta — as duas frias,
+   sobre um branco levemente azulado. Medições em docs/verificacao-visual.md. */
 :root[data-tema='claro'] {
   color-scheme: light;
-  --ouro: #8a6300;
-  --violeta: #6b21a8;
-  --fundo: #faf8f5;
-  --texto-forte: #16151c;
-  --texto: #34313f;
-  --apagado: #605d6d;
-  --painel: rgba(22, 21, 28, 0.05);
-  --borda-suave: rgba(22, 21, 28, 0.18);
+  --destaque: #0e6e7d;
+  --apoio: #1b2a4a;
+  --fundo: #f5f7f9;
+  --texto-forte: #14181f;
+  --texto: #2f3540;
+  --apagado: #5b6472;
+  --painel: rgba(20, 24, 31, 0.05);
+  --borda-suave: rgba(20, 24, 31, 0.18);
 }
 
-/* No escuro os botões são de contorno: o traço violeta brilha sobre o céu e o
+/* No escuro os botões são de contorno: o traço de --apoio brilha sobre o céu e o
    preenchimento estragaria isso. Sobre fundo claro o mesmo contorno fica
-   apagado, então aqui eles são preenchidos — violeta nos secundários, âmbar no
-   principal, os dois com o texto na cor do fundo da página (8,23:1 e 5,13:1).
+   apagado, então aqui eles são preenchidos — --apoio nos secundários,
+   --destaque no principal, os dois com o texto na cor do fundo da página.
 
    A sombra deslocada sai junto: é um recurso de pôster que funciona sobre o
    céu escuro e pesa no claro, onde o tema é liso por escolha. */
 :root[data-tema='claro'] .botao {
-  background: var(--violeta);
-  border-color: var(--violeta);
+  background: var(--apoio);
+  border-color: var(--apoio);
   color: var(--fundo);
   box-shadow: none;
 }
 
 /* Precisa vir depois e com a mesma especificidade da regra acima: o
    .botao--principal de cima sozinho perde para `:root[data-tema] .botao` e o
-   botão principal sairia violeta como os outros. */
+   botão principal sairia da cor dos outros. */
 :root[data-tema='claro'] .botao--principal {
-  background: var(--ouro);
-  border-color: var(--ouro);
+  background: var(--destaque);
+  border-color: var(--destaque);
   color: var(--fundo);
 }
 
 /* Os retângulos de mundo — na home e no topo de cada índice de seção — seguem
-   os botões: preenchidos no claro, de contorno no escuro. A troca violeta →
-   âmbar no hover é a mesma de sempre, só que agora acontece no preenchimento
+   os botões: preenchidos no claro, de contorno no escuro. A troca --apoio →
+   --destaque no hover é a mesma de sempre, só que agora no preenchimento
    em vez de no traço. */
 :root[data-tema='claro'] .lista-subgeneros a {
-  background: var(--violeta);
-  border-color: var(--violeta);
+  background: var(--apoio);
+  border-color: var(--apoio);
   color: var(--fundo);
 }
 
 :root[data-tema='claro'] .lista-subgeneros a:hover {
-  background: var(--ouro);
-  border-color: var(--ouro);
+  background: var(--destaque);
+  border-color: var(--destaque);
   color: var(--fundo);
 }
 
@@ -102,12 +120,12 @@ h1, h2, h3 {
 }
 
 a {
-  color: var(--violeta);
+  color: var(--apoio);
 }
 
 .etiqueta {
   display: inline-block;
-  background: var(--ouro);
+  background: var(--destaque);
   color: var(--fundo);
   font-weight: 900;
   font-size: 0.7rem;
@@ -117,25 +135,25 @@ a {
 }
 
 .botao {
-  border: 2px solid var(--violeta);
-  color: var(--violeta);
+  border: 2px solid var(--apoio);
+  color: var(--apoio);
   background: transparent;
   font-weight: 800;
   text-transform: uppercase;
   padding: 8px 14px;
   cursor: pointer;
-  box-shadow: 3px 3px 0 color-mix(in srgb, var(--violeta) 28%, transparent);
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--apoio) 28%, transparent);
 }
 
 .botao--principal {
-  background: var(--ouro);
-  border-color: var(--ouro);
+  background: var(--destaque);
+  border-color: var(--destaque);
   color: var(--fundo);
-  box-shadow: 3px 3px 0 color-mix(in srgb, var(--ouro) 30%, transparent);
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--destaque) 30%, transparent);
 }
 
 .botao:focus-visible, a:focus-visible {
-  outline: 3px solid var(--violeta);
+  outline: 3px solid var(--apoio);
   outline-offset: 3px;
 }
 
@@ -152,7 +170,7 @@ a {
 
 .lista-subgeneros a {
   display: inline-block;
-  border: 2px solid var(--violeta);
+  border: 2px solid var(--apoio);
   padding: 8px 14px;
   font-weight: 800;
   text-transform: uppercase;
@@ -161,8 +179,8 @@ a {
 }
 
 .lista-subgeneros a:hover {
-  color: var(--ouro);
-  border-color: var(--ouro);
+  color: var(--destaque);
+  border-color: var(--destaque);
 }
 
 .abertura {
@@ -171,14 +189,14 @@ a {
 
 .autor {
   font-weight: 800;
-  color: var(--ouro);
+  color: var(--destaque);
   text-transform: uppercase;
   font-size: 0.8rem;
   letter-spacing: 0.06em;
 }
 
 blockquote {
-  border-left: 3px solid var(--ouro);
+  border-left: 3px solid var(--destaque);
   padding-left: 14px;
   margin-inline-start: 0;
   font-style: italic;

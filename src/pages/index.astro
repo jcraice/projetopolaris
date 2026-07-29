@@ -77,7 +77,7 @@ const pilares = [
     min-width: 220px;
     flex: 1 1 220px;
     background: var(--painel);
-    border: 2px solid var(--ouro);
+    border: 2px solid var(--destaque);
     padding: 16px;
     text-decoration: none;
   }
@@ -88,17 +88,16 @@ const pilares = [
   }
 
   .pilar:hover h3 {
-    color: var(--ouro);
+    color: var(--destaque);
   }
 
-  /* No claro o pilar é preenchido, e o âmbar é a escolha natural porque já era
-     a cor da borda dele. A etiqueta de dentro precisa trocar para violeta ou
-     desapareceria no próprio fundo — ela também é âmbar. No hover as duas
-     invertem, o que mantém a troca âmbar ↔ violeta que o tema escuro faz com
-     a cor do título. */
+  /* No claro o pilar é preenchido com --destaque, que já era a cor da borda
+     dele. A etiqueta de dentro é da mesma cor e sumiria no próprio fundo, então
+     troca para --apoio; no hover as duas invertem, o que mantém a troca de cor
+     que o tema escuro faz no título. */
   :global(html[data-tema='claro']) .pilar {
-    background: var(--ouro);
-    border-color: var(--ouro);
+    background: var(--destaque);
+    border-color: var(--destaque);
   }
 
   :global(html[data-tema='claro']) .pilar h3,
@@ -107,16 +106,16 @@ const pilares = [
   }
 
   :global(html[data-tema='claro']) .pilar .etiqueta {
-    background: var(--violeta);
+    background: var(--apoio);
   }
 
   :global(html[data-tema='claro']) .pilar:hover {
-    background: var(--violeta);
-    border-color: var(--violeta);
+    background: var(--apoio);
+    border-color: var(--apoio);
   }
 
   :global(html[data-tema='claro']) .pilar:hover .etiqueta {
-    background: var(--ouro);
+    background: var(--destaque);
   }
 
   .cta-gerador {
@@ -124,7 +123,7 @@ const pilares = [
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
-    border-left: 3px solid var(--violeta);
+    border-left: 3px solid var(--apoio);
     padding-left: 16px;
   }
 </style>
