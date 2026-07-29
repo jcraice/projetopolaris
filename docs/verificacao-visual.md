@@ -49,11 +49,11 @@ elementos de interface.
 5,34:1, contra o mínimo de 4,5:1. O painel não precisou ser escurecido: o alfa
 segue em 0,8.
 
-> **Atualização depois da medição.** Os verbetes do catálogo perderam a moldura
-> dourada e o painel: agora formam um bloco contínuo direto sobre o céu, por
-> decisão editorial. O painel continua valendo para a navegação, os pilares da
-> home e as três cartas do gerador — que mantêm a moldura porque ali ela
-> significa alguma coisa, virando violeta quando a peça está travada.
+> **Atualização depois da medição.** As molduras douradas saíram do site por
+> decisão editorial — primeiro dos verbetes do catálogo, depois das três cartas
+> do gerador. Nos dois casos o painel saiu junto, e o texto passou a ficar
+> direto sobre o céu. Restam sobre painel apenas a navegação e os pilares da
+> home. A tabela acima vale para esses dois; para todo o resto, use a próxima.
 
 ## Contraste direto sobre o céu
 
@@ -97,10 +97,21 @@ muda o desenho e não só um número:
   verbetes saíram do painel, também a linha de autor dos livros (`.autor`, 0,8
   rem), que é conteúdo permanente e não estado de interação.
 
-O corpo dos verbetes e os títulos, que são a maior parte do texto do catálogo,
-passam sobre o céu em todos os mundos: 4,71 a 5,92 para `--texto` e 6,86 a 8,63
-para `--papel`. A barra lateral violeta do `.corpo` fica entre 2,34 e 2,95, mas
-é divisória decorativa, não elemento de interface com significado próprio.
+O corpo dos verbetes passa sobre o céu em todos os mundos — 4,71 a 5,92 para
+`--texto` — e o mesmo vale para os nomes das peças sorteadas no gerador, que
+usam `--papel` (6,86 a 8,63). A barra lateral violeta do `.corpo` fica entre
+2,34 e 2,95, mas é divisória decorativa, não elemento de interface com
+significado próprio.
+
+**Títulos dos verbetes em dourado.** Passaram a `var(--ouro)` para distinguir um
+verbete do outro sem moldura, o que os coloca naqueles mesmos 4,27 do pior
+mundo. Por isso foram de 1.1rem para **1.2rem**: a partir de 18,66px em negrito
+o WCAG trata o texto como grande e o mínimo cai para 3:1, que o dourado cumpre
+em todos os seis mundos. Encolher esses títulos de volta reprova o contraste.
+
+**Cadeado do gerador.** Usa `--texto` no estado destravado (4,71 no pior mundo)
+e `--ouro` no travado (4,27) — os dois acima dos 3:1 que o WCAG 1.4.11 pede de
+elemento de interface. `--apagado` foi descartado justamente por ficar em 2,12.
 
 Nenhum ajuste de opacidade resolve: para `--apagado` passar em 4,5:1 sobre o
 céu, a aurora teria que cair para 0,135, o que apaga a identidade visual do
@@ -117,7 +128,7 @@ Confirmado no CSS gerado por `npm run build`:
 |---|---|---|
 | giro da aurora, 90s | `Aurora.astro` | `.aurora { animation: none }` |
 | surgir da lista de busca | `Busca.astro` | `.busca__lista { animation: none }` |
-| transição de borda das cartas | `gerador.astro` | `.carta { transition: none }` |
+| transição de cor do cadeado | `gerador.astro` | `.cadeado { transition: none }` |
 
 Como a aurora vive no layout `Base.astro`, a guarda vale para todas as 39
 páginas. Falta só a confirmação visual com "reduzir movimento" ligado no

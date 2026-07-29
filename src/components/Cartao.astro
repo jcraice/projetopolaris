@@ -36,9 +36,18 @@ const { titulo, ancora, marcador } = Astro.props;
     scroll-margin-top: 96px;
   }
 
+  /* Dourado, e não o branco padrão de h1/h2/h3: com a moldura fora, é a cor do
+     título que separa um verbete do próximo à primeira vista.
+
+     1.2rem, e não os 1.1rem de antes, por causa do contraste: sobre o céu o
+     dourado fica em 4,27:1 no mundo Invasão Alienígena, abaixo dos 4,5 que
+     texto pequeno exige. A partir de 18,66px em negrito o WCAG passa a tratar
+     como texto grande, cujo mínimo é 3:1 — e 1.2rem dá 19,2px. Encolher o
+     título de novo reprova o contraste; ver docs/verificacao-visual.md. */
   .verbete h3 {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    color: var(--ouro);
   }
 
   /* .etiqueta é inline-block em global.css para abraçar só o texto, mas

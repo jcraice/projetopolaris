@@ -47,13 +47,36 @@ const CARTAS = [
 
   <section id="cartas" class="pilha-cartas" aria-live="polite" aria-label="Peças sorteadas">
     {CARTAS.map(({ tipo, rotulo }) => (
-      <article class="cartao carta" data-carta={tipo}>
+      <article class="carta" data-carta={tipo}>
         <div class="carta__topo">
           <h2 class="carta__papel">{rotulo}</h2>
           <span class="etiqueta" data-papel="etiqueta"></span>
         </div>
         <p class="carta__nome" data-papel="nome"></p>
-        <button type="button" class="botao" data-travar={tipo} aria-pressed="false">Travar</button>
+        {/* O rótulo fica no aria-label e não muda com o estado: aria-pressed já
+            faz o leitor de tela anunciar "pressionado"/"não pressionado", e um
+            rótulo que também virasse "Destravar" diria a mesma coisa duas
+            vezes, uma delas invertida. */}
+        <button
+          type="button"
+          class="cadeado"
+          data-travar={tipo}
+          aria-pressed="false"
+          aria-label={`Travar ${rotulo.toLowerCase()}`}
+        >
+          <svg class="cadeado__aberto" viewBox="0 0 24 24" width="20" height="20"
+               fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4" y="11" width="16" height="10" rx="2" />
+            <path d="M8 11V7a4 4 0 0 1 7.5-2" />
+          </svg>
+          <svg class="cadeado__fechado" viewBox="0 0 24 24" width="20" height="20"
+               fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4" y="11" width="16" height="10" rx="2" />
+            <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+          </svg>
+        </button>
       </article>
     ))}
   </section>
@@ -121,15 +144,69 @@ const CARTAS = [
   .pilha-cartas {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    /* Era 16px quando cada carta tinha moldura. Sem ela, é o espaço que separa
+       uma peça da outra, como nos verbetes do catálogo. */
+    gap: 28px;
     margin-bottom: 32px;
   }
 
+  /* Sem moldura nem painel, como o catálogo. O estado de trava, que antes era
+     a borda mudando de dourado para violeta, passou inteiro para o cadeado. */
   .carta {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    transition: border-color 0.15s ease;
+    /* Reserva a coluna do cadeado, que é absoluto no canto: sem isto, um nome
+       de peça comprido passaria por baixo do ícone. */
+    padding-right: 40px;
+  }
+
+  .cadeado {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* 36px de área tocável, acima dos 24px do WCAG 2.2 AA, com um ícone de
+       20px dentro — discreto de ver, confortável de acertar no celular. */
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    /* --texto, e não --apagado: o cadeado é elemento de interface e precisa de
+       3:1 sobre o fundo. Direto sobre o céu o apagado fica em 2,1 no pior
+       mundo, e o dourado do estado travado em 4,3. */
+    color: var(--texto);
+    transition: color 0.15s ease;
+  }
+
+  .cadeado:hover,
+  .cadeado[aria-pressed='true'] {
+    color: var(--ouro);
+  }
+
+  .cadeado:focus-visible {
+    outline: 3px solid var(--violeta);
+    outline-offset: 2px;
+  }
+
+  /* O par de ícones vive no HTML e quem troca é o CSS, a partir do
+     aria-pressed que o script já mantinha. Assim o estado visual e o estado
+     anunciado pelo leitor de tela não têm como divergir. */
+  .cadeado__fechado {
+    display: none;
+  }
+
+  .cadeado[aria-pressed='true'] .cadeado__aberto {
+    display: none;
+  }
+
+  .cadeado[aria-pressed='true'] .cadeado__fechado {
+    display: block;
   }
 
   .carta__topo {
@@ -150,13 +227,6 @@ const CARTAS = [
     font-size: 1.3rem;
     font-weight: 800;
     color: var(--papel);
-  }
-
-  /* Estado de trava: a borda muda de dourado (padrão de .cartao) para violeta,
-     reforçando visualmente o que o aria-pressed do botão já diz a quem usa
-     leitor de tela. */
-  .carta--travada {
-    border-color: var(--violeta);
   }
 
   .bloco-premissa #premissa {
@@ -180,7 +250,7 @@ const CARTAS = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .carta {
+    .cadeado {
       transition: none;
     }
   }
@@ -253,9 +323,10 @@ const CARTAS = [
     botao.addEventListener('click', () => {
       const tipo = botao.dataset.travar as keyof Travas;
       travas[tipo] = !travas[tipo];
+      // aria-pressed é o estado inteiro: o CSS troca o cadeado aberto pelo
+      // fechado a partir dele. Nada de mexer no conteúdo do botão aqui —
+      // escrever textContent apagaria os dois SVGs de dentro dele.
       botao.setAttribute('aria-pressed', String(travas[tipo]));
-      botao.textContent = travas[tipo] ? 'Destravar' : 'Travar';
-      botao.closest<HTMLElement>('.carta')!.classList.toggle('carta--travada', travas[tipo]);
     });
   }
 
@@ -266,8 +337,8 @@ const CARTAS = [
   // peças a serem redesenhadas dentro do novo filtro. As travas em si
   // também precisam zerar aqui: sortear() já ignora travas.* quando não
   // há `anterior`, então as três peças saem corretas mesmo sem este
-  // trecho — mas sem ele os botões continuavam dizendo "Destravar" com
-  // aria-pressed="true" para peças que na verdade não estão mais travadas,
+  // trecho — mas sem ele os cadeados continuavam fechados, com
+  // aria-pressed="true", para peças que na verdade não estão mais travadas,
   // o que confunde tanto visualmente quanto para quem usa leitor de tela.
   form.addEventListener('change', () => {
     atual = null;
@@ -275,8 +346,6 @@ const CARTAS = [
       travas[tipo] = false;
       const botao = document.querySelector<HTMLButtonElement>(`[data-travar="${tipo}"]`)!;
       botao.setAttribute('aria-pressed', 'false');
-      botao.textContent = 'Travar';
-      botao.closest<HTMLElement>('.carta')!.classList.remove('carta--travada');
     }
     rolar();
   });
