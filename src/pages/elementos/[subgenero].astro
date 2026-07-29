@@ -18,7 +18,7 @@ const elementos = (await getCollection('elementos', (e) => e.data.subgenero === 
   <h1>Elementos {subgenero.data.nome}</h1>
   <p class="abertura">{subgenero.body}</p>
   {elementos.map((e) => (
-    <Cartao etiqueta={subgenero.data.nome} titulo={e.data.titulo} ancora={paraAncora(e.data.titulo)}>
+    <Cartao titulo={e.data.titulo} ancora={paraAncora(e.data.titulo)}>
       <p>{e.body}</p>
     </Cartao>
   ))}

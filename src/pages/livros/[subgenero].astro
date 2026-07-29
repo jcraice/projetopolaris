@@ -22,7 +22,7 @@ const livrosRenderizados = await Promise.all(
 <Base titulo={`Livros ${subgenero.data.nome}`} aurora={subgenero.data.aurora}>
   <h1>Livros {subgenero.data.nome}</h1>
   {livrosRenderizados.map(({ entrada, Content }) => (
-    <Cartao etiqueta={subgenero.data.nome} titulo={entrada.data.titulo} ancora={paraAncora(entrada.data.titulo)}>
+    <Cartao titulo={entrada.data.titulo} ancora={paraAncora(entrada.data.titulo)}>
       <p class="autor">{entrada.data.autor}</p>
       <Content />
     </Cartao>

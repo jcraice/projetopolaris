@@ -51,13 +51,13 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
       Arquétipos <a class="ver-tudo" href={`${raiz}arquetipos/${subgenero.id}/`}>Ver todos →</a>
     </h2>
     {arquetiposComuns.map((f) => (
-      <Cartao etiqueta={subgenero.data.nome} titulo={f.data.nome} ancora={`arquetipos-${paraAncora(f.data.nome)}`}>
+      <Cartao titulo={f.data.nome} ancora={`arquetipos-${paraAncora(f.data.nome)}`}>
         <p>{f.body}</p>
       </Cartao>
     ))}
     {arquetipoFelino && (
       <Cartao
-        etiqueta="Arquétipo Felino"
+        marcador="Arquétipo Felino"
         titulo={arquetipoFelino.data.nome}
         ancora={`arquetipos-${paraAncora(arquetipoFelino.data.nome)}`}
       >
@@ -71,7 +71,7 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
       Cenários <a class="ver-tudo" href={`${raiz}cenarios/${subgenero.id}/`}>Ver todos →</a>
     </h2>
     {cenarios.map((c) => (
-      <Cartao etiqueta={subgenero.data.nome} titulo={c.data.titulo} ancora={`cenarios-${paraAncora(c.data.titulo)}`}>
+      <Cartao titulo={c.data.titulo} ancora={`cenarios-${paraAncora(c.data.titulo)}`}>
         <p>{c.body}</p>
       </Cartao>
     ))}
@@ -82,7 +82,7 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
       Elementos Narrativos <a class="ver-tudo" href={`${raiz}elementos/${subgenero.id}/`}>Ver todos →</a>
     </h2>
     {elementos.map((e) => (
-      <Cartao etiqueta={subgenero.data.nome} titulo={e.data.titulo} ancora={`elementos-${paraAncora(e.data.titulo)}`}>
+      <Cartao titulo={e.data.titulo} ancora={`elementos-${paraAncora(e.data.titulo)}`}>
         <p>{e.body}</p>
       </Cartao>
     ))}
@@ -93,7 +93,7 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
       Livros <a class="ver-tudo" href={`${raiz}livros/${subgenero.id}/`}>Ver todos →</a>
     </h2>
     {livrosRenderizados.map(({ entrada, Content }) => (
-      <Cartao etiqueta={subgenero.data.nome} titulo={entrada.data.titulo} ancora={`livros-${paraAncora(entrada.data.titulo)}`}>
+      <Cartao titulo={entrada.data.titulo} ancora={`livros-${paraAncora(entrada.data.titulo)}`}>
         <p class="autor">{entrada.data.autor}</p>
         <Content />
       </Cartao>

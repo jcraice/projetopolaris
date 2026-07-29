@@ -19,13 +19,13 @@ const felino = fichas.find((f) => f.data.felino);
   <h1>Arquétipos {subgenero.data.nome}</h1>
   {subgenero.data.aberturaArquetipos && <p class="abertura">{subgenero.data.aberturaArquetipos}</p>}
   {comuns.map((f) => (
-    <Cartao etiqueta={subgenero.data.nome} titulo={f.data.nome} ancora={paraAncora(f.data.nome)}>
+    <Cartao titulo={f.data.nome} ancora={paraAncora(f.data.nome)}>
       <p>{f.body}</p>
     </Cartao>
   ))}
   {felino && (
     <section aria-label="Arquétipo felino">
-      <Cartao etiqueta="Arquétipo Felino" titulo={felino.data.nome} ancora={paraAncora(felino.data.nome)}>
+      <Cartao marcador="Arquétipo Felino" titulo={felino.data.nome} ancora={paraAncora(felino.data.nome)}>
         <p>{felino.body}</p>
       </Cartao>
     </section>

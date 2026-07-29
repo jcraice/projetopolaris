@@ -1,13 +1,18 @@
 ---
 interface Props {
-  etiqueta: string;
   titulo: string;
   ancora: string;
+  /* Só o arquétipo felino passa este marcador. Antes existia uma etiqueta
+     obrigatória que repetia o nome do subgênero em todo verbete — saiu porque
+     quem está lendo a página de Space Opera já sabe que está em Space Opera.
+     O felino é outra coisa: não é o mundo, é a natureza do arquétipo, e essa
+     informação não aparece em nenhum outro lugar da página. */
+  marcador?: string;
 }
-const { etiqueta, titulo, ancora } = Astro.props;
+const { titulo, ancora, marcador } = Astro.props;
 ---
-<article class="cartao" id={ancora}>
-  <span class="etiqueta">{etiqueta}</span>
+<article class="verbete" id={ancora}>
+  {marcador && <span class="etiqueta">{marcador}</span>}
   <h3>{titulo}</h3>
   <div class="corpo">
     <slot />
@@ -15,30 +20,39 @@ const { etiqueta, titulo, ancora } = Astro.props;
 </article>
 
 <style>
-  .cartao {
+  /* Sem moldura e sem painel de propósito: os verbetes de uma seção formam um
+     bloco contínuo, separado por espaço em branco, e não uma fileira de caixas
+     emolduradas de dourado. A classe .cartao de global.css continua existindo
+     para as cartas do gerador, onde a moldura carrega significado — ela vira
+     violeta quando a peça está travada. */
+  .verbete {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin-block-end: 16px;
+    /* Era 16px com moldura em volta. Sem ela, o espaço é a única coisa que
+       separa um verbete do próximo, então precisa ser maior que o intervalo
+       interno de 8px para a leitura não virar uma parede de texto. */
+    margin-block-end: 32px;
     scroll-margin-top: 96px;
   }
 
-  .cartao h3 {
+  .verbete h3 {
     margin: 0;
     font-size: 1.1rem;
   }
 
   /* .etiqueta é inline-block em global.css para abraçar só o texto, mas
-     .cartao é flex column e align-items: stretch estica os filhos por
-     padrão — sem isto, a etiqueta vira uma barra dourada do tamanho do
-     cartão. align-self aqui, nunca align-items no .cartao (isso encolheria
-     o .corpo, que precisa da largura toda para a barra lateral violeta). */
+     .verbete é flex column e align-items: stretch estica os filhos por
+     padrão — sem isto, o marcador vira uma barra dourada da largura toda.
+     align-self aqui, nunca align-items no .verbete (isso encolheria o .corpo,
+     que precisa da largura toda para a barra lateral violeta). */
   .etiqueta {
     align-self: flex-start;
   }
 
   /* A barra lateral violeta cerca o conjunto do conteúdo, não cada parágrafo —
-     necessário porque o corpo pode vir de render() com múltiplos <p> (livros). */
+     necessário porque o corpo pode vir de render() com múltiplos <p> (livros).
+     Com a moldura fora, é ela que marca onde um verbete começa e termina. */
   .corpo {
     border-left: 3px solid var(--violeta);
     padding-left: 10px;

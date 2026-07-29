@@ -17,7 +17,7 @@ const cenarios = (await getCollection('cenarios', (c) => c.data.subgenero === su
 <Base titulo={`Cenários ${subgenero.data.nome}`} aurora={subgenero.data.aurora}>
   <h1>Cenários {subgenero.data.nome}</h1>
   {cenarios.map((c) => (
-    <Cartao etiqueta={subgenero.data.nome} titulo={c.data.titulo} ancora={paraAncora(c.data.titulo)}>
+    <Cartao titulo={c.data.titulo} ancora={paraAncora(c.data.titulo)}>
       <p>{c.body}</p>
     </Cartao>
   ))}

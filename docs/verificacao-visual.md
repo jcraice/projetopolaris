@@ -49,11 +49,17 @@ elementos de interface.
 5,34:1, contra o mínimo de 4,5:1. O painel não precisou ser escurecido: o alfa
 segue em 0,8.
 
+> **Atualização depois da medição.** Os verbetes do catálogo perderam a moldura
+> dourada e o painel: agora formam um bloco contínuo direto sobre o céu, por
+> decisão editorial. O painel continua valendo para a navegação, os pilares da
+> home e as três cartas do gerador — que mantêm a moldura porque ali ela
+> significa alguma coisa, virando violeta quando a peça está travada.
+
 ## Contraste direto sobre o céu
 
-Fora dos painéis — os parágrafos de abertura, os títulos, o sumário dos mundos,
-o rodapé — o texto encosta no céu, que é bem mais claro que o painel. Foi aqui
-que a medição encontrou problema.
+Fora dos painéis — os verbetes do catálogo, os parágrafos de abertura, os
+títulos, o sumário dos mundos, o rodapé — o texto encosta no céu, que é bem
+mais claro que o painel. Foi aqui que a medição encontrou problema.
 
 | Mundo | `--texto` antes (0,42) | `--texto` agora (0,36) | `--papel` | `--ouro` | `--apagado` | `--violeta` |
 |---|---|---|---|---|---|---|
@@ -85,9 +91,16 @@ muda o desenho e não só um número:
 - `--violeta` como cor de link sobre o céu: 2,34 a 2,95 — abaixo até do mínimo
   de 3:1 para elementos grandes.
 - `--ouro` sobre o céu, **só no mundo Invasão Alienígena**: 4,27, contra 4,5
-  exigidos. Atinge apenas estados `:hover` de texto pequeno fora do painel —
-  `.lista-subgeneros a`, `.ver-tudo` e `.sumario a`. Nos outros cinco mundos
-  fica entre 4,59 e 5,37. O dourado dentro do painel passa em todos (10,7+).
+  exigidos. Nos outros cinco mundos fica entre 4,59 e 5,37, e dentro do painel
+  passa em todos (10,7+). Atinge os estados `:hover` de texto pequeno fora do
+  painel — `.lista-subgeneros a`, `.ver-tudo` e `.sumario a` — e, desde que os
+  verbetes saíram do painel, também a linha de autor dos livros (`.autor`, 0,8
+  rem), que é conteúdo permanente e não estado de interação.
+
+O corpo dos verbetes e os títulos, que são a maior parte do texto do catálogo,
+passam sobre o céu em todos os mundos: 4,71 a 5,92 para `--texto` e 6,86 a 8,63
+para `--papel`. A barra lateral violeta do `.corpo` fica entre 2,34 e 2,95, mas
+é divisória decorativa, não elemento de interface com significado próprio.
 
 Nenhum ajuste de opacidade resolve: para `--apagado` passar em 4,5:1 sobre o
 céu, a aurora teria que cair para 0,135, o que apaga a identidade visual do
