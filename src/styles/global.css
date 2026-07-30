@@ -246,6 +246,15 @@ a {
   margin-block-end: 0;
 }
 
+/* O mesmo agrupamento do .bloco, com contorno em vez de preenchimento. Existe
+   para o fechamento da página de Estilos, que vem logo abaixo de dois blocos
+   cheios: repetir o preenchimento ali faria dele um terceiro bloco de conteúdo,
+   quando o que ele é são as considerações finais. */
+.bloco--vazado {
+  background: none;
+  border: 2px solid var(--borda-suave);
+}
+
 /* Sem limite de largura próprio por escolha da autora: o texto acompanha a
    extensão da página. Havia aqui um `max-width: 68ch`, a medida de linha
    confortável de leitura. As linhas param onde a coluna de conteúdo para —

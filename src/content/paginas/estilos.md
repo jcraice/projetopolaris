@@ -10,6 +10,8 @@ em volta delas são obrigatórias: sem elas o Markdown de dentro deixa de ser
 processado e o texto sai como marcação crua. Ao editar, mantenha cada abertura
 com o seu fechamento. -->
 
+Mais do que regras rígidas, a ficção científica é feita de possibilidades. Aqui você encontra breves conceitos sobre estilos variados e sugestões de combinações criativas entre subgêneros, servindo como uma fonte extra de ideias para expandir seus horizontes narrativos.
+
 <div class="bloco">
 
 ## Estilos
@@ -43,5 +45,13 @@ Um dos encantos da ficção científica é a possibilidade de combinar estilos e
 **Viagem no tempo + Invasão Alienígena**: Rebeldes que saltam por séculos, tentando impedir que espécies alienígenas dominem a Terra antes mesmo de sua colonização.
 
 **Pós Apocalíptico + Space Opera**: Restos de civilizações destruídas que vagam pelo espaço em enormes naves-colônia, buscando um lar que talvez não exista mais.
+
+</div>
+
+<div class="bloco bloco--vazado">
+
+***Combine** estilos e subgêneros de acordo com o **tom, mensagem** e **universo desejados**. Reflita sobre como diferentes abordagens influenciam os papéis dos personagens, os conflitos e até as soluções encontradas nas histórias.*
+
+*Misture elementos, experimente estilos e descubra novas possibilidades narrativas. A criatividade na ficção científica está justamente em cruzar fronteiras, de universos, ideias e estilos!*
 
 </div>
