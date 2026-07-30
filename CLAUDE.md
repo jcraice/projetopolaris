@@ -91,14 +91,20 @@ testados fora do Astro. Regras do esquema que não são óbvias:
 O campo `ordem` define a posição nos índices — a ordenação é sempre explícita,
 nunca alfabética por acidente.
 
-**Prosa não mora em componente.** Os textos das páginas de índice, de Sobre e de
-Estilos vêm da coleção `paginas` (`src/content/paginas/*.md`), buscados com
-`getEntry` — e a página estoura o build com mensagem explícita se a entrada
-sumir, em vez de renderizar vazio. A home vai além e reaproveita parágrafos já
-escritos em `sobre.md` por `paragrafoComPrefixo()`
-([texto.ts](src/lib/texto.ts)), casando pelo início do parágrafo; ao editar
-`sobre.md`, esses prefixos são contrato. Nada de copiar prosa autoral para
-dentro de um `.astro`.
+**Prosa não mora em componente.** Os textos da home, das páginas de índice, de
+Sobre e de Estilos vêm da coleção `paginas` (`src/content/paginas/*.md`),
+buscados com `getEntry` — e a página estoura o build com mensagem explícita se a
+entrada sumir, em vez de renderizar vazio. `home.md` é o caso mais completo: o
+corpo traz a apresentação e a lista "Como usar", e três campos de frontmatter
+(`subtitulo`, `chamadaGerador`, `citacao`) trazem as frases que a página encaixa
+fora do texto corrido. Nada de copiar prosa autoral para dentro de um `.astro`.
+
+As páginas de índice de arquétipos, cenários e elementos têm duas entradas cada:
+`<pagina>.md` traz a abertura, que fica acima da lista de subgêneros, e
+`<pagina>-como-usar.md` traz o bloco "Como usar esta página", que a página
+renderiza **depois** da lista. São dois arquivos porque `render()` devolve o
+Markdown inteiro de uma vez, e não há como intercalar a lista no meio dele.
+Livros não tem esse segundo arquivo.
 
 `/mundos/[subgenero]/` é porta de entrada, não catálogo: mostra três itens de
 cada tipo e manda para a página completa (e deixa o arquétipo felino de fora da
