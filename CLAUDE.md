@@ -150,6 +150,16 @@ o molde.
 JSON estático no HTML em tempo de build e liga tudo com um `<script>` sem
 framework. Zero requisição em runtime.
 
+A mesma página também monta, a partir do mesmo sorteio, um prompt pronto para
+colar numa IA de texto. O molde é conteúdo da autora — não código — em
+[prompt-ia.md](src/content/paginas/prompt-ia.md), com quatro marcadores em
+maiúsculas (`[MUNDO]`, `[ARQUÉTIPO]`, `[CENÁRIO]`, `[ELEMENTO NARRATIVO]`) que
+`montarPrompt()` ([prompt.ts](src/lib/gerador/prompt.ts)) substitui pelos
+valores sorteados. Um marcador desconhecido faz `montarPrompt` lançar — e o
+frontmatter de `gerador.astro` chama a função uma vez com valores de descarte
+só para isso acontecer em `npm run build`, e não em produção no navegador de
+alguém.
+
 **Concordância gramatical** é a parte delicada:
 [redacao.ts](src/lib/gerador/redacao.ts) resolve contração de preposição
 (`em`+`uma` → `numa`), gênero pelo artigo e número do elemento por heurística de

@@ -56,6 +56,11 @@ describe('nomearMundos', () => {
     const sorteio = sorteioCom('comuns', 'distopia', 'distopia');
     expect(nomearMundos(sorteio, opcoesCom('distopia', true), NOMES)).toBe('Distopia');
   });
+
+  it('misturando, cai no próprio identificador quando o nome é desconhecido', () => {
+    const sorteio = sorteioCom('distopia', 'mundo-novo', 'distopia');
+    expect(nomearMundos(sorteio, opcoesCom('distopia', true), NOMES)).toBe('Distopia + mundo-novo');
+  });
 });
 
 describe('montarPrompt', () => {

@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import { montarPrompt } from '../lib/gerador';
 
 const subgeneros = await getCollection('subgeneros');
 const mundos = subgeneros.filter((s) => s.data.mundo).sort((a, b) => a.data.ordem - b.data.ordem);
@@ -10,6 +11,19 @@ const mundos = subgeneros.filter((s) => s.data.mundo).sort((a, b) => a.data.orde
 // escrito lá.
 const modeloDoPrompt = await getEntry('paginas', 'prompt-ia');
 if (!modeloDoPrompt) throw new Error("página 'prompt-ia' não encontrada em src/content/paginas");
+if (!modeloDoPrompt.body) throw new Error("página 'prompt-ia' está sem corpo em src/content/paginas");
+
+// O montarPrompt estoura em marcador desconhecido, e é aqui que isso vira
+// utilidade: uma chamada em tempo de build faz um `[ARQUETIPO]` sem acento no
+// prompt-ia.md quebrar `npm run build` — o mesmo portão que o deploy roda —
+// em vez de chegar em produção e deixar o card do prompt vazio em silêncio.
+// Os valores são de descarte: quem importa aqui são os marcadores do modelo.
+montarPrompt(modeloDoPrompt.body, {
+  mundo: 'conferência',
+  arquetipo: 'conferência',
+  cenario: 'conferência',
+  elemento: 'conferência',
+});
 
 // Mapa de identificador para nome de exibição, para o prompt dizer "Space Opera"
 // e não "space-opera". Só os mundos entram; `comuns` não é mundo e nomearMundos
