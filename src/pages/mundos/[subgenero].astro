@@ -136,6 +136,14 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
     margin-block-start: 40px;
   }
 
+  /* As quatro seções são alvo do sumário logo acima. Sem folga, o <h2> para
+     debaixo da barra fixa do topo. Os mesmos 96px do scroll-margin-top dos
+     verbetes em Cartao.astro, pelo mesmo motivo: a barra recolhida tem cerca de
+     68px e o resto é respiro. */
+  section[id] {
+    scroll-margin-top: 96px;
+  }
+
   h2 {
     display: flex;
     align-items: baseline;
