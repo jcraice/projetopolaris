@@ -214,9 +214,15 @@ const links = [
          O teto vai na lista, e não no <header>: .busca__lista é absolute dentro
          da busca, e overflow-y no header cortaria os resultados em vez de
          deixá-los sobrepor a página. Em tela de pé a lista cabe e nada disto
-         entra em ação. */
+         entra em ação.
+
+         A regra base de .nav__links tem flex-wrap: wrap, então o cap de altura
+         torna a coluna flex envolvível em colunas (múltiplas colagens), em vez
+         de rolar verticalmente — quem remove o flex-wrap: nowrap abaixo quebra
+         a rolagem. */
       max-height: calc(100dvh - 150px);
       overflow-y: auto;
+      flex-wrap: nowrap;
     }
 
     .nav__abrir[aria-expanded='true'] ~ :global(.busca) {
@@ -229,6 +235,7 @@ const links = [
     .nav__abrir[aria-expanded='true'] ~ .nav__links a {
       padding: 10px 0;
       border-bottom: 2px solid var(--borda-suave);
+      flex-shrink: 0;
     }
 
     /* A marca empurra o resto para a direita e os dois ícones ficam colados,
