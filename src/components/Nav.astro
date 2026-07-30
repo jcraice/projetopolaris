@@ -202,6 +202,21 @@ const links = [
       gap: 0;
       width: 100%;
       order: 5;
+      /* Com a barra fixa, o menu aberto não pode passar da tela: sticky grudado
+         no topo não se move, e o que sobrar embaixo fica inalcançável. Acontece
+         em celular na horizontal, onde a altura é 375px e a barra aberta pede
+         uns 400px.
+
+         Os 150px são o que fica acima e abaixo da lista dentro da barra: 16px
+         de recuo, ~36px da fileira da marca, 12px de intervalo, ~44px da busca,
+         12px de intervalo e 16px de recuo.
+
+         O teto vai na lista, e não no <header>: .busca__lista é absolute dentro
+         da busca, e overflow-y no header cortaria os resultados em vez de
+         deixá-los sobrepor a página. Em tela de pé a lista cabe e nada disto
+         entra em ação. */
+      max-height: calc(100dvh - 150px);
+      overflow-y: auto;
     }
 
     .nav__abrir[aria-expanded='true'] ~ :global(.busca) {

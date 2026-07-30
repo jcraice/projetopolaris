@@ -226,6 +226,10 @@ Verificado por leitura do CSS; falta a confirmação visual no navegador.
   contêiner de rolagem e a barra do topo, que é sticky, se fixaria em relação a
   ele em vez da tela. O hidden do `html` é propagado para a viewport e clipa
   igual.
+- O menu aberto tem teto: `.nav__links` no estado expandido é
+  `max-height: calc(100dvh - 150px)` com rolagem interna. Sem isso, em celular
+  na horizontal (375px de altura) a barra aberta passaria da tela e, sendo
+  sticky, deixaria os últimos links inalcançáveis.
 
 ## Verificação final
 
