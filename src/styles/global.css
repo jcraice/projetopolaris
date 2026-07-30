@@ -52,6 +52,13 @@
      errado. */
   --largura-conteudo: 1280px;
   --recuo: max(20px, calc((100% - var(--largura-conteudo)) / 2));
+
+  /* O raio dos cantos. 8px tira o aspecto quadrado sem descaracterizar o pôster:
+     a partir de uns 16px a página passa a ler como aplicativo, e a sombra
+     deslocada dos botões começa a brigar com a curva. O raio pequeno é para as
+     peças miúdas — a etiqueta tem 20px de altura, e 8px nela viraria cápsula. */
+  --raio: 8px;
+  --raio-pequeno: 4px;
 }
 
 /* O claro não é o escuro clareado: é outra paleta, escolhida pela autora
@@ -163,6 +170,7 @@ a {
   letter-spacing: 0.16em;
   padding: 4px 8px;
   text-transform: uppercase;
+  border-radius: var(--raio-pequeno);
 }
 
 .botao {
@@ -174,6 +182,7 @@ a {
   padding: 8px 14px;
   cursor: pointer;
   box-shadow: 3px 3px 0 color-mix(in srgb, var(--apoio) 28%, transparent);
+  border-radius: var(--raio);
 }
 
 .botao--principal {
@@ -207,6 +216,7 @@ a {
   text-transform: uppercase;
   text-decoration: none;
   color: var(--texto);
+  border-radius: var(--raio);
 }
 
 .lista-subgeneros a:hover {
@@ -219,6 +229,7 @@ a {
 .bloco {
   background: var(--bloco);
   padding: 20px;
+  border-radius: var(--raio);
 }
 
 /* As margens do primeiro e do último filho somariam ao espaço interno do bloco
