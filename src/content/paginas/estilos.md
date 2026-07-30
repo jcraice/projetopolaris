@@ -3,14 +3,14 @@ titulo: "Estilos & Combinações"
 ordem: 6
 ---
 
-<!-- As três divisões abaixo são a única marcação HTML de todo o acervo. Estão
-aqui porque esta página tem partes que aparecem cada uma no seu bloco de fundo,
-e o Markdown sozinho não tem como agrupar um trecho. As duas primeiras levam
-preenchimento; a terceira é o card de fechamento, em `bloco--vazado`, com
-contorno em vez de preenchimento. As linhas em branco em volta delas são
-obrigatórias: sem elas o Markdown de dentro deixa de ser processado e o texto
-sai como marcação crua. Ao editar, mantenha cada abertura com o seu
-fechamento. -->
+<!-- As duas divisões abaixo são a única marcação HTML de todo o acervo. Estão
+aqui porque esta página tem duas partes que aparecem cada uma no seu bloco de
+fundo, e o Markdown sozinho não tem como agrupar um trecho. O texto de
+fechamento, no fim do arquivo, fica solto de propósito: chegou a ter um card
+de contorno em volta e a autora achou que pesava. As linhas em branco em volta
+das divisões são obrigatórias: sem elas o Markdown de dentro deixa de ser
+processado e o texto sai como marcação crua. Ao editar, mantenha cada abertura
+com o seu fechamento. -->
 
 Mais do que regras rígidas, a ficção científica é feita de possibilidades. Aqui você encontra breves conceitos sobre estilos variados e sugestões de combinações criativas entre subgêneros, servindo como uma fonte extra de ideias para expandir seus horizontes narrativos.
 
@@ -50,10 +50,6 @@ Um dos encantos da ficção científica é a possibilidade de combinar estilos e
 
 </div>
 
-<div class="bloco bloco--vazado">
-
 ***Combine** estilos e subgêneros de acordo com o **tom, mensagem** e **universo desejados**. Reflita sobre como diferentes abordagens influenciam os papéis dos personagens, os conflitos e até as soluções encontradas nas histórias.*
 
 *Misture elementos, experimente estilos e descubra novas possibilidades narrativas. A criatividade na ficção científica está justamente em cruzar fronteiras, de universos, ideias e estilos!*
-
-</div>
