@@ -4,6 +4,16 @@ import Base from '../layouts/Base.astro';
 
 const pagina = await getEntry('paginas', 'home');
 if (!pagina) throw new Error("página 'home' não encontrada em src/content/paginas");
+
+// A home depende dos três: subtítulo abaixo do título, chamada dentro do card
+// do gerador, citação no fim. Falhar alto aqui é melhor que uma página com um
+// buraco silencioso onde deveria haver frase.
+for (const campo of ['subtitulo', 'chamadaGerador', 'citacao'] as const) {
+  if (!pagina.data[campo]) {
+    throw new Error(`campo '${campo}' ausente em src/content/paginas/home.md`);
+  }
+}
+
 const { Content } = await render(pagina);
 
 const mundos = (await getCollection('subgeneros', (s) => s.data.mundo)).sort(
@@ -36,7 +46,7 @@ const pilares = [
 ---
 <Base titulo="Início">
   <h1>{pagina.data.titulo}</h1>
-  {pagina.data.subtitulo && <p class="subtitulo">{pagina.data.subtitulo}</p>}
+  <p class="subtitulo">{pagina.data.subtitulo}</p>
   <div class="conteudo">
     <Content />
   </div>
@@ -44,7 +54,7 @@ const pilares = [
   <div class="pilares">
     {pilares.map((p) => (
       <a class="pilar" href={p.href}>
-        <h3>{p.titulo}</h3>
+        <h2>{p.titulo}</h2>
         <p>{p.descricao}</p>
       </a>
     ))}
@@ -79,11 +89,17 @@ const pilares = [
     <a class="botao botao--principal" href={`${raiz}gerador`}>Ir para o Gerador</a>
   </section>
 
-  {pagina.data.citacao && <blockquote>{pagina.data.citacao}</blockquote>}
+  <blockquote>{pagina.data.citacao}</blockquote>
 </Base>
 
 <style>
-  section + section {
+  /* Depois que os cards perderam o <section> que os embrulhava, sobrou um só
+     intervalo governado por regra e o resto caiu na margem padrão do navegador.
+     Estas quatro combinações são as fronteiras de verdade da página. */
+  .conteudo + .pilares,
+  .pilares + section,
+  section + section,
+  section + blockquote {
     margin-block-start: 40px;
   }
 
@@ -134,9 +150,13 @@ const pilares = [
     border-radius: var(--raio);
   }
 
-  .pilar h3 {
+  /* Virou h2 para não pular nível de título (h1 direto para h3 sem h2 no meio) —
+     o tamanho fica preso em 1.17rem, que era o que um h3 já renderizava, para a
+     mudança de nível não mudar a aparência da home. */
+  .pilar h2 {
     margin: 0;
     color: var(--texto);
+    font-size: 1.17rem;
   }
 
   .pilar p {
@@ -146,7 +166,7 @@ const pilares = [
     color: var(--texto);
   }
 
-  .pilar:hover h3 {
+  .pilar:hover h2 {
     color: var(--destaque);
   }
 
@@ -159,9 +179,9 @@ const pilares = [
     border-color: var(--destaque);
   }
 
-  :global(html[data-tema='claro']) .pilar h3,
+  :global(html[data-tema='claro']) .pilar h2,
   :global(html[data-tema='claro']) .pilar p,
-  :global(html[data-tema='claro']) .pilar:hover h3 {
+  :global(html[data-tema='claro']) .pilar:hover h2 {
     color: var(--fundo);
   }
 

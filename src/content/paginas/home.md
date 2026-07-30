@@ -3,7 +3,7 @@ titulo: "Projeto Polaris: Arquétipos da Ficção Científica"
 subtitulo: "Recursos narrativos. Sua imaginação dita as regras."
 chamadaGerador: "Dê vida a novas tramas. O sistema alinha um arquétipo, um cenário e um elemento narrativo do universo da sua escolha, criando a centelha inicial para a sua história."
 citacao: "A ficção científica oferece uma chance de escapar, mas também de refletir sobre o mundo em que vivemos."
-ordem: 1
+ordem: 0
 ---
 
 Funcionando como um catálogo, o Projeto Polaris reúne arquétipos de personagens, cenários e elementos narrativos cuidadosamente organizados por subgêneros, desde Space Operas grandiosas até Distopias e Cyberpunk. Cada arquétipo é uma base pronta para ser adaptada, misturada ou reinventada, servindo como ponto de partida para construir universos complexos e personagens memoráveis.

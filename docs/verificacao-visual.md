@@ -11,7 +11,7 @@ O fundo atrás de um texto não é uma cor chapada — é uma pilha de três cam
 |---|---|---|
 | fundo da página | `body` | `--fundo` `#0b0b0e`, opaco |
 | aurora | `.aurora` | gradiente cônico do mundo, `opacity: 0.36` sobre o fundo |
-| painel | `.cartao`, `.nav`, `.pilar` | `--painel` `rgba(11, 11, 14, 0.8)` sobre a aurora |
+| painel | `.cartao`, `.nav`, `.pilar`, `.cta-gerador` | `--painel` `rgba(11, 11, 14, 0.8)` sobre a aurora |
 
 Daí saem as duas superfícies que importam:
 
@@ -59,8 +59,9 @@ segue em 0,8.
 > **Atualização depois da medição.** As molduras douradas saíram do site por
 > decisão editorial — primeiro dos verbetes do catálogo, depois das três cartas
 > do gerador. Nos dois casos o painel saiu junto, e o texto passou a ficar
-> direto sobre o céu. Restam sobre painel apenas a navegação e os pilares da
-> home. A tabela acima vale para esses dois; para todo o resto, use a próxima.
+> direto sobre o céu. Restam sobre painel a navegação, os pilares da home e o
+> card do gerador na home. A tabela acima vale para esses três; para todo o
+> resto, use a próxima.
 
 **A barra do topo é sticky**, então deixou de ser só a navegação vista sobre a
 aurora: o fundo dela agora é o que rola por baixo. O pior caso real é um título

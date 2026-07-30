@@ -3,12 +3,14 @@ titulo: "Estilos & Combinações"
 ordem: 6
 ---
 
-<!-- As duas divisões abaixo são a única marcação HTML de todo o acervo. Estão
-aqui porque esta página tem duas partes que aparecem cada uma no seu bloco de
-fundo, e o Markdown sozinho não tem como agrupar um trecho. As linhas em branco
-em volta delas são obrigatórias: sem elas o Markdown de dentro deixa de ser
-processado e o texto sai como marcação crua. Ao editar, mantenha cada abertura
-com o seu fechamento. -->
+<!-- As três divisões abaixo são a única marcação HTML de todo o acervo. Estão
+aqui porque esta página tem partes que aparecem cada uma no seu bloco de fundo,
+e o Markdown sozinho não tem como agrupar um trecho. As duas primeiras levam
+preenchimento; a terceira é o card de fechamento, em `bloco--vazado`, com
+contorno em vez de preenchimento. As linhas em branco em volta delas são
+obrigatórias: sem elas o Markdown de dentro deixa de ser processado e o texto
+sai como marcação crua. Ao editar, mantenha cada abertura com o seu
+fechamento. -->
 
 Mais do que regras rígidas, a ficção científica é feita de possibilidades. Aqui você encontra breves conceitos sobre estilos variados e sugestões de combinações criativas entre subgêneros, servindo como uma fonte extra de ideias para expandir seus horizontes narrativos.
 

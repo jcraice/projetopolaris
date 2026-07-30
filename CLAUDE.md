@@ -27,6 +27,12 @@ Depois de adicionar ou editar Markdown em `src/content/`, `npm run build` é o
 que confirma que o frontmatter passa na validação Zod — não existe comando de
 lint separado para conteúdo.
 
+**Mudou o esquema de uma coleção com `npm run dev` já rodando?** Os campos
+novos saem vazios na página, mesmo com o Markdown certo e o build passando —
+`.astro/data-store.json` guarda as entradas já interpretadas pelo esquema
+antigo, e o Zod descarta chave desconhecida em silêncio em vez de avisar.
+Apague `.astro/` e reinicie o servidor.
+
 ## Restrições do projeto
 
 Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md](docs/superpowers/plans/2026-07-27-polaris.md)) e valem para código novo:

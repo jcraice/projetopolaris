@@ -645,7 +645,9 @@ npm run build
 
 Esperado: 75 testes, 0 erros, 39 páginas. Este é o passo que valida os três
 campos novos do frontmatter contra o Zod: se um nome de campo estiver errado no
-`home.md`, o build falha aqui.
+`home.md`, o build falha aqui (falso quando escrito — `esquemaPagina` só
+ganhou `.strict()` na revisão final; até lá a chave errada era descartada em
+silêncio).
 
 - [ ] **Passo 7: Conferir a home**
 
