@@ -119,7 +119,12 @@ html {
 
 body {
   margin: 0;
-  overflow-x: hidden;
+  /* Sem `overflow-x: hidden` aqui, e não por descuido: com um eixo em hidden o
+     body vira contêiner de rolagem próprio (o outro eixo computa para auto), e
+     a barra do topo, que é sticky, passaria a se fixar em relação ao body em
+     vez da tela — ou seja, subiria embora ao rolar. O hidden continua no
+     <html>, cujo overflow é propagado para a viewport, e é lá que o transbordo
+     da aurora é clipado. */
   background: var(--fundo);
   color: var(--texto);
   font-family: 'Segoe UI', system-ui, sans-serif;

@@ -161,6 +161,13 @@ Dourado e violeta ficaram só no tema escuro.
 | `--destaque` | `#0e6e7d` ciano | 5,52 | 4,99 |
 | `--apoio` | `#1b2a4a` azul-tinta | 13,24 | 11,99 |
 
+**A navegação passou para a primeira coluna.** Desde que a barra do topo é fixa
+(`position: sticky`), o fundo dela no tema claro é `--fundo` opaco e não
+`--painel`: cinco por cento de véu deixariam o texto rolando por baixo aparecer
+atrás dos links. Então, no tema claro, a navegação se lê pela coluna "sobre o
+fundo `#f5f7f9`". `--painel` não mudou de valor, e a coluna do painel continua
+valendo para a lista de resultados da busca, que é o que ainda o usa aqui.
+
 Os botões e os retângulos são preenchidos aqui, e não de contorno como no
 escuro, onde o traço brilha sobre o céu e sobre fundo claro ficaria apagado.
 Junto com a etiqueta, invertem o par — cor de fundo, texto na cor do fundo da
@@ -214,8 +221,11 @@ Verificado por leitura do CSS; falta a confirmação visual no navegador.
 - As cartas do gerador já são uma coluna em qualquer largura
   (`.pilha-cartas` é `flex-direction: column`, decisão de projeto), então
   empilham por construção, não por media query.
-- `html` e `body` têm `overflow-x: hidden`, que impede a rolagem horizontal
-  mesmo se algo vazar.
+- `html` tem `overflow-x: hidden`, que impede a rolagem horizontal mesmo se algo
+  vazar. O `body` **não** tem, de propósito: com um eixo em hidden ele viraria
+  contêiner de rolagem e a barra do topo, que é sticky, se fixaria em relação a
+  ele em vez da tela. O hidden do `html` é propagado para a viewport e clipa
+  igual.
 
 ## Verificação final
 

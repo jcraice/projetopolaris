@@ -63,6 +63,13 @@ const links = [
 
 <style>
   .nav {
+    position: sticky;
+    top: 0;
+    /* Acima de qualquer descendente posicionado do <main>: o cadeado do gerador
+       é absolute e, sem isto, pintaria por cima da barra ao rolar, porque vem
+       depois na ordem do documento. A lista da busca (z-index: 20) segue
+       funcionando dentro do contexto de empilhamento que este z-index cria. */
+    z-index: 10;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -72,6 +79,20 @@ const links = [
     border-bottom: 2px solid var(--borda-suave);
     background: var(--painel);
     backdrop-filter: blur(9px);
+  }
+
+  /* No claro --painel é rgba(20, 24, 31, 0.05), e cinco por cento não seguram o
+     texto que passa por baixo de uma barra fixa: ele apareceria atrás dos
+     links. Aqui a barra é opaca, e o backdrop-filter sai junto porque não tem
+     mais o que borrar — deixa de custar uma recomposição por quadro de
+     rolagem, o mesmo raciocínio que tirou a aurora inteira do tema claro.
+
+     Contraste: --painel não muda de valor, e esta superfície já está medida em
+     docs/verificacao-visual.md, na coluna "sobre o fundo #f5f7f9" da tabela do
+     tema claro — --texto em 11,47 e --texto-forte em 16,57. */
+  :global(html[data-tema='claro']) .nav {
+    background: var(--fundo);
+    backdrop-filter: none;
   }
 
   .nav__marca {
