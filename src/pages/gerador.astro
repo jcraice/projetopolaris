@@ -90,6 +90,9 @@ const CARTAS = [
         </button>
       </article>
     ))}
+    <div class="acoes">
+      <button type="button" class="botao botao--principal" id="sortear">Gerar</button>
+    </div>
   </section>
 
   <section class="bloco bloco-premissa" aria-labelledby="premissa-titulo">
@@ -97,6 +100,10 @@ const CARTAS = [
     {/* aria-live no parágrafo, e não na seção inteira: na seção, cada clique
         em Gerar faria o leitor de tela reler também o título e os botões. */}
     <p id="premissa" class="abertura" aria-live="polite"></p>
+    <div class="acoes">
+      <button type="button" class="botao" id="copiar-premissa">Copiar premissa</button>
+    </div>
+    <span class="aviso" id="aviso-premissa" role="status"></span>
   </section>
 
   <section class="bloco bloco-prompt" aria-labelledby="prompt-titulo">
@@ -105,13 +112,11 @@ const CARTAS = [
         e relê-las a cada clique em Gerar tornaria a página impraticável com
         leitor de tela. Quem quiser o texto chega nele navegando. */}
     <p id="prompt" class="prompt__texto"></p>
+    <div class="acoes">
+      <button type="button" class="botao" id="copiar-prompt">Copiar prompt</button>
+    </div>
+    <span class="aviso" id="aviso-prompt" role="status"></span>
   </section>
-
-  <div class="acoes">
-    <button type="button" class="botao botao--principal" id="sortear">Gerar</button>
-    <button type="button" class="botao" id="copiar">Copiar</button>
-  </div>
-  <span id="aviso" role="status"></span>
 
   {/* is:inline porque isto é dado, não código: sem a diretiva o Astro trata o
       bloco como script a processar e emite um aviso em `npm run check`. */}
@@ -275,16 +280,24 @@ const CARTAS = [
     line-height: 1.5;
   }
 
+  /* Cada bloco termina com a ação que pertence a ele, centralizada no rodapé —
+     o botão fica junto do que ele opera, em vez de uma fileira no fim da página
+     comandando três coisas distantes. */
   .acoes {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 12px;
-    margin: 16px 0 10px;
+    margin: 16px 0 0;
   }
 
-  #aviso {
-    display: inline-block;
+  /* Um aviso por botão de copiar, logo abaixo dele: a confirmação aparece onde
+     a pessoa clicou, e não num canto distante da página. */
+  .aviso {
+    display: block;
     min-height: 1.2em;
+    margin-top: 8px;
+    text-align: center;
     color: var(--apagado);
     font-size: 0.85rem;
   }
@@ -308,7 +321,6 @@ const CARTAS = [
   const form = document.getElementById('opcoes') as HTMLFormElement;
   const premissa = document.getElementById('premissa')!;
   const prompt = document.getElementById('prompt')!;
-  const aviso = document.getElementById('aviso')!;
 
   const travas: Travas = { arquetipo: false, cenario: false, elemento: false };
 
@@ -352,15 +364,29 @@ const CARTAS = [
 
   document.getElementById('sortear')!.addEventListener('click', rolar);
 
-  document.getElementById('copiar')!.addEventListener('click', async () => {
-    if (!premissa.textContent) return;
+  /* A mensagem de sucesso vem pronta em vez de ser montada com o nome da peça:
+     "premissa" é feminino e "prompt" é masculino, e montar a frase aqui daria
+     "Prompt copiada". */
+  async function copiar(texto: string, aviso: HTMLElement, sucesso: string) {
+    if (!texto) return;
     try {
-      await navigator.clipboard.writeText(premissa.textContent);
-      aviso.textContent = 'Premissa copiada.';
+      await navigator.clipboard.writeText(texto);
+      aviso.textContent = sucesso;
     } catch {
       aviso.textContent = 'Não foi possível copiar automaticamente.';
     }
     setTimeout(() => { aviso.textContent = ''; }, 2000);
+  }
+
+  const avisoDaPremissa = document.getElementById('aviso-premissa')!;
+  const avisoDoPrompt = document.getElementById('aviso-prompt')!;
+
+  document.getElementById('copiar-premissa')!.addEventListener('click', () => {
+    copiar(premissa.textContent ?? '', avisoDaPremissa, 'Premissa copiada.');
+  });
+
+  document.getElementById('copiar-prompt')!.addEventListener('click', () => {
+    copiar(prompt.textContent ?? '', avisoDoPrompt, 'Prompt copiado.');
   });
 
   for (const botao of document.querySelectorAll<HTMLButtonElement>('[data-travar]')) {
