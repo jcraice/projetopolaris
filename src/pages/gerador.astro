@@ -1,9 +1,20 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 
 const subgeneros = await getCollection('subgeneros');
 const mundos = subgeneros.filter((s) => s.data.mundo).sort((a, b) => a.data.ordem - b.data.ordem);
+
+// O texto do prompt é conteúdo da autora, não código: mora em Markdown e é lido
+// como texto cru (`body`), nunca renderizado — o que a IA recebe é o que está
+// escrito lá.
+const modeloDoPrompt = await getEntry('paginas', 'prompt-ia');
+if (!modeloDoPrompt) throw new Error("página 'prompt-ia' não encontrada em src/content/paginas");
+
+// Mapa de identificador para nome de exibição, para o prompt dizer "Space Opera"
+// e não "space-opera". Só os mundos entram; `comuns` não é mundo e nomearMundos
+// o ignora.
+const nomesDosMundos = Object.fromEntries(mundos.map((m) => [m.id, m.data.nome]));
 
 // Os pools inteiros (146 arquétipos, 60 cenários, 120 elementos) são lidos
 // aqui em build e injetados como JSON estático na página — a interatividade
@@ -81,11 +92,19 @@ const CARTAS = [
     ))}
   </section>
 
-  <section class="bloco bloco-premissa" aria-labelledby="dica-titulo">
-    <h2 id="dica-titulo">Dica de enredo</h2>
+  <section class="bloco bloco-premissa" aria-labelledby="premissa-titulo">
+    <h2 id="premissa-titulo">Premissa</h2>
     {/* aria-live no parágrafo, e não na seção inteira: na seção, cada clique
         em Gerar faria o leitor de tela reler também o título e os botões. */}
     <p id="premissa" class="abertura" aria-live="polite"></p>
+  </section>
+
+  <section class="bloco bloco-prompt" aria-labelledby="prompt-titulo">
+    <h2 id="prompt-titulo">Crie enredos com sua IA favorita</h2>
+    {/* Sem aria-live, ao contrário da premissa: são cerca de trezentas palavras,
+        e relê-las a cada clique em Gerar tornaria a página impraticável com
+        leitor de tela. Quem quiser o texto chega nele navegando. */}
+    <p id="prompt" class="prompt__texto"></p>
   </section>
 
   <div class="acoes">
@@ -97,6 +116,8 @@ const CARTAS = [
   {/* is:inline porque isto é dado, não código: sem a diretiva o Astro trata o
       bloco como script a processar e emite um aviso em `npm run check`. */}
   <script type="application/json" id="pools" is:inline set:html={JSON.stringify(pools)}></script>
+  <script type="application/json" id="modelo-prompt" is:inline set:html={JSON.stringify(modeloDoPrompt.body)}></script>
+  <script type="application/json" id="nomes-dos-mundos" is:inline set:html={JSON.stringify(nomesDosMundos)}></script>
 </Base>
 
 <style>
@@ -245,6 +266,15 @@ const CARTAS = [
     color: var(--texto-forte);
   }
 
+  /* pre-wrap, e não <pre>: as quebras de linha do prompt-ia.md fazem parte do
+     texto — sem elas a lista numerada vira um bloco único ilegível —, mas isto
+     é texto para ler, não código, então nada de fonte monoespaçada nem moldura. */
+  .prompt__texto {
+    margin: 0;
+    white-space: pre-wrap;
+    line-height: 1.5;
+  }
+
   .acoes {
     display: flex;
     flex-wrap: wrap;
@@ -267,12 +297,17 @@ const CARTAS = [
 </style>
 
 <script>
-  import { sortear, redigir, MOLDES } from '../lib/gerador';
+  import { montarPrompt, nomearMundos, sortear, redigir, MOLDES } from '../lib/gerador';
   import type { Opcoes, Pools, Sorteio, Travas } from '../lib/gerador';
 
   const pools: Pools = JSON.parse(document.getElementById('pools')!.textContent!);
+  const modeloDoPrompt: string = JSON.parse(document.getElementById('modelo-prompt')!.textContent!);
+  const nomesDosMundos: Record<string, string> = JSON.parse(
+    document.getElementById('nomes-dos-mundos')!.textContent!,
+  );
   const form = document.getElementById('opcoes') as HTMLFormElement;
   const premissa = document.getElementById('premissa')!;
+  const prompt = document.getElementById('prompt')!;
   const aviso = document.getElementById('aviso')!;
 
   const travas: Travas = { arquetipo: false, cenario: false, elemento: false };
@@ -293,7 +328,7 @@ const CARTAS = [
 
   const moldeAoAcaso = () => MOLDES[Math.floor(Math.random() * MOLDES.length)];
 
-  function pintar(sorteio: Sorteio, molde: string) {
+  function pintar(sorteio: Sorteio, molde: string, opcoes: Opcoes) {
     for (const tipo of ['arquetipo', 'cenario', 'elemento'] as const) {
       const carta = document.querySelector(`[data-carta="${tipo}"]`)!;
       const peca = sorteio[tipo];
@@ -301,11 +336,18 @@ const CARTAS = [
       carta.querySelector('[data-papel="etiqueta"]')!.textContent = peca.subgenero.replace(/-/g, ' ');
     }
     premissa.textContent = redigir(sorteio, molde);
+    prompt.textContent = montarPrompt(modeloDoPrompt, {
+      mundo: nomearMundos(sorteio, opcoes, nomesDosMundos),
+      arquetipo: sorteio.arquetipo.nome,
+      cenario: sorteio.cenario.nome,
+      elemento: sorteio.elemento.nome,
+    });
   }
 
   function rolar() {
-    atual = sortear(pools, lerOpcoes(), travas, atual, Math.random);
-    pintar(atual, moldeAoAcaso());
+    const opcoes = lerOpcoes();
+    atual = sortear(pools, opcoes, travas, atual, Math.random);
+    pintar(atual, moldeAoAcaso(), opcoes);
   }
 
   document.getElementById('sortear')!.addEventListener('click', rolar);
