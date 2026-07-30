@@ -1,31 +1,10 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import { paragrafoComPrefixo } from '../lib/texto';
 
-// Reaproveita dois parágrafos já escritos em Sobre (src/content/paginas/sobre.md)
-// em vez de redigir uma apresentação nova — ver relatório da Task 8 para a origem.
-const sobre = await getEntry('paginas', 'sobre');
-if (!sobre) throw new Error("página 'sobre' não encontrada em src/content/paginas");
-const apresentacao = paragrafoComPrefixo(sobre.body ?? '', 'Meu desejo');
-
-// A busca é por prefixo, então basta alguém reescrever a primeira linha do
-// parágrafo em sobre.md para a home perder o texto sem avisar ninguém. Quebrar
-// o build é melhor que publicar uma seção vazia.
-if (!apresentacao) {
-  throw new Error(
-    'parágrafo "Meu desejo..." não encontrado em src/content/paginas/sobre.md — ' +
-      'confira se o prefixo procurado em index.astro ainda casa com o texto',
-  );
-}
-
-// Texto próprio da home, escrito pela autora para esta chamada. Não sai de
-// sobre.md como o parágrafo acima: lá o gerador é contado em primeira pessoa,
-// dentro da história do projeto, e aqui o que se quer é o convite direto.
-const chamadaGerador =
-  'Dê vida a novas tramas. O sistema alinha um arquétipo, um cenário e um ' +
-  'elemento narrativo do universo da sua escolha, criando a centelha inicial ' +
-  'para a sua história.';
+const pagina = await getEntry('paginas', 'home');
+if (!pagina) throw new Error("página 'home' não encontrada em src/content/paginas");
+const { Content } = await render(pagina);
 
 const mundos = (await getCollection('subgeneros', (s) => s.data.mundo)).sort(
   (a, b) => a.data.ordem - b.data.ordem,
@@ -55,22 +34,21 @@ const pilares = [
   },
 ];
 ---
-<Base titulo="Projeto Polaris">
-  <h1>Projeto Polaris</h1>
-  {apresentacao && <p class="abertura">{apresentacao}</p>}
-  <p><a href={`${raiz}sobre`}>Leia a história completa em Sobre →</a></p>
+<Base titulo="Início">
+  <h1>{pagina.data.titulo}</h1>
+  {pagina.data.subtitulo && <p class="subtitulo">{pagina.data.subtitulo}</p>}
+  <div class="conteudo">
+    <Content />
+  </div>
 
-  <section aria-labelledby="pilares-titulo">
-    <h2 id="pilares-titulo">Comece por aqui</h2>
-    <div class="pilares">
-      {pilares.map((p) => (
-        <a class="pilar" href={p.href}>
-          <h3>{p.titulo}</h3>
-          <p>{p.descricao}</p>
-        </a>
-      ))}
-    </div>
-  </section>
+  <div class="pilares">
+    {pilares.map((p) => (
+      <a class="pilar" href={p.href}>
+        <h3>{p.titulo}</h3>
+        <p>{p.descricao}</p>
+      </a>
+    ))}
+  </div>
 
   <section aria-labelledby="mundos-titulo">
     <h2 id="mundos-titulo">Os mundos</h2>
@@ -97,14 +75,43 @@ const pilares = [
 
   <section class="cta-gerador" aria-labelledby="gerador-titulo">
     <h2 id="gerador-titulo">Gerador de Combinações</h2>
-    <p>{chamadaGerador}</p>
+    <p>{pagina.data.chamadaGerador}</p>
     <a class="botao botao--principal" href={`${raiz}gerador`}>Ir para o Gerador</a>
   </section>
+
+  {pagina.data.citacao && <blockquote>{pagina.data.citacao}</blockquote>}
 </Base>
 
 <style>
   section + section {
     margin-block-start: 40px;
+  }
+
+  /* 1.2rem e não menos, pela mesma razão dos títulos de verbete: sobre o céu o
+     --destaque fica em 4,27:1 no pior mundo, abaixo dos 4,5 que texto pequeno
+     exige, mas a partir de 18,66px em negrito o WCAG trata como texto grande e
+     o mínimo cai para 3:1. 1.2rem dá 19,2px. Encolher aqui reprova o contraste. */
+  .subtitulo {
+    margin-block: 0 24px;
+    color: var(--destaque);
+    font-weight: 800;
+    font-size: 1.2rem;
+  }
+
+  /* O corpo vem de render() do Markdown e não recebe o atributo de escopo do
+     Astro, então o alcance tem que vir do contêiner. */
+  .conteudo :global(p) {
+    line-height: 1.55;
+  }
+
+  /* O emoji de cada item já é o marcador; o disco do navegador em cima dele
+     ficaria marcador duplicado. */
+  .conteudo :global(ul) {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 
   .pilares {
@@ -228,13 +235,28 @@ const pilares = [
     }
   }
 
+  /* Era uma seção com barra lateral. Virou card, com o mesmo par de contorno e
+     painel dos três pilares acima, para a home ler como uma sequência de cards.
+
+     Não recebe o preenchimento que o .pilar ganha no tema claro: o botão
+     principal dentro dele também é --destaque, e um sobre o outro sumiria. */
   .cta-gerador {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
-    border-left: 3px solid var(--apoio);
-    padding-left: 16px;
+    background: var(--painel);
+    border: 2px solid var(--destaque);
+    border-radius: var(--raio);
+    padding: 16px;
+  }
+
+  .cta-gerador h2 {
+    margin: 0;
+  }
+
+  .cta-gerador p {
+    margin: 0;
   }
 </style>
 

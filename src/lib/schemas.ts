@@ -44,7 +44,15 @@ export const esquemaLivro = z.object({
   ordem: z.number().int().nonnegative(),
 });
 
+/* Os três campos opcionais servem só à home hoje: são frases soltas que a página
+   encaixa em lugares diferentes da estrutura — subtítulo abaixo do título,
+   chamada dentro do card do gerador, citação no fim — e por isso não cabem no
+   corpo corrido do Markdown. Mesma solução que esquemaSubgenero usa para citacao
+   e aberturaArquetipos. */
 export const esquemaPagina = z.object({
   titulo: z.string().min(1),
   ordem: z.number().int().nonnegative().default(0),
+  subtitulo: z.string().optional(),
+  chamadaGerador: z.string().optional(),
+  citacao: z.string().optional(),
 });
