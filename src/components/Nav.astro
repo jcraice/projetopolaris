@@ -209,17 +209,18 @@ const links = [
 
          Os 150px são o que fica acima e abaixo da lista dentro da barra: 16px
          de recuo, ~36px da fileira da marca, 12px de intervalo, ~44px da busca,
-         12px de intervalo e 16px de recuo.
+         12px de intervalo e 16px de recuo — soma 136px, arredondado para cima
+         para deixar folga.
 
          O teto vai na lista, e não no <header>: .busca__lista é absolute dentro
          da busca, e overflow-y no header cortaria os resultados em vez de
          deixá-los sobrepor a página. Em tela de pé a lista cabe e nada disto
          entra em ação.
 
-         A regra base de .nav__links tem flex-wrap: wrap, então o cap de altura
-         torna a coluna flex envolvível em colunas (múltiplas colagens), em vez
-         de rolar verticalmente — quem remove o flex-wrap: nowrap abaixo quebra
-         a rolagem. */
+         A regra base de .nav__links tem flex-wrap: wrap, e com o teto de altura
+         uma coluna flex que quebra passa a distribuir os itens em várias colunas
+         em vez de rolar — por isso o flex-wrap: nowrap abaixo. Quem o remover
+         quebra a rolagem interna. */
       max-height: calc(100dvh - 150px);
       overflow-y: auto;
       flex-wrap: nowrap;
@@ -235,6 +236,9 @@ const links = [
     .nav__abrir[aria-expanded='true'] ~ .nav__links a {
       padding: 10px 0;
       border-bottom: 2px solid var(--borda-suave);
+      /* Sem isto os links encolhem para caber no teto de altura em vez de a
+         lista rolar, e o alvo de toque de 40px (os 10px de padding em cima e
+         embaixo) some junto. */
       flex-shrink: 0;
     }
 

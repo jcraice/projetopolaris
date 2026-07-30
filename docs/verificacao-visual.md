@@ -62,6 +62,14 @@ segue em 0,8.
 > direto sobre o céu. Restam sobre painel apenas a navegação e os pilares da
 > home. A tabela acima vale para esses dois; para todo o resto, use a próxima.
 
+**A barra do topo é sticky**, então deixou de ser só a navegação vista sobre a
+aurora: o fundo dela agora é o que rola por baixo. O pior caso real é um título
+quase branco passando sob o véu de 80%, que compõe para algo perto de
+`rgb(60, 60, 62)` — mais claro que o `--fundo` opaco que a tabela acima assume.
+Mesmo nesse extremo, `--texto` fica em ~7,5:1 e `--texto-forte` em ~11:1: os
+dois continuam passando, mas o pior caso da navegação não é mais o número da
+tabela.
+
 ## Contraste direto sobre o céu
 
 Fora dos painéis — os verbetes do catálogo, os parágrafos de abertura, os
@@ -153,7 +161,7 @@ dourado e violeta para caberem em fundo claro; a autora recusou o par e
 escolheu, entre três propostas, um destaque ciano profundo com apoio azul-tinta.
 Dourado e violeta ficaram só no tema escuro.
 
-| Papel | Valor | Sobre o fundo `#f5f7f9` | Sobre o painel (navegação) |
+| Papel | Valor | Sobre o fundo `#f5f7f9` | Sobre o painel (lista da busca) |
 |---|---|---|---|
 | `--texto-forte` | `#14181f` | 16,57 | 15,00 |
 | `--texto` | `#2f3540` | 11,47 | 10,39 |

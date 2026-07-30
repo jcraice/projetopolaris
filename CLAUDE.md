@@ -166,6 +166,12 @@ uma vez por [Base.astro](src/layouts/Base.astro); o resto é `<style>` escopado 
 própria página. A única coisa que o site guarda no navegador é a chave
 `polaris-tema` do `localStorage`, lida pelo script embutido no `<head>`.
 
+A coluna de conteúdo é `--largura-conteudo` (1280px) e o recuo que a centraliza
+é `--recuo`, consumido pelo `padding-inline` das três faixas — barra do topo,
+`main` e rodapé. O `100%` dentro do token se resolve no ponto de uso, então ele
+só vale para filho direto do `<body>`; dentro de um contêiner mais estreito o
+recuo sai errado sem avisar.
+
 O HTML que sai de `render()` de uma entrada Markdown **não** recebe o atributo de
 escopo do Astro — estilizá-lo pede um contêiner escopado e `:global()` dentro
 dele (`.conteudo :global(h2)`), como em

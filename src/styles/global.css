@@ -47,8 +47,9 @@
      O 100% é resolvido onde o token é usado, não aqui — custom property é
      substituída como texto e a porcentagem só se resolve na propriedade que a
      recebe. Por isso --recuo vale para filho direto do <body>, onde 100% é a
-     largura da tela: usá-lo dentro de um contêiner mais estreito daria um
-     recuo silenciosamente errado. */
+     largura do <body> — a tela menos a barra de rolagem clássica: usá-lo
+     dentro de um contêiner mais estreito daria um recuo silenciosamente
+     errado. */
   --largura-conteudo: 1280px;
   --recuo: max(20px, calc((100% - var(--largura-conteudo)) / 2));
 }

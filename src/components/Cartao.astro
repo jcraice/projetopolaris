@@ -33,6 +33,10 @@ const { titulo, ancora, marcador } = Astro.props;
        separa um verbete do próximo, então precisa ser maior que o intervalo
        interno de 8px para a leitura não virar uma parede de texto. */
     margin-block-end: 32px;
+    /* Os mesmos 96px do scroll-margin-top das quatro section[id] em
+       mundos/[subgenero].astro, pelo mesmo motivo: dar folga para o título não
+       parar debaixo da barra fixa do topo. Os dois valores devem mudar
+       juntos. */
     scroll-margin-top: 96px;
   }
 
