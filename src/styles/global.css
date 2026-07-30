@@ -37,6 +37,20 @@
      o céu: a cor que deveria dar destaque tirava legibilidade. Assim o texto
      sobe de 4,71 para 6,90. */
   --bloco: rgba(44, 34, 62, 0.45);
+
+  /* A coluna de conteúdo. O recuo é os mesmos 20px de sempre e, quando a tela
+     passa de 1320px (1280 da coluna + as duas margens), vira o que sobrar
+     dividido em dois: a página para de crescer e o excesso vira margem. Abaixo
+     de 1320px nada muda, o que preserva o ponto de quebra de 1079px da
+     navegação e da lista de mundos.
+
+     O 100% é resolvido onde o token é usado, não aqui — custom property é
+     substituída como texto e a porcentagem só se resolve na propriedade que a
+     recebe. Por isso --recuo vale para filho direto do <body>, onde 100% é a
+     largura da tela: usá-lo dentro de um contêiner mais estreito daria um
+     recuo silenciosamente errado. */
+  --largura-conteudo: 1280px;
+  --recuo: max(20px, calc((100% - var(--largura-conteudo)) / 2));
 }
 
 /* O claro não é o escuro clareado: é outra paleta, escolhida pela autora
@@ -215,9 +229,11 @@ a {
   margin-block-end: 0;
 }
 
-/* Sem limite de largura por escolha da autora: o texto acompanha a extensão da
-   página. Havia aqui um `max-width: 68ch`, a medida de linha confortável de
-   leitura — em tela larga as linhas agora ficam bem mais longas que isso. */
+/* Sem limite de largura próprio por escolha da autora: o texto acompanha a
+   extensão da página. Havia aqui um `max-width: 68ch`, a medida de linha
+   confortável de leitura. As linhas param onde a coluna de conteúdo para —
+   --largura-conteudo, 1280px, ou cerca de 145 caracteres —, bem mais largas
+   que os 68ch, e é assim de propósito. */
 .abertura {
   max-width: none;
 }
