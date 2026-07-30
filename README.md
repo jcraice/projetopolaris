@@ -6,10 +6,12 @@ acervo cobre arquétipos de personagem, cenários, elementos narrativos e
 livros de referência, e é publicado como site estático no GitHub Pages.
 
 O site está no ar em **https://jcraice.github.io/projetopolaris/**, com 146
-arquétipos, 60 cenários, 120 elementos narrativos e 36 livros divididos em seis
-mundos, mais um pool de 20 arquétipos comuns. Tem busca em todo o acervo, tema
-claro e escuro, e um gerador que combina as peças em premissas prontas para
-começar uma história.
+arquétipos, 60 cenários, 120 elementos narrativos e 36 livros. São seis mundos —
+Cyberpunk, Distopia, Invasão Alienígena, Pós Apocalíptico, Space Opera e Viagem
+no Tempo — com 21 arquétipos, 10 cenários e 20 elementos cada, mais um pool de
+20 arquétipos comuns que serve a todos. Tem busca em todo o acervo, tema claro e
+escuro, e um gerador que combina as peças em premissas prontas para começar uma
+história.
 
 Nada é carregado de fora e nada é guardado sobre quem visita: o gerador roda
 inteiramente no navegador, a partir de dados embutidos na página em tempo de
@@ -32,8 +34,12 @@ Outros comandos úteis:
 ```bash
 npm run build     # gera o site estático em dist/
 npm run preview   # serve o build de dist/ localmente
+npm run check     # confere TypeScript e templates .astro
 npx vitest run    # roda a suíte de testes
 ```
+
+`npx vitest run` e `npm run check` são o que a publicação roda antes de
+construir o site — se um dos dois falhar, o deploy para.
 
 ## Como contribuir com um arquétipo novo
 

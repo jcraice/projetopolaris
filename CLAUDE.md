@@ -53,7 +53,8 @@ Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md]
 - **Mexeu em cor, tamanho de fonte ou opacidade da aurora?** Refaça as contas de
   [docs/verificacao-visual.md](docs/verificacao-visual.md) e atualize o
   documento. Vários valores estão no limite: os títulos dos verbetes só passam
-  porque têm 1.2rem, e a aurora só pode ir até 0,37.
+  porque têm 1.2rem, e a aurora só pode ir até 0,37 (hoje está em 0,36, em
+  [Aurora.astro](src/components/Aurora.astro)).
 - **`prefers-reduced-motion` respeitado** por qualquer animação.
 - **Tudo em português do Brasil**: identificadores, nomes de arquivo, interface,
   comentários e mensagens de commit (imperativo — "Adiciona busca global").
@@ -90,6 +91,19 @@ testados fora do Astro. Regras do esquema que não são óbvias:
 O campo `ordem` define a posição nos índices — a ordenação é sempre explícita,
 nunca alfabética por acidente.
 
+**Prosa não mora em componente.** Os textos das páginas de índice, de Sobre e de
+Estilos vêm da coleção `paginas` (`src/content/paginas/*.md`), buscados com
+`getEntry` — e a página estoura o build com mensagem explícita se a entrada
+sumir, em vez de renderizar vazio. A home vai além e reaproveita parágrafos já
+escritos em `sobre.md` por `paragrafoComPrefixo()`
+([texto.ts](src/lib/texto.ts)), casando pelo início do parágrafo; ao editar
+`sobre.md`, esses prefixos são contrato. Nada de copiar prosa autoral para
+dentro de um `.astro`.
+
+`/mundos/[subgenero]/` é porta de entrada, não catálogo: mostra três itens de
+cada tipo e manda para a página completa (e deixa o arquétipo felino de fora da
+amostra). Listar tudo ali esvazia o "Ver todos".
+
 ### Gerador de premissas
 
 [src/lib/gerador/](src/lib/gerador/) é um conjunto de funções puras, exportadas
@@ -98,8 +112,27 @@ internos). Fluxo: `sortear()` escolhe arquétipo + cenário + elemento +
 complicação respeitando travas e filtros, e `redigir()` encaixa o sorteio num
 dos `MOLDES`.
 
+`sortear` recebe o sorteio anterior e nunca repete a complicação nem a família
+dela em duas rodadas seguidas — as travas (`Travas`) só congelam as três peças
+do acervo, e a complicação sempre muda.
+
+**As complicações são a exceção à regra de prosa em Markdown**: o banco vive em
+[complicacoes.ts](src/lib/gerador/complicacoes.ts) porque é peça de molde, não
+texto de página — mas é conteúdo editorial (CC BY, como o resto do acervo), não
+código. Cada complicação começa em minúscula e não termina em ponto, senão não
+encaixa depois de "descobre que". [dados.test.ts](src/lib/gerador/dados.test.ts)
+tranca as contagens (7 famílias, 40 complicações, 10 moldes): incluir uma
+complicação nova é editar esses números junto.
+
+Nos `MOLDES` os marcadores carregam a regência — `{em:cenario}`, `{a:cenario}`,
+`{de:elemento}`, `{impera:elemento}`, `{ser:elemento}`, `{pronome}` —, e o teste
+exige que todo molde use as quatro peças e termine em ponto final. Molde novo
+sem uma das peças quebra a suíte, não o build.
+
 `sortear` recebe `aleatorio: () => number` como parâmetro justamente para os
-testes serem determinísticos — não chame `Math.random()` dentro da lib.
+testes serem determinísticos — não chame `Math.random()` dentro da lib. Quem
+injeta o acaso de verdade é o `<script>` de `gerador.astro`, que também sorteia
+o molde.
 
 [src/pages/gerador.astro](src/pages/gerador.astro) injeta os pools inteiros como
 JSON estático no HTML em tempo de build e liga tudo com um `<script>` sem
@@ -114,6 +147,34 @@ longos explicando por que cada alternativa mais simples foi descartada —
 inventar uma regra nova. Cada ajuste ali merece um caso em
 [redacao.test.ts](src/lib/gerador/redacao.test.ts) com o título real do acervo
 que motivou a mudança.
+
+### Interatividade sem framework
+
+Cada `<script>` de página ou componente importa funções puras de `src/lib/` e só
+faz a ligação com o DOM; a lógica testável fica na lib. O padrão de melhoria
+progressiva está em [expansivel.ts](src/lib/expansivel.ts), usado pelo menu do
+Nav e pela lista de mundos da home: o botão nasce com `[hidden]` no HTML e só
+aparece pelo JavaScript, então sem script a lista fica visível em vez de virar
+um menu que não abre. E o estado de aberto/fechado mora num lugar só, o
+`aria-expanded` do botão, com o CSS reagindo por seletor de irmão — nada de
+estado paralelo que possa divergir do que o leitor de tela anuncia.
+
+### Estilo nas páginas
+
+Os tokens de cor moram todos em [global.css](src/styles/global.css), importado
+uma vez por [Base.astro](src/layouts/Base.astro); o resto é `<style>` escopado na
+própria página. A única coisa que o site guarda no navegador é a chave
+`polaris-tema` do `localStorage`, lida pelo script embutido no `<head>`.
+
+O HTML que sai de `render()` de uma entrada Markdown **não** recebe o atributo de
+escopo do Astro — estilizá-lo pede um contêiner escopado e `:global()` dentro
+dele (`.conteudo :global(h2)`), como em
+[estilos.astro](src/pages/estilos.astro). Sem isso a regra é descartada em
+silêncio, o que parece um seletor errado e não é.
+
+A aurora recebe o trio de cores do subgênero por prop de `Base` e o converte em
+`conic-gradient` por `gradienteConico()` ([aurora.ts](src/lib/aurora.ts)), que
+cai no `AURORA_PADRAO` quando a página não é de mundo.
 
 ### Busca
 
@@ -138,7 +199,8 @@ base `/`. Por isso **todo link interno precisa passar por
 em produção.
 
 [.github/workflows/deploy.yml](.github/workflows/deploy.yml) roda `npx vitest
-run` antes do build e publica no GitHub Pages a partir de `main`.
+run` e `npm run check` antes do build e publica no GitHub Pages a partir de
+`main` — os dois precisam passar localmente antes de empurrar.
 
 ### Migração do Notion
 

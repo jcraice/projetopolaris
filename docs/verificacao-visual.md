@@ -9,15 +9,15 @@ O fundo atrás de um texto não é uma cor chapada — é uma pilha de três cam
 
 | Camada | Onde | Composição |
 |---|---|---|
-| fundo da página | `body` | `--tinta` `#0b0b0e`, opaco |
-| aurora | `.aurora` | gradiente cônico do mundo, `opacity: 0.36` sobre a tinta |
+| fundo da página | `body` | `--fundo` `#0b0b0e`, opaco |
+| aurora | `.aurora` | gradiente cônico do mundo, `opacity: 0.36` sobre o fundo |
 | painel | `.cartao`, `.nav`, `.pilar` | `--painel` `rgba(11, 11, 14, 0.8)` sobre a aurora |
 
 Daí saem as duas superfícies que importam:
 
 ```
-céu    = 0,36 × cor_da_aurora + 0,64 × tinta
-painel = 0,80 × tinta          + 0,20 × céu
+céu    = 0,36 × cor_da_aurora + 0,64 × fundo
+painel = 0,80 × fundo          + 0,20 × céu
 ```
 
 O `blur(58px)` e o `backdrop-filter` não mudam a cor média, só a espalham —
@@ -31,6 +31,13 @@ desfavorável, e ele acontece de verdade em todas as páginas.
 
 Mínimos exigidos: **4,5:1** para corpo de texto, **3:1** para texto grande e
 elementos de interface.
+
+**Nomes dos tokens.** Dois mudaram depois desta medição, sem mudar de valor, e
+as tabelas já usam os nomes de hoje: `--tinta` virou `--fundo`, e `--papel`,
+`--texto-forte`. As colunas `--ouro` e `--violeta` continuam com esses nomes
+porque tudo daqui até a seção do tema claro mede o tema escuro, onde
+`--destaque` é o ouro e `--apoio` é o violeta — em componente, porém, a cor se
+pede sempre pelo papel.
 
 ## Contraste sobre o painel
 
@@ -61,7 +68,7 @@ Fora dos painéis — os verbetes do catálogo, os parágrafos de abertura, os
 títulos, o sumário dos mundos, o rodapé — o texto encosta no céu, que é bem
 mais claro que o painel. Foi aqui que a medição encontrou problema.
 
-| Mundo | `--texto` antes (0,42) | `--texto` agora (0,36) | `--papel` | `--ouro` | `--apagado` | `--violeta` |
+| Mundo | `--texto` antes (0,42) | `--texto` agora (0,36) | `--texto-forte` | `--ouro` | `--apagado` | `--violeta` |
 |---|---|---|---|---|---|---|
 | Cyberpunk | 4,53 | **5,46** | 7,95 | 4,94 | 2,46 | 2,72 |
 | Distopia | 4,99 | **5,92** | 8,63 | 5,37 | 2,67 | 2,95 |
@@ -99,7 +106,7 @@ muda o desenho e não só um número:
 
 O corpo dos verbetes passa sobre o céu em todos os mundos — 4,71 a 5,92 para
 `--texto` — e o mesmo vale para os nomes das peças sorteadas no gerador, que
-usam `--papel` (6,86 a 8,63). A barra lateral violeta do `.corpo` fica entre
+usam `--texto-forte` (6,86 a 8,63). A barra lateral violeta do `.corpo` fica entre
 2,34 e 2,95, mas é divisória decorativa, não elemento de interface com
 significado próprio.
 
@@ -181,8 +188,8 @@ valendo só para o tema escuro.
 
 ## Movimento reduzido
 
-Três animações existem no site, e as três têm guarda `prefers-reduced-motion`.
-Confirmado no CSS gerado por `npm run build`:
+Quatro animações existem no site, e as quatro têm guarda
+`prefers-reduced-motion`. Confirmado no CSS gerado por `npm run build`:
 
 | Animação | Arquivo | Regra sob `prefers-reduced-motion: reduce` |
 |---|---|---|
@@ -216,7 +223,7 @@ Rodado em 29 de julho de 2026, tudo passando:
 
 | Comando | Resultado |
 |---|---|
-| `npx vitest run` | 71 testes, 8 arquivos |
-| `npm run check` | 0 erros, 0 avisos, 0 hints |
+| `npx vitest run` | 75 testes, 9 arquivos |
+| `npm run check` | 44 arquivos, 0 erros, 0 avisos, 0 hints |
 | `npm run build` | 39 páginas |
 | `cd scripts && python -m pytest` | 107 testes |
