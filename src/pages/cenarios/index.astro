@@ -6,6 +6,10 @@ const pagina = await getEntry('paginas', 'cenarios');
 if (!pagina) throw new Error("página 'cenarios' não encontrada em src/content/paginas");
 const { Content } = await render(pagina);
 
+const comoUsar = await getEntry('paginas', 'cenarios-como-usar');
+if (!comoUsar) throw new Error("página 'cenarios-como-usar' não encontrada em src/content/paginas");
+const { Content: ComoUsar } = await render(comoUsar);
+
 const subgeneros = (await getCollection('subgeneros', (s) => s.data.mundo)).sort(
   (a, b) => a.data.ordem - b.data.ordem,
 );
@@ -23,4 +27,5 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
       </li>
     ))}
   </ul>
+  <ComoUsar />
 </Base>

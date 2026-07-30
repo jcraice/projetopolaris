@@ -6,6 +6,10 @@ const pagina = await getEntry('paginas', 'arquetipos');
 if (!pagina) throw new Error("página 'arquetipos' não encontrada em src/content/paginas");
 const { Content } = await render(pagina);
 
+const comoUsar = await getEntry('paginas', 'arquetipos-como-usar');
+if (!comoUsar) throw new Error("página 'arquetipos-como-usar' não encontrada em src/content/paginas");
+const { Content: ComoUsar } = await render(comoUsar);
+
 const subgeneros = (await getCollection('subgeneros')).sort((a, b) => a.data.ordem - b.data.ordem);
 
 const base = import.meta.env.BASE_URL;
@@ -21,4 +25,5 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
       </li>
     ))}
   </ul>
+  <ComoUsar />
 </Base>
