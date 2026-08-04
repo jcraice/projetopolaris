@@ -16,7 +16,11 @@ const elementos = (await getCollection('elementos', (e) => e.data.subgenero === 
 ---
 <Base titulo={`Elementos ${subgenero.data.nome}`} aurora={subgenero.data.aurora}>
   <h1>Elementos {subgenero.data.nome}</h1>
-  <p class="abertura">{subgenero.body}</p>
+  {/* Aqui morava `subgenero.body`, a descrição geral do mundo — a mesma que
+      abre /mundos/. Saiu quando a autora escreveu uma abertura própria para
+      cada tipo: esta fala dos elementos que estão na lista abaixo, e não do
+      mundo em volta, como já acontecia em /arquetipos/. */}
+  {subgenero.data.aberturaElementos && <p class="abertura">{subgenero.data.aberturaElementos}</p>}
   <div class="bloco">
     {elementos.map((e) => (
       <Cartao titulo={e.data.titulo} ancora={paraAncora(e.data.titulo)}>

@@ -2,6 +2,14 @@ import { z } from 'astro/zod';
 
 const cor = z.string().regex(/^#[0-9a-fA-F]{6}$/, 'cor deve ser hexadecimal de 6 dígitos');
 
+/* As três aberturas são os parágrafos que abrem as páginas de catálogo daquele
+   mundo — um por tipo, porque cada um fala do que está na lista abaixo dele.
+   Todas opcionais: `comuns` só tem arquétipos, e nada impede um mundo de entrar
+   no acervo antes de a autora escrever os três.
+
+   `.strict()` porque os nomes são parecidos: sem ele um `aberturaCenários` com
+   acento seria descartado em silêncio pelo Zod, e a página abriria sem parágrafo
+   sem que build ou teste reclamassem — o mesmo motivo de esquemaPagina. */
 export const esquemaSubgenero = z
   .object({
     nome: z.string().min(1),
@@ -11,7 +19,10 @@ export const esquemaSubgenero = z
     citacao: z.string().optional(),
     citacaoAutor: z.string().optional(),
     aberturaArquetipos: z.string().optional(),
+    aberturaCenarios: z.string().optional(),
+    aberturaElementos: z.string().optional(),
   })
+  .strict()
   .refine((d) => !d.mundo || d.aurora !== undefined, {
     message: 'subgênero com mundo verdadeiro precisa de aurora',
     path: ['aurora'],

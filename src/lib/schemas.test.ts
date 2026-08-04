@@ -26,17 +26,34 @@ describe('esquemaSubgenero', () => {
     expect(r.success).toBe(false);
   });
 
-  it('aceita aberturaArquetipos, mas ele é opcional', () => {
-    const comAbertura = esquemaSubgenero.safeParse({
+  // Uma abertura por tipo de página, e todas opcionais: `comuns` só tem
+  // arquétipos, e um mundo pode entrar no acervo antes de a autora escrever
+  // os três parágrafos.
+  it('aceita as três aberturas, e cada uma é opcional', () => {
+    const comAberturas = esquemaSubgenero.safeParse({
       nome: 'Cyberpunk', ordem: 3, aurora: ['#ff2d92', '#7c3aed', '#00e5ff'],
       aberturaArquetipos: 'Nesse subgênero, os arquétipos vivem entre conspirações e aprimoramentos.',
+      aberturaCenarios: 'Nesse subgênero, os cenários empilham neon sobre ruína.',
+      aberturaElementos: 'Nesse subgênero, os elementos narrativos tratam de quem controla o dado.',
     });
-    expect(comAbertura.success).toBe(true);
+    expect(comAberturas.success).toBe(true);
 
     const semAbertura = esquemaSubgenero.safeParse({
       nome: 'Cyberpunk', ordem: 3, aurora: ['#ff2d92', '#7c3aed', '#00e5ff'],
     });
     expect(semAbertura.success).toBe(true);
+  });
+
+  /* O esquema é `.strict()` desde que passou a ter três aberturas de nome
+     parecido: sem isso um `aberturaCenários` com acento — que não é o nome do
+     campo — seria descartado em silêncio, e a página abriria sem parágrafo
+     nenhum sem que build ou teste reclamassem. */
+  it('recusa campo desconhecido em vez de descartá-lo calado', () => {
+    const r = esquemaSubgenero.safeParse({
+      nome: 'Cyberpunk', ordem: 3, aurora: ['#ff2d92', '#7c3aed', '#00e5ff'],
+      aberturaCenários: 'Com acento, que não é o nome do campo.',
+    });
+    expect(r.success).toBe(false);
   });
 });
 
