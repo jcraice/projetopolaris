@@ -1,0 +1,58 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const pagina = await getEntry('paginas', '404');
+if (!pagina) throw new Error("página '404' não encontrada em src/content/paginas");
+const { Content } = await render(pagina);
+
+/* Os destinos são os mesmos da navegação, e de propósito: quem cai aqui perdeu
+   o rumo, e a saída mais útil é a lista que ele já veria no topo de qualquer
+   outra página. Sem a aurora de mundo nenhum — esta página não é de um mundo,
+   então cai no AURORA_PADRAO como a home e o gerador.
+
+   Os endereços passam por BASE_URL porque em produção o site vive numa subpasta,
+   e um `/arquetipos/` cru levaria para fora dele. Vale ainda mais aqui: o
+   GitHub Pages serve esta página em cima do endereço errado que a pessoa
+   digitou, que pode estar em qualquer profundidade. */
+const base = import.meta.env.BASE_URL;
+const raiz = base.endsWith('/') ? base : `${base}/`;
+
+const destinos = [
+  { titulo: 'Início', href: raiz },
+  { titulo: 'Arquétipos', href: `${raiz}arquetipos/` },
+  { titulo: 'Cenários', href: `${raiz}cenarios/` },
+  { titulo: 'Elementos', href: `${raiz}elementos/` },
+  { titulo: 'Livros', href: `${raiz}livros/` },
+  { titulo: 'Sobre', href: `${raiz}sobre/` },
+];
+---
+<Base titulo={pagina.data.titulo}>
+  <p class="etiqueta">{pagina.data.subtitulo}</p>
+  <h1>{pagina.data.titulo}</h1>
+  <Content />
+
+  <nav aria-label="Onde ir a partir daqui">
+    <ul class="lista-subgeneros">
+      {destinos.map((d) => (
+        <li><a href={d.href}>{d.titulo}</a></li>
+      ))}
+    </ul>
+  </nav>
+
+  <p class="saida">
+    <a class="botao botao--principal" href={`${raiz}gerador`}>Sortear uma premissa</a>
+  </p>
+</Base>
+
+<style>
+  /* A etiqueta é inline-block por padrão e ficaria colada no título; este é o
+     único espaçamento que a página acrescenta ao que já vem do global. */
+  .etiqueta {
+    margin-block-end: 12px;
+  }
+
+  .saida {
+    margin-block-start: 24px;
+  }
+</style>
