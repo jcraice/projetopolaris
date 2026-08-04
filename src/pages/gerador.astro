@@ -285,9 +285,11 @@ const CARTAS = [
     color: var(--texto-forte);
   }
 
-  /* pre-wrap, e não <pre>: as quebras de linha do prompt-ia.md fazem parte do
-     texto — sem elas a lista numerada vira um bloco único ilegível —, mas isto
-     é texto para ler, não código, então nada de fonte monoespaçada nem moldura. */
+  /* pre-wrap, e não <pre>: qualquer quebra de linha que o prompt-ia.md tiver
+     faz parte do texto que vai para a IA e precisa aparecer na tela igual, mas
+     isto é texto para ler, não código — nada de fonte monoespaçada nem moldura.
+     O modelo de hoje é um parágrafo só, sem quebras, e então pre-wrap se
+     comporta como quebra normal; ele existe para o dia em que voltar a ter. */
   .prompt__texto {
     margin: 0;
     white-space: pre-wrap;
