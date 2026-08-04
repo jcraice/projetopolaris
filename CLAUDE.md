@@ -49,8 +49,8 @@ Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md]
   Toda cor vem de token em `:root` — nunca escrever cor literal em componente,
   senão ela só funciona num dos dois temas.
 - **Cor de acento sempre por papel, nunca por nome de cor.** `--destaque` é o
-  que chama o olho (título da página, botão principal, etiqueta, pilares, linha
-  de autor dos livros, cadeado travado) e `--apoio` é a interface em volta
+  que chama o olho (título da página, botão principal, etiqueta, pilares,
+  cadeado travado) e `--apoio` é a interface em volta
   (links, botões secundários, foco, barra lateral dos verbetes, retângulos de
   mundo). `--ouro` e `--violeta` existem só como origem dos dois no tema escuro —
   componente nenhum deve consumi-los direto, porque no claro a paleta é outra

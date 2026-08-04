@@ -278,9 +278,18 @@ a {
   max-width: none;
 }
 
+/* --texto, e não a cor de acento que esta linha teve por um tempo. Dois motivos,
+   os dois consequência de os títulos de verbete terem perdido a cor: o nome do
+   autor ficava mais aparente que o título do livro logo acima dele, invertendo a
+   hierarquia; e em 0,8rem o dourado dá 4,27:1 no mundo Invasão Alienígena,
+   abaixo dos 4,5 que texto pequeno exige — era a reprovação de contraste mais
+   visível do site. Em --texto são 4,71:1 no pior mundo.
+
+   O que distingue esta linha do corpo do verbete não é mais a cor: é o peso 800,
+   a caixa alta e o corpo menor. */
 .autor {
   font-weight: 800;
-  color: var(--destaque);
+  color: var(--texto);
   text-transform: uppercase;
   font-size: 0.8rem;
   letter-spacing: 0.06em;

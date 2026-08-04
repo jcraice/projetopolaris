@@ -111,17 +111,18 @@ muda o desenho e não só um número:
 - `--ouro` sobre o céu, **só no mundo Invasão Alienígena**: 4,27, contra 4,5
   exigidos. Nos outros cinco mundos fica entre 4,59 e 5,37, e dentro do painel
   passa em todos (10,7+). Atinge os estados `:hover` de texto pequeno fora do
-  painel — `.lista-subgeneros a`, `.ver-tudo` e `.sumario a` — e, desde que os
-  verbetes saíram do painel, também a linha de autor dos livros (`.autor`, 0,8
-  rem), que é conteúdo permanente e não estado de interação. **Não atinge o
+  painel — `.lista-subgeneros a`, `.ver-tudo` e `.sumario a`. **Não atinge o
   `h1`**, que é acento mas tem 32px e por isso responde ao mínimo de 3:1.
 
-  Desde que os títulos de verbete deixaram de ser dourados, `.autor` é o único
-  conteúdo permanente de texto pequeno em cor de acento — e ficou mais aparente
-  que o próprio título do livro logo acima dele, que hoje é `--texto-forte`.
-  Passá-lo a `--texto` resolveria as duas coisas de uma vez (4,71:1 no pior
-  mundo, e a hierarquia voltaria à ordem), mas é mudança de aparência: **decisão
-  da autora**, pendente.
+  **Resolvido para a linha de autor dos livros.** `.autor` (0,8rem) era o único
+  conteúdo permanente de texto pequeno em cor de acento, e por isso a reprovação
+  mais visível do site — 4,27:1. Quando os títulos de verbete perderam a cor, ele
+  virou também o elemento mais aparente do verbete, acima do próprio título do
+  livro. A autora aprovou passá-lo a `--texto`: **4,71:1** no pior mundo, e a
+  hierarquia volta à ordem. O que o distingue do corpo agora é peso, caixa alta e
+  corpo menor, não cor.
+
+  Sobra a pendência só nos estados `:hover`, que são interação e não conteúdo.
 
 O corpo dos verbetes passa sobre o céu em todos os mundos — 4,71 a 5,92 para
 `--texto` — e o mesmo vale para os nomes das peças sorteadas no gerador, que
