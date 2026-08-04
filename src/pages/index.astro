@@ -192,11 +192,16 @@ const pilares = [
 
   /* Os seis retângulos de mundo viram uma lista que abre em tela estreita.
 
-     O ponto de quebra é o mesmo 1079px da navegação, e não por simetria: os
-     seis nomes somam cerca de 1060px com o espaço entre eles — "Invasão
-     Alienígena" e "Pós Apocalíptico" são largos — então é por volta daí que
-     eles passariam para uma segunda linha. Recolher antes disso é o que evita
-     vê-los quebrados no caminho até o celular. */
+     O ponto de quebra sai do conteúdo desta lista, e não da navegação: os seis
+     nomes somam cerca de 1060px com o espaço entre eles — "Invasão Alienígena" e
+     "Pós Apocalíptico" são largos — então é por volta daí que eles passariam
+     para uma segunda linha. Recolher antes disso é o que evita vê-los quebrados
+     no caminho até o celular.
+
+     Já foi o mesmo número da navegação, por coincidência das duas somas. Deixou
+     de ser quando a navegação ganhou o link da ficha e precisou subir para
+     1103px: os dois pontos de quebra são independentes, cada um medido no seu
+     próprio conteúdo, e mudar um não obriga a mudar o outro. */
   .abrir-mundos {
     display: none;
     align-items: center;

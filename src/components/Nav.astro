@@ -11,6 +11,7 @@ const links = [
   { rotulo: 'Estilos', href: `${raiz}estilos` },
   { rotulo: 'Livros', href: `${raiz}livros` },
   { rotulo: 'Gerador', href: `${raiz}gerador` },
+  { rotulo: 'Ficha', href: `${raiz}ficha` },
   { rotulo: 'Sobre', href: `${raiz}sobre` },
 ];
 ---
@@ -131,7 +132,7 @@ const links = [
     color: var(--destaque);
   }
 
-  /* O botão do menu só existe abaixo do ponto de quebra; acima, os sete links
+  /* O botão do menu só existe abaixo do ponto de quebra; acima, os oito links
      cabem na fileira e um menu recolhido só atrapalharia. */
   .nav__abrir {
     display: none;
@@ -175,16 +176,21 @@ const links = [
     display: block;
   }
 
-  /* O ponto de quebra é 1080px, e não uma medida redonda de tablet, porque quem
-     manda aqui é a soma do conteúdo: a marca, os sete links, a busca e o botão
-     de tema pedem cerca de 1030px. Abaixo disso o header começava a se desfazer
-     item a item — primeiro o botão de tema caía para a segunda linha, depois a
-     busca — que é exatamente o que este recolhimento evita.
+  /* O ponto de quebra não é uma medida redonda de tablet: quem manda aqui é a
+     soma do conteúdo — a marca, os links, a busca e o botão de tema. Abaixo dela
+     o header começa a se desfazer item a item, primeiro o botão de tema caindo
+     para a segunda linha, depois a busca, que é exatamente o que este
+     recolhimento evita.
+
+     Era 1080px com sete links. Com a entrada de "Ficha" a soma foi medida de
+     novo, largura a largura: em 1103px o botão de tema ainda cai para a segunda
+     linha, e em 1104px o header volta a caber numa linha só. Daí o 1103 aqui.
+     **Link novo na navegação obriga a refazer essa medição** — a folga acabou.
 
      A busca entra no menu junto com os links. Ela sozinha pede 180px, e marca
      mais busca mais dois ícones não cabem na largura de um celular: mantê-la
      fora obrigaria a segunda linha a voltar em tela estreita. */
-  @media (max-width: 1079px) {
+  @media (max-width: 1103px) {
     .nav__abrir:not([hidden]) {
       display: flex;
       order: 3;

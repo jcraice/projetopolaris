@@ -213,9 +213,16 @@ Os dois modos compartilham
 [OpcoesDoSorteio.astro](src/components/OpcoesDoSorteio.astro) (mundo, misturar,
 incluir comuns) — o `name` de cada campo é contrato com as chaves de `Opcoes`, e
 o `data-carta`/`data-travar` de cada carta é contrato com os campos de
-`Sorteio`/`SorteioFicha`. A ficha **não está na navegação**: o header tem sete
-itens e foi ajustado para caber numa linha só até recolher em 1079px, então o
-acesso é por link no fim de cada um dos dois modos.
+`Sorteio`/`SorteioFicha`. Os dois modos também se apontam por um link no fim da
+página, além da navegação.
+
+**A navegação está no limite.** Com a entrada de "Ficha" são oito itens, e a
+soma foi medida largura a largura: em 1103px o botão de tema ainda cai para uma
+segunda linha, em 1104px o header cabe. Por isso o ponto de quebra de
+[Nav.astro](src/components/Nav.astro) subiu de 1079 para **1103px**. Não há mais
+folga: **link novo na navegação obriga a refazer essa medição**. O ponto de
+quebra da lista de mundos da home continua em 1079px — ele sai da soma dos seis
+nomes, não da navegação, e os dois são independentes desde esta mudança.
 
 **Concordância gramatical** é a parte delicada:
 [redacao.ts](src/lib/gerador/redacao.ts) resolve contração de preposição

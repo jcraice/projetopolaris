@@ -41,8 +41,8 @@
   /* A coluna de conteúdo. O recuo é os mesmos 20px de sempre e, quando a tela
      passa de 1320px (1280 da coluna + as duas margens), vira o que sobrar
      dividido em dois: a página para de crescer e o excesso vira margem. Abaixo
-     de 1320px nada muda, o que preserva o ponto de quebra de 1079px da
-     navegação e da lista de mundos.
+     de 1320px nada muda, o que preserva os pontos de quebra da navegação
+     (1103px) e da lista de mundos da home (1079px), os dois bem abaixo daqui.
 
      O 100% é resolvido onde o token é usado, não aqui — custom property é
      substituída como texto e a porcentagem só se resolve na propriedade que a
