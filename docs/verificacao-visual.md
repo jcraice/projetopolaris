@@ -1,7 +1,9 @@
 # Verificação visual — contraste, movimento e tela estreita
 
-Registro da Task 14. Refazer esta medição sempre que mudar `--painel`,
-a opacidade da aurora ou o trio de cores de algum mundo.
+Registro da Task 14, atualizado a cada mudança de cor desde então. Refazer esta
+medição sempre que mudar `--painel`, `--bloco`, `--destaque`, `--apoio`, a
+opacidade da aurora, o trio de cores de algum mundo ou o tamanho de fonte de
+qualquer texto que use cor de acento.
 
 ## Como o contraste foi medido
 
@@ -111,7 +113,15 @@ muda o desenho e não só um número:
   passa em todos (10,7+). Atinge os estados `:hover` de texto pequeno fora do
   painel — `.lista-subgeneros a`, `.ver-tudo` e `.sumario a` — e, desde que os
   verbetes saíram do painel, também a linha de autor dos livros (`.autor`, 0,8
-  rem), que é conteúdo permanente e não estado de interação.
+  rem), que é conteúdo permanente e não estado de interação. **Não atinge o
+  `h1`**, que é acento mas tem 32px e por isso responde ao mínimo de 3:1.
+
+  Desde que os títulos de verbete deixaram de ser dourados, `.autor` é o único
+  conteúdo permanente de texto pequeno em cor de acento — e ficou mais aparente
+  que o próprio título do livro logo acima dele, que hoje é `--texto-forte`.
+  Passá-lo a `--texto` resolveria as duas coisas de uma vez (4,71:1 no pior
+  mundo, e a hierarquia voltaria à ordem), mas é mudança de aparência: **decisão
+  da autora**, pendente.
 
 O corpo dos verbetes passa sobre o céu em todos os mundos — 4,71 a 5,92 para
 `--texto` — e o mesmo vale para os nomes das peças sorteadas no gerador, que
@@ -119,11 +129,24 @@ usam `--texto-forte` (6,86 a 8,63). A barra lateral violeta do `.corpo` fica ent
 2,34 e 2,95, mas é divisória decorativa, não elemento de interface com
 significado próprio.
 
-**Títulos dos verbetes em dourado.** Passaram a `var(--ouro)` para distinguir um
-verbete do outro sem moldura, o que os coloca naqueles mesmos 4,27 do pior
-mundo. Por isso foram de 1.1rem para **1.2rem**: a partir de 18,66px em negrito
-o WCAG trata o texto como grande e o mínimo cai para 3:1, que o dourado cumpre
-em todos os seis mundos. Encolher esses títulos de volta reprova o contraste.
+**Títulos dos verbetes: a cor saiu.** Foram `var(--ouro)` por um tempo, para
+distinguir um verbete do outro sem moldura, e chegaram a ser `var(--apoio)` por
+um instante. A autora recusou as duas versões — quer o acento em um lugar só — e
+eles passaram a herdar `--texto-forte`. Sobre o céu isso dá **6,86 a 8,63:1**,
+folga até no critério de texto pequeno, contra os 4,27 do dourado no pior mundo.
+O que separa um verbete do próximo é o peso do título e a barra lateral do
+`.corpo`, em `--apoio`.
+
+Consequência: os **1.2rem existiam por contraste** e agora não mais. Eram 1.1rem
+até o dourado exigir os 18,66px que fazem o WCAG tratar o texto como grande. Em
+`--texto-forte` esse piso desapareceu, então o tamanho hoje é escolha de
+hierarquia e pode encolher sem reprovar.
+
+**Título da página em `--destaque`.** O `h1` é o único texto de acento que restou
+fora dos preenchimentos. Tem 2em, ou 32px, em peso 900 — texto grande, mínimo
+3:1 —, e o dourado sobre o céu fica entre **4,27 e 5,37:1**. Passa nos seis
+mundos, e em cinco deles passaria até no critério de texto pequeno. Encolher o
+`h1` abaixo de 18,66px reprova.
 
 **Cadeado do gerador.** Usa `--texto` no estado destravado (4,71 no pior mundo)
 e `--destaque` no travado (4,27) — os dois acima dos 3:1 que o WCAG 1.4.11 pede
@@ -162,13 +185,34 @@ dourado e violeta para caberem em fundo claro; a autora recusou o par e
 escolheu, entre três propostas, um destaque ciano profundo com apoio azul-tinta.
 Dourado e violeta ficaram só no tema escuro.
 
-| Papel | Valor | Sobre o fundo `#f5f7f9` | Sobre o painel (lista da busca) |
+**O ciano depois caiu.** Vendo as duas cores em uso, a autora recusou ter dois
+tons frios — "muito colorido, quero uma cor que salta aos olhos apenas" — e
+trocou o `--destaque` por um laranja-tijolo. O apoio azul-tinta ficou.
+
+| Papel | Valor | Sobre o fundo `#f5f7f9` | Sobre o painel (lista da busca) | Sobre `--bloco` |
+|---|---|---|---|---|
+| `--texto-forte` | `#14181f` | 16,57 | 15,00 | 14,84 |
+| `--texto` | `#2f3540` | 11,47 | 10,39 | 10,28 |
+| `--apagado` | `#5b6472` | 5,57 | 5,04 | 4,99 |
+| `--destaque` | `#b34700` laranja-tijolo | 5,12 | 4,64 | 4,59 |
+| `--apoio` | `#1b2a4a` azul-tinta | 13,24 | 11,99 | 11,86 |
+
+**Por que este laranja, e não um vivo.** `--destaque` é usado como preenchimento
+com a letra na cor do fundo — botão principal, etiqueta, pilares —, e isso exige
+4,5:1. Os candidatos medidos:
+
+| Laranja | Sobre o fundo claro | Serve de preenchimento | Separação do ciano |
 |---|---|---|---|
-| `--texto-forte` | `#14181f` | 16,57 | 15,00 |
-| `--texto` | `#2f3540` | 11,47 | 10,39 |
-| `--apagado` | `#5b6472` | 5,57 | 5,04 |
-| `--destaque` | `#0e6e7d` ciano | 5,52 | 4,99 |
-| `--apoio` | `#1b2a4a` azul-tinta | 13,24 | 11,99 |
+| `#ff7a00` vivo | 2,43 | ✗ | 2,27 |
+| `#d35400` médio | 3,88 | ✗ | 1,42 |
+| `#b34700` tijolo | **5,12** | ✓ | 1,08 |
+| `#8f3a00` escuro | 7,05 | ✓ | 1,28 |
+
+A última coluna é o que decidiu qual azul ficaria: qualquer laranja utilizável
+tem quase a mesma claridade do ciano — 1,08:1 no caso do escolhido —, então os
+dois competiriam onde se encostassem. Contra o azul-tinta o laranja separa
+**2,59:1**, folga maior que os 2,40:1 dos dois azuis anteriores. Clarear o
+`#b34700` reprova o preenchimento.
 
 **A navegação passou para a primeira coluna.** Desde que a barra do topo é fixa
 (`position: sticky`), o fundo dela no tema claro é `--fundo` opaco e não
@@ -184,22 +228,27 @@ página:
 
 | Elemento | Preenchimento | Texto | Razão |
 |---|---|---|---|
-| botão principal, etiqueta, pilares | `--destaque` | `--fundo` | 5,52 |
+| botão principal, etiqueta, pilares | `--destaque` | `--fundo` | 5,12 |
 | botões secundários, retângulos de mundo | `--apoio` | `--fundo` | 13,24 |
-| os mesmos, no hover | trocam entre si | `--fundo` | 5,52 / 13,24 |
+| os mesmos, no hover | trocam entre si | `--fundo` | 5,12 / 13,24 |
 
 Sobre `--bloco`, o véu de `--apoio` a 6% que agrupa as peças e a dica de enredo
-no gerador, o corpo de texto fica em 10,28:1 e o destaque em 4,94:1 — aqui não
+no gerador, o corpo de texto fica em 10,28:1 e o destaque em 4,59:1 — aqui não
 há céu para escurecer, então o bloco só precisa ser sutil.
 
-Dentro de um pilar preenchido a etiqueta troca de `--destaque` para `--apoio`, e
-volta no hover, quando o pilar inverte — sem isso ela sumiria dentro do próprio
-fundo, que é da mesma cor. Os dois acentos separam um do outro em 2,40:1, o
-bastante para a etiqueta se destacar do pilar.
+**Uma regra que este documento descrevia e não existe mais.** Havia aqui a
+troca da etiqueta de `--destaque` para `--apoio` dentro de um pilar preenchido,
+com a observação de que os dois acentos separavam 2,40:1. Os pilares da home não
+contêm etiqueta nenhuma — são um `h2` e um `p` dentro de um link —, e a regra saiu
+do CSS. Hoje a etiqueta aparece em três lugares e nenhum é um pilar: o marcador
+do arquétipo felino, as marcas de mundo das cartas do gerador e o "Erro 404". Em
+todos, ela fica sobre o fundo da página. A separação entre os dois acentos
+continua registrada — **2,59:1** com o laranja — porque é útil saber, não porque
+algum lugar dependa dela.
 
 **Tudo passa, inclusive o que reprova no escuro.** As três pendências da seção
 anterior — `--apagado`, links e o acento em texto pequeno — deixam de existir no
-tema claro, onde o pior número da tabela inteira é 4,99:1. A pendência continua
+tema claro, onde o pior número da tabela inteira é 4,59:1. A pendência continua
 valendo só para o tema escuro.
 
 ## Movimento reduzido
@@ -250,3 +299,12 @@ Rodado em 29 de julho de 2026, tudo passando:
 | `npm run check` | 44 arquivos, 0 erros, 0 avisos, 0 hints |
 | `npm run build` | 39 páginas |
 | `cd scripts && python -m pytest` | 107 testes |
+
+Refeita em 4 de agosto de 2026, depois do 404, das aberturas novas e da troca de
+paleta do tema claro:
+
+| Comando | Resultado |
+|---|---|
+| `npx vitest run` | 84 testes, 10 arquivos |
+| `npm run check` | 47 arquivos, 0 erros, 0 avisos, 0 hints |
+| `npm run build` | 40 páginas |

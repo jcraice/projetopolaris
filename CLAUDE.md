@@ -49,18 +49,29 @@ Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md]
   Toda cor vem de token em `:root` — nunca escrever cor literal em componente,
   senão ela só funciona num dos dois temas.
 - **Cor de acento sempre por papel, nunca por nome de cor.** `--destaque` é o
-  que chama o olho (títulos de verbete, botão principal, etiqueta, pilares) e
-  `--apoio` é a interface em volta (links, botões secundários, foco, barras).
-  `--ouro` e `--violeta` existem só como origem dos dois no tema escuro —
+  que chama o olho (título da página, botão principal, etiqueta, pilares, linha
+  de autor dos livros, cadeado travado) e `--apoio` é a interface em volta
+  (links, botões secundários, foco, barra lateral dos verbetes, retângulos de
+  mundo). `--ouro` e `--violeta` existem só como origem dos dois no tema escuro —
   componente nenhum deve consumi-los direto, porque no claro a paleta é outra
-  (ciano `#0e6e7d` e azul-tinta `#1b2a4a`, sem relação com dourado e violeta).
+  (laranja-tijolo `#b34700` e azul-tinta `#1b2a4a`, sem relação com dourado e
+  violeta).
+- **Acento com parcimônia, por escolha da autora.** Uma cor quente que salta aos
+  olhos e mais nada: o tema claro já teve um ciano no `--destaque` e foi recusado
+  justamente por somar um segundo tom frio ao azul-tinta. Título de **verbete**
+  não é acento — herda `--texto-forte` (branco no escuro, quase preto no claro),
+  e quem separa um do outro é a barra lateral em `--apoio`. Já foi dourado e já
+  foi violeta; os dois foram recusados. Não repintar.
 - A "aurora" muda de cor por subgênero e **não existe no tema claro**, onde o
   fundo é liso.
 - **Mexeu em cor, tamanho de fonte ou opacidade da aurora?** Refaça as contas de
   [docs/verificacao-visual.md](docs/verificacao-visual.md) e atualize o
-  documento. Vários valores estão no limite: os títulos dos verbetes só passam
-  porque têm 1.2rem, e a aurora só pode ir até 0,37 (hoje está em 0,36, em
-  [Aurora.astro](src/components/Aurora.astro)).
+  documento. Vários valores estão no limite: o `--destaque` do tema claro não
+  pode clarear (`#b34700` dá 5,12:1 e é preenchimento com letra na cor do fundo,
+  que exige 4,5), e a aurora só pode ir até 0,37 (hoje está em 0,36, em
+  [Aurora.astro](src/components/Aurora.astro)). O `h1` em `--destaque` passa por
+  ser texto grande — 4,27:1 no pior mundo contra os 3:1 exigidos —, então
+  encolhê-lo abaixo de 18,66px reprova.
 - **`prefers-reduced-motion` respeitado** por qualquer animação.
 - **Tudo em português do Brasil**: identificadores, nomes de arquivo, interface,
   comentários e mensagens de commit (imperativo — "Adiciona busca global").

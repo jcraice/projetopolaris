@@ -40,18 +40,21 @@ const { titulo, ancora, marcador } = Astro.props;
     scroll-margin-top: 96px;
   }
 
-  /* Dourado, e não o branco padrão de h1/h2/h3: com a moldura fora, é a cor do
-     título que separa um verbete do próximo à primeira vista.
+  /* Sem cor própria: herda o --texto-forte de h1/h2/h3, ou seja, branco no
+     escuro e quase preto no claro. Já foi --destaque (dourado) e, por um
+     momento, --apoio; a autora recusou os dois. O que separa um verbete do
+     próximo é o peso e o tamanho do título mais a barra lateral do .corpo, que
+     continua em --apoio — a única cor aqui. O acento ficou reservado ao título
+     da página.
 
-     1.2rem, e não os 1.1rem de antes, por causa do contraste: sobre o céu o
-     dourado fica em 4,27:1 no mundo Invasão Alienígena, abaixo dos 4,5 que
-     texto pequeno exige. A partir de 18,66px em negrito o WCAG passa a tratar
-     como texto grande, cujo mínimo é 3:1 — e 1.2rem dá 19,2px. Encolher o
-     título de novo reprova o contraste; ver docs/verificacao-visual.md. */
+     Os 1.2rem existiam por contraste: em dourado o título ficava em 4,27:1 no
+     pior mundo e só passava por ser tratado como texto grande, acima de 18,66px.
+     Em --texto-forte esse piso desapareceu — são 6,86:1 no pior mundo, folga até
+     no critério de texto pequeno —, então o tamanho hoje é escolha de hierarquia
+     e pode encolher sem reprovar. Ver docs/verificacao-visual.md. */
   .verbete h3 {
     margin: 0;
     font-size: 1.2rem;
-    color: var(--destaque);
   }
 
   /* .etiqueta é inline-block em global.css para abraçar só o texto, mas

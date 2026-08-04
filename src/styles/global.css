@@ -13,7 +13,7 @@
 
   /* Os papéis. É por aqui que todo componente pede cor de acento, porque só o
      papel sobrevive à troca de tema — no claro a paleta é outra e "ouro"
-     guardaria um ciano, que é exatamente a confusão que --tinta causava antes
+     guardaria um laranja, que é exatamente a confusão que --tinta causava antes
      de virar --fundo.
 
      --destaque  o que chama o olho: títulos dos verbetes, botão principal,
@@ -63,11 +63,22 @@
 
 /* O claro não é o escuro clareado: é outra paleta, escolhida pela autora
    depois de ver a primeira tentativa. Dourado e violeta ficaram só no escuro.
-   Aqui o destaque é um ciano profundo e o apoio, azul-tinta — as duas frias,
-   sobre um branco levemente azulado. Medições em docs/verificacao-visual.md. */
+
+   O destaque foi um ciano profundo até a autora ver os dois juntos e recusar o
+   par: com o apoio já sendo azul-tinta, a página tinha dois azuis e nenhuma cor
+   que saltasse. Trocou pelo laranja-tijolo, com a intenção declarada de ter uma
+   cor quente só — o resto da página é fria e sóbria.
+
+   Por que este laranja e não um vivo: --destaque é usado como preenchimento com
+   a letra na cor do fundo (botão principal, etiqueta, pilares), e isso exige
+   4,5:1. Um #ff7a00 dá 2,43:1 e reprovaria; #b34700 dá 5,12:1. Clarear este
+   valor reprova o preenchimento.
+
+   O laranja também separa melhor do azul-tinta do que o ciano separava: 2,59:1
+   contra 2,40:1. Medições em docs/verificacao-visual.md. */
 :root[data-tema='claro'] {
   color-scheme: light;
-  --destaque: #0e6e7d;
+  --destaque: #b34700;
   --apoio: #1b2a4a;
   --fundo: #f5f7f9;
   --texto-forte: #14181f;
@@ -155,6 +166,18 @@ h1, h2, h3 {
   letter-spacing: -0.04em;
   text-transform: uppercase;
   line-height: 0.95;
+}
+
+/* O título da página em --destaque, e só ele: era o único lugar onde as páginas
+   de índice e a de Sobre não tinham acento nenhum. Vem depois do trio acima para
+   sobrescrever o --texto-forte, e não junto, porque h2 e h3 continuam claros.
+
+   Contraste: h1 é 2em, ou 32px, em peso 900 — texto grande para o WCAG, cujo
+   mínimo é 3:1. O dourado sobre o céu fica em 4,27:1 no pior mundo e o laranja do
+   tema claro em 5,12:1. Encolher o h1 abaixo de 18,66px reprovaria; ver
+   docs/verificacao-visual.md. */
+h1 {
+  color: var(--destaque);
 }
 
 a {
