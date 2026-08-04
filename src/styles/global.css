@@ -41,8 +41,8 @@
   /* A coluna de conteúdo. O recuo é os mesmos 20px de sempre e, quando a tela
      passa de 1320px (1280 da coluna + as duas margens), vira o que sobrar
      dividido em dois: a página para de crescer e o excesso vira margem. Abaixo
-     de 1320px nada muda, o que preserva os pontos de quebra da navegação
-     (1103px) e da lista de mundos da home (1079px), os dois bem abaixo daqui.
+     de 1320px nada muda, o que preserva o ponto de quebra de 1079px da
+     navegação e da lista de mundos.
 
      O 100% é resolvido onde o token é usado, não aqui — custom property é
      substituída como texto e a porcentagem só se resolve na propriedade que a
@@ -245,43 +245,6 @@ a {
 .lista-subgeneros a:hover {
   color: var(--destaque);
   border-color: var(--destaque);
-}
-
-/* As três regras a seguir servem aos dois modos do gerador — a premissa em
-   /gerador/ e a ficha em /ficha/. Moram aqui, e não numa das duas páginas, pelo
-   mesmo motivo de .lista-subgeneros: eram para ser copiadas verbatim na segunda
-   página, e uma cópia já é uma a mais. */
-
-/* Decisão de projeto: os cartões ficam empilhados em coluna, não em grade. */
-.pilha-cartas {
-  display: flex;
-  flex-direction: column;
-  /* Era 16px quando cada carta tinha moldura. Sem ela, é o espaço que separa
-     uma peça da outra, como nos verbetes do catálogo. */
-  gap: 28px;
-  margin-bottom: 32px;
-}
-
-/* Cada bloco termina com a ação que pertence a ele, centralizada no rodapé — o
-   botão fica junto do que ele opera, em vez de uma fileira no fim da página
-   comandando três coisas distantes. */
-.acoes {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-  margin: 16px 0 0;
-}
-
-/* Um aviso por botão de copiar, logo abaixo dele: a confirmação aparece onde a
-   pessoa clicou, e não num canto distante da página. */
-.aviso {
-  display: block;
-  min-height: 1.2em;
-  margin-top: 8px;
-  text-align: center;
-  color: var(--apagado);
-  font-size: 0.85rem;
 }
 
 /* Agrupa sem emoldurar: cor quase transparente e espaço interno, nenhum traço.

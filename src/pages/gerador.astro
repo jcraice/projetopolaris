@@ -1,8 +1,6 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import CartaSorteada from '../components/CartaSorteada.astro';
-import OpcoesDoSorteio from '../components/OpcoesDoSorteio.astro';
 import { montarPrompt } from '../lib/gerador';
 
 const subgeneros = await getCollection('subgeneros');
@@ -32,9 +30,6 @@ montarPrompt(modeloDoPrompt.body, {
 // o ignora.
 const nomesDosMundos = Object.fromEntries(mundos.map((m) => [m.id, m.data.nome]));
 
-const base = import.meta.env.BASE_URL;
-const raiz = base.endsWith('/') ? base : `${base}/`;
-
 // Os pools inteiros (146 arquétipos, 60 cenários, 120 elementos) são lidos
 // aqui em build e injetados como JSON estático na página — a interatividade
 // do gerador não faz nenhuma requisição em tempo de execução.
@@ -61,17 +56,61 @@ const CARTAS = [
 <Base titulo="Gerador">
   <h1>Gerador de combinações</h1>
 
-  <OpcoesDoSorteio />
+  <form id="opcoes">
+    <fieldset>
+      <legend>Opções do sorteio</legend>
+      <label for="opcoes-mundo">
+        Mundo
+        <select id="opcoes-mundo" name="subgenero">
+          {mundos.map((m) => <option value={m.id}>{m.data.nome}</option>)}
+        </select>
+      </label>
+      <label><input type="checkbox" name="misturarMundos" /> Misturar mundos</label>
+      <label><input type="checkbox" name="incluirComuns" /> Incluir os 20 arquétipos comuns</label>
+    </fieldset>
+  </form>
 
   <section id="cartas" class="pilha-cartas bloco" aria-live="polite" aria-label="Peças sorteadas">
-    {CARTAS.map(({ tipo, rotulo }) => <CartaSorteada tipo={tipo} rotulo={rotulo} />)}
+    {CARTAS.map(({ tipo, rotulo }) => (
+      <article class="carta" data-carta={tipo}>
+        <div class="carta__topo">
+          <h2 class="carta__papel">{rotulo}</h2>
+          <span class="etiqueta" data-papel="etiqueta"></span>
+        </div>
+        <p class="carta__nome" data-papel="nome"></p>
+        {/* O rótulo fica no aria-label e não muda com o estado: aria-pressed já
+            faz o leitor de tela anunciar "pressionado"/"não pressionado", e um
+            rótulo que também virasse "Destravar" diria a mesma coisa duas
+            vezes, uma delas invertida. */}
+        <button
+          type="button"
+          class="cadeado"
+          data-travar={tipo}
+          aria-pressed="false"
+          aria-label={`Travar ${rotulo.toLowerCase()}`}
+        >
+          <svg class="cadeado__aberto" viewBox="0 0 24 24" width="20" height="20"
+               fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4" y="11" width="16" height="10" rx="2" />
+            <path d="M8 11V7a4 4 0 0 1 7.5-2" />
+          </svg>
+          <svg class="cadeado__fechado" viewBox="0 0 24 24" width="20" height="20"
+               fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4" y="11" width="16" height="10" rx="2" />
+            <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+          </svg>
+        </button>
+      </article>
+    ))}
     <div class="acoes">
       <button type="button" class="botao botao--principal" id="sortear">Gerar</button>
     </div>
   </section>
 
   <section class="bloco bloco-premissa" aria-labelledby="premissa-titulo">
-    <h2 id="premissa-titulo">Premissa</h2>
+    <h2 id="premissa-titulo">Premissa gerada</h2>
     {/* aria-live no parágrafo, e não na seção inteira: na seção, cada clique
         em Gerar faria o leitor de tela reler também o título e os botões. */}
     <p id="premissa" class="abertura" aria-live="polite"></p>
@@ -93,13 +132,6 @@ const CARTAS = [
     <span class="aviso" id="aviso-prompt" role="status"></span>
   </section>
 
-  {/* O {' '} é necessário: o Astro descarta o espaço em branco entre o texto e a
-      tag, e sem ele sai "fechada?Monte uma ficha". */}
-  <p class="outro-modo">
-    Prefere as peças soltas, em vez de uma frase fechada?{' '}
-    <a href={`${raiz}ficha/`}>Monte uma ficha de história</a>.
-  </p>
-
   {/* is:inline porque isto é dado, não código: sem a diretiva o Astro trata o
       bloco como script a processar e emite um aviso em `npm run check`. */}
   <script type="application/json" id="pools" is:inline set:html={JSON.stringify(pools)}></script>
@@ -108,10 +140,144 @@ const CARTAS = [
 </Base>
 
 <style>
-  /* O fieldset das opções, a carta e o cadeado saíram daqui: viraram
-     OpcoesDoSorteio.astro e CartaSorteada.astro, compartilhados com /ficha/.
-     .pilha-cartas, .acoes e .aviso foram para global.css pelo mesmo motivo.
-     O que sobrou neste arquivo é só o que é da premissa e do prompt. */
+  fieldset {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 18px;
+    border: 2px solid var(--borda-suave);
+    padding: 14px 18px;
+    margin: 0 0 24px;
+  }
+
+  legend {
+    padding: 0 6px;
+    font-weight: 900;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--apagado);
+  }
+
+  #opcoes label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+  }
+
+  #opcoes select {
+    background: var(--fundo);
+    color: var(--texto);
+    border: 2px solid var(--borda-suave);
+    padding: 6px 10px;
+    font-family: inherit;
+    /* 1rem pelo mesmo motivo do campo de busca: abaixo de 16px o Safari do
+       iPhone amplia a página ao abrir o seletor. */
+    font-size: 1rem;
+    border-radius: var(--raio);
+  }
+
+  #opcoes select:focus-visible,
+  #opcoes input:focus-visible {
+    outline: 3px solid var(--apoio);
+    outline-offset: 3px;
+  }
+
+  /* Decisão de projeto: os cartões ficam empilhados em coluna, não em grade. */
+  .pilha-cartas {
+    display: flex;
+    flex-direction: column;
+    /* Era 16px quando cada carta tinha moldura. Sem ela, é o espaço que separa
+       uma peça da outra, como nos verbetes do catálogo. */
+    gap: 28px;
+    margin-bottom: 32px;
+  }
+
+  /* Sem moldura nem painel, como o catálogo. O estado de trava, que antes era
+     a borda mudando de cor, passou inteiro para o cadeado. */
+  .carta {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* Reserva a coluna do cadeado, que é absoluto no canto: sem isto, um nome
+       de peça comprido passaria por baixo do ícone. */
+    padding-right: 40px;
+  }
+
+  .cadeado {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* 36px de área tocável, acima dos 24px do WCAG 2.2 AA, com um ícone de
+       20px dentro — discreto de ver, confortável de acertar no celular. */
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    /* --texto, e não --apagado: o cadeado é elemento de interface e precisa de
+       3:1 sobre o fundo. Direto sobre o céu o apagado fica em 2,1 no pior
+       mundo, e --destaque, do estado travado, em 4,3. */
+    color: var(--texto);
+    transition: color 0.15s ease;
+    border-radius: var(--raio);
+  }
+
+  .cadeado:hover,
+  .cadeado[aria-pressed='true'] {
+    color: var(--destaque);
+  }
+
+  .cadeado:focus-visible {
+    outline: 3px solid var(--apoio);
+    outline-offset: 2px;
+  }
+
+  /* O par de ícones vive no HTML e quem troca é o CSS, a partir do
+     aria-pressed que o script já mantinha. Assim o estado visual e o estado
+     anunciado pelo leitor de tela não têm como divergir. */
+  .cadeado__fechado {
+    display: none;
+  }
+
+  .cadeado[aria-pressed='true'] .cadeado__aberto {
+    display: none;
+  }
+
+  .cadeado[aria-pressed='true'] .cadeado__fechado {
+    display: block;
+  }
+
+  .carta__topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  /* --destaque nos dois temas: o amarelo no escuro e o laranja no claro. A
+     primeira versão usava --apoio no claro, mas o azul-tinta ficou escuro
+     demais para servir de destaque. Sobre o fundo do bloco dá 6,78:1 no pior
+     mundo escuro e 4,59:1 no claro. */
+  .carta__papel {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--destaque);
+  }
+
+  .carta__nome {
+    margin: 0;
+    min-height: 1.5em;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--texto-forte);
+  }
 
   .bloco-premissa #premissa {
     min-height: 1.6em;
@@ -130,14 +296,32 @@ const CARTAS = [
     line-height: 1.5;
   }
 
-  /* O link para o outro modo do gerador, no fim da página: quem chegou até aqui
-     já viu a premissa e o prompt, e é o momento de oferecer a alternativa. A
-     ficha também está na navegação; este link continua porque a troca entre os
-     dois modos é o passo natural de quem acabou de ler um deles, e o fim da
-     página é onde esse passo acontece. */
-  .outro-modo {
-    margin: 32px 0 0;
+  /* Cada bloco termina com a ação que pertence a ele, centralizada no rodapé —
+     o botão fica junto do que ele opera, em vez de uma fileira no fim da página
+     comandando três coisas distantes. */
+  .acoes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 16px 0 0;
+  }
+
+  /* Um aviso por botão de copiar, logo abaixo dele: a confirmação aparece onde
+     a pessoa clicou, e não num canto distante da página. */
+  .aviso {
+    display: block;
+    min-height: 1.2em;
+    margin-top: 8px;
     text-align: center;
+    color: var(--apagado);
+    font-size: 0.85rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cadeado {
+      transition: none;
+    }
   }
 </style>
 

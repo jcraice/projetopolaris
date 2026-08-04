@@ -1,4 +1,3 @@
-import { preencher } from './modelo';
 import type { Opcoes, Sorteio } from './tipos';
 
 /* O pool `comuns` não é um mundo: são os 20 arquétipos que servem a todos. Com
@@ -7,17 +6,8 @@ import type { Opcoes, Sorteio } from './tipos';
    mundo nenhum — descreveria o acervo. Por isso ele não contribui com nome. */
 const NAO_E_MUNDO = 'comuns';
 
-/**
- * Nome do mundo a partir dos subgêneros das peças sorteadas.
- *
- * @param subgeneros na ordem em que as cartas aparecem na tela. Importa: o Set
- *   abaixo preserva a ordem de inserção, então "Distopia + Cyberpunk" sai na
- *   ordem em que a pessoa lê as peças, e não em ordem alfabética nem de coleção.
- *   Cada modo do gerador tem a sua — a premissa é arquétipo, cenário, elemento;
- *   a ficha é personagem A, personagem B, local.
- */
-export function nomearMundosDe(
-  subgeneros: string[],
+export function nomearMundos(
+  sorteio: Sorteio,
   opcoes: Opcoes,
   nomes: Record<string, string>,
 ): string {
@@ -26,20 +16,16 @@ export function nomearMundosDe(
     return id ? (nomes[id] ?? id) : '';
   }
 
-  const usados = subgeneros.filter((subgenero) => subgenero !== NAO_E_MUNDO);
-  return [...new Set(usados)].map((id) => nomes[id] ?? id).join(' + ');
-}
+  /* A ordem é a das cartas na tela — arquétipo, cenário, elemento — e o Set
+     preserva a ordem de inserção, então "Distopia + Cyberpunk" sai na ordem em
+     que a pessoa lê as peças, não em ordem alfabética nem de coleção. */
+  const usados = [
+    sorteio.arquetipo.subgenero,
+    sorteio.cenario.subgenero,
+    sorteio.elemento.subgenero,
+  ].filter((subgenero) => subgenero !== NAO_E_MUNDO);
 
-export function nomearMundos(
-  sorteio: Sorteio,
-  opcoes: Opcoes,
-  nomes: Record<string, string>,
-): string {
-  return nomearMundosDe(
-    [sorteio.arquetipo.subgenero, sorteio.cenario.subgenero, sorteio.elemento.subgenero],
-    opcoes,
-    nomes,
-  );
+  return [...new Set(usados)].map((id) => nomes[id] ?? id).join(' + ');
 }
 
 export type ValoresDoPrompt = {
@@ -49,15 +35,32 @@ export type ValoresDoPrompt = {
   elemento: string;
 };
 
+const MARCADORES: Record<string, keyof ValoresDoPrompt> = {
+  '[MUNDO]': 'mundo',
+  '[ARQUÉTIPO]': 'arquetipo',
+  '[CENÁRIO]': 'cenario',
+  '[ELEMENTO NARRATIVO]': 'elemento',
+};
+
+/* Marcador é colchete com só maiúsculas e espaço dentro — é a convenção dos
+   quatro que existem. A definição é estreita de propósito: um "[ver nota]" em
+   minúsculas no meio da prosa continua sendo texto, e a autora pode escrever
+   colchetes no prompt-ia.md sem que a montagem pare de funcionar. */
+const MARCADOR_QUE_SOBROU = /\[\p{Lu}[\p{Lu} ]*\]/u;
+
 export function montarPrompt(modelo: string, valores: ValoresDoPrompt): string {
-  return preencher(
-    modelo,
-    {
-      '[MUNDO]': valores.mundo,
-      '[ARQUÉTIPO]': valores.arquetipo,
-      '[CENÁRIO]': valores.cenario,
-      '[ELEMENTO NARRATIVO]': valores.elemento,
-    },
-    'prompt-ia.md',
-  );
+  let texto = modelo;
+  for (const [marcador, chave] of Object.entries(MARCADORES)) {
+    texto = texto.split(marcador).join(valores[chave]);
+  }
+
+  /* Falhar alto em vez de devolver o texto pela metade: um marcador escrito
+     errado no prompt-ia.md vira teste vermelho, e não um prompt que chega na IA
+     com "[ARQUETIPO]" cru no meio. */
+  const sobrou = texto.match(MARCADOR_QUE_SOBROU);
+  if (sobrou) {
+    throw new Error(`marcador desconhecido no modelo do prompt: ${sobrou[0]}`);
+  }
+
+  return texto;
 }
