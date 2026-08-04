@@ -1,5 +1,5 @@
 ---
-nome: "O Observador espacial"
+nome: "O Observador Espacial"
 subgenero: space-opera
 ordem: 21
 felino: true

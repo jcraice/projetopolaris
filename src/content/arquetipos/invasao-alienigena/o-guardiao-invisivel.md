@@ -1,5 +1,5 @@
 ---
-nome: "O guardião invisível"
+nome: "O Guardião Invisível"
 subgenero: invasao-alienigena
 ordem: 21
 felino: true
