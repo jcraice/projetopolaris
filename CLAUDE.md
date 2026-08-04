@@ -92,13 +92,21 @@ testados fora do Astro. Regras do esquema que não são óbvias:
   entra no gerador quando "incluir comuns" está ligado.
 - `subgenero` com `mundo: true` exige `aurora` (trio de cores hex).
 - `arquetipos.felino: true` marca o arquétipo bônus, renderizado à parte com
-  etiqueta própria.
+  etiqueta própria. Ele aparece na página de catálogo à parte, fica de fora da
+  amostra de `/mundos/` e **entra** no sorteio do gerador — decisão da autora.
+- `subgeneros.abertura{Arquetipos,Cenarios,Elementos}` são os parágrafos que
+  abrem as três páginas de catálogo daquele mundo, um por tipo, porque cada um
+  fala do que está listado abaixo dele. Todos opcionais (`comuns` só tem
+  arquétipos), e por isso `esquemaSubgenero` é `.strict()`: os nomes são
+  parecidos o suficiente para um `aberturaCenários` com acento ser descartado em
+  silêncio pelo Zod, e a página abrir sem parágrafo sem ninguém reclamar.
+  Livros não tem abertura.
 
 O campo `ordem` define a posição nos índices — a ordenação é sempre explícita,
 nunca alfabética por acidente.
 
 **Prosa não mora em componente.** Os textos da home, das páginas de índice, de
-Sobre e de Estilos vêm da coleção `paginas` (`src/content/paginas/*.md`),
+Sobre, de Estilos e do 404 vêm da coleção `paginas` (`src/content/paginas/*.md`),
 buscados com `getEntry` — e a página estoura o build com mensagem explícita se a
 entrada sumir, em vez de renderizar vazio. `home.md` é o caso mais completo: o
 corpo traz a apresentação e a lista "Como usar", e três campos de frontmatter
