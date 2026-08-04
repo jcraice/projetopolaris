@@ -1,0 +1,141 @@
+---
+/* Uma peça sorteada, com o cadeado que a trava. Nasce vazia: o `<script>` da
+   página preenche `[data-papel="nome"]` e `[data-papel="etiqueta"]` a cada
+   rolagem, e lê `data-carta` / `data-travar` para saber de qual peça se trata.
+
+   Extraído de gerador.astro quando a ficha passou a precisar da mesma carta —
+   mesmo motivo de `.lista-subgeneros` ter virado regra de global.css em vez de
+   uma quinta cópia. */
+interface Props {
+  /* Chave da peça no sorteio. É o que o script usa para achar a carta e para
+     saber qual trava alternar, então precisa casar com o nome do campo em
+     Sorteio/SorteioFicha — `arquetipo`, `cenario`, `personagemA`… */
+  tipo: string;
+  rotulo: string;
+}
+const { tipo, rotulo } = Astro.props;
+---
+<article class="carta" data-carta={tipo}>
+  <div class="carta__topo">
+    <h2 class="carta__papel">{rotulo}</h2>
+    <span class="etiqueta" data-papel="etiqueta"></span>
+  </div>
+  <p class="carta__nome" data-papel="nome"></p>
+  {/* O rótulo fica no aria-label e não muda com o estado: aria-pressed já
+      faz o leitor de tela anunciar "pressionado"/"não pressionado", e um
+      rótulo que também virasse "Destravar" diria a mesma coisa duas
+      vezes, uma delas invertida. */}
+  <button
+    type="button"
+    class="cadeado"
+    data-travar={tipo}
+    aria-pressed="false"
+    aria-label={`Travar ${rotulo.toLowerCase()}`}
+  >
+    <svg class="cadeado__aberto" viewBox="0 0 24 24" width="20" height="20"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="4" y="11" width="16" height="10" rx="2" />
+      <path d="M8 11V7a4 4 0 0 1 7.5-2" />
+    </svg>
+    <svg class="cadeado__fechado" viewBox="0 0 24 24" width="20" height="20"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="4" y="11" width="16" height="10" rx="2" />
+      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+    </svg>
+  </button>
+</article>
+
+<style>
+  /* Sem moldura nem painel, como o catálogo. O estado de trava, que antes era
+     a borda mudando de cor, passou inteiro para o cadeado. */
+  .carta {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* Reserva a coluna do cadeado, que é absoluto no canto: sem isto, um nome
+       de peça comprido passaria por baixo do ícone. */
+    padding-right: 40px;
+  }
+
+  .cadeado {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* 36px de área tocável, acima dos 24px do WCAG 2.2 AA, com um ícone de
+       20px dentro — discreto de ver, confortável de acertar no celular. */
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    /* --texto, e não --apagado: o cadeado é elemento de interface e precisa de
+       3:1 sobre o fundo. Direto sobre o céu o apagado fica em 2,1 no pior
+       mundo, e --destaque, do estado travado, em 4,3. */
+    color: var(--texto);
+    transition: color 0.15s ease;
+    border-radius: var(--raio);
+  }
+
+  .cadeado:hover,
+  .cadeado[aria-pressed='true'] {
+    color: var(--destaque);
+  }
+
+  .cadeado:focus-visible {
+    outline: 3px solid var(--apoio);
+    outline-offset: 2px;
+  }
+
+  /* O par de ícones vive no HTML e quem troca é o CSS, a partir do
+     aria-pressed que o script já mantinha. Assim o estado visual e o estado
+     anunciado pelo leitor de tela não têm como divergir. */
+  .cadeado__fechado {
+    display: none;
+  }
+
+  .cadeado[aria-pressed='true'] .cadeado__aberto {
+    display: none;
+  }
+
+  .cadeado[aria-pressed='true'] .cadeado__fechado {
+    display: block;
+  }
+
+  .carta__topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  /* --destaque nos dois temas: o amarelo no escuro e o laranja no claro. A
+     primeira versão usava --apoio no claro, mas o azul-tinta ficou escuro
+     demais para servir de destaque. Sobre o fundo do bloco dá 6,78:1 no pior
+     mundo escuro e 4,59:1 no claro. */
+  .carta__papel {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--destaque);
+  }
+
+  .carta__nome {
+    margin: 0;
+    min-height: 1.5em;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--texto-forte);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cadeado {
+      transition: none;
+    }
+  }
+</style>

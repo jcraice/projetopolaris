@@ -117,7 +117,8 @@ O campo `ordem` define a posição nos índices — a ordenação é sempre expl
 nunca alfabética por acidente.
 
 **Prosa não mora em componente.** Os textos da home, das páginas de índice, de
-Sobre, de Estilos e do 404 vêm da coleção `paginas` (`src/content/paginas/*.md`),
+Sobre, de Estilos, do 404, o prompt de IA e o molde da ficha vêm da coleção
+`paginas` (`src/content/paginas/*.md`),
 buscados com `getEntry` — e a página estoura o build com mensagem explícita se a
 entrada sumir, em vez de renderizar vazio. `home.md` é o caso mais completo: o
 corpo traz a apresentação e a lista "Como usar", e três campos de frontmatter
@@ -174,10 +175,47 @@ colar numa IA de texto. O molde é conteúdo da autora — não código — em
 [prompt-ia.md](src/content/paginas/prompt-ia.md), com quatro marcadores em
 maiúsculas (`[MUNDO]`, `[ARQUÉTIPO]`, `[CENÁRIO]`, `[ELEMENTO NARRATIVO]`) que
 `montarPrompt()` ([prompt.ts](src/lib/gerador/prompt.ts)) substitui pelos
-valores sorteados. Um marcador desconhecido faz `montarPrompt` lançar — e o
-frontmatter de `gerador.astro` chama a função uma vez com valores de descarte
-só para isso acontecer em `npm run build`, e não em produção no navegador de
-alguém.
+valores sorteados. Quem troca os marcadores é `preencher()`
+([modelo.ts](src/lib/gerador/modelo.ts)), compartilhado com a ficha. Um marcador
+desconhecido faz `preencher` lançar — e o frontmatter de `gerador.astro` chama a
+função uma vez com valores de descarte só para isso acontecer em
+`npm run build`, e não em produção no navegador de alguém.
+
+### O segundo modo: a ficha
+
+`/ficha/` ([ficha.astro](src/pages/ficha.astro)) é o outro modo do gerador, de um
+esquema que a autora escreveu antes do site: em vez de uma frase fechada, uma
+ficha de quatro linhas com **dois** personagens, um local e um "Importante:". A
+lógica é `sortearFicha()` + `redigirFicha()` em
+[ficha.ts](src/lib/gerador/ficha.ts), e o molde é conteúdo da autora em
+[ficha.md](src/content/paginas/ficha.md), com cinco marcadores.
+
+- Os dois personagens são arquétipos e **nunca são o mesmo**. As travas
+  complicam isso: quem está travado é resolvido primeiro, e só então o solto é
+  sorteado excluindo o travado — sortear na ordem A, B ingenuamente deixa passar
+  o caso de B travado. Há teste para os dois lados.
+- Mesmo mundo para tudo, salvo "misturar mundos", pelo mesmo `poolsFiltrados`.
+- O `[FATO]` não tem cadeado: complicação sempre muda, como na premissa.
+- A página **não injeta os 120 elementos**, que a ficha não usa; `Pools.elementos`
+  vai vazio de propósito.
+
+**A ficha está na versão mínima.** O esquema original tem "Personagem A que
+_característica física_" e "Personagem B que é _personalidade_", e esses dois
+bancos não existem — a versão de hoje mostra só os nomes. Quando vierem, cada
+entrada declara as duas formas de gênero no frontmatter: "cego"/"cega",
+"egocêntrico"/"egocêntrica", e invariáveis como "contrabandista" iguais nas duas.
+**Não derivar feminino por regra de sufixo** — é o caminho que
+[redacao.ts](src/lib/gerador/redacao.ts) já rejeitou, com o motivo escrito. Ver
+[o plano](docs/superpowers/plans/2026-08-04-ficha-minima.md).
+
+Os dois modos compartilham
+[CartaSorteada.astro](src/components/CartaSorteada.astro) (a carta e o cadeado) e
+[OpcoesDoSorteio.astro](src/components/OpcoesDoSorteio.astro) (mundo, misturar,
+incluir comuns) — o `name` de cada campo é contrato com as chaves de `Opcoes`, e
+o `data-carta`/`data-travar` de cada carta é contrato com os campos de
+`Sorteio`/`SorteioFicha`. A ficha **não está na navegação**: o header tem sete
+itens e foi ajustado para caber numa linha só até recolher em 1079px, então o
+acesso é por link no fim de cada um dos dois modos.
 
 **Concordância gramatical** é a parte delicada:
 [redacao.ts](src/lib/gerador/redacao.ts) resolve contração de preposição

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { montarPrompt, nomearMundos } from './prompt';
+import { montarPrompt, nomearMundos, nomearMundosDe } from './prompt';
 import type { Opcoes, Sorteio } from './tipos';
 
 const NOMES = {
@@ -60,6 +60,32 @@ describe('nomearMundos', () => {
   it('misturando, cai no próprio identificador quando o nome é desconhecido', () => {
     const sorteio = sorteioCom('distopia', 'mundo-novo', 'distopia');
     expect(nomearMundos(sorteio, opcoesCom('distopia', true), NOMES)).toBe('Distopia + mundo-novo');
+  });
+});
+
+/* A ficha tem outra ordem de cartas que a premissa — personagem A, personagem B,
+   local —, e é essa ordem que decide como o nome composto sai escrito. Foi o que
+   motivou nomearMundos a ganhar esta versão que recebe a lista pronta. */
+describe('nomearMundosDe', () => {
+  it('junta na ordem em que os subgêneros são passados', () => {
+    const opcoes = opcoesCom('space-opera', true);
+    expect(nomearMundosDe(['distopia', 'cyberpunk', 'space-opera'], opcoes, NOMES)).toBe(
+      'Distopia + Cyberpunk + Space Opera',
+    );
+    expect(nomearMundosDe(['space-opera', 'cyberpunk', 'distopia'], opcoes, NOMES)).toBe(
+      'Space Opera + Cyberpunk + Distopia',
+    );
+  });
+
+  it('ignora o pool comuns e não repete mundo', () => {
+    const opcoes = opcoesCom('distopia', true);
+    expect(nomearMundosDe(['comuns', 'distopia', 'distopia'], opcoes, NOMES)).toBe('Distopia');
+  });
+
+  it('sem misturar, devolve só o mundo do seletor', () => {
+    expect(nomearMundosDe(['cyberpunk', 'distopia'], opcoesCom('distopia', false), NOMES)).toBe(
+      'Distopia',
+    );
   });
 });
 

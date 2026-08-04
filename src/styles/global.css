@@ -247,6 +247,43 @@ a {
   border-color: var(--destaque);
 }
 
+/* As três regras a seguir servem aos dois modos do gerador — a premissa em
+   /gerador/ e a ficha em /ficha/. Moram aqui, e não numa das duas páginas, pelo
+   mesmo motivo de .lista-subgeneros: eram para ser copiadas verbatim na segunda
+   página, e uma cópia já é uma a mais. */
+
+/* Decisão de projeto: os cartões ficam empilhados em coluna, não em grade. */
+.pilha-cartas {
+  display: flex;
+  flex-direction: column;
+  /* Era 16px quando cada carta tinha moldura. Sem ela, é o espaço que separa
+     uma peça da outra, como nos verbetes do catálogo. */
+  gap: 28px;
+  margin-bottom: 32px;
+}
+
+/* Cada bloco termina com a ação que pertence a ele, centralizada no rodapé — o
+   botão fica junto do que ele opera, em vez de uma fileira no fim da página
+   comandando três coisas distantes. */
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px 0 0;
+}
+
+/* Um aviso por botão de copiar, logo abaixo dele: a confirmação aparece onde a
+   pessoa clicou, e não num canto distante da página. */
+.aviso {
+  display: block;
+  min-height: 1.2em;
+  margin-top: 8px;
+  text-align: center;
+  color: var(--apagado);
+  font-size: 0.85rem;
+}
+
 /* Agrupa sem emoldurar: cor quase transparente e espaço interno, nenhum traço.
    É o que separa as peças sorteadas da dica de enredo no gerador. */
 .bloco {
