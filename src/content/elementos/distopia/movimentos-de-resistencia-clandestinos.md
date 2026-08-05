@@ -1,7 +1,7 @@
 ---
 titulo: "Movimentos de resistência clandestinos"
 subgenero: distopia
-ordem: 13
+ordem: 7
 ---
 
 Grupos que se opõem secretamente ao regime.

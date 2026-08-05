@@ -1,7 +1,7 @@
 ---
 titulo: "Interfaces neurais diretas"
 subgenero: cyberpunk
-ordem: 15
+ordem: 2
 ---
 
 Conexão do cérebro a sistemas digitais.

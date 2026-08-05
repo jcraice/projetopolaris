@@ -1,7 +1,7 @@
 ---
 titulo: "Inteligências artificiais sencientes"
 subgenero: cyberpunk
-ordem: 7
+ordem: 3
 ---
 
 IAs que desenvolvem consciência ou agem de forma autônoma.

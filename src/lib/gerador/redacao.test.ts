@@ -63,7 +63,7 @@ describe('generoDe', () => {
 describe('emMinuscula', () => {
   it('abaixa só o artigo, preservando o resto do título', () => {
     expect(emMinuscula('A busca por autenticidade')).toBe('a busca por autenticidade');
-    expect(emMinuscula('O medo invisível')).toBe('o medo invisível');
+    expect(emMinuscula('O papel da memória e do legado')).toBe('o papel da memória e do legado');
   });
 });
 

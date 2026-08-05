@@ -124,7 +124,7 @@ O campo `ordem` define a posição nos índices — a ordenação é sempre expl
 nunca alfabética por acidente.
 
 O tamanho do acervo (hoje 76 arquétipos — 10 por mundo mais o felino, e mais 10
-comuns —, 60 cenários, 120 elementos, 36 livros) está escrito por extenso em
+comuns —, 60 cenários, 60 elementos, 36 livros) está escrito por extenso em
 quatro lugares que nenhum teste confere: [README.md](README.md),
 [sobre.md](src/content/paginas/sobre.md), o rótulo de "incluir comuns" em
 [gerador.astro](src/pages/gerador.astro) e o `nome` de

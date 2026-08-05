@@ -6,9 +6,9 @@ acervo cobre arquétipos de personagem, cenários, elementos narrativos e
 livros de referência, e é publicado como site estático no GitHub Pages.
 
 O site está no ar em **https://jcraice.github.io/projetopolaris/**, com 76
-arquétipos, 60 cenários, 120 elementos narrativos e 36 livros. São seis mundos —
+arquétipos, 60 cenários, 60 elementos narrativos e 36 livros. São seis mundos —
 Cyberpunk, Distopia, Invasão Alienígena, Pós Apocalíptico, Space Opera e Viagem
-no Tempo — com 11 arquétipos, 10 cenários e 20 elementos cada, mais um pool de
+no Tempo — com 11 arquétipos, 10 cenários e 10 elementos cada, mais um pool de
 10 arquétipos comuns que serve a todos. Tem busca em todo o acervo, tema claro e
 escuro, e um gerador que combina as peças em premissas prontas para começar uma
 história.

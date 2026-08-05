@@ -42,6 +42,14 @@ const ARTIGOS = new Set(['a', 'o', 'as', 'os', 'um', 'uma']);
 // palavras — mesmo espírito de NUCLEOS_FEMININOS em singular.py.
 const NUCLEOS_SINGULARES_TERMINADOS_EM_S = new Set(['lápis', 'vírus', 'ônibus', 'atlas', 'tênis', 'país']);
 
+// Aviso de leitura para os comentários daqui até o fim de numeroDe: parte dos
+// títulos citados como prova ("Corrupção governamental e corporativa",
+// "Conflito entre segurança e liberdade", "Propaganda e desinformação") saiu do
+// acervo quando os elementos foram reduzidos a dez por mundo. Ficaram escritos
+// porque o que eles documentam é o padrão gramatical que derrubou cada
+// alternativa mais simples, não o verbete em si — e o padrão volta assim que um
+// título futuro tiver a mesma forma.
+
 // Preposições que marcam o início de um complemento. Usadas para decidir se
 // um "e" encontrado no título liga dois núcleos do sujeito (sujeito
 // composto, plural: "Propaganda e desinformação") ou se está dentro do

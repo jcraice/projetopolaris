@@ -1,7 +1,7 @@
 ---
 titulo: "Hacktivismo e subversão digital"
 subgenero: cyberpunk
-ordem: 4
+ordem: 10
 ---
 
 O uso de tecnologia para combater o sistema ou desvendar segredos.

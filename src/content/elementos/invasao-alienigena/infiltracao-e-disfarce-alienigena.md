@@ -1,7 +1,7 @@
 ---
 titulo: "Infiltração e disfarce alienígena"
 subgenero: invasao-alienigena
-ordem: 8
+ordem: 3
 ---
 
 Extraterrestres que se misturam entre os humanos.

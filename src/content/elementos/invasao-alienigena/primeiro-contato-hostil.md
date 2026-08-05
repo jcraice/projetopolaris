@@ -1,7 +1,7 @@
 ---
 titulo: "Primeiro contato hostil"
 subgenero: invasao-alienigena
-ordem: 3
+ordem: 1
 ---
 
 A chegada dos alienígenas resulta em guerra imediata.
