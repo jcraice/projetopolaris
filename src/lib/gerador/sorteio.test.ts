@@ -13,7 +13,7 @@ const pools: Pools = {
     { id: 'c2', nome: 'Ruínas Antigas', subgenero: 'space-opera', singular: 'uma ruína antiga' },
   ],
   elementos: [
-    { id: 'e1', nome: 'Vigilância onipresente', subgenero: 'cyberpunk' },
+    { id: 'e1', nome: 'Realidade virtual e espaços digitais', subgenero: 'cyberpunk' },
     { id: 'e2', nome: 'Profecias cósmicas', subgenero: 'space-opera' },
   ],
 };
