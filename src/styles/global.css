@@ -16,8 +16,9 @@
      guardaria um laranja, que é exatamente a confusão que --tinta causava antes
      de virar --fundo.
 
-     --destaque  o que chama o olho: títulos dos verbetes, botão principal,
-                 etiqueta, pilares da home, cadeado travado
+     --destaque  o que chama o olho: título da página, botão principal,
+                 etiqueta, pilares da home, cadeado travado. Título de verbete
+                 não entra: já foi daqui e voltou para --texto-forte.
      --apoio     a interface em volta: links, botões secundários, contorno de
                  foco, barra lateral dos verbetes, retângulos de mundo */
   --destaque: var(--ouro);

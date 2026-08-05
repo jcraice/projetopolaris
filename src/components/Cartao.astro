@@ -22,9 +22,9 @@ const { titulo, ancora, marcador } = Astro.props;
 <style>
   /* Sem moldura e sem painel de propósito: os verbetes de uma seção formam um
      bloco contínuo, separado por espaço em branco, e não uma fileira de caixas
-     emolduradas. A classe .cartao de global.css continua existindo
-     para as cartas do gerador, onde a moldura carrega significado — ela vira
-     outra cor quando a peça está travada. */
+     emolduradas. Quem ainda tem moldura é a .carta do gerador, escopada na
+     própria gerador.astro, porque lá ela carrega significado — vira outra cor
+     quando a peça está travada. */
   .verbete {
     display: flex;
     flex-direction: column;
