@@ -11,7 +11,7 @@ const NOMES = {
 // Só os subgêneros importam para nomearMundos; o resto do sorteio é preenchido
 // com valores plausíveis para o objeto ser do tipo certo.
 const sorteioCom = (arquetipo: string, cenario: string, elemento: string): Sorteio => ({
-  arquetipo: { id: 'a', nome: 'O Hacker', subgenero: arquetipo },
+  arquetipo: { id: 'a', nome: 'Hacker/Console Cowboy', artigo: 'o', subgenero: arquetipo },
   cenario: { id: 'c', nome: 'Megacidades superpovoadas', subgenero: cenario, singular: 'uma megacidade superpovoada' },
   elemento: { id: 'e', nome: 'Vigilância onipresente', subgenero: elemento },
   complicacao: 'alguém do mesmo lado já negociou a rendição de todos',
@@ -66,7 +66,7 @@ describe('nomearMundos', () => {
 describe('montarPrompt', () => {
   const valores = {
     mundo: 'Cyberpunk',
-    arquetipo: 'O Hacker',
+    arquetipo: 'Hacker/Console Cowboy',
     cenario: 'Megacidades superpovoadas',
     elemento: 'Vigilância onipresente',
   };
@@ -74,14 +74,14 @@ describe('montarPrompt', () => {
   it('troca os quatro marcadores pelos valores do sorteio', () => {
     const modelo = 'Mundo: [MUNDO]\nPersonagem: [ARQUÉTIPO]\nLugar: [CENÁRIO]\nMotor: [ELEMENTO NARRATIVO]';
     expect(montarPrompt(modelo, valores)).toBe(
-      'Mundo: Cyberpunk\nPersonagem: O Hacker\nLugar: Megacidades superpovoadas\nMotor: Vigilância onipresente',
+      'Mundo: Cyberpunk\nPersonagem: Hacker/Console Cowboy\nLugar: Megacidades superpovoadas\nMotor: Vigilância onipresente',
     );
   });
 
   it('troca todas as ocorrências do mesmo marcador', () => {
     const modelo = '[MUNDO] e de novo [MUNDO], com [ARQUÉTIPO], [CENÁRIO] e [ELEMENTO NARRATIVO]';
     expect(montarPrompt(modelo, valores)).toBe(
-      'Cyberpunk e de novo Cyberpunk, com O Hacker, Megacidades superpovoadas e Vigilância onipresente',
+      'Cyberpunk e de novo Cyberpunk, com Hacker/Console Cowboy, Megacidades superpovoadas e Vigilância onipresente',
     );
   });
 

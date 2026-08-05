@@ -1,4 +1,4 @@
-import type { Sorteio } from './tipos';
+import type { Artigo, Sorteio } from './tipos';
 
 const CONTRACOES: Record<string, Record<string, string>> = {
   em: { um: 'num', uma: 'numa', o: 'no', a: 'na', os: 'nos', as: 'nas' },
@@ -16,8 +16,13 @@ export function contrair(preposicao: 'em' | 'a' | 'de', sintagma: string): strin
   return fundido ? `${fundido} ${resto.join(' ')}` : `${preposicao} ${sintagma}`;
 }
 
-export function generoDe(nome: string): 'f' | 'm' {
-  return nome.startsWith('A ') ? 'f' : 'm';
+/* O artigo é o que carrega o gênero: os nomes do acervo são limpos e não têm
+   terminação confiável ("Megacorporação" é feminino, "Duplo do Protagonista" é
+   masculino, "IA Aliada" é feminino e começa por sigla). Antes isto lia o
+   "A "/"O " embutido no nome; agora lê o campo `artigo` do frontmatter, que é
+   obrigatório justamente para essa dedução nunca cair num palpite. */
+export function generoDe(artigo: Artigo): 'f' | 'm' {
+  return artigo === 'a' ? 'f' : 'm';
 }
 
 export function emMinuscula(nome: string): string {
@@ -122,8 +127,13 @@ export function redigir(sorteio: Sorteio, molde: string): string {
     .replaceAll('{ser:elemento}', numeroDe(elemento.nome) === 'plural' ? 'são' : 'é')
     .replaceAll('{de:elemento}', contrair('de', emMinuscula(elemento.nome)))
     .replaceAll('{elemento}', emMinuscula(elemento.nome))
-    .replaceAll('{arquetipo}', emMinuscula(arquetipo.nome))
-    .replaceAll('{pronome}', generoDe(arquetipo.nome) === 'f' ? 'ela' : 'ele')
+    /* Artigo em minúscula e nome como está no acervo — nada de emMinuscula
+       aqui. O nome já vem limpo do frontmatter, então não há artigo grudado
+       para abaixar, e passar por emMinuscula estragaria as siglas: "IA Aliada"
+       viraria "iA Aliada". Só os elementos continuam precisando dela, porque
+       os títulos deles abrem com artigo ("A busca por autenticidade"). */
+    .replaceAll('{arquetipo}', `${arquetipo.artigo} ${arquetipo.nome}`)
+    .replaceAll('{pronome}', generoDe(arquetipo.artigo) === 'f' ? 'ela' : 'ele')
     .replaceAll('{complicacao}', complicacao);
 
   return frase.charAt(0).toUpperCase() + frase.slice(1);

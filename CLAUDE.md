@@ -35,7 +35,7 @@ Apague `.astro/` e reinicie o servidor.
 
 ## Restrições do projeto
 
-Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md](docs/superpowers/plans/2026-07-27-polaris.md)) e valem para código novo:
+Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md](docs/superpowers/plans/2026-07-27-polaris.md)) e valem para código novo. As mudanças posteriores têm cada uma seu par de spec e plano em [docs/superpowers/](docs/superpowers/) — é lá que está o porquê de decisão que o código só mostra pronta (topo fixo, prompt do gerador, home reformulada):
 
 - **Sem framework de interface.** Nada de React/Vue/Svelte. Interatividade em
   TypeScript puro dentro de `<script>` das páginas Astro.
@@ -94,12 +94,19 @@ Site estático em Astro. O acervo editorial é uma grade de duas dimensões —
 Zod isolados em [src/lib/schemas.ts](src/lib/schemas.ts) para poderem ser
 testados fora do Astro. Regras do esquema que não são óbvias:
 
-- `arquetipos.nome` **precisa** começar com "A " ou "O " — o gerador deriva
-  gênero gramatical e pronome desse artigo.
+- `arquetipos.nome` vai **sem** artigo ("Megacorporação", "IA Aliada") e o
+  artigo definido mora em `arquetipos.artigo` (`a` ou `o`). O gerador tira dali
+  as duas coisas: o artigo que abre a frase ("a Megacorporação descobre que…") e
+  o gênero do `{pronome}`. O campo é obrigatório e **não tem padrão** de
+  propósito — um padrão faria todo arquétipo novo nascer masculino em silêncio.
+  Por isso também o nome do arquétipo nunca passa por `emMinuscula` em
+  [redacao.ts](src/lib/gerador/redacao.ts): não há artigo grudado para abaixar, e
+  a função estragaria as siglas ("IA Aliada" → "iA Aliada"). Os elementos
+  continuam precisando dela, porque os títulos deles abrem com artigo.
 - `cenarios.singular` precisa começar com "um " ou "uma " — é a forma que entra
   nos moldes de frase, contraída com preposição.
 - `subgeneros.mundo: false` marca um pool que não é um mundo (hoje só
-  `comuns.md`, os 20 arquétipos comuns): não gera página em `/mundos/` e só
+  `comuns.md`, os 10 arquétipos comuns): não gera página em `/mundos/` e só
   entra no gerador quando "incluir comuns" está ligado.
 - `subgenero` com `mundo: true` exige `aurora` (trio de cores hex).
 - `arquetipos.felino: true` marca o arquétipo bônus, renderizado à parte com
@@ -115,6 +122,14 @@ testados fora do Astro. Regras do esquema que não são óbvias:
 
 O campo `ordem` define a posição nos índices — a ordenação é sempre explícita,
 nunca alfabética por acidente.
+
+O tamanho do acervo (hoje 76 arquétipos — 10 por mundo mais o felino, e mais 10
+comuns —, 60 cenários, 120 elementos, 36 livros) está escrito por extenso em
+quatro lugares que nenhum teste confere: [README.md](README.md),
+[sobre.md](src/content/paginas/sobre.md), o rótulo de "incluir comuns" em
+[gerador.astro](src/pages/gerador.astro) e o `nome` de
+[comuns.md](src/content/subgeneros/comuns.md). Entrada nova em `src/content/`
+desatualiza os quatro em silêncio.
 
 **Prosa não mora em componente.** Os textos da home, das páginas de índice, de
 Sobre, de Estilos e do 404 vêm da coleção `paginas` (`src/content/paginas/*.md`),
@@ -207,6 +222,13 @@ uma vez por [Base.astro](src/layouts/Base.astro); o resto é `<style>` escopado 
 própria página. A única coisa que o site guarda no navegador é a chave
 `polaris-tema` do `localStorage`, lida pelo script embutido no `<head>`.
 
+Além dos tokens, `global.css` guarda o punhado de classes que mais de uma página
+usa — `.bloco`, `.etiqueta`, `.botao` (com `.botao--principal`),
+`.lista-subgeneros`, `.abertura`, `.autor`. Antes de escrever regra nova num
+`<style>` escopado, conferir se uma delas já faz o trabalho: `.lista-subgeneros`
+só foi parar ali depois de ter sido copiada em quatro páginas. Classe que vale
+para uma página só continua escopada.
+
 A coluna de conteúdo é `--largura-conteudo` (1280px) e o recuo que a centraliza
 é `--recuo`, consumido pelo `padding-inline` das três faixas — barra do topo,
 `main` e rodapé. O `100%` dentro do token se resolve no ponto de uso, então ele
@@ -222,6 +244,22 @@ silêncio, o que parece um seletor errado e não é.
 A aurora recebe o trio de cores do subgênero por prop de `Base` e o converte em
 `conic-gradient` por `gradienteConico()` ([aurora.ts](src/lib/aurora.ts)), que
 cai no `AURORA_PADRAO` quando a página não é de mundo.
+
+**A barra do topo é `position: sticky`** ([Nav.astro](src/components/Nav.astro)),
+e isso cria duas amarras que o CSS não consegue impor sozinho:
+
+- Todo alvo de âncora precisa de `scroll-margin-top: 96px`, senão o título para
+  debaixo da barra. O valor está escrito duas vezes — em
+  [Cartao.astro](src/components/Cartao.astro) e nas `section[id]` de
+  [mundos/[subgenero].astro](src/pages/mundos/[subgenero].astro) — e os dois
+  mudam juntos. Quem chega às âncoras é a busca, então errar aqui quebra a
+  busca, não a página.
+- A escada de `z-index` é curta e proposital: aurora em `-1`, Nav em `10`, lista
+  de resultados da busca em `20`. O `10` do Nav existe porque o cadeado do
+  gerador é `absolute` e vem depois no documento — sem ele, passaria por cima da
+  barra ao rolar. E como o Nav abre um contexto de empilhamento, valor novo
+  acima de `20` em componente de página não vence a barra; vai por dentro dela
+  ou não vai.
 
 ### Busca
 

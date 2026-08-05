@@ -4,9 +4,9 @@ import type { Opcoes, Pools, Sorteio, Travas } from './tipos';
 
 const pools: Pools = {
   arquetipos: [
-    { id: 'a1', nome: 'A Transumana', subgenero: 'cyberpunk' },
-    { id: 'a2', nome: 'O Capitão Estratégico', subgenero: 'space-opera' },
-    { id: 'a3', nome: 'A Mentora', subgenero: 'comuns' },
+    { id: 'a1', nome: 'Humano Aumentado', artigo: 'o', subgenero: 'cyberpunk' },
+    { id: 'a2', nome: 'Comandante Carismático', artigo: 'o', subgenero: 'space-opera' },
+    { id: 'a3', nome: 'IA Aliada', artigo: 'a', subgenero: 'comuns' },
   ],
   cenarios: [
     { id: 'c1', nome: 'Megacidades', subgenero: 'cyberpunk', singular: 'uma megacidade' },

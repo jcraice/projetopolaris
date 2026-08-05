@@ -5,11 +5,11 @@ gerador de combinações de premissas que roda inteiramente no navegador. O
 acervo cobre arquétipos de personagem, cenários, elementos narrativos e
 livros de referência, e é publicado como site estático no GitHub Pages.
 
-O site está no ar em **https://jcraice.github.io/projetopolaris/**, com 146
+O site está no ar em **https://jcraice.github.io/projetopolaris/**, com 76
 arquétipos, 60 cenários, 120 elementos narrativos e 36 livros. São seis mundos —
 Cyberpunk, Distopia, Invasão Alienígena, Pós Apocalíptico, Space Opera e Viagem
-no Tempo — com 21 arquétipos, 10 cenários e 20 elementos cada, mais um pool de
-20 arquétipos comuns que serve a todos. Tem busca em todo o acervo, tema claro e
+no Tempo — com 11 arquétipos, 10 cenários e 20 elementos cada, mais um pool de
+10 arquétipos comuns que serve a todos. Tem busca em todo o acervo, tema claro e
 escuro, e um gerador que combina as peças em premissas prontas para começar uma
 história.
 
@@ -49,7 +49,8 @@ frontmatter validado por esquema. Um arquétipo novo é um arquivo em
 
 ```markdown
 ---
-nome: A Exploradora Silenciosa
+nome: Exploradora Silenciosa
+artigo: a
 subgenero: cyberpunk
 ordem: 15
 ---
@@ -57,10 +58,11 @@ ordem: 15
 Descrição do arquétipo em um ou dois parágrafos.
 ```
 
-O nome deve começar com o artigo definido ("A " ou "O "), porque o gerador de
-premissas usa esse artigo para concordância gramatical. O campo `subgenero`
-deve corresponder ao identificador de um arquivo já existente em
-`src/content/subgeneros/`.
+O nome vai sem artigo — é assim que ele aparece no catálogo. O artigo definido
+fica no campo `artigo` (`a` ou `o`), que o gerador de premissas usa tanto para
+montar a frase quanto para a concordância do pronome, e por isso é obrigatório.
+O campo `subgenero` deve corresponder ao identificador de um arquivo já
+existente em `src/content/subgeneros/`.
 
 Depois de adicionar ou editar um arquivo, rode `npm run build` para
 confirmar que o conteúdo passa na validação de esquema, e `npx vitest run`

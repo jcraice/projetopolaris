@@ -3,7 +3,7 @@ import { contrair, emMinuscula, generoDe, numeroDe, redigir } from './redacao';
 import type { Sorteio } from './tipos';
 
 const sorteio: Sorteio = {
-  arquetipo: { id: 'a', nome: 'A Colecionadora de Artefatos', subgenero: 'space-opera' },
+  arquetipo: { id: 'a', nome: 'Figura Política/Diplomata', artigo: 'a', subgenero: 'space-opera' },
   cenario: { id: 'c', nome: 'Ruínas Antigas', subgenero: 'space-opera', singular: 'uma ruína antiga' },
   elemento: { id: 'e', nome: 'Busca por artefatos ancestrais', subgenero: 'space-opera' },
   complicacao: 'a cura existe, e é fabricada com a própria doença',
@@ -50,16 +50,20 @@ describe('contrair', () => {
 });
 
 describe('generoDe', () => {
-  it('deduz o gênero do artigo inicial', () => {
-    expect(generoDe('A Transumana')).toBe('f');
-    expect(generoDe('O Capitão Estratégico')).toBe('m');
+  it('deduz o gênero do artigo do arquétipo', () => {
+    expect(generoDe('a')).toBe('f');
+    expect(generoDe('o')).toBe('m');
   });
 });
 
+/* Os exemplos são títulos de elemento, e não de arquétipo, porque é só neles
+   que emMinuscula continua sendo usada: o artigo faz parte do título ("A busca
+   por autenticidade") e precisa cair quando o título entra no meio da frase.
+   Arquétipo não passa mais por aqui — o artigo dele mora em campo próprio. */
 describe('emMinuscula', () => {
-  it('abaixa só o artigo, preservando o nome', () => {
-    expect(emMinuscula('A Colecionadora de Artefatos')).toBe('a Colecionadora de Artefatos');
-    expect(emMinuscula('O Hacker')).toBe('o Hacker');
+  it('abaixa só o artigo, preservando o resto do título', () => {
+    expect(emMinuscula('A busca por autenticidade')).toBe('a busca por autenticidade');
+    expect(emMinuscula('O medo invisível')).toBe('o medo invisível');
   });
 });
 
@@ -145,8 +149,20 @@ describe('redigir', () => {
     const frase = redigir(sorteio, '{em:cenario}, sob {elemento}, {arquetipo} descobre que {complicacao}.');
     expect(frase).toBe(
       'Numa ruína antiga, sob busca por artefatos ancestrais, ' +
-        'a Colecionadora de Artefatos descobre que a cura existe, e é fabricada com a própria doença.',
+        'a Figura Política/Diplomata descobre que a cura existe, e é fabricada com a própria doença.',
     );
+  });
+
+  /* "IA Aliada" e "IA Hostil" são os nomes que proíbem passar o arquétipo por
+     emMinuscula: a função abaixa a primeira letra, o que resolvia o artigo
+     grudado do acervo antigo ("A Ciborgue" → "a Ciborgue") e aqui estragaria a
+     sigla, produzindo "a iA Aliada". O artigo vem do campo próprio e o nome
+     entra intocado. */
+  it('preserva a sigla do nome, que não passa por emMinuscula', () => {
+    const sigla = { ...sorteio, arquetipo: { id: 'ia', nome: 'IA Aliada', artigo: 'a' as const, subgenero: 'comuns' } };
+    const frase = redigir(sigla, '{em:cenario}, sob {elemento}, {arquetipo} descobre que {complicacao}.');
+    expect(frase).toContain('a IA Aliada descobre que');
+    expect(frase).not.toContain('iA Aliada');
   });
 
   it('conjuga "impera" no singular quando o elemento é singular', () => {
@@ -177,7 +193,7 @@ describe('redigir', () => {
   });
 
   it('usa ele quando o arquétipo é masculino', () => {
-    const masculino = { ...sorteio, arquetipo: { id: 'b', nome: 'O Hacker', subgenero: 'cyberpunk' } };
+    const masculino = { ...sorteio, arquetipo: { id: 'b', nome: 'Hacker/Console Cowboy', artigo: 'o' as const, subgenero: 'cyberpunk' } };
     const frase = redigir(masculino, '{arquetipo} some {em:cenario} com {elemento} até {pronome} ver que {complicacao}.');
     expect(frase).toContain('até ele ver que');
   });
@@ -200,7 +216,7 @@ describe('redigir', () => {
   it('capitaliza somente a primeira letra da frase', () => {
     const frase = redigir(sorteio, '{em:cenario}, sob {elemento}, {arquetipo} descobre que {complicacao}.');
     expect(frase[0]).toBe('N');
-    expect(frase).toContain(', a Colecionadora');
+    expect(frase).toContain(', a Figura');
   });
 
   it('não deixa marcador por resolver', () => {

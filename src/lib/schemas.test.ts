@@ -9,7 +9,7 @@ describe('esquemaSubgenero', () => {
 
   it('dispensa aurora quando não é um mundo', () => {
     const r = esquemaSubgenero.safeParse({
-      nome: '20 Arquétipos Comuns', ordem: 7, mundo: false,
+      nome: '10 Arquétipos Comuns', ordem: 7, mundo: false,
     });
     expect(r.success).toBe(true);
   });
@@ -59,16 +59,28 @@ describe('esquemaSubgenero', () => {
 
 describe('esquemaArquetipo', () => {
   it('aceita uma ficha completa', () => {
-    const r = esquemaArquetipo.parse({ nome: 'A Transumana', subgenero: 'cyberpunk', ordem: 14 });
+    const r = esquemaArquetipo.parse({
+      nome: 'Humano Aumentado', artigo: 'o', subgenero: 'cyberpunk', ordem: 4,
+    });
     expect(r.felino).toBe(false);
   });
 
   it('recusa ficha sem subgênero', () => {
-    expect(esquemaArquetipo.safeParse({ nome: 'A Transumana', ordem: 14 }).success).toBe(false);
+    expect(esquemaArquetipo.safeParse({ nome: 'Humano Aumentado', artigo: 'o', ordem: 4 }).success).toBe(false);
   });
 
-  it('exige que o nome comece com artigo definido', () => {
-    const r = esquemaArquetipo.safeParse({ nome: 'Transumana', subgenero: 'cyberpunk', ordem: 14 });
+  /* Sem padrão de propósito: o artigo é o que o gerador usa para montar
+     "a Megacorporação" e para escolher entre "ela" e "ele". Um padrão faria
+     todo arquétipo novo nascer masculino sem ninguém perceber. */
+  it('exige o artigo, sem cair num padrão', () => {
+    const r = esquemaArquetipo.safeParse({ nome: 'Megacorporação', subgenero: 'cyberpunk', ordem: 2 });
+    expect(r.success).toBe(false);
+  });
+
+  it('só aceita "a" ou "o" como artigo', () => {
+    const r = esquemaArquetipo.safeParse({
+      nome: 'Megacorporação', artigo: 'A', subgenero: 'cyberpunk', ordem: 2,
+    });
     expect(r.success).toBe(false);
   });
 });

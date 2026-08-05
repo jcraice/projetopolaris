@@ -1,8 +1,8 @@
 import type { Opcoes, Sorteio } from './tipos';
 
-/* O pool `comuns` não é um mundo: são os 20 arquétipos que servem a todos. Com
+/* O pool `comuns` não é um mundo: são os 10 arquétipos que servem a todos. Com
    "misturar mundos" ligado ele entra no sorteio como qualquer outro, e um
-   "Distopia + 20 Arquétipos Comuns" na linha "Mundo:" do prompt não descreveria
+   "Distopia + 10 Arquétipos Comuns" na linha "Mundo:" do prompt não descreveria
    mundo nenhum — descreveria o acervo. Por isso ele não contribui com nome. */
 const NAO_E_MUNDO = 'comuns';
 

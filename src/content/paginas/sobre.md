@@ -9,7 +9,7 @@ Em 2014, mergulhei no universo das fanfics, aproveitava personagens e cenários 
 
 Foram anos de pequenos avanços. Sempre que tinha um tempo livre, voltava ao projeto, mesmo depois de me desanimar com as IAs que prometiam criar tramas inteiras num clique. Não que eu seja contra, pelo contrário, o ChatGPT foi um aliado valioso nas minhas pesquisas. Enfim, aos poucos, o foco mudou do gerador para algo mais sólido: os arquétipos.
 
-Hoje, este é um projeto no ar: são 6 subgêneros de ficção científica, cada um com 20 arquétipos listados e um arquétipo felino de bônus, além de cenários, elementos narrativos e livros de referência, cada um com seu nome e descrição detalhada.
+Hoje, este é um projeto no ar: são 6 subgêneros de ficção científica, cada um com 10 arquétipos listados e um arquétipo felino de bônus, além de cenários, elementos narrativos e livros de referência, cada um com seu nome e descrição detalhada.
 
 O gerador, que já foi só um plano, ressurgiu — agora como complemento a esse acervo. Ele sorteia um arquétipo, um cenário e um elemento narrativo do mundo que você escolher e devolve uma premissa pronta para começar. Se a combinação não servir, trave o que gostou e gere de novo.
 

@@ -6,5 +6,5 @@ export { contrair, emMinuscula, generoDe, numeroDe, redigir } from './redacao';
 export { MOLDES } from './moldes';
 export { COMPLICACOES } from './complicacoes';
 export { montarPrompt, nomearMundos } from './prompt';
-export type { Familia, Opcoes, Peca, PecaCenario, Pools, Sorteio, Travas } from './tipos';
+export type { Artigo, Familia, Opcoes, Peca, PecaArquetipo, PecaCenario, Pools, Sorteio, Travas } from './tipos';
 export type { ValoresDoPrompt } from './prompt';

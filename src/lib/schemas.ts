@@ -28,8 +28,17 @@ export const esquemaSubgenero = z
     path: ['aurora'],
   });
 
+/* O nome vem sem artigo ("Megacorporação", "IA Aliada") porque é assim que ele
+   aparece no catálogo, e o artigo mora num campo próprio. Já foi embutido no
+   nome, obrigado por regex a começar com "A " ou "O " — mudou porque a autora
+   reescreveu o acervo com nomes limpos.
+
+   O campo é obrigatório e não tem padrão de propósito: o gerador tira dele o
+   artigo da frase e o gênero do pronome ("até ela descobrir que"), e um padrão
+   silencioso faria todo arquétipo novo nascer masculino sem ninguém notar. */
 export const esquemaArquetipo = z.object({
-  nome: z.string().regex(/^[AO] ./, 'nome deve começar com o artigo "A " ou "O "'),
+  nome: z.string().min(1),
+  artigo: z.enum(['a', 'o']),
   subgenero: z.string().min(1),
   ordem: z.number().int().nonnegative(),
   felino: z.boolean().default(false),

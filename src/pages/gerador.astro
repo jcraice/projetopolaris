@@ -30,12 +30,15 @@ montarPrompt(modeloDoPrompt.body, {
 // o ignora.
 const nomesDosMundos = Object.fromEntries(mundos.map((m) => [m.id, m.data.nome]));
 
-// Os pools inteiros (146 arquétipos, 60 cenários, 120 elementos) são lidos
+// Os pools inteiros (76 arquétipos, 60 cenários, 120 elementos) são lidos
 // aqui em build e injetados como JSON estático na página — a interatividade
 // do gerador não faz nenhuma requisição em tempo de execução.
+//
+// O `artigo` do arquétipo viaja junto: sem ele o script não teria como montar
+// "a Megacorporação" nem escolher entre "ela" e "ele" no pronome.
 const pools = {
   arquetipos: (await getCollection('arquetipos')).map((a) => ({
-    id: a.id, nome: a.data.nome, subgenero: a.data.subgenero,
+    id: a.id, nome: a.data.nome, artigo: a.data.artigo, subgenero: a.data.subgenero,
   })),
   cenarios: (await getCollection('cenarios')).map((c) => ({
     id: c.id, nome: c.data.titulo, subgenero: c.data.subgenero, singular: c.data.singular,
@@ -66,7 +69,7 @@ const CARTAS = [
         </select>
       </label>
       <label><input type="checkbox" name="misturarMundos" /> Misturar mundos</label>
-      <label><input type="checkbox" name="incluirComuns" /> Incluir os 20 arquétipos comuns</label>
+      <label><input type="checkbox" name="incluirComuns" /> Incluir os 10 arquétipos comuns</label>
     </fieldset>
   </form>
 
