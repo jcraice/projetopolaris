@@ -119,9 +119,22 @@ testados fora do Astro. Regras do esquema que não são óbvias:
   parecidos o suficiente para um `aberturaCenários` com acento ser descartado em
   silêncio pelo Zod, e a página abrir sem parágrafo sem ninguém reclamar.
   Livros não tem abertura.
+- `subgeneros.citacao` e `citacaoAutor` são a epígrafe do mundo, repetida no
+  `<blockquote>` das cinco páginas daquele subgênero (os quatro catálogos e
+  `/mundos/`). Vem do frontmatter, não do corpo, justamente por aparecer em
+  cinco lugares. A `citacao` de `paginas/home.md` é outra coisa e não tem autor.
 
 O campo `ordem` define a posição nos índices — a ordenação é sempre explícita,
 nunca alfabética por acidente.
+
+**Antes de acrescentar ou trocar verbete, ler
+[docs/revisao-de-repeticoes.md](docs/revisao-de-repeticoes.md).** É o critério
+que decide em qual das três coleções um verbete entra — arquétipo é **quem**,
+cenário é **onde**, elemento é **o quê / que força** — e a revisão inteira
+nasceu de "cenários" que eram condição, não lugar. O documento também nomeia as
+sobreposições que são de propósito e não devem ser "corrigidas" (Refugiado da
+Invasão × Campos de refugiados, Humano Aumentado × Implantes cibernéticos):
+elas são o que a grade de duas dimensões existe para fazer.
 
 O tamanho do acervo (hoje 76 arquétipos — 10 por mundo mais o felino, e mais 10
 comuns —, 60 cenários, 60 elementos, 36 livros) está escrito por extenso em
