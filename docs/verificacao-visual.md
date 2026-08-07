@@ -149,6 +149,47 @@ fora dos preenchimentos. Tem 2em, ou 32px, em peso 900 — texto grande, mínimo
 mundos, e em cinco deles passaria até no critério de texto pequeno. Encolher o
 `h1` abaixo de 18,66px reprova.
 
+**Títulos de seção das páginas de mundo: pastilha preenchida.** Os quatro `h2` de
+[`/mundos/[subgenero]/`](../src/pages/mundos/%5Bsubgenero%5D.astro) — Arquétipos,
+Cenários, Elementos Narrativos, Livros — herdavam `--texto-forte` e ficavam
+iguais aos títulos dos verbetes logo abaixo, que também são claros: a página
+inteira lia como um bloco só. Viraram pastilha preenchida por escolha da autora,
+no mesmo par que o `.botao--principal` e a `.etiqueta` já usam — fundo
+`--destaque`, letra `--fundo`. Dá **12,22:1** no tema escuro e **5,12:1** no
+claro, folga até no critério de texto pequeno. Nenhum dos dois números depende do
+mundo: o preenchimento é opaco e tapa o céu, então a tabela por mundo não se
+aplica a este elemento.
+
+A sombra deslocada de 4px em `--apoio` põe a segunda cor de acento na peça sem
+carregar texto, e por isso não responde a mínimo de contraste.
+
+**A sombra fica nos dois temas, e isso é exceção à regra do `.botao`.**
+[global.css](../src/styles/global.css) tira a sombra deslocada dos botões no tema
+claro, por ela ser recurso de pôster que brilha sobre o céu escuro e pesa sobre
+fundo claro. A primeira versão desta pastilha seguia a mesma regra; a autora
+pediu para manter a sombra também no claro, para a peça ter a mesma forma nos
+dois temas. Não há conflito visual porque a página de mundo não renderiza nenhum
+`.botao` — não existe sombra ausente ao lado desta para destoar. Como a cor vem
+por papel, no claro ela sai azul-tinta `#1b2a4a` em vez de violeta.
+
+**O que foi medido e recusado aqui.** A proposta inicial era letra `--apoio`
+sobre preenchimento `--destaque` — "roxo com fundo amarelo". Reprova nos dois
+temas: **1,82:1** no escuro e **2,59:1** no claro, contra os 3:1 de texto grande.
+O motivo é estrutural e vale para qualquer par dos dois acentos: no tema escuro
+os dois foram escolhidos para brilhar sobre o mesmo céu, então são as duas cores
+mais claras da paleta e não se separam uma da outra; no claro, 2,59:1 é
+exatamente o número que este documento já registrava como a distância entre os
+acentos. Também foi medido `--fundo` sobre `--apoio` (**6,71:1** no escuro e
+**13,24:1** no claro): passa, mas gasta o papel da barra lateral dos verbetes que
+vêm logo abaixo, e os dois passariam a competir.
+
+**Consequência estrutural.** O "Ver todos →" saiu de dentro do `<h2>` e virou
+irmão dele, dentro de um `.titulo-linha`. Dentro da pastilha ele ficaria em
+`--apagado` sobre `--destaque`: **2,01:1** no escuro e **1,09:1** no claro, e é
+texto pequeno — a mesma reprovação do roxo-sobre-amarelo, em pior grau. Fora
+dela ele continua sobre o céu, com os mesmos 2,12 a 2,67 da pendência registrada
+acima; a mudança não melhora nem piora esse número.
+
 **Cadeado do gerador.** Usa `--texto` no estado destravado (4,71 no pior mundo)
 e `--destaque` no travado (4,27) — os dois acima dos 3:1 que o WCAG 1.4.11 pede
 de elemento de interface. `--apagado` foi descartado por ficar em 2,12.
@@ -309,3 +350,16 @@ paleta do tema claro:
 | `npx vitest run` | 84 testes, 10 arquivos |
 | `npm run check` | 47 arquivos, 0 erros, 0 avisos, 0 hints |
 | `npm run build` | 40 páginas |
+
+Refeita em 7 de agosto de 2026, depois de os títulos de seção das páginas de
+mundo virarem pastilha preenchida:
+
+| Comando | Resultado |
+|---|---|
+| `npx vitest run` | 86 testes, 10 arquivos |
+| `npm run check` | 47 arquivos, 0 erros, 0 avisos, 0 hints |
+| `npm run build` | 40 páginas |
+
+A pastilha não tem mais nenhuma regra condicionada ao tema: uma declaração só,
+`box-shadow: 4px 4px 0 var(--apoio)`, que os tokens resolvem para violeta no
+escuro e azul-tinta no claro.

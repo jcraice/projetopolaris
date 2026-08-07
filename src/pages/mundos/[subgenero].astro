@@ -60,9 +60,10 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
   </nav>
 
   <section id="arquetipos" aria-labelledby="arquetipos-titulo">
-    <h2 id="arquetipos-titulo">
-      Arquétipos <a class="ver-tudo" href={`${raiz}arquetipos/${subgenero.id}/`}>Ver todos →</a>
-    </h2>
+    <div class="titulo-linha">
+      <h2 id="arquetipos-titulo">Arquétipos</h2>
+      <a class="ver-tudo" href={`${raiz}arquetipos/${subgenero.id}/`}>Ver todos →</a>
+    </div>
     {arquetipos.map((f) => (
       <Cartao titulo={f.data.nome} ancora={`arquetipos-${paraAncora(f.data.nome)}`}>
         <p>{f.body}</p>
@@ -71,9 +72,10 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
   </section>
 
   <section id="cenarios" aria-labelledby="cenarios-titulo">
-    <h2 id="cenarios-titulo">
-      Cenários <a class="ver-tudo" href={`${raiz}cenarios/${subgenero.id}/`}>Ver todos →</a>
-    </h2>
+    <div class="titulo-linha">
+      <h2 id="cenarios-titulo">Cenários</h2>
+      <a class="ver-tudo" href={`${raiz}cenarios/${subgenero.id}/`}>Ver todos →</a>
+    </div>
     {cenarios.map((c) => (
       <Cartao titulo={c.data.titulo} ancora={`cenarios-${paraAncora(c.data.titulo)}`}>
         <p>{c.body}</p>
@@ -82,9 +84,10 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
   </section>
 
   <section id="elementos" aria-labelledby="elementos-titulo">
-    <h2 id="elementos-titulo">
-      Elementos Narrativos <a class="ver-tudo" href={`${raiz}elementos/${subgenero.id}/`}>Ver todos →</a>
-    </h2>
+    <div class="titulo-linha">
+      <h2 id="elementos-titulo">Elementos Narrativos</h2>
+      <a class="ver-tudo" href={`${raiz}elementos/${subgenero.id}/`}>Ver todos →</a>
+    </div>
     {elementos.map((e) => (
       <Cartao titulo={e.data.titulo} ancora={`elementos-${paraAncora(e.data.titulo)}`}>
         <p>{e.body}</p>
@@ -93,9 +96,10 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
   </section>
 
   <section id="livros" aria-labelledby="livros-titulo">
-    <h2 id="livros-titulo">
-      Livros <a class="ver-tudo" href={`${raiz}livros/${subgenero.id}/`}>Ver todos →</a>
-    </h2>
+    <div class="titulo-linha">
+      <h2 id="livros-titulo">Livros</h2>
+      <a class="ver-tudo" href={`${raiz}livros/${subgenero.id}/`}>Ver todos →</a>
+    </div>
     {livrosRenderizados.map(({ entrada, Content }) => (
       <Cartao titulo={entrada.data.titulo} ancora={`livros-${paraAncora(entrada.data.titulo)}`}>
         <p class="autor">{entrada.data.autor}</p>
@@ -144,11 +148,47 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
     scroll-margin-top: 96px;
   }
 
-  h2 {
+  /* A linha do título: a pastilha e o "Ver todos" alinhados pela base. O link
+     está fora do <h2>, e não dentro como antes, por causa do preenchimento —
+     em --apagado sobre --destaque ele daria 2,01:1 no escuro e 1,09:1 no claro.
+     É a mesma reprovação que tirou o roxo-sobre-amarelo de cogitação, e em grau
+     pior, porque aqui é texto pequeno. Fora da pastilha ele continua sobre o
+     céu, onde sempre esteve, e o número dele não muda. */
+  .titulo-linha {
     display: flex;
     align-items: baseline;
     gap: 12px;
     flex-wrap: wrap;
+  }
+
+  /* O título de seção é uma pastilha preenchida, não texto claro: em
+     --texto-forte ele ficava igual aos títulos dos verbetes logo abaixo, que
+     também são claros, e a página inteira lia como um bloco só.
+
+     inline-flex para a pastilha abraçar o texto — em `flex` ela atravessaria a
+     coluna de 1280px inteira. O par de cores é o mesmo do .botao--principal e
+     da .etiqueta: preenchimento em --destaque, letra em --fundo, 12,22:1 no
+     escuro e 5,12:1 no claro. A sombra deslocada em --apoio traz a segunda cor
+     sem carregar texto, então não responde a mínimo de contraste.
+     Contas em docs/verificacao-visual.md.
+
+     O espaço interno é maior que os 8px 14px do .botao porque a letra aqui tem
+     24px contra os ~16px de um botão; com o padding do botão a pastilha ficava
+     apertada em volta da caixa alta.
+
+     A sombra fica nos dois temas, e isto é exceção deliberada: global.css tira
+     a sombra deslocada do .botao no claro, por ela ser recurso de pôster que
+     pesa sobre fundo claro. Aqui a autora pediu para manter, para a pastilha
+     ter a mesma forma nos dois temas. Não conflita na tela porque a página de
+     mundo não renderiza nenhum .botao — não há sombra ausente ao lado desta
+     para destoar. Sendo cor por papel, no claro ela sai azul-tinta. */
+  h2 {
+    display: inline-flex;
+    background: var(--destaque);
+    color: var(--fundo);
+    padding: 10px 16px;
+    border-radius: var(--raio);
+    box-shadow: 4px 4px 0 var(--apoio);
   }
 
   .ver-tudo {
