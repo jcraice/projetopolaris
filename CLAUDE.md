@@ -238,11 +238,21 @@ que motivou a mudança.
 Cada `<script>` de página ou componente importa funções puras de `src/lib/` e só
 faz a ligação com o DOM; a lógica testável fica na lib. O padrão de melhoria
 progressiva está em [expansivel.ts](src/lib/expansivel.ts), usado pelo menu do
-Nav e pela lista de mundos da home: o botão nasce com `[hidden]` no HTML e só
-aparece pelo JavaScript, então sem script a lista fica visível em vez de virar
-um menu que não abre. E o estado de aberto/fechado mora num lugar só, o
-`aria-expanded` do botão, com o CSS reagindo por seletor de irmão — nada de
-estado paralelo que possa divergir do que o leitor de tela anuncia.
+Nav, pelo submenu "Mais" e pela lista de mundos da home: o botão nasce com
+`[hidden]` no HTML e só aparece pelo JavaScript, então sem script a lista fica
+visível em vez de virar um menu que não abre. E o estado de aberto/fechado mora
+num lugar só, o `aria-expanded` do botão, com o CSS reagindo por seletor de
+irmão — nada de estado paralelo que possa divergir do que o leitor de tela
+anuncia.
+
+O "Mais" é o único dos três que flutua sobre a página, e por isso ganha o que os
+outros dois não precisam: fecha no Escape (devolvendo o foco ao botão) e no
+clique fora, como a busca. Abaixo do ponto de quebra ele deixa de existir —
+`display: contents` dissolve o agrupamento e os três links voltam a ser irmãos
+dos outros quatro dentro do menu recolhido, para não haver menu dentro de menu.
+Mexer no que está na barra pede refazer a conta de largura que está comentada
+no `@media` de [Nav.astro](src/components/Nav.astro): o ponto de quebra sai
+dessa soma, não de uma medida de tablet.
 
 ### Estilo nas páginas
 
@@ -283,12 +293,19 @@ e isso cria duas amarras que o CSS não consegue impor sozinho:
   [mundos/[subgenero].astro](src/pages/mundos/[subgenero].astro) — e os dois
   mudam juntos. Quem chega às âncoras é a busca, então errar aqui quebra a
   busca, não a página.
-- A escada de `z-index` é curta e proposital: aurora em `-1`, Nav em `10`, lista
-  de resultados da busca em `20`. O `10` do Nav existe porque o cadeado do
-  gerador é `absolute` e vem depois no documento — sem ele, passaria por cima da
-  barra ao rolar. E como o Nav abre um contexto de empilhamento, valor novo
-  acima de `20` em componente de página não vence a barra; vai por dentro dela
-  ou não vai.
+- A escada de `z-index` é curta e proposital: aurora em `-1`, Nav em `10`, e em
+  `20` as duas coisas que abrem por cima da página — a lista de resultados da
+  busca e o submenu do "Mais". As duas moram dentro do Nav, e o empate não
+  importa porque estão em pontas opostas da fileira. O `10` do Nav existe porque
+  o cadeado do gerador é `absolute` e vem depois no documento — sem ele,
+  passaria por cima da barra ao rolar. E como o Nav abre um contexto de
+  empilhamento, valor novo acima de `20` em componente de página não vence a
+  barra; vai por dentro dela ou não vai.
+- **Painel que flutua sobre a página é opaco** (`--fundo`), nunca `--painel`. O
+  token de painel é translúcido nos dois temas (0,8 no escuro, 0,05 no claro) e
+  deixa passar o que está embaixo — o submenu do "Mais" abre justo em cima do
+  `h1`, e com `--painel` o título aparecia atrás dos links. `backdrop-filter`
+  não resolve texto sobre texto.
 
 ### Busca
 
