@@ -107,21 +107,21 @@ const CARTAS = [
         </button>
       </article>
     ))}
-    <div class="acoes">
-      <button type="button" class="botao botao--principal" id="sortear">Gerar</button>
-    </div>
   </section>
+  <div class="acoes">
+    <button type="button" class="botao botao--principal" id="sortear">Gerar</button>
+  </div>
 
   <section class="bloco bloco-premissa" aria-labelledby="premissa-titulo">
     <h2 id="premissa-titulo">Premissa gerada</h2>
     {/* aria-live no parágrafo, e não na seção inteira: na seção, cada clique
-        em Gerar faria o leitor de tela reler também o título e os botões. */}
+        em Gerar faria o leitor de tela reler também o título. */}
     <p id="premissa" class="abertura" aria-live="polite"></p>
-    <div class="acoes">
-      <button type="button" class="botao" id="copiar-premissa">Copiar premissa</button>
-    </div>
-    <span class="aviso" id="aviso-premissa" role="status"></span>
   </section>
+  <div class="acoes">
+    <button type="button" class="botao" id="copiar-premissa">Copiar premissa</button>
+    <span class="aviso" id="aviso-premissa" role="status"></span>
+  </div>
 
   <section class="bloco bloco-prompt" aria-labelledby="prompt-titulo">
     <h2 id="prompt-titulo">Crie enredos com sua IA favorita</h2>
@@ -129,11 +129,11 @@ const CARTAS = [
         e relê-las a cada clique em Gerar tornaria a página impraticável com
         leitor de tela. Quem quiser o texto chega nele navegando. */}
     <p id="prompt" class="prompt__texto"></p>
-    <div class="acoes">
-      <button type="button" class="botao" id="copiar-prompt">Copiar prompt</button>
-    </div>
-    <span class="aviso" id="aviso-prompt" role="status"></span>
   </section>
+  <div class="acoes">
+    <button type="button" class="botao" id="copiar-prompt">Copiar prompt</button>
+    <span class="aviso" id="aviso-prompt" role="status"></span>
+  </div>
 
   {/* is:inline porque isto é dado, não código: sem a diretiva o Astro trata o
       bloco como script a processar e emite um aviso em `npm run check`. */}
@@ -194,7 +194,6 @@ const CARTAS = [
     /* Era 16px quando cada carta tinha moldura. Sem ela, é o espaço que separa
        uma peça da outra, como nos verbetes do catálogo. */
     gap: 28px;
-    margin-bottom: 32px;
   }
 
   /* Sem moldura nem painel, como o catálogo. O estado de trava, que antes era
@@ -288,34 +287,38 @@ const CARTAS = [
     color: var(--texto-forte);
   }
 
-  /* pre-wrap, e não <pre>: qualquer quebra de linha que o prompt-ia.md tiver
-     faz parte do texto que vai para a IA e precisa aparecer na tela igual, mas
-     isto é texto para ler, não código — nada de fonte monoespaçada nem moldura.
-     O modelo de hoje é um parágrafo só, sem quebras, e então pre-wrap se
-     comporta como quebra normal; ele existe para o dia em que voltar a ter. */
+  /* pre-wrap, e não <pre>: as quebras de linha do prompt-ia.md fazem parte do
+     texto que vai para a IA — é o que põe cada uma das quatro peças na própria
+     linha, a forma que aguenta título começado por artigo ("A busca por
+     autenticidade") — e precisam aparecer na tela igual. Mas isto é texto para
+     ler, não código: nada de fonte monoespaçada nem moldura. */
   .prompt__texto {
     margin: 0;
     white-space: pre-wrap;
     line-height: 1.5;
   }
 
-  /* Cada bloco termina com a ação que pertence a ele, centralizada no rodapé —
-     o botão fica junto do que ele opera, em vez de uma fileira no fim da página
-     comandando três coisas distantes. */
+  /* O botão de cada bloco fica fora da caixa cinza, logo abaixo dela, e não
+     dentro do rodapé como antes: a caixa guarda só o que foi sorteado ou
+     escrito, e a ação que opera sobre aquilo mora do lado de fora. Cada botão
+     continua encostado no bloco a que pertence — três caixas, três ações —, e é
+     ele que agora separa uma caixa da seguinte, que de outro modo se
+     encostariam por terem o mesmo fundo. Em coluna porque o aviso de "copiado"
+     vem junto, logo abaixo do próprio botão. */
   .acoes {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    margin: 16px 0 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0 32px;
   }
 
   /* Um aviso por botão de copiar, logo abaixo dele: a confirmação aparece onde
-     a pessoa clicou, e não num canto distante da página. */
+     a pessoa clicou, e não num canto distante da página. O min-height reserva a
+     linha desde o começo — sem ele, a página inteira pula para baixo quando a
+     mensagem aparece. */
   .aviso {
-    display: block;
     min-height: 1.2em;
-    margin-top: 8px;
     text-align: center;
     color: var(--apagado);
     font-size: 0.85rem;
