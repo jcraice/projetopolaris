@@ -127,6 +127,13 @@ testados fora do Astro. Regras do esquema que não são óbvias:
 O campo `ordem` define a posição nos índices — a ordenação é sempre explícita,
 nunca alfabética por acidente.
 
+**O corpo de arquétipo, cenário e elemento entra na página como texto puro**
+(`{entrada.body}` dentro de um `<p>`), sem passar por `render()` — Markdown no
+corpo apareceria literal, com asterisco e tudo. São um parágrafo só, por isso a
+economia. Só `livros` chama `render()`, porque cada livro tem vários parágrafos
+(edição, comentário, sinopse). Verbete que precisar de dois parágrafos ou de
+ênfase muda a página junto, não só o Markdown.
+
 **Antes de acrescentar ou trocar verbete, ler
 [docs/revisao-de-repeticoes.md](docs/revisao-de-repeticoes.md).** É o critério
 que decide em qual das três coleções um verbete entra — arquétipo é **quem**,
@@ -138,11 +145,13 @@ elas são o que a grade de duas dimensões existe para fazer.
 
 O tamanho do acervo (hoje 76 arquétipos — 10 por mundo mais o felino, e mais 10
 comuns —, 60 cenários, 60 elementos, 36 livros) está escrito por extenso em
-quatro lugares que nenhum teste confere: [README.md](README.md),
-[sobre.md](src/content/paginas/sobre.md), o rótulo de "incluir comuns" em
-[gerador.astro](src/pages/gerador.astro) e o `nome` de
-[comuns.md](src/content/subgeneros/comuns.md). Entrada nova em `src/content/`
-desatualiza os quatro em silêncio.
+seis lugares que nenhum teste confere: [README.md](README.md),
+[sobre.md](src/content/paginas/sobre.md), o rótulo de "incluir comuns" e o
+comentário dos pools em [gerador.astro](src/pages/gerador.astro), o `nome` de
+[comuns.md](src/content/subgeneros/comuns.md) e os dois comentários de
+[mundos/[subgenero].astro](src/pages/mundos/[subgenero].astro) (o pool comuns e
+a posição do felino). Entrada nova em `src/content/` desatualiza os seis em
+silêncio — os de `mundos/` já tinham ficado para trás uma vez.
 
 **Prosa não mora em componente.** Os textos da home, das páginas de índice, de
 Sobre, de Estilos e do 404 vêm da coleção `paginas` (`src/content/paginas/*.md`),
@@ -162,6 +171,13 @@ Livros não tem esse segundo arquivo.
 `/mundos/[subgenero]/` é porta de entrada, não catálogo: mostra três itens de
 cada tipo e manda para a página completa (e deixa o arquétipo felino de fora da
 amostra). Listar tudo ali esvazia o "Ver todos".
+
+As cinco rotas `[subgenero]` têm o mesmo `getStaticPaths` — `getCollection('subgeneros')`,
+um caminho por entrada —, com **uma assimetria de propósito**: só
+[arquetipos/[subgenero].astro](src/pages/arquetipos/[subgenero].astro) não
+filtra por `s.data.mundo`, porque `/arquetipos/comuns/` precisa existir. As
+outras quatro filtram, senão gerariam `/cenarios/comuns/` e afins vazias.
+"Uniformizar" as cinco apaga a página dos 10 comuns.
 
 ### Gerador de premissas
 
