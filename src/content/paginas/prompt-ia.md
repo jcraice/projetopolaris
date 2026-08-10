@@ -3,4 +3,11 @@ titulo: "Prompt para IA"
 ordem: 8
 ---
 
-Você é um roteirista de ficção científica. Escreva um enredo de no máximo 400 palavras, em fluxo corrido e sem divisão em atos, a partir destas quatro restrições obrigatórias: mundo [MUNDO], protagonista [ARQUÉTIPO], cenário [CENÁRIO] e elemento narrativo [ELEMENTO NARRATIVO] — que precisa ser o motor do conflito, e não pano de fundo. Dê à história um título, ao menos uma reviravolta e um protagonista que termine diferente de como começou.
+Você é um roteirista de ficção científica. Escreva um enredo de no máximo 400 palavras, em fluxo corrido, sem divisão em atos, a partir destas quatro peças:
+
+Mundo: [MUNDO]
+Protagonista: [ARQUÉTIPO]
+Cenário: [CENÁRIO]
+Elemento narrativo: [ELEMENTO NARRATIVO]
+
+O elemento narrativo precisa ser o motor do conflito, e não pano de fundo. Dê à história um título e ao menos uma reviravolta, e leve o protagonista a terminar diferente de como começou.
