@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { proximoEstado } from './expansivel';
+import { ehTeclaDeFechar, proximoEstado } from './expansivel';
 
 describe('proximoEstado', () => {
   it('abre quando está fechado', () => {
@@ -19,5 +19,28 @@ describe('proximoEstado', () => {
   it('abre diante de qualquer valor que não seja "true"', () => {
     expect(proximoEstado('')).toBe('true');
     expect(proximoEstado('sim')).toBe('true');
+  });
+});
+
+describe('ehTeclaDeFechar', () => {
+  it('reconhece o Escape dos navegadores atuais', () => {
+    expect(ehTeclaDeFechar('Escape')).toBe(true);
+  });
+
+  // O "Esc" abreviado é o que o Internet Explorer e o Edge antigo mandam.
+  it('reconhece o "Esc" abreviado', () => {
+    expect(ehTeclaDeFechar('Esc')).toBe(true);
+  });
+
+  it('ignora as outras teclas', () => {
+    expect(ehTeclaDeFechar('Enter')).toBe(false);
+    expect(ehTeclaDeFechar('ArrowDown')).toBe(false);
+    expect(ehTeclaDeFechar('e')).toBe(false);
+  });
+
+  // Comparação sensível a caixa: um "escape" minúsculo não é o que o navegador
+  // manda, e aceitá-lo esconderia um erro de digitação em quem chamar.
+  it('não aceita a tecla em minúsculas', () => {
+    expect(ehTeclaDeFechar('escape')).toBe(false);
   });
 });

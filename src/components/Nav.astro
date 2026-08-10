@@ -4,13 +4,19 @@ import Busca from './Busca.astro';
 const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : `${base}/`;
 
+// As três coleções que o gerador combina, mais a própria ação de gerar: é o
+// que fica visível na barra. O resto entra no menu "Mais" — são páginas que se
+// visita uma vez, não a cada volta ao site.
 const links = [
   { rotulo: 'Arquétipos', href: `${raiz}arquetipos` },
   { rotulo: 'Cenários', href: `${raiz}cenarios` },
   { rotulo: 'Elementos', href: `${raiz}elementos` },
+  { rotulo: 'Gerador', href: `${raiz}gerador` },
+];
+
+const linksDeMais = [
   { rotulo: 'Estilos', href: `${raiz}estilos` },
   { rotulo: 'Livros', href: `${raiz}livros` },
-  { rotulo: 'Gerador', href: `${raiz}gerador` },
   { rotulo: 'Sobre', href: `${raiz}sobre` },
 ];
 ---
@@ -42,6 +48,32 @@ const links = [
     {links.map((link) => (
       <a href={link.href}>{link.rotulo}</a>
     ))}
+    {/* Mesmo contrato do botão do menu: nasce com [hidden] e só aparece pelo
+        JavaScript. Sem script os três links de dentro ficam soltos na barra,
+        como estavam antes do menu existir, em vez de virarem um "Mais" que
+        não abre. */}
+    <div class="nav__mais">
+      <button
+        type="button"
+        class="nav__mais-botao"
+        id="abrir-mais"
+        hidden
+        aria-expanded="false"
+        aria-controls="submenu-mais"
+      >
+        Mais
+        <svg class="nav__seta" viewBox="0 0 24 24" width="14" height="14"
+             fill="none" stroke="currentColor" stroke-width="3"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 9l7 7 7-7" />
+        </svg>
+      </button>
+      <div class="nav__submenu" id="submenu-mais">
+        {linksDeMais.map((link) => (
+          <a href={link.href}>{link.rotulo}</a>
+        ))}
+      </div>
+    </div>
   </nav>
   <Busca />
   {/* O ícone mostra o tema que o clique traz, não o que está valendo: sol
@@ -131,6 +163,112 @@ const links = [
     color: var(--destaque);
   }
 
+  .nav__mais {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Sem JavaScript o botão não existe e isto é o que se vê: os três links em
+     fila, dentro da mesma linha dos outros. */
+  .nav__submenu {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Herda de .nav__links a tudo que é tipografia; o que muda é ser botão. */
+  .nav__mais-botao {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 4px;
+    border: 0;
+    background: transparent;
+    color: var(--texto);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    border-radius: var(--raio);
+  }
+
+  .nav__mais-botao:hover,
+  .nav__mais-botao[aria-expanded='true'] {
+    color: var(--destaque);
+  }
+
+  .nav__mais-botao:focus-visible {
+    outline: 3px solid var(--apoio);
+    outline-offset: 2px;
+  }
+
+  .nav__mais-botao[hidden] {
+    display: none;
+  }
+
+  .nav__seta {
+    transition: transform 0.15s ease;
+  }
+
+  .nav__mais-botao[aria-expanded='true'] .nav__seta {
+    transform: rotate(180deg);
+  }
+
+  /* Existindo o botão, os três links viram painel flutuante: borda de destaque
+     e a mesma entrada de 0,12s da lista de resultados da busca, porque são as
+     duas únicas coisas do site que abrem por cima da página.
+
+     O que muda em relação à busca é o fundo, e é de propósito: --fundo opaco em
+     vez de --painel com blur. O --painel é translúcido nos dois temas — 0,8 no
+     escuro e 0,05 no claro — e este menu abre bem em cima do h1, que é o texto
+     maior e mais colorido da página. No claro o título aparecia inteiro atrás
+     dos links; no escuro, borrado mas ainda legível. Texto por cima de texto
+     não se resolve com blur, se resolve tapando. */
+  .nav__mais-botao:not([hidden]) ~ .nav__submenu {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + 6px);
+    left: 0;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    min-width: 180px;
+    padding: 4px;
+    background: var(--fundo);
+    border: 2px solid var(--destaque);
+    border-radius: var(--raio);
+    animation: submenu-surgir 0.12s ease-out;
+  }
+
+  /* Mesma especificidade da regra acima; quem decide é vir depois. */
+  .nav__mais-botao[aria-expanded='true'] ~ .nav__submenu {
+    display: flex;
+  }
+
+  .nav__submenu a {
+    padding: 8px 10px;
+    border-radius: var(--raio);
+  }
+
+  .nav__submenu a:hover {
+    background: color-mix(in srgb, var(--apoio) 25%, transparent);
+  }
+
+  @keyframes submenu-surgir {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav__seta { transition: none; }
+    .nav__mais-botao:not([hidden]) ~ .nav__submenu { animation: none; }
+  }
+
   /* O botão do menu só existe abaixo do ponto de quebra; acima, os sete links
      cabem na fileira e um menu recolhido só atrapalharia. */
   .nav__abrir {
@@ -175,16 +313,24 @@ const links = [
     display: block;
   }
 
-  /* O ponto de quebra é 1080px, e não uma medida redonda de tablet, porque quem
-     manda aqui é a soma do conteúdo: a marca, os sete links, a busca e o botão
-     de tema pedem cerca de 1030px. Abaixo disso o header começava a se desfazer
-     item a item — primeiro o botão de tema caía para a segunda linha, depois a
-     busca — que é exatamente o que este recolhimento evita.
+  /* O ponto de quebra não é uma medida redonda de tablet: quem manda é a soma do
+     conteúdo, e ela mudou quando três links entraram no menu "Mais". Medido no
+     navegador, a barra numa linha só pede 862px — 102 da marca, 468 dos quatro
+     links mais o botão "Mais", 180 da busca (o min-width dela, que é o quanto
+     ela cede antes de apertar), 36 do botão de tema, 36 dos três intervalos de
+     12px e 40 dos dois recuos de 20px, que é o valor de --recuo abaixo de
+     1280px. Eram cerca de 1030px com os sete links soltos, e por isso o ponto
+     ficava em 1080.
+
+     Os 920px de hoje guardam a mesma folga de uns 50px que o 1080 guardava:
+     abaixo dela o header se desfaz item a item — primeiro o botão de tema cai
+     para a segunda linha, depois a busca —, que é o que este recolhimento
+     evita. Mexeu no que está na barra? A conta muda junto.
 
      A busca entra no menu junto com os links. Ela sozinha pede 180px, e marca
      mais busca mais dois ícones não cabem na largura de um celular: mantê-la
      fora obrigaria a segunda linha a voltar em tela estreita. */
-  @media (max-width: 1079px) {
+  @media (max-width: 919px) {
     .nav__abrir:not([hidden]) {
       display: flex;
       order: 3;
@@ -232,6 +378,24 @@ const links = [
       width: 100%;
       max-width: none;
       order: 4;
+    }
+
+    /* Dentro do menu recolhido não existe "Mais": seria um menu que abre dentro
+       de outro menu, com dois aria-expanded para a mesma pessoa administrar.
+       O display: contents dissolve o agrupamento e devolve os três links à
+       condição de irmãos dos outros quatro — a mesma lista corrida que o
+       celular tinha antes deste menu existir. */
+    .nav__mais {
+      display: contents;
+    }
+
+    .nav__mais-botao {
+      display: none;
+    }
+
+    .nav__mais-botao:not([hidden]) ~ .nav__submenu,
+    .nav__mais-botao[aria-expanded='true'] ~ .nav__submenu {
+      display: contents;
     }
 
     .nav__abrir[aria-expanded='true'] ~ .nav__links a {
@@ -301,9 +465,36 @@ const links = [
 </style>
 
 <script>
-  import { ligarExpansivel } from '../lib/expansivel';
+  import { ehTeclaDeFechar, ligarExpansivel } from '../lib/expansivel';
 
   ligarExpansivel(document.getElementById('abrir-menu'));
+
+  // O "Mais" abre e fecha pelo mesmo mecanismo dos outros expansíveis, e ganha
+  // por cima o que só faz sentido para um painel que cobre a página.
+  const botaoDeMais = document.getElementById('abrir-mais');
+  ligarExpansivel(botaoDeMais);
+
+  if (botaoDeMais instanceof HTMLButtonElement) {
+    const grupo = botaoDeMais.closest('.nav__mais');
+    const fecharMais = () => botaoDeMais.setAttribute('aria-expanded', 'false');
+    const estaAberto = () => botaoDeMais.getAttribute('aria-expanded') === 'true';
+
+    // Clique fora fecha. O listener fica no documento, e não no grupo, porque o
+    // que interessa é o que acontece longe dele; cliques dentro passam pelo
+    // contains e não fazem nada, inclusive o do próprio botão, que o
+    // ligarExpansivel já tratou.
+    document.addEventListener('click', (evento) => {
+      if (grupo && !grupo.contains(evento.target as Node)) fecharMais();
+    });
+
+    document.addEventListener('keydown', (evento) => {
+      if (!ehTeclaDeFechar(evento.key) || !estaAberto()) return;
+      fecharMais();
+      // O foco volta para o botão: sem isto ele fica preso num link que acabou
+      // de sumir da tela, e o próximo Tab recomeça do topo da página.
+      botaoDeMais.focus();
+    });
+  }
 
   const botao = document.getElementById('alternar-tema');
   const preferenciaClara = window.matchMedia('(prefers-color-scheme: light)');

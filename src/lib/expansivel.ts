@@ -11,6 +11,17 @@ export function proximoEstado(atual: string | null): 'true' | 'false' {
   return atual === 'true' ? 'false' : 'true';
 }
 
+// O menu "Mais" da navegação flutua por cima da página, e por isso precisa
+// fechar sozinho — no Escape e no clique fora —, coisa que o menu do celular e
+// a lista de mundos da home não precisam, porque empurram o conteúdo em vez de
+// cobri-lo. A comparação da tecla mora aqui, e não no <script> do Nav, para
+// poder ser testada: o "Esc" é o nome que o Internet Explorer e o Edge antigo
+// mandavam em KeyboardEvent.key, e quem só compara com "Escape" deixa o menu
+// preso aberto nesses navegadores.
+export function ehTeclaDeFechar(tecla: string): boolean {
+  return tecla === 'Escape' || tecla === 'Esc';
+}
+
 export function ligarExpansivel(botao: Element | null): void {
   if (!(botao instanceof HTMLButtonElement)) return;
 
