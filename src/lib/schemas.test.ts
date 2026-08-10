@@ -70,16 +70,16 @@ describe('esquemaArquetipo', () => {
   });
 
   /* Sem padrão de propósito: o artigo é o que o gerador usa para montar
-     "a Megacorporação" e para escolher entre "ela" e "ele". Um padrão faria
+     "a IA Emergente" e para escolher entre "ela" e "ele". Um padrão faria
      todo arquétipo novo nascer masculino sem ninguém perceber. */
   it('exige o artigo, sem cair num padrão', () => {
-    const r = esquemaArquetipo.safeParse({ nome: 'Megacorporação', subgenero: 'cyberpunk', ordem: 2 });
+    const r = esquemaArquetipo.safeParse({ nome: 'IA Emergente', subgenero: 'cyberpunk', ordem: 2 });
     expect(r.success).toBe(false);
   });
 
   it('só aceita "a" ou "o" como artigo', () => {
     const r = esquemaArquetipo.safeParse({
-      nome: 'Megacorporação', artigo: 'A', subgenero: 'cyberpunk', ordem: 2,
+      nome: 'IA Emergente', artigo: 'A', subgenero: 'cyberpunk', ordem: 2,
     });
     expect(r.success).toBe(false);
   });

@@ -28,7 +28,7 @@ export const esquemaSubgenero = z
     path: ['aurora'],
   });
 
-/* O nome vem sem artigo ("Megacorporação", "IA Aliada") porque é assim que ele
+/* O nome vem sem artigo ("IA Emergente", "Duplo do Protagonista") porque é assim que ele
    aparece no catálogo, e o artigo mora num campo próprio. Já foi embutido no
    nome, obrigado por regex a começar com "A " ou "O " — mudou porque a autora
    reescreveu o acervo com nomes limpos.

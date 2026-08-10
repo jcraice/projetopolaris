@@ -17,8 +17,8 @@ export function contrair(preposicao: 'em' | 'a' | 'de', sintagma: string): strin
 }
 
 /* O artigo é o que carrega o gênero: os nomes do acervo são limpos e não têm
-   terminação confiável ("Megacorporação" é feminino, "Duplo do Protagonista" é
-   masculino, "IA Aliada" é feminino e começa por sigla). Antes isto lia o
+   terminação confiável ("Duplo do Protagonista" é masculino apesar do -a final,
+   "IA Aliada" é feminino e começa por sigla). Antes isto lia o
    "A "/"O " embutido no nome; agora lê o campo `artigo` do frontmatter, que é
    obrigatório justamente para essa dedução nunca cair num palpite. */
 export function generoDe(artigo: Artigo): 'f' | 'm' {
