@@ -3,7 +3,7 @@ titulo: "Prompt para IA"
 ordem: 8
 ---
 
-Você é um roteirista de ficção científica. Escreva um enredo de no máximo 400 palavras, em fluxo corrido, sem divisão em atos, a partir destas quatro peças:
+Você é um roteirista de ficção científica. Escreva um enredo de no máximo 400 palavras a partir destas quatro peças:
 
 Mundo: [MUNDO]
 Protagonista: [ARQUÉTIPO]
