@@ -4,7 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Cartao from '../../components/Cartao.astro';
 import { paraAncora } from '../../lib/texto';
 
-// O pool "20 Arquétipos Comuns" tem mundo: false — não é um mundo, então não
+// O pool "10 Arquétipos Comuns" tem mundo: false — não é um mundo, então não
 // entra aqui. As seis páginas de mundo são as únicas geradas por esta rota.
 export async function getStaticPaths() {
   const subgeneros = await getCollection('subgeneros', (s) => s.data.mundo);
@@ -23,7 +23,7 @@ const porOrdem = (a: { data: { ordem: number } }, b: { data: { ordem: number } }
   a.data.ordem - b.data.ordem;
 
 // O arquétipo felino fica de fora da amostra e aparece só na página completa:
-// ele é o vigésimo primeiro de cada mundo, não um dos três primeiros.
+// ele é o décimo primeiro de cada mundo, não um dos três primeiros.
 const arquetipos = (await getCollection('arquetipos', (a) => a.data.subgenero === subgenero.id && !a.data.felino))
   .sort(porOrdem)
   .slice(0, PREVIA);
