@@ -94,9 +94,9 @@ Site estático em Astro. O acervo editorial é uma grade de duas dimensões —
 Zod isolados em [src/lib/schemas.ts](src/lib/schemas.ts) para poderem ser
 testados fora do Astro. Regras do esquema que não são óbvias:
 
-- `arquetipos.nome` vai **sem** artigo ("Megacorporação", "IA Aliada") e o
-  artigo definido mora em `arquetipos.artigo` (`a` ou `o`). O gerador tira dali
-  as duas coisas: o artigo que abre a frase ("a Megacorporação descobre que…") e
+- `arquetipos.nome` vai **sem** artigo ("IA Emergente", "Duplo do Protagonista")
+  e o artigo definido mora em `arquetipos.artigo` (`a` ou `o`). O gerador tira
+  dali as duas coisas: o artigo que abre a frase ("a IA Emergente descobre que…") e
   o gênero do `{pronome}`. O campo é obrigatório e **não tem padrão** de
   propósito — um padrão faria todo arquétipo novo nascer masculino em silêncio.
   Por isso também o nome do arquétipo nunca passa por `emMinuscula` em
@@ -145,12 +145,14 @@ elas são o que a grade de duas dimensões existe para fazer.
 
 O tamanho do acervo (hoje 76 arquétipos — 10 por mundo mais o felino, e mais 10
 comuns —, 60 cenários, 60 elementos, 36 livros) está escrito por extenso em
-seis lugares que nenhum teste confere: [README.md](README.md),
+sete lugares que nenhum teste confere: [README.md](README.md),
 [sobre.md](src/content/paginas/sobre.md), o rótulo de "incluir comuns" e o
 comentário dos pools em [gerador.astro](src/pages/gerador.astro), o `nome` de
-[comuns.md](src/content/subgeneros/comuns.md) e os dois comentários de
+[comuns.md](src/content/subgeneros/comuns.md), os dois comentários de
 [mundos/[subgenero].astro](src/pages/mundos/[subgenero].astro) (o pool comuns e
-a posição do felino). Entrada nova em `src/content/` desatualiza os seis em
+a posição do felino) e
+[docs/atributos-do-gerador.md](docs/atributos-do-gerador.md), que lista o acervo
+verbete a verbete. Entrada nova em `src/content/` desatualiza os sete em
 silêncio — os de `mundos/` já tinham ficado para trás uma vez.
 
 **Prosa não mora em componente.** Os textos da home, das páginas de índice, de
@@ -190,6 +192,13 @@ dos `MOLDES`.
 `sortear` recebe o sorteio anterior e nunca repete a complicação nem a família
 dela em duas rodadas seguidas — as travas (`Travas`) só congelam as três peças
 do acervo, e a complicação sempre muda.
+
+[docs/atributos-do-gerador.md](docs/atributos-do-gerador.md) é o inventário do
+que o gerador pode produzir — as três coleções verbete a verbete, as 40
+complicações por família, os 10 moldes com a tabela de marcadores e as regras
+do sorteio. Existe porque complicação e molde não aparecem em página nenhuma do
+site: só se conhece o repertório rolando o gerador. Mexeu em `complicacoes.ts`,
+em `moldes.ts` ou no acervo? O documento envelhece junto.
 
 **As complicações são a exceção à regra de prosa em Markdown**: o banco vive em
 [complicacoes.ts](src/lib/gerador/complicacoes.ts) porque é peça de molde, não
