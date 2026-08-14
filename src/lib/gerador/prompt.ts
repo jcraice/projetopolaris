@@ -1,11 +1,5 @@
 import type { Opcoes, Sorteio } from './tipos';
 
-/* O pool `comuns` não é um mundo: são os 10 arquétipos que servem a todos. Com
-   "misturar mundos" ligado ele entra no sorteio como qualquer outro, e um
-   "Distopia + 10 Arquétipos Comuns" na linha "Mundo:" do prompt não descreveria
-   mundo nenhum — descreveria o acervo. Por isso ele não contribui com nome. */
-const NAO_E_MUNDO = 'comuns';
-
 export function nomearMundos(
   sorteio: Sorteio,
   opcoes: Opcoes,
@@ -16,30 +10,35 @@ export function nomearMundos(
     return id ? (nomes[id] ?? id) : '';
   }
 
-  /* A ordem é a das cartas na tela — arquétipo, cenário, elemento — e o Set
-     preserva a ordem de inserção, então "Distopia + Cyberpunk" sai na ordem em
-     que a pessoa lê as peças, não em ordem alfabética nem de coleção. */
+  /* A ordem é a das cartas na tela — personagem A, personagem B, local — e o
+     Set preserva a ordem de inserção, então "Distopia + Cyberpunk" sai na ordem
+     em que a pessoa lê as peças, não em ordem alfabética nem de coleção.
+
+     O filtro do pool `comuns` que existia aqui saiu junto com os arquétipos: as
+     profissões pertencem aos seis mundos e a nenhum outro pool. */
   const usados = [
-    sorteio.arquetipo.subgenero,
-    sorteio.cenario.subgenero,
-    sorteio.elemento.subgenero,
-  ].filter((subgenero) => subgenero !== NAO_E_MUNDO);
+    sorteio.personagemA.profissao.subgenero,
+    sorteio.personagemB.profissao.subgenero,
+    sorteio.local.subgenero,
+  ];
 
   return [...new Set(usados)].map((id) => nomes[id] ?? id).join(' + ');
 }
 
 export type ValoresDoPrompt = {
   mundo: string;
-  arquetipo: string;
-  cenario: string;
-  elemento: string;
+  personagemA: string;
+  personagemB: string;
+  local: string;
+  fato: string;
 };
 
 const MARCADORES: Record<string, keyof ValoresDoPrompt> = {
   '[MUNDO]': 'mundo',
-  '[ARQUÉTIPO]': 'arquetipo',
-  '[CENÁRIO]': 'cenario',
-  '[ELEMENTO NARRATIVO]': 'elemento',
+  '[PERSONAGEM A]': 'personagemA',
+  '[PERSONAGEM B]': 'personagemB',
+  '[LOCAL]': 'local',
+  '[FATO]': 'fato',
 };
 
 /* Marcador é colchete com só maiúsculas e espaço dentro — é a convenção dos
