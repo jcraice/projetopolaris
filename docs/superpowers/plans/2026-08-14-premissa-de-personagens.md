@@ -4,7 +4,7 @@
 
 **Goal:** Trocar a premissa do gerador — hoje uma frase sobre um arquétipo, um cenário e um elemento — por um bloco de quatro linhas sobre dois personagens com profissão e traço, um local e um fato.
 
-**Architecture:** Quatro listas novas em TypeScript dentro de `src/lib/gerador/` (profissões por mundo, características, personalidades e fatos universais), um molde único no lugar dos dez, e `sortear`/`redigir` reescritos em volta de um `Sorteio` de dois personagens. O acervo em `src/content/` não é tocado: arquétipos e elementos continuam no catálogo, só saem do gerador. Cenários viram "locais" e são a única peça que ainda vem de coleção de conteúdo.
+**Architecture:** Quatro listas novas em TypeScript dentro de `src/lib/gerador/` (profissões por mundo, características, personalidades e fatos universais), um molde único no lugar dos dez, e `sortear`/`redigir` reescritos em volta de um `Sorteio` de dois personagens. O acervo em `src/content/` não é tocado: arquétipos e elementos continuam no catálogo, só saem do gerador. Cenários viram "locais" e são a única peça que ainda vem de coleção de conteúdo. Fecha com uma página nova, `/guia-de-personagens/`, que mostra as 60 profissões com a descrição que a autora escreveu — fora do menu e da busca, alcançável só pelo gerador.
 
 **Tech Stack:** Astro 7, TypeScript estrito, Vitest. Sem framework de interface, sem dependência de runtime no cliente.
 
@@ -47,92 +47,102 @@ Conteúdo editorial primeiro, porque todo o resto depende dos nomes e do formato
 Só acrescentar. Não apagar nada de `tipos.ts` nesta task — o resto sai na Task 2, e apagar agora quebra `sorteio.ts` e `redacao.ts` antes da hora.
 
 ```ts
-/* Só nome e mundo: profissão não é entrada de conteúdo — não tem página, não
-   tem descrição e não entra na busca —, então não precisa do `id` que as peças
-   vindas de src/content/ carregam. */
-export type Profissao = { nome: string; subgenero: string };
+/* Sem `id` como as peças vindas de src/content/: profissão não é entrada de
+   coleção, não tem rota e não entra na busca.
+
+   A `descricao` não aparece no sorteio — ela existe para o guia em
+   /guia-de-personagens/, e mora aqui junto do nome porque os dois descrevem a
+   mesma peça. Separá-los em dois arquivos os faria divergir na primeira edição. */
+export type Profissao = { nome: string; subgenero: string; descricao: string };
 ```
 
 - [ ] **Step 2: Escrever `profissoes.ts`**
 
-Dez por mundo, seis mundos. Em minúscula e com o artigo junto, como `cenarios.singular` já faz — quem sobe a primeira letra é `redigir`, porque a profissão abre linha. O `(a)` está lá porque a autora decidiu que a profissão não fixa gênero.
+**Este conteúdo é da autora e vem pronto.** Não inventar profissão, não trocar nome, não reescrever descrição. O único trabalho da implementação foi flexionar os nomes, que ela entregou no masculino — e a flexão já está feita abaixo, com concordância no substantivo **e** no adjetivo, decisão dela.
+
+O artigo não entra aqui: as 60 abrem com `Um(a)`, então ele mora no molde (Task 3).
 
 ```ts
 import type { Profissao } from './tipos';
 
 /* Conteúdo editorial da autora (CC BY), não código — mesma situação das
-   complicações que existiam antes: é peça de sorteio, não verbete de leitura,
-   e por isso mora aqui e não em src/content/.
+   complicações que existiam antes: é peça de sorteio, não verbete de coleção, e
+   por isso mora aqui e não em src/content/.
 
-   Escritas em minúscula e com artigo junto, como `cenarios.singular`. Sem
-   gênero — decisão da autora, para quem escreve a história decidir. O adjetivo
-   que vem depois, na lista de personalidades, acompanha a mesma regra. */
+   Os nomes vêm com maiúscula porque são arquétipos de profissão, como os
+   verbetes do catálogo, e não ocupações soltas. Sem gênero: a autora escreveu no
+   masculino e pediu "(a) quando necessário", com concordância completa —
+   substantivo e adjetivo, "Executivo(a) Corporativo(a)". Palavra invariável fica
+   limpa ("Hacker", "Contrabandista", "Fixer", "Engenheiro(a) Chefe").
+
+   A `descricao` não é usada no sorteio: ela é o corpo do guia em
+   /guia-de-personagens/, e mora junto do nome para os dois não divergirem. */
 export const PROFISSOES: Profissao[] = [
-  { nome: 'um(a) técnico(a) de implantes', subgenero: 'cyberpunk' },
-  { nome: 'um(a) corretor(a) de dados', subgenero: 'cyberpunk' },
-  { nome: 'um(a) segurança de corporação', subgenero: 'cyberpunk' },
-  { nome: 'um(a) médico(a) de rua', subgenero: 'cyberpunk' },
-  { nome: 'um(a) falsificador(a) de identidades', subgenero: 'cyberpunk' },
-  { nome: 'um(a) entregador(a) de encomendas sigilosas', subgenero: 'cyberpunk' },
-  { nome: 'um(a) programador(a) desempregado(a)', subgenero: 'cyberpunk' },
-  { nome: 'um(a) dono(a) de bar', subgenero: 'cyberpunk' },
-  { nome: 'um(a) jornalista independente', subgenero: 'cyberpunk' },
-  { nome: 'um(a) cobrador(a) de dívidas', subgenero: 'cyberpunk' },
+  { nome: 'Hacker', subgenero: 'cyberpunk', descricao: 'Invasores de redes neurais e construtos de dados corporativos.' },
+  { nome: 'Samurai de Rua', subgenero: 'cyberpunk', descricao: 'Mercenários e guarda-costas com modificações cibernéticas pesadas.' },
+  { nome: 'Cirurgião(ã) de Rua', subgenero: 'cyberpunk', descricao: 'Médicos clandestinos que instalam, removem ou consertam implantes ilegais.' },
+  { nome: 'Executivo(a) Corporativo(a)', subgenero: 'cyberpunk', descricao: 'Burocratas implacáveis que gerenciam os interesses das megacorporações.' },
+  { nome: 'Corretor(a) de Dados', subgenero: 'cyberpunk', descricao: 'Traficantes de informações secretas, segredos industriais e chantagens.' },
+  { nome: 'Mensageiro(a) Neural', subgenero: 'cyberpunk', descricao: 'Contrabandistas que transportam dados sensíveis criptografados em seus próprios cérebros.' },
+  { nome: 'Detetive Particular', subgenero: 'cyberpunk', descricao: 'Investigadores cínicos que navegam pelo submundo para resolver crimes que a polícia ignora.' },
+  { nome: 'Caçador(a) de Recompensas', subgenero: 'cyberpunk', descricao: 'Profissionais focados em rastrear devedores de corporações ou criminosos foragidos.' },
+  { nome: 'Técnico(a) de Drones', subgenero: 'cyberpunk', descricao: 'Operadores e engenheiros de vigilância e combate remoto.' },
+  { nome: 'Engenheiro(a) de IA', subgenero: 'cyberpunk', descricao: 'Programadores que tentam controlar (ou libertar) inteligências artificiais rebeldes.' },
 
-  { nome: 'um(a) arquivista do Estado', subgenero: 'distopia' },
-  { nome: 'um(a) professor(a) primário(a)', subgenero: 'distopia' },
-  { nome: 'um(a) inspetor(a) de rações', subgenero: 'distopia' },
-  { nome: 'um(a) censor(a) de correspondência', subgenero: 'distopia' },
-  { nome: 'um(a) operário(a) de turno noturno', subgenero: 'distopia' },
-  { nome: 'um(a) locutor(a) de rádio oficial', subgenero: 'distopia' },
-  { nome: 'um(a) enfermeiro(a) de posto público', subgenero: 'distopia' },
-  { nome: 'um(a) contador(a) de uma repartição', subgenero: 'distopia' },
-  { nome: 'um(a) motorista de transporte coletivo', subgenero: 'distopia' },
-  { nome: 'um(a) recrutador(a) da juventude', subgenero: 'distopia' },
+  { nome: 'Agente de Supressão', subgenero: 'distopia', descricao: 'Fiscais encarregados de monitorar e punir desvios ideológicos.' },
+  { nome: 'Reescritor(a) Histórico(a)', subgenero: 'distopia', descricao: 'Funcionários do governo responsáveis por alterar documentos e livros para apagar a verdade.' },
+  { nome: 'Operário(a) de Base', subgenero: 'distopia', descricao: 'Trabalhadores de fábricas ou minas que sustentam a elite, geralmente vivendo em condições desumanas.' },
+  { nome: 'Líder da Resistência', subgenero: 'distopia', descricao: 'Estrategistas clandestinos que organizam rebeliões contra o sistema.' },
+  { nome: 'Propagandista do Estado', subgenero: 'distopia', descricao: 'Criadores de mídia focados em manter a população dócil e alienada.' },
+  { nome: 'Geneticista', subgenero: 'distopia', descricao: 'Cientistas que determinam o destino e a função social dos cidadãos antes mesmo do nascimento.' },
+  { nome: 'Coletor(a) de Rações', subgenero: 'distopia', descricao: 'Burocratas que distribuem (e muitas vezes desviam) recursos escassos como comida e água.' },
+  { nome: 'Contrabandista de Artefatos Antigos', subgenero: 'distopia', descricao: 'Pessoas que vendem itens do "mundo anterior" (livros reais, discos, arte).' },
+  { nome: 'Médico(a) de Triagem Social', subgenero: 'distopia', descricao: 'Profissionais que decidem quem vive ou morre com base na utilidade para o estado.' },
+  { nome: 'Infiltrado(a)', subgenero: 'distopia', descricao: 'Espiões da resistência trabalhando dentro da máquina do governo.' },
 
-  { nome: 'um(a) biomédico(a)', subgenero: 'invasao-alienigena' },
-  { nome: 'um(a) radioamador(a)', subgenero: 'invasao-alienigena' },
-  { nome: 'um(a) veterinário(a)', subgenero: 'invasao-alienigena' },
-  { nome: 'um(a) piloto de helicóptero', subgenero: 'invasao-alienigena' },
-  { nome: 'um(a) tradutor(a)', subgenero: 'invasao-alienigena' },
-  { nome: 'um(a) fotógrafo(a) de guerra', subgenero: 'invasao-alienigena' },
-  { nome: 'um(a) sargento da reserva', subgenero: 'invasao-alienigena' },
-  { nome: 'um(a) agricultor(a)', subgenero: 'invasao-alienigena' },
-  { nome: 'um(a) astrônomo(a) amador(a)', subgenero: 'invasao-alienigena' },
-  { nome: 'um(a) coveiro(a)', subgenero: 'invasao-alienigena' },
+  { nome: 'Xenobiólogo(a)', subgenero: 'invasao-alienigena', descricao: 'Cientistas encarregados de entender a anatomia, fraquezas e evolução dos invasores.' },
+  { nome: 'Fuzileiro(a) de Defesa Terrestre', subgenero: 'invasao-alienigena', descricao: 'A linha de frente militar humana contra as forças extraterrestres.' },
+  { nome: 'Linguista', subgenero: 'invasao-alienigena', descricao: 'Especialistas desesperados para decifrar as comunicações ou motivos alienígenas.' },
+  { nome: 'Piloto de Caça', subgenero: 'invasao-alienigena', descricao: 'Condutores de veículos atmosféricos ou robôs gigantes na defesa aérea e terrestre.' },
+  { nome: 'Engenheiro(a) de Engenharia Reversa', subgenero: 'invasao-alienigena', descricao: 'Técnicos que desmontam naves abatidas para adaptar armas alienígenas para uso humano.' },
+  { nome: 'Líder de Milícia', subgenero: 'invasao-alienigena', descricao: 'Civis que assumem o comando de grupos de resistência armada após o colapso dos governos.' },
+  { nome: 'Negociador(a) Interespécies', subgenero: 'invasao-alienigena', descricao: 'Diplomatas tentando evitar a extinção através do diálogo.' },
+  { nome: 'Médico(a) de Combate', subgenero: 'invasao-alienigena', descricao: 'Cirurgiões de campo lidando com armas de plasma e ferimentos desconhecidos.' },
+  { nome: 'Catador(a) de Tecnologia', subgenero: 'invasao-alienigena', descricao: 'Sobreviventes que exploram os destroços das batalhas em busca de baterias e armas.' },
+  { nome: 'Estrategista de Defesa Orbital', subgenero: 'invasao-alienigena', descricao: 'Generais que coordenam a defesa do planeta a partir de bunkers subterrâneos ou satélites.' },
 
-  { nome: 'um(a) catador(a) de sucata', subgenero: 'pos-apocaliptico' },
-  { nome: 'um(a) guia de estrada', subgenero: 'pos-apocaliptico' },
-  { nome: 'um(a) curandeiro(a)', subgenero: 'pos-apocaliptico' },
-  { nome: 'um(a) mecânico(a) de motores velhos', subgenero: 'pos-apocaliptico' },
-  { nome: 'um(a) guarda de um poço de água', subgenero: 'pos-apocaliptico' },
-  { nome: 'um(a) sementeiro(a)', subgenero: 'pos-apocaliptico' },
-  { nome: 'um(a) contador(a) de histórias', subgenero: 'pos-apocaliptico' },
-  { nome: 'um(a) caçador(a)', subgenero: 'pos-apocaliptico' },
-  { nome: 'um(a) ferreiro(a)', subgenero: 'pos-apocaliptico' },
-  { nome: 'um(a) rastreador(a) de mapas antigos', subgenero: 'pos-apocaliptico' },
+  { nome: 'Catador(a)', subgenero: 'pos-apocaliptico', descricao: 'Exploradores de ruínas urbanas em busca de comida enlatada, remédios e peças úteis.' },
+  { nome: 'Mecânico(a) de Sucata', subgenero: 'pos-apocaliptico', descricao: 'Engenheiros capazes de fazer um gerador ou um carro funcionar com arame e peças velhas.' },
+  { nome: 'Líder de Assentamento', subgenero: 'pos-apocaliptico', descricao: 'Figuras políticas ou ditadores locais que mantêm a ordem em comunidades de sobreviventes.' },
+  { nome: 'Mercador(a) Itinerante', subgenero: 'pos-apocaliptico', descricao: 'Mascates que viajam entre assentamentos trocando balas por água ou remédios.' },
+  { nome: 'Guarda de Caravana', subgenero: 'pos-apocaliptico', descricao: 'Mercenários contratados para proteger mercadores contra saqueadores e mutantes.' },
+  { nome: 'Agricultor(a) de Subsistência', subgenero: 'pos-apocaliptico', descricao: 'Fazendeiros que tentam cultivar alimentos em solo irradiado ou estéril.' },
+  { nome: 'Curandeiro(a)', subgenero: 'pos-apocaliptico', descricao: 'Médicos que utilizam plantas e conhecimentos antigos na ausência de antibióticos modernos.' },
+  { nome: 'Senhor(a) da Guerra', subgenero: 'pos-apocaliptico', descricao: 'Líderes brutais que controlam recursos vitais (como água ou gasolina) pela força.' },
+  { nome: 'Arquivista do Velho Mundo', subgenero: 'pos-apocaliptico', descricao: 'Guardiões do conhecimento que tentam preservar livros e história humana.' },
+  { nome: 'Rastreador(a)', subgenero: 'pos-apocaliptico', descricao: 'Sobreviventes solitários especialistas em ler o ambiente e encontrar caça ou pessoas perdidas.' },
 
-  { nome: 'um(a) contrabandista', subgenero: 'space-opera' },
-  { nome: 'um(a) piloto de salto', subgenero: 'space-opera' },
-  { nome: 'um(a) cozinheiro(a) de bordo', subgenero: 'space-opera' },
-  { nome: 'um(a) diplomata júnior', subgenero: 'space-opera' },
-  { nome: 'um(a) mecânico(a) de casco', subgenero: 'space-opera' },
-  { nome: 'um(a) cartógrafo(a) estelar', subgenero: 'space-opera' },
-  { nome: 'um(a) oficial de comunicações', subgenero: 'space-opera' },
-  { nome: 'um(a) comerciante de rota longa', subgenero: 'space-opera' },
-  { nome: 'um(a) médico(a) de nave', subgenero: 'space-opera' },
-  { nome: 'um(a) desertor(a) da frota', subgenero: 'space-opera' },
+  { nome: 'Capitão(ã) de Nave Estelar', subgenero: 'space-opera', descricao: 'Líderes carismáticos e independentes que comandam tripulações mercenárias ou contrabandistas.' },
+  { nome: 'Navegador(a)', subgenero: 'space-opera', descricao: 'Matemáticos e pilotos responsáveis por calcular saltos hiperespaciais sem bater em supernovas.' },
+  { nome: 'Embaixador(a) Galáctico(a)', subgenero: 'space-opera', descricao: 'Representantes de planetas ou federações em concílios alienígenas complexos.' },
+  { nome: 'Engenheiro(a) Chefe', subgenero: 'space-opera', descricao: 'Os mecânicos geniais que mantêm os motores de dobra funcionando quando tudo dá errado.' },
+  { nome: 'Aristocrata Exilado(a)', subgenero: 'space-opera', descricao: 'Membros da nobreza intergaláctica tentando recuperar seus tronos ou fugindo de impérios opressores.' },
+  { nome: 'Caçador(a) de Recompensas Espacial', subgenero: 'space-opera', descricao: 'Rastreadores implacáveis que cruzam a galáxia atrás de alvos valiosos.' },
+  { nome: 'Xenoantropólogo(a)', subgenero: 'space-opera', descricao: 'Estudiosos dedicados a compreender as culturas e religiões de milhares de espécies diferentes.' },
+  { nome: 'Contrabandista', subgenero: 'space-opera', descricao: 'Mercadores que evitam bloqueios imperiais para transportar cargas ilegais e valiosas.' },
+  { nome: 'Comandante de Frota', subgenero: 'space-opera', descricao: 'Estrategistas militares que lideram batalhas com milhares de cruzadores estelares.' },
+  { nome: 'Membro da Patrulha Espacial', subgenero: 'space-opera', descricao: 'Soldados treinados para invasões em gravidade zero e abordagens de naves.' },
 
-  { nome: 'um(a) historiador(a)', subgenero: 'viagem-no-tempo' },
-  { nome: 'um(a) relojoeiro(a)', subgenero: 'viagem-no-tempo' },
-  { nome: 'um(a) arqueólogo(a)', subgenero: 'viagem-no-tempo' },
-  { nome: 'um(a) físico(a) de laboratório', subgenero: 'viagem-no-tempo' },
-  { nome: 'um(a) genealogista', subgenero: 'viagem-no-tempo' },
-  { nome: 'um(a) restaurador(a) de documentos', subgenero: 'viagem-no-tempo' },
-  { nome: 'um(a) detetive de seguros', subgenero: 'viagem-no-tempo' },
-  { nome: 'um(a) bibliotecário(a)', subgenero: 'viagem-no-tempo' },
-  { nome: 'um(a) fotógrafo(a) de retratos', subgenero: 'viagem-no-tempo' },
-  { nome: 'um(a) escrivão(ã) de cartório', subgenero: 'viagem-no-tempo' },
+  { nome: 'Agente da Polícia Temporal', subgenero: 'viagem-no-tempo', descricao: 'Oficiais da lei dedicados a caçar criminosos que tentam alterar eventos do passado.' },
+  { nome: 'Piloto de Máquina do Tempo', subgenero: 'viagem-no-tempo', descricao: 'Os testadores e viajantes pioneiros que navegam pelas correntes do tempo.' },
+  { nome: 'Historiador(a) de Campo', subgenero: 'viagem-no-tempo', descricao: 'Acadêmicos que viajam a épocas passadas para observação direta, com a regra estrita de nunca interferir.' },
+  { nome: 'Físico(a) Quântico(a) Estrutural', subgenero: 'viagem-no-tempo', descricao: 'Os inventores geniais e teóricos que mantêm as máquinas do tempo funcionando e calculam as ramificações.' },
+  { nome: 'Investigador(a) de Paradoxo', subgenero: 'viagem-no-tempo', descricao: 'Detetives especializados em descobrir onde a linha do tempo foi fraturada e como consertá-la.' },
+  { nome: 'Turista Temporal', subgenero: 'viagem-no-tempo', descricao: 'Viajantes ricos que pagam fortunas para assistir a eventos históricos (e frequentemente causam problemas).' },
+  { nome: 'Contrabandista de Anacronismos', subgenero: 'viagem-no-tempo', descricao: 'Ladrões que roubam artefatos famosos (como a verdadeira Monalisa) antes de serem destruídos ou perdidos na história original.' },
+  { nome: 'Guardião(ã) da Linha do Tempo', subgenero: 'viagem-no-tempo', descricao: 'Observadores fixos em séculos específicos, encarregados de garantir que certos eventos ocorram exatamente como deveriam.' },
+  { nome: 'Técnico(a) de Extração', subgenero: 'viagem-no-tempo', descricao: 'Especialistas focados em resgatar pessoas do passado milissegundos antes de suas mortes registradas.' },
+  { nome: 'Fixer', subgenero: 'viagem-no-tempo', descricao: 'Profissionais cuja única função é apagar rastros materiais (celulares, roupas modernas) deixados acidentalmente no passado.' },
 ];
 ```
 
@@ -317,6 +327,24 @@ describe('PROFISSOES', () => {
   it('não tem profissão repetida', () => {
     expect(new Set(PROFISSOES.map((p) => p.nome)).size).toBe(60);
   });
+
+  /* A descrição é o corpo do guia em /guia-de-personagens/. Uma vazia passaria
+     no build e deixaria um verbete mudo na página, que é justamente o problema
+     que o guia existe para resolver. */
+  it('toda profissão tem descrição própria', () => {
+    for (const p of PROFISSOES) expect(p.descricao.trim().length).toBeGreaterThan(0);
+    expect(new Set(PROFISSOES.map((p) => p.descricao)).size).toBe(60);
+  });
+
+  /* Ao contrário das outras três listas, os nomes de profissão abrem com
+     maiúscula (são arquétipos, como os verbetes do catálogo) e as descrições
+     terminam em ponto (são frases inteiras, não peça de molde). */
+  it('os nomes começam com maiúscula e não terminam em ponto', () => {
+    for (const p of PROFISSOES) {
+      expect(p.nome[0]).toBe(p.nome[0].toUpperCase());
+      expect(p.nome.endsWith('.')).toBe(false);
+    }
+  });
 });
 
 describe('as três listas universais', () => {
@@ -333,15 +361,15 @@ describe('as três listas universais', () => {
   });
 });
 
-/* A regra vale para as quatro listas: quem fecha a linha é o molde, e uma
-   entrada que já venha com ponto produziria "egocêntrico(a)..". A minúscula
-   vale porque nenhuma delas abre frase — a de profissão abre linha, mas quem
-   sobe a primeira letra é redigir(). */
-describe('a forma do texto das quatro listas', () => {
-  const todas = [
-    ...PROFISSOES.map((p) => p.nome),
-    ...CARACTERISTICAS, ...PERSONALIDADES, ...FATOS,
-  ];
+/* As três listas universais entram no meio de uma frase que o molde já começou
+   ("Um(a) Hacker que ...", "Importante: ..."), então nenhuma abre com maiúscula
+   e nenhuma fecha com ponto — quem fecha a linha é o molde, e uma entrada com
+   ponto produziria "egocêntrico(a)..".
+
+   As profissões são a exceção e têm regra própria acima: abrem com maiúscula
+   porque são nomes de arquétipo, não trechos de frase. */
+describe('a forma do texto das três listas universais', () => {
+  const todas = [...CARACTERISTICAS, ...PERSONALIDADES, ...FATOS];
 
   it('nenhuma entrada termina em ponto', () => {
     for (const texto of todas) expect(texto.endsWith('.')).toBe(false);
@@ -364,7 +392,7 @@ git rm src/lib/gerador/complicacoes.ts
 - [ ] **Step 8: Rodar só o teste dos dados**
 
 Run: `npx vitest run src/lib/gerador/dados.test.ts`
-Expected: PASS, 7 testes.
+Expected: PASS, 9 testes.
 
 `npx vitest run` inteiro **vai falhar** aqui, em `sorteio.test.ts` e `redacao.test.ts`, porque `complicacoes.ts` não existe mais e os tipos antigos continuam de pé. É o único ponto do plano em que a suíte fica vermelha.
 
@@ -400,10 +428,13 @@ git commit -m "Escreve as quatro listas da premissa de personagens"
 Arquivo inteiro. Saem `Familia`, `Artigo`, `PecaArquetipo` e o campo `incluirComuns`.
 
 ```ts
-/* Só nome e mundo: profissão não é entrada de conteúdo — não tem página, não
-   tem descrição e não entra na busca —, então não precisa do `id` que as peças
-   vindas de src/content/ carregam. */
-export type Profissao = { nome: string; subgenero: string };
+/* Sem `id` como as peças vindas de src/content/: profissão não é entrada de
+   coleção, não tem rota e não entra na busca.
+
+   A `descricao` não aparece no sorteio — ela é o corpo do guia em
+   /guia-de-personagens/, e mora aqui junto do nome porque os dois descrevem a
+   mesma peça. Separá-los em dois arquivos os faria divergir na primeira edição. */
+export type Profissao = { nome: string; subgenero: string; descricao: string };
 
 export type Peca = { id: string; nome: string; subgenero: string };
 export type PecaCenario = Peca & { singular: string };
@@ -448,9 +479,9 @@ import type { Opcoes, Pools, Sorteio, Travas } from './tipos';
 
 const pools: Pools = {
   profissoes: [
-    { nome: 'um(a) técnico(a) de implantes', subgenero: 'cyberpunk' },
-    { nome: 'um(a) corretor(a) de dados', subgenero: 'cyberpunk' },
-    { nome: 'um(a) contrabandista', subgenero: 'space-opera' },
+    { nome: 'Hacker', subgenero: 'cyberpunk', descricao: 'Invasores de redes neurais.' },
+    { nome: 'Corretor(a) de Dados', subgenero: 'cyberpunk', descricao: 'Traficantes de informação.' },
+    { nome: 'Contrabandista', subgenero: 'space-opera', descricao: 'Evitam bloqueios imperiais.' },
   ],
   locais: [
     { id: 'c1', nome: 'Megacidades', subgenero: 'cyberpunk', singular: 'uma megacidade' },
@@ -465,9 +496,7 @@ const zero = () => 0;
 describe('poolsFiltrados', () => {
   it('mantém apenas o mundo escolhido', () => {
     const r = poolsFiltrados(pools, base);
-    expect(r.profissoes.map((p) => p.nome)).toEqual([
-      'um(a) técnico(a) de implantes', 'um(a) corretor(a) de dados',
-    ]);
+    expect(r.profissoes.map((p) => p.nome)).toEqual(['Hacker', 'Corretor(a) de Dados']);
     expect(r.locais.map((l) => l.id)).toEqual(['c1']);
   });
 
@@ -572,7 +601,7 @@ describe('sortear', () => {
      silêncio — e o acervo tem dez por mundo, então isto é guarda-corpo. */
   it('lança erro quando só há uma profissão para os dois personagens', () => {
     const soUma: Pools = {
-      profissoes: [{ nome: 'um(a) técnico(a) de implantes', subgenero: 'cyberpunk' }],
+      profissoes: [{ nome: 'Hacker', subgenero: 'cyberpunk', descricao: 'Invasores de redes neurais.' }],
       locais: pools.locais,
     };
     expect(() => sortear(soUma, base, SEM_TRAVA, null, zero)).toThrow(/sem peças/i);
@@ -693,11 +722,17 @@ import type { Sorteio } from './tipos';
 
 const sorteio: Sorteio = {
   personagemA: {
-    profissao: { nome: 'um(a) biomédico(a)', subgenero: 'invasao-alienigena' },
+    profissao: {
+      nome: 'Xenobiólogo(a)', subgenero: 'invasao-alienigena',
+      descricao: 'Cientistas encarregados de entender a anatomia dos invasores.',
+    },
     caracteristica: 'é cego(a) de um olho',
   },
   personagemB: {
-    profissao: { nome: 'um(a) contrabandista', subgenero: 'space-opera' },
+    profissao: {
+      nome: 'Contrabandista', subgenero: 'space-opera',
+      descricao: 'Mercadores que evitam bloqueios imperiais.',
+    },
     personalidade: 'egocêntrico(a)',
   },
   local: {
@@ -711,8 +746,8 @@ describe('redigir', () => {
   it('monta o bloco inteiro', () => {
     expect(redigir(sorteio, MOLDE, 'Invasão Alienígena')).toBe(
       'Essa é uma ficção científica de invasão alienígena.\n\n'
-      + 'Um(a) biomédico(a) que é cego(a) de um olho.\n'
-      + 'Um(a) contrabandista que é egocêntrico(a).\n\n'
+      + 'Um(a) Xenobiólogo(a) que é cego(a) de um olho.\n'
+      + 'Um(a) Contrabandista que é egocêntrico(a).\n\n'
       + 'Tudo começa num laboratório secreto.\n\n'
       + 'Importante: um personagem está de luto.',
     );
@@ -730,10 +765,13 @@ describe('redigir', () => {
     expect(frase).toContain('de space opera + invasão alienígena.');
   });
 
-  it('sobe a primeira letra das duas linhas de personagem', () => {
+  /* O nome entra como está guardado — nada de mexer em maiúscula na redação. O
+     mesmo texto aparece na carta e no guia, e um `toLowerCase` aqui estragaria
+     as siglas ("Engenheiro(a) de IA" viraria "engenheiro(a) de ia"). */
+  it('escreve o nome da profissão como está na lista', () => {
     const frase = redigir(sorteio, MOLDE, 'Distopia');
-    expect(frase).toContain('\nUm(a) biomédico(a) que');
-    expect(frase).toContain('\nUm(a) contrabandista que');
+    expect(frase).toContain('\nUm(a) Xenobiólogo(a) que é cego(a) de um olho.');
+    expect(frase).toContain('\nUm(a) Contrabandista que é egocêntrico(a).');
   });
 
   /* O "é" fica no molde só na linha da personalidade. Na de característica ele
@@ -745,7 +783,7 @@ describe('redigir', () => {
       personagemA: { ...sorteio.personagemA, caracteristica: 'tem cicatrizes nas mãos' },
     };
     const frase = redigir(outro, MOLDE, 'Distopia');
-    expect(frase).toContain('Um(a) biomédico(a) que tem cicatrizes nas mãos.');
+    expect(frase).toContain('Um(a) Xenobiólogo(a) que tem cicatrizes nas mãos.');
     expect(frase).not.toContain('que é tem cicatrizes');
   });
 
@@ -781,13 +819,18 @@ Arquivo inteiro. `MOLDES` (plural, 10) vira `MOLDE` (singular, 1).
    bloco de quatro linhas, não um parágrafo corrido, e é por isso que o
    parágrafo da premissa em gerador.astro precisa de `white-space: pre-wrap`.
 
+   O "Um(a)" está aqui e não na lista de profissões: as 60 abrem com o mesmo
+   artigo, então não há o que sortear, e o nome guardado fica idêntico ao que
+   aparece no guia e na carta. É a diferença em relação ao local, que carrega o
+   artigo dentro de `cenarios.singular` porque varia entre "um" e "uma".
+
    Repare no "é": ele está no molde só na linha da personalidade. Na linha da
    característica o verbo vem de dentro do texto sorteado, o que permite "que
    tem cicatrizes nas mãos" e "que é cego(a) de um olho" na mesma lista. */
 export const MOLDE = `Essa é uma ficção científica de {mundo}.
 
-{profissaoA} que {caracteristica}.
-{profissaoB} que é {personalidade}.
+Um(a) {profissaoA} que {caracteristica}.
+Um(a) {profissaoB} que é {personalidade}.
 
 Tudo começa {em:local}.
 
@@ -805,22 +848,21 @@ import type { Sorteio } from './tipos';
 
 // ... CONTRACOES e contrair() ficam como estão, sem uma linha de mudança ...
 
-function subirPrimeira(texto: string): string {
-  return texto.charAt(0).toUpperCase() + texto.slice(1);
-}
-
 /* `mundo` chega pronto de nomearMundos() — pode ser um nome ("Space Opera") ou
    vários unidos por " + " quando "Misturar mundos" está ligado. A minúscula é
    aplicada aqui, e não lá, porque o prompt de IA usa o mesmo valor e quer o
-   nome como está escrito na coleção. */
+   nome como está escrito na coleção.
+
+   O nome da profissão entra como está na lista, sem tocar em maiúscula: ele já
+   nasce com a inicial certa, e é o mesmo texto que o guia e a carta mostram. */
 export function redigir(sorteio: Sorteio, molde: string, mundo: string): string {
   const { personagemA, personagemB, local, fato } = sorteio;
 
   return molde
     .replaceAll('{mundo}', mundo.toLocaleLowerCase('pt-BR'))
-    .replaceAll('{profissaoA}', subirPrimeira(personagemA.profissao.nome))
+    .replaceAll('{profissaoA}', personagemA.profissao.nome)
     .replaceAll('{caracteristica}', personagemA.caracteristica)
-    .replaceAll('{profissaoB}', subirPrimeira(personagemB.profissao.nome))
+    .replaceAll('{profissaoB}', personagemB.profissao.nome)
     .replaceAll('{personalidade}', personagemB.personalidade)
     .replaceAll('{em:local}', contrair('em', local.singular))
     .replaceAll('{fato}', fato);
@@ -914,11 +956,17 @@ const nomes = {
 
 const sorteio: Sorteio = {
   personagemA: {
-    profissao: { nome: 'um(a) contrabandista', subgenero: 'space-opera' },
+    profissao: {
+      nome: 'Contrabandista', subgenero: 'space-opera',
+      descricao: 'Mercadores que evitam bloqueios imperiais.',
+    },
     caracteristica: 'é cego(a) de um olho',
   },
   personagemB: {
-    profissao: { nome: 'um(a) arquivista do Estado', subgenero: 'distopia' },
+    profissao: {
+      nome: 'Reescritor(a) Histórico(a)', subgenero: 'distopia',
+      descricao: 'Funcionários que alteram documentos para apagar a verdade.',
+    },
     personalidade: 'egocêntrico(a)',
   },
   local: { id: 'l1', nome: 'Ruínas Antigas', subgenero: 'cyberpunk', singular: 'uma ruína antiga' },
@@ -941,7 +989,10 @@ describe('nomearMundos', () => {
     const mesmo: Sorteio = {
       ...sorteio,
       personagemB: {
-        profissao: { nome: 'um(a) piloto de salto', subgenero: 'space-opera' },
+        profissao: {
+          nome: 'Navegador(a)', subgenero: 'space-opera',
+          descricao: 'Calculam saltos hiperespaciais sem bater em supernovas.',
+        },
         personalidade: 'teimoso(a)',
       },
       local: { ...sorteio.local, subgenero: 'space-opera' },
@@ -953,8 +1004,8 @@ describe('nomearMundos', () => {
 describe('montarPrompt', () => {
   const valores = {
     mundo: 'Space Opera',
-    personagemA: 'um(a) contrabandista que é cego(a) de um olho',
-    personagemB: 'um(a) arquivista do Estado que é egocêntrico(a)',
+    personagemA: 'Um(a) Contrabandista que é cego(a) de um olho',
+    personagemB: 'Um(a) Reescritor(a) Histórico(a) que é egocêntrico(a)',
     local: 'Ruínas Antigas',
     fato: 'um personagem está de luto',
   };
@@ -962,8 +1013,8 @@ describe('montarPrompt', () => {
   it('troca os cinco marcadores', () => {
     const modelo = 'M: [MUNDO] A: [PERSONAGEM A] B: [PERSONAGEM B] L: [LOCAL] F: [FATO]';
     expect(montarPrompt(modelo, valores)).toBe(
-      'M: Space Opera A: um(a) contrabandista que é cego(a) de um olho'
-      + ' B: um(a) arquivista do Estado que é egocêntrico(a)'
+      'M: Space Opera A: Um(a) Contrabandista que é cego(a) de um olho'
+      + ' B: Um(a) Reescritor(a) Histórico(a) que é egocêntrico(a)'
       + ' L: Ruínas Antigas F: um personagem está de luto',
     );
   });
@@ -1250,8 +1301,10 @@ E no `.bloco-premissa #premissa`, acrescentar `white-space: pre-wrap`:
     premissa.textContent = redigir(sorteio, MOLDE, mundo);
     prompt.textContent = montarPrompt(modeloDoPrompt, {
       mundo,
-      personagemA: `${sorteio.personagemA.profissao.nome} que ${sorteio.personagemA.caracteristica}`,
-      personagemB: `${sorteio.personagemB.profissao.nome} que é ${sorteio.personagemB.personalidade}`,
+      // O "Um(a)" vem escrito aqui e no MOLDE, e não da lista, porque as 60
+      // profissões abrem com o mesmo artigo — ver o comentário em moldes.ts.
+      personagemA: `Um(a) ${sorteio.personagemA.profissao.nome} que ${sorteio.personagemA.caracteristica}`,
+      personagemB: `Um(a) ${sorteio.personagemB.profissao.nome} que é ${sorteio.personagemB.personalidade}`,
       local: sorteio.local.nome,
       fato: sorteio.fato,
     });
@@ -1357,7 +1410,152 @@ git commit -m "Mostra dois personagens nas cartas do gerador"
 
 ---
 
-### Task 6: A documentação
+### Task 6: O guia de personagens
+
+Página nova com as 60 profissões e suas descrições. A carta do gerador mostra só o nome — quem tira "Mensageiro(a) Neural" não tem como saber que é um contrabandista que carrega dados criptografados no próprio cérebro, e é isso que o guia resolve.
+
+**Files:**
+- Create: `src/pages/guia-de-personagens.astro`
+- Modify: `src/pages/gerador.astro` (só o link, no fim)
+
+**Interfaces:**
+- Consumes: `PROFISSOES` e `Profissao` (Task 1), via `src/lib/gerador`.
+- Produces: a rota `/guia-de-personagens/`.
+
+- [ ] **Step 1: Criar a página**
+
+Uma página só, com seis seções — nada de rota por mundo. A ordem dos mundos sai da coleção `subgeneros`, para bater com a ordem do seletor do gerador e das outras páginas do site.
+
+```astro
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { PROFISSOES } from '../lib/gerador';
+
+/* Guia do gerador, não um quinto catálogo. Por isso a página não entra no Nav,
+   não tem rota por mundo e não aparece na busca — o índice da busca é montado a
+   partir das quatro coleções de src/content/, e as profissões não são coleção,
+   então não há nada a excluir. O único caminho até aqui é o link no fim de
+   gerador.astro. Uma página fora do menu parece esquecimento; é decisão. */
+const subgeneros = await getCollection('subgeneros');
+const mundos = subgeneros
+  .filter((s) => s.data.mundo)
+  .sort((a, b) => a.data.ordem - b.data.ordem);
+
+const base = import.meta.env.BASE_URL;
+const raiz = base.endsWith('/') ? base : base + '/';
+---
+<Base titulo="Guia de personagens">
+  <h1>Guia de personagens</h1>
+
+  <p class="abertura">
+    As profissões que o gerador sorteia, com o que cada uma é. São dez por mundo,
+    e o mundo escolhido no gerador decide de quais dez os dois personagens saem.
+  </p>
+
+  {mundos.map((mundo) => (
+    <section class="bloco">
+      <h2>{mundo.data.nome}</h2>
+      <dl class="profissoes">
+        {PROFISSOES.filter((p) => p.subgenero === mundo.id).map((profissao) => (
+          <div class="profissao">
+            <dt>{profissao.nome}</dt>
+            <dd>{profissao.descricao}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  ))}
+
+  <p class="volta"><a href={`${raiz}gerador/`}>Voltar ao gerador</a></p>
+</Base>
+
+<style>
+  /* <dl> porque é exatamente isto: uma lista de termos e suas definições. O
+     <div> em volta de cada par existe para o grid tratar o par como uma unidade
+     — sem ele, dt e dd viram itens soltos e desalinham. */
+  .profissoes {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .profissao {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  /* Mesmo peso e cor do título de verbete do catálogo: quem separa um termo do
+     seguinte é o espaço, não moldura nem cor de acento. */
+  dt {
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--texto-forte);
+  }
+
+  dd {
+    margin: 0;
+    color: var(--texto);
+  }
+
+  .volta {
+    margin-top: 32px;
+  }
+</style>
+```
+
+Conferir contra o `<style>` de outra página antes de commitar: se `.bloco` já dá espaçamento entre seções, não acrescentar `margin` competindo com ele.
+
+- [ ] **Step 2: Ligar o gerador ao guia**
+
+No fim de `gerador.astro`, depois do bloco do prompt e do seu botão de copiar, antes dos `<script type="application/json">`:
+
+```astro
+  {/* Único caminho até o guia: ele não está no Nav nem na busca, por decisão de
+      projeto — é material de apoio do gerador, não um catálogo do site. */}
+  <p class="guia">
+    Não conhece alguma das profissões?
+    <a href={`${raiz}guia-de-personagens/`}>Veja o guia de personagens</a>.
+  </p>
+```
+
+E no frontmatter da página, se ainda não existir, a normalização de base que todo link interno do projeto usa:
+
+```ts
+const base = import.meta.env.BASE_URL;
+const raiz = base.endsWith('/') ? base : base + '/';
+```
+
+Um `href="/guia-de-personagens/"` cru quebra em produção, onde o site vive sob `/projetopolaris/`.
+
+- [ ] **Step 3: Rodar os portões e o build**
+
+Run: `npx vitest run && npm run check && npm run build`
+Expected: PASS nos três.
+
+- [ ] **Step 4: Conferir no navegador**
+
+Run: `npm run dev`
+
+- `/guia-de-personagens/` abre com as seis seções na mesma ordem do seletor do gerador, dez profissões em cada.
+- As 60 descrições aparecem, nenhuma vazia.
+- O link no fim de `/gerador/` leva até lá, e o "Voltar ao gerador" traz de volta.
+- **O guia não está no menu do topo** — conferir a barra e o submenu "Mais".
+- **Buscar "Contrabandista" na busca do site não traz o guia** — só verbetes do acervo.
+- A página fica legível nos dois temas.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add src/pages/guia-de-personagens.astro src/pages/gerador.astro
+git commit -m "Abre o guia de personagens ao lado do gerador"
+```
+
+---
+
+### Task 7: A documentação
 
 Três documentos descrevem o gerador antigo e passam a mentir. Esta task é o que impede o próximo leitor de confiar neles.
 
@@ -1374,7 +1572,8 @@ Três documentos descrevem o gerador antigo e passam a mentir. Esta task é o qu
 
 É o inventário do que o gerador pode produzir, e existe porque essas peças não aparecem em página nenhuma do site — só se conhece o repertório rolando o gerador. Passa a listar:
 
-- as 60 profissões, agrupadas pelos seis mundos;
+- as 60 profissões com suas descrições, agrupadas pelos seis mundos — e um
+  apontamento para `/guia-de-personagens/`, que mostra as mesmas no site;
 - as 30 características, as 30 personalidades e os 40 fatos, cada lista inteira;
 - o molde único, com a tabela dos sete marcadores (`{mundo}`, `{profissaoA}`, `{caracteristica}`, `{profissaoB}`, `{personalidade}`, `{em:local}`, `{fato}`) e o que cada um recebe;
 - as regras do sorteio: profissões diferentes entre A e B, fato sem cadeado e sem repetir o anterior, travas nas três cartas, filtro por mundo só em profissões e locais.
@@ -1393,6 +1592,8 @@ O que precisa mudar, ponto a ponto:
 - A seção de concordância encolhe: sobra `contrair`. Apagar a parte sobre `numeroDe`, a heurística de número e o pedido de "leia os comentários antes de mexer" — a função não existe mais.
 - Em `gerador.astro`: só os **cenários** são injetados como JSON; as quatro listas são importadas pelo `<script>`.
 - Os marcadores do prompt viraram `[MUNDO]`, `[PERSONAGEM A]`, `[PERSONAGEM B]`, `[LOCAL]`, `[FATO]`.
+
+A seção precisa ganhar também **a rota `/guia-de-personagens/` e o motivo de ela estar fora do menu e da busca**: uma página que não aparece na navegação parece esquecimento para quem chega depois, e é o contrário — é a decisão que impede as profissões de virarem um segundo catálogo de "quem". Registrar junto que a `descricao` mora em `profissoes.ts` com o nome, e por quê.
 
 Fora dessa seção, dois trechos também envelheceram:
 
@@ -1421,7 +1622,7 @@ git commit -m "Atualiza a documentação para a premissa de personagens"
 
 ## Verificação final
 
-Depois da Task 6, com tudo commitado no branch `premissa-de-personagens`:
+Depois da Task 7, com tudo commitado no branch `premissa-de-personagens`:
 
 ```bash
 npx vitest run && npm run check && npm run build

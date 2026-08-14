@@ -47,10 +47,20 @@ acervo.
 
 | Arquivo | Quantas | Por mundo? | Forma do texto | Exemplo |
 |---|---|---|---|---|
-| `profissoes.ts` | 10 por mundo (60) | sim | minúscula, com artigo | `um(a) contrabandista` |
+| `profissoes.ts` | 10 por mundo (60) | sim | nome próprio + descrição | `Corretor(a) de Dados` |
 | `caracteristicas.ts` | 30 | não | **começa com verbo** | `é cego(a) de um olho` |
 | `personalidades.ts` | 30 | não | **sem verbo**, adjetivo | `egocêntrico(a)` |
 | `fatos.ts` | 40 | não | oração completa | `um personagem está de luto` |
+
+**As 60 profissões são texto pronto da autora**, entregues com nome e descrição
+de uma linha. Diferente das outras três listas, elas não são rascunho a
+reescrever: o trabalho da implementação é só flexionar os nomes e transcrever.
+São arquétipos de profissão ("Samurai de Rua", "Reescritor(a) Histórico(a)",
+"Guardião(ã) da Linha do Tempo"), não ocupações soltas, e por isso levam
+maiúscula como os verbetes do catálogo.
+
+A descrição de cada uma existe por causa do guia da seção 9 — no sorteio ela não
+aparece.
 
 Nenhuma termina em ponto — quem fecha a linha é o molde, como já acontece com as
 complicações.
@@ -65,13 +75,24 @@ produziria repetição, não sabor.
 ### Por que o "(a)" está em toda parte
 
 A profissão é escrita sem gênero — decisão da autora, para quem escreve a
-história decidir. Isso obriga o adjetivo que vem depois a acompanhar: *"Um(a)
-contrabandista que é egocêntrico"* devolve pela porta dos fundos o gênero que a
-profissão tinha acabado de deixar em aberto. Daí `cego(a)`, `egocêntrico(a)`.
+história decidir. Isso obriga tudo o que concorda com ela a acompanhar, senão o
+gênero volta pela porta dos fundos: *"Um(a) Executivo Corporativo que é
+egocêntrico"* fixa em masculino o que o `Um(a)` tinha acabado de abrir.
 
-Onde o traço já é invariável, fica limpo, sem parênteses: `leal demais`,
-`de poucas palavras`, `tem cicatrizes nas mãos`, `incapaz de mentir`. Escrever
-traços invariáveis sempre que possível é preferência de estilo, não regra.
+**A concordância é completa**, decisão da autora: flexionam o substantivo **e** o
+adjetivo. `Executivo(a) Corporativo(a)`, `Físico(a) Quântico(a) Estrutural`,
+`Embaixador(a) Galáctico(a)`. A alternativa de flexionar só o substantivo foi
+apresentada e recusada.
+
+Onde a palavra já é invariável, fica limpa, sem parênteses: `Hacker`,
+`Contrabandista`, `Fixer`, `Turista Temporal`, `Guarda de Caravana`,
+`Engenheiro(a) Chefe` (só o primeiro flexiona), `leal demais`, `de poucas
+palavras`, `tem cicatrizes nas mãos`.
+
+**O artigo não fica na lista.** As 60 profissões abrem com `Um(a)` sem exceção,
+então o artigo mora no molde e o nome guardado é só o nome — o mesmo que aparece
+no guia e na carta. É a diferença em relação a `cenarios.singular`, que precisa
+carregar o artigo porque varia entre "um" e "uma".
 
 ### O tamanho do repertório
 
@@ -86,8 +107,8 @@ Um só, fixo:
 ```
 Essa é uma ficção científica de {mundo}.
 
-{profissaoA} que {caracteristica}.
-{profissaoB} que é {personalidade}.
+Um(a) {profissaoA} que {caracteristica}.
+Um(a) {profissaoB} que é {personalidade}.
 
 Tudo começa {em:local}.
 
@@ -107,9 +128,10 @@ Detalhes que decidem se a frase sai certa:
   verbo *ser*. A personalidade não traz (`egocêntrico(a)`), e o `é` fica no
   molde. Não é assimetria por descuido: é o que permite `que tem cicatrizes` sem
   precisar de duas listas de característica.
-- **`{profissaoA}` e `{profissaoB}` abrem linha**, então a primeira letra sobe
-  para maiúscula no momento de redigir. As listas guardam tudo em minúscula, como
-  `cenarios.singular` já faz.
+- **O `Um(a)` está no molde, não na lista.** Como as 60 profissões abrem com o
+  mesmo artigo, não há o que sortear ali, e o nome guardado fica idêntico ao que
+  o guia e a carta mostram. Nada de subir a primeira letra em tempo de redação: o
+  nome já vem com maiúscula.
 - **`{em:local}`** passa por `contrair()`: `em` + `um laboratório secreto` →
   `num laboratório secreto`. É a única concordância que sobra no gerador.
 
@@ -154,9 +176,12 @@ o bloco do prompt, os dois botões de copiar.
 
 | Carta hoje | Carta depois | O que mostra |
 |---|---|---|
-| Arquétipo | **Personagem A** | `um(a) biomédico(a)` / `é cego(a) de um olho` |
-| Cenário | **Personagem B** | `um(a) contrabandista` / `egocêntrico(a)` |
+| Arquétipo | **Personagem A** | `Corretor(a) de Dados` / `é cego(a) de um olho` |
+| Cenário | **Personagem B** | `Samurai de Rua` / `egocêntrico(a)` |
 | Elemento narrativo | **Local** | `Laboratório secreto` |
+
+No fim da página, depois do bloco do prompt, entra o link para o guia da
+seção 9 — é o único caminho até ele.
 
 A etiqueta de mundo de cada carta continua existindo e continua saindo da peça
 que tem mundo: a profissão nas duas cartas de personagem, o local na terceira. A
@@ -208,13 +233,46 @@ lançando em marcador desconhecido, e `gerador.astro` continua chamando-a uma ve
 em tempo de build com valores de descarte, para um `[PERSONAGEM Á]` com acento
 errado quebrar `npm run build` em vez de chegar em produção.
 
-## 9. Quem escreve as 160 entradas
+## 9. O guia de personagens
 
-A implementação entrega uma **primeira versão completa** das quatro listas — 60
-profissões, 30 características, 30 personalidades, 40 fatos —, e a autora
-reescreve por cima. Nenhuma lista nasce pela metade nem com marcador de
-"preencher depois": o gerador precisa rodar de verdade para ela julgar o
-resultado, e página em branco é pior ponto de partida do que texto para corrigir.
+Página nova em **`/guia-de-personagens/`**, com as 60 profissões agrupadas pelos
+seis mundos, cada uma com o nome e a descrição de uma linha que a autora
+escreveu.
+
+Existe porque a carta do gerador mostra só o nome: quem tira "Mensageiro(a)
+Neural" não tem como saber que é um contrabandista que carrega dados
+criptografados no próprio cérebro. A descrição é o que faz a peça sorteada virar
+personagem.
+
+**É guia do gerador, não um quinto catálogo.** As diferenças são de propósito:
+
+- **Não entra no menu.** O único caminho até ela é um link no fim da página do
+  gerador.
+- **Não tem rota por mundo.** Uma página só, com seis seções — nada de
+  `/guia-de-personagens/cyberpunk/`.
+- **Não entra na busca.** O índice é montado a partir das quatro coleções de
+  `src/content/`, e as profissões não são coleção; nada a fazer para excluí-las.
+- **Não aparece em `/mundos/`.**
+
+Assim o arquétipo segue sendo o único "quem" catalogado do site, como manda
+[revisao-de-repeticoes.md](../../revisao-de-repeticoes.md), e o guia é material
+de apoio de uma ferramenta.
+
+A prosa vem de `profissoes.ts`, junto com o nome, e não de um Markdown separado:
+nome e descrição descrevem a mesma peça e separá-los em dois arquivos os faria
+divergir na primeira edição. É a mesma exceção que já vale para as complicações —
+conteúdo editorial que mora em código por ser peça de ferramenta.
+
+## 9.1. Quem escreve o quê
+
+- **As 60 profissões são da autora**, entregues prontas com nome e descrição. A
+  implementação flexiona os nomes (`Corretor de Dados` → `Corretor(a) de Dados`)
+  e transcreve; não inventa profissão nem reescreve descrição.
+- **As outras três listas** — 30 características, 30 personalidades, 40 fatos —
+  a implementação entrega em primeira versão completa, para a autora reescrever
+  por cima. Nenhuma nasce pela metade nem com marcador de "preencher depois": o
+  gerador precisa rodar de verdade para ela julgar o resultado, e página em
+  branco é pior ponto de partida do que texto para corrigir.
 
 ## 10. O que não muda
 
@@ -228,10 +286,9 @@ resultado, e página em branco é pior ponto de partida do que texto para corrig
 
 ## 11. Fora de escopo
 
-- **Catálogo de profissões.** Decisão da autora: elas vivem só dentro do gerador,
-  sem página, sem descrição e sem entrada na busca. O arquétipo segue sendo o
-  único "quem" que se lê no site, como manda
-  [revisao-de-repeticoes.md](../../revisao-de-repeticoes.md).
+- **Catálogo de profissões.** O guia da seção 9 não é catálogo: sem menu, sem
+  rota por mundo, sem busca, sem `/mundos/`. Transformá-lo em catálogo é outro
+  trabalho, com outra decisão editorial por trás.
 - **Um terceiro personagem**, ou número variável de personagens.
 - **Escolher a profissão ou o traço à mão.** O gerador sorteia; o cadeado é o
   único controle.
@@ -250,7 +307,9 @@ Testes novos e reescritos em `src/lib/gerador/`:
 - `poolsFiltrados` filtra profissões e locais pelo mundo, e **não** filtra
   características, personalidades e fatos, que são universais.
 - `redigir` monta o bloco inteiro com as quebras de linha nos lugares certos.
-- `redigir` sobe a primeira letra das duas linhas de personagem.
+- `redigir` escreve o nome da profissão como está na lista, sem mexer em
+  maiúscula — `Um(a) Corretor(a) de Dados`, não `Um(a) corretor(a) de dados`.
+- Toda profissão tem descrição não vazia, e nenhuma descrição se repete.
 - `redigir` contrai a preposição do local (`em` + `uma órbita baixa` → `numa
   órbita baixa`), com um caso para `um` e um para `uma`.
 - `redigir` põe o `é` só na linha da personalidade.
@@ -275,6 +334,10 @@ trazendo mais de um nome na primeira linha; o formulário sem a caixa de comuns;
 premissa com as quebras de linha visíveis; e os dois botões de copiar levando o
 texto certo.
 
+E o guia: `/guia-de-personagens/` abrindo com as seis seções e as 60 descrições;
+o link no fim da página do gerador levando até ela; o guia **fora** do menu do
+Nav e **fora** dos resultados da busca; e a página legível nos dois temas.
+
 ## 13. Documentação que envelhece junto
 
 - [docs/atributos-do-gerador.md](../../atributos-do-gerador.md) — é o inventário
@@ -287,3 +350,6 @@ texto certo.
   reescrita, não apagada: o campo continua obrigatório por motivo editorial.
 - [README.md](../../../README.md) — descreve o gerador como "combina as peças em
   premissas"; conferir se a frase ainda descreve o que a página faz.
+- [CLAUDE.md](../../../CLAUDE.md), de novo — a rota nova precisa aparecer, com o
+  motivo de ela não estar no menu nem na busca. Uma página fora do Nav parece
+  esquecimento para quem chega depois, e é o contrário: é a decisão.
