@@ -14,15 +14,16 @@ if (!modeloDoPrompt) throw new Error("página 'prompt-ia' não encontrada em src
 if (!modeloDoPrompt.body) throw new Error("página 'prompt-ia' está sem corpo em src/content/paginas");
 
 // O montarPrompt estoura em marcador desconhecido, e é aqui que isso vira
-// utilidade: uma chamada em tempo de build faz um `[ARQUETIPO]` sem acento no
-// prompt-ia.md quebrar `npm run build` — o mesmo portão que o deploy roda —
-// em vez de chegar em produção e deixar o card do prompt vazio em silêncio.
+// utilidade: uma chamada em tempo de build faz um `[PERSONAGEM Á]` com acento
+// errado quebrar `npm run build` — o mesmo portão que o deploy roda — em vez de
+// chegar em produção e deixar o card do prompt vazio em silêncio.
 // Os valores são de descarte: quem importa aqui são os marcadores do modelo.
 montarPrompt(modeloDoPrompt.body, {
   mundo: 'conferência',
-  arquetipo: 'conferência',
-  cenario: 'conferência',
-  elemento: 'conferência',
+  personagemA: 'conferência',
+  personagemB: 'conferência',
+  local: 'conferência',
+  fato: 'conferência',
 });
 
 // Mapa de identificador para nome de exibição, para o prompt dizer "Space Opera"
@@ -30,30 +31,20 @@ montarPrompt(modeloDoPrompt.body, {
 // o ignora.
 const nomesDosMundos = Object.fromEntries(mundos.map((m) => [m.id, m.data.nome]));
 
-// Os pools inteiros (76 arquétipos, 60 cenários, 60 elementos) são lidos
-// aqui em build e injetados como JSON estático na página — a interatividade
-// do gerador não faz nenhuma requisição em tempo de execução.
-//
-// O `artigo` do arquétipo viaja junto: sem ele o script não teria como montar
-// "a IA Emergente" nem escolher entre "ela" e "ele" no pronome.
-const pools = {
-  arquetipos: (await getCollection('arquetipos')).map((a) => ({
-    id: a.id, nome: a.data.nome, artigo: a.data.artigo, subgenero: a.data.subgenero,
-  })),
-  cenarios: (await getCollection('cenarios')).map((c) => ({
-    id: c.id, nome: c.data.titulo, subgenero: c.data.subgenero, singular: c.data.singular,
-  })),
-  elementos: (await getCollection('elementos')).map((e) => ({
-    id: e.id, nome: e.data.titulo, subgenero: e.data.subgenero,
-  })),
-};
+// Só os locais vêm daqui: são os 60 cenários do acervo, lidos em build e
+// injetados como JSON estático. As profissões, características, personalidades
+// e fatos moram em src/lib/gerador/ e o <script> os importa direto — não
+// precisam passar pelo HTML.
+const locais = (await getCollection('cenarios')).map((c) => ({
+  id: c.id, nome: c.data.titulo, subgenero: c.data.subgenero, singular: c.data.singular,
+}));
 
 // Rótulo fixo de cada carta — não depende do sorteio, por isso é escrito em
 // build, diferente de {etiqueta} e {nome}, que o script preenche a cada rolagem.
 const CARTAS = [
-  { tipo: 'arquetipo', rotulo: 'Arquétipo' },
-  { tipo: 'cenario', rotulo: 'Cenário' },
-  { tipo: 'elemento', rotulo: 'Elemento narrativo' },
+  { tipo: 'personagemA', rotulo: 'Personagem A' },
+  { tipo: 'personagemB', rotulo: 'Personagem B' },
+  { tipo: 'local', rotulo: 'Local' },
 ] as const;
 ---
 <Base titulo="Gerador">
@@ -69,7 +60,6 @@ const CARTAS = [
         </select>
       </label>
       <label><input type="checkbox" name="misturarMundos" /> Misturar mundos</label>
-      <label><input type="checkbox" name="incluirComuns" /> Incluir os 10 arquétipos comuns</label>
     </fieldset>
   </form>
 
@@ -81,6 +71,7 @@ const CARTAS = [
           <span class="etiqueta" data-papel="etiqueta"></span>
         </div>
         <p class="carta__nome" data-papel="nome"></p>
+        <p class="carta__traco" data-papel="traco"></p>
         {/* O rótulo fica no aria-label e não muda com o estado: aria-pressed já
             faz o leitor de tela anunciar "pressionado"/"não pressionado", e um
             rótulo que também virasse "Destravar" diria a mesma coisa duas
@@ -137,7 +128,7 @@ const CARTAS = [
 
   {/* is:inline porque isto é dado, não código: sem a diretiva o Astro trata o
       bloco como script a processar e emite um aviso em `npm run check`. */}
-  <script type="application/json" id="pools" is:inline set:html={JSON.stringify(pools)}></script>
+  <script type="application/json" id="locais" is:inline set:html={JSON.stringify(locais)}></script>
   <script type="application/json" id="modelo-prompt" is:inline set:html={JSON.stringify(modeloDoPrompt.body)}></script>
   <script type="application/json" id="nomes-dos-mundos" is:inline set:html={JSON.stringify(nomesDosMundos)}></script>
 </Base>
@@ -281,10 +272,29 @@ const CARTAS = [
     color: var(--texto-forte);
   }
 
+  /* Segunda linha da carta de personagem: o traço sorteado, mais discreto que a
+     profissão porque é qualificador dela, não outra peça. --texto, e não
+     --apagado: precisa dos 4,5:1 de texto comum sobre o fundo. */
+  .carta__traco {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--texto);
+  }
+
+  /* A carta do local não tem traço, e o parágrafo vazio somaria um espaço que
+     desalinharia as três cartas. */
+  .carta__traco:empty {
+    display: none;
+  }
+
+  /* pre-wrap porque a premissa deixou de ser uma frase e virou um bloco de quatro
+     linhas: as quebras vêm do MOLDE e precisam aparecer na tela. Mesmo motivo do
+     .prompt__texto logo abaixo. */
   .bloco-premissa #premissa {
     min-height: 1.6em;
     font-size: 1.15rem;
     color: var(--texto-forte);
+    white-space: pre-wrap;
   }
 
   /* pre-wrap, e não <pre>: as quebras de linha do prompt-ia.md fazem parte do
@@ -332,19 +342,25 @@ const CARTAS = [
 </style>
 
 <script>
-  import { montarPrompt, nomearMundos, sortear, redigir, MOLDES } from '../lib/gerador';
-  import type { Opcoes, Pools, Sorteio, Travas } from '../lib/gerador';
+  import { montarPrompt, nomearMundos, sortear, redigir, MOLDE, PROFISSOES } from '../lib/gerador';
+  import type { Opcoes, PecaCenario, Pools, Sorteio, Travas } from '../lib/gerador';
 
-  const pools: Pools = JSON.parse(document.getElementById('pools')!.textContent!);
+  const locais: PecaCenario[] = JSON.parse(document.getElementById('locais')!.textContent!);
   const modeloDoPrompt: string = JSON.parse(document.getElementById('modelo-prompt')!.textContent!);
   const nomesDosMundos: Record<string, string> = JSON.parse(
     document.getElementById('nomes-dos-mundos')!.textContent!,
   );
+
+  // As profissões vêm do módulo, os locais do JSON injetado: os dois se juntam
+  // aqui para sortear() continuar recebendo tudo por parâmetro e seguir puro.
+  const pools: Pools = { profissoes: PROFISSOES, locais };
+
   const form = document.getElementById('opcoes') as HTMLFormElement;
   const premissa = document.getElementById('premissa')!;
   const prompt = document.getElementById('prompt')!;
 
-  const travas: Travas = { arquetipo: false, cenario: false, elemento: false };
+  const travas: Travas = { personagemA: false, personagemB: false, local: false };
+  const TIPOS = ['personagemA', 'personagemB', 'local'] as const;
 
   // Único estado guardado do gerador, e vive só em memória: nada é escrito no
   // navegador (sem localStorage, sem conta, sem link compartilhável), por
@@ -356,32 +372,57 @@ const CARTAS = [
     return {
       subgenero: String(dados.get('subgenero')),
       misturarMundos: dados.get('misturarMundos') === 'on',
-      incluirComuns: dados.get('incluirComuns') === 'on',
     };
   };
 
-  const moldeAoAcaso = () => MOLDES[Math.floor(Math.random() * MOLDES.length)];
+  /* Cada carta mostra a peça que tem mundo (a profissão, ou o local) e, nas
+     duas de personagem, o traço embaixo. A etiqueta sai sempre da peça de
+     mundo — característica e personalidade são universais e não têm o que
+     etiquetar.
 
-  function pintar(sorteio: Sorteio, molde: string, opcoes: Opcoes) {
-    for (const tipo of ['arquetipo', 'cenario', 'elemento'] as const) {
-      const carta = document.querySelector(`[data-carta="${tipo}"]`)!;
-      const peca = sorteio[tipo];
-      carta.querySelector('[data-papel="nome"]')!.textContent = peca.nome;
-      carta.querySelector('[data-papel="etiqueta"]')!.textContent = peca.subgenero.replace(/-/g, ' ');
+     O `tipo` de cada ramo é conferido separadamente (em vez de indexar
+     `s[tipo]` uma única vez e decidir o traço depois) porque `s[tipo]` com
+     `tipo` ainda em união não estreita o tipo do valor: o TypeScript não
+     consegue provar que checar `tipo === 'personagemA'` depois já garante
+     `personagem.caracteristica`. */
+  const conteudoDaCarta = (s: Sorteio, tipo: (typeof TIPOS)[number]) => {
+    if (tipo === 'local') {
+      return { nome: s.local.nome, traco: '', subgenero: s.local.subgenero };
     }
-    premissa.textContent = redigir(sorteio, molde);
+    if (tipo === 'personagemA') {
+      const { profissao, caracteristica } = s.personagemA;
+      return { nome: profissao.nome, traco: caracteristica, subgenero: profissao.subgenero };
+    }
+    const { profissao, personalidade } = s.personagemB;
+    return { nome: profissao.nome, traco: personalidade, subgenero: profissao.subgenero };
+  };
+
+  function pintar(sorteio: Sorteio, opcoes: Opcoes) {
+    for (const tipo of TIPOS) {
+      const carta = document.querySelector(`[data-carta="${tipo}"]`)!;
+      const { nome, traco, subgenero } = conteudoDaCarta(sorteio, tipo);
+      carta.querySelector('[data-papel="nome"]')!.textContent = nome;
+      carta.querySelector('[data-papel="traco"]')!.textContent = traco;
+      carta.querySelector('[data-papel="etiqueta"]')!.textContent = subgenero.replace(/-/g, ' ');
+    }
+
+    const mundo = nomearMundos(sorteio, opcoes, nomesDosMundos);
+    premissa.textContent = redigir(sorteio, MOLDE, mundo);
     prompt.textContent = montarPrompt(modeloDoPrompt, {
-      mundo: nomearMundos(sorteio, opcoes, nomesDosMundos),
-      arquetipo: sorteio.arquetipo.nome,
-      cenario: sorteio.cenario.nome,
-      elemento: sorteio.elemento.nome,
+      mundo,
+      // O "Um(a)" vem escrito aqui e no MOLDE, e não da lista, porque as 60
+      // profissões abrem com o mesmo artigo — ver o comentário em moldes.ts.
+      personagemA: `Um(a) ${sorteio.personagemA.profissao.nome} que ${sorteio.personagemA.caracteristica}`,
+      personagemB: `Um(a) ${sorteio.personagemB.profissao.nome} que é ${sorteio.personagemB.personalidade}`,
+      local: sorteio.local.nome,
+      fato: sorteio.fato,
     });
   }
 
   function rolar() {
     const opcoes = lerOpcoes();
     atual = sortear(pools, opcoes, travas, atual, Math.random);
-    pintar(atual, moldeAoAcaso(), opcoes);
+    pintar(atual, opcoes);
   }
 
   document.getElementById('sortear')!.addEventListener('click', rolar);
@@ -422,22 +463,17 @@ const CARTAS = [
     });
   }
 
-  // Trocar de mundo (ou qualquer opção do formulário) zera o sorteio
-  // anterior: sem isto, uma peça travada do mundo antigo sobreviveria e
-  // contradiria a opção recém-escolhida. Como sortear() só respeita uma
-  // trava quando existe um sorteio anterior, zerar `atual` força as três
-  // peças a serem redesenhadas dentro do novo filtro. As travas em si
-  // também precisam zerar aqui: sortear() já ignora travas.* quando não
-  // há `anterior`, então as três peças saem corretas mesmo sem este
-  // trecho — mas sem ele os cadeados continuavam fechados, com
-  // aria-pressed="true", para peças que na verdade não estão mais travadas,
-  // o que confunde tanto visualmente quanto para quem usa leitor de tela.
+  // Trocar de mundo (ou qualquer opção do formulário) zera o sorteio anterior:
+  // sem isto, uma peça travada do mundo antigo sobreviveria e contradiria a
+  // opção recém-escolhida. As travas também zeram aqui — sortear() já as ignora
+  // sem `anterior`, mas sem este trecho os cadeados continuariam fechados, com
+  // aria-pressed="true", para peças que não estão mais travadas.
   form.addEventListener('change', () => {
     atual = null;
-    for (const tipo of ['arquetipo', 'cenario', 'elemento'] as const) {
+    for (const tipo of TIPOS) {
       travas[tipo] = false;
-      const botao = document.querySelector<HTMLButtonElement>(`[data-travar="${tipo}"]`)!;
-      botao.setAttribute('aria-pressed', 'false');
+      document.querySelector<HTMLButtonElement>(`[data-travar="${tipo}"]`)!
+        .setAttribute('aria-pressed', 'false');
     }
     rolar();
   });
