@@ -1,13 +1,28 @@
 import { describe, expect, it } from 'vitest';
-import { contrair, emMinuscula, generoDe, numeroDe, redigir } from './redacao';
+import { contrair, redigir } from './redacao';
+import { MOLDE } from './moldes';
 import type { Sorteio } from './tipos';
 
 const sorteio: Sorteio = {
-  arquetipo: { id: 'a', nome: 'Figura Política/Diplomata', artigo: 'a', subgenero: 'space-opera' },
-  cenario: { id: 'c', nome: 'Ruínas Antigas', subgenero: 'space-opera', singular: 'uma ruína antiga' },
-  elemento: { id: 'e', nome: 'Busca por artefatos ancestrais', subgenero: 'space-opera' },
-  complicacao: 'a cura existe, e é fabricada com a própria doença',
-  familia: 'O preço do poder',
+  personagemA: {
+    profissao: {
+      nome: 'Xenobiólogo(a)', subgenero: 'invasao-alienigena',
+      descricao: 'Cientistas encarregados de entender a anatomia dos invasores.',
+    },
+    caracteristica: 'é cego(a) de um olho',
+  },
+  personagemB: {
+    profissao: {
+      nome: 'Contrabandista', subgenero: 'space-opera',
+      descricao: 'Mercadores que evitam bloqueios imperiais.',
+    },
+    personalidade: 'egocêntrico(a)',
+  },
+  local: {
+    id: 'l1', nome: 'Laboratórios Secretos',
+    subgenero: 'invasao-alienigena', singular: 'um laboratório secreto',
+  },
+  fato: 'um personagem está de luto',
 };
 
 describe('contrair', () => {
@@ -49,181 +64,60 @@ describe('contrair', () => {
   });
 });
 
-describe('generoDe', () => {
-  it('deduz o gênero do artigo do arquétipo', () => {
-    expect(generoDe('a')).toBe('f');
-    expect(generoDe('o')).toBe('m');
-  });
-});
-
-/* Os exemplos são títulos de elemento, e não de arquétipo, porque é só neles
-   que emMinuscula continua sendo usada: o artigo faz parte do título ("A busca
-   por autenticidade") e precisa cair quando o título entra no meio da frase.
-   Arquétipo não passa mais por aqui — o artigo dele mora em campo próprio. */
-describe('emMinuscula', () => {
-  it('abaixa só o artigo, preservando o resto do título', () => {
-    expect(emMinuscula('A busca por autenticidade')).toBe('a busca por autenticidade');
-    expect(emMinuscula('O papel da memória e do legado')).toBe('o papel da memória e do legado');
-  });
-});
-
-describe('numeroDe', () => {
-  it('reconhece núcleo singular sem artigo', () => {
-    expect(numeroDe('Vigilância onipresente')).toBe('singular');
-  });
-
-  it('reconhece núcleo plural sem artigo', () => {
-    expect(numeroDe('Comunidades de sobreviventes')).toBe('plural');
-  });
-
-  it('pula o artigo inicial antes de olhar o núcleo — singular', () => {
-    expect(numeroDe('A busca por autenticidade')).toBe('singular');
-    expect(numeroDe('O medo invisível')).toBe('singular');
-  });
-
-  it('pula o artigo inicial antes de olhar o núcleo — plural', () => {
-    expect(numeroDe('As ameaças cósmicas desconhecidas')).toBe('plural');
-    expect(numeroDe('Os conflitos de identidade')).toBe('plural');
-  });
-
-  it('não confunde o artigo "A"/"O" com o núcleo', () => {
-    // Sem pular o artigo, "A" seria lido como núcleo e sairia singular por
-    // acidente (e "As" sairia plural pelo motivo errado, não pelo núcleo).
-    expect(numeroDe('A busca por autenticidade')).toBe(numeroDe('Busca por autenticidade'));
-    expect(numeroDe('As ameaças cósmicas desconhecidas')).toBe(numeroDe('Ameaças cósmicas desconhecidas'));
-  });
-
-  it('reconhece sujeito composto quando "e" aparece antes de qualquer preposição', () => {
-    // "Propaganda e desinformação" — o "e" liga dois núcleos, nenhuma
-    // preposição antes dele: sujeito composto, plural.
-    expect(numeroDe('Propaganda e desinformação')).toBe('plural');
-  });
-
-  it('não confunde coordenação dentro do complemento com sujeito composto', () => {
-    // "Formação de novas leis e códigos morais" — a preposição "de" vem
-    // antes do "e": a coordenação está dentro do complemento, não no
-    // sujeito. O núcleo sozinho ("formação") decide, e é singular.
-    expect(numeroDe('Formação de novas leis e códigos morais')).toBe('singular');
-  });
-
-  it('não muda o resultado quando o núcleo isolado já é plural', () => {
-    // "Sistemas de troca e escambo" — mesmo padrão do caso acima (a
-    // preposição "de" vem antes do "e"), mas o núcleo "sistemas" já é
-    // plural por sufixo, então o resultado final não muda.
-    expect(numeroDe('Sistemas de troca e escambo')).toBe('plural');
-  });
-
-  it('reclassifica como plural os oito casos duvidosos da rodada anterior', () => {
-    const casos = [
-      'Cativeiro e experimentação humana',
-      'Desespero e colapso social',
-      'Diplomacia e acordos interespécies',
-      'Hacktivismo e subversão digital',
-      'Infiltração e disfarce alienígena',
-      'Propaganda e desinformação',
-      'Realidade virtual e espaços digitais',
-      'Reeducação e doutrinação ideológica',
-    ];
-    for (const caso of casos) expect(numeroDe(caso)).toBe('plural');
-  });
-
-  it('reconhece "entre" como preposição — o "e" fica preso ao complemento, não ao sujeito', () => {
-    // Antes de "entre" entrar na lista de preposições, o laço não parava
-    // nela, chegava ao "e" primeiro e classificava (errado) como composto.
-    expect(numeroDe('Conflito entre destino e livre-arbítrio')).toBe('singular');
-    expect(numeroDe('Conflito entre segurança e liberdade')).toBe('singular');
-  });
-
-  it('trata coordenação de adjetivos como singular via exceção nomeada', () => {
-    // "governamental e corporativa" e "centralizada e controlada" são dois
-    // adjetivos do mesmo núcleo único — não dois núcleos coordenados. Não há
-    // regra de superfície que separe isto de "Propaganda e desinformação"
-    // (substantivo e substantivo, plural); por isso a exceção nomeada.
-    expect(numeroDe('Corrupção governamental e corporativa')).toBe('singular');
-    expect(numeroDe('Economia centralizada e controlada')).toBe('singular');
-  });
-});
-
 describe('redigir', () => {
-  it('monta a frase com contração e artigo em minúscula', () => {
-    const frase = redigir(sorteio, '{em:cenario}, sob {elemento}, {arquetipo} descobre que {complicacao}.');
-    expect(frase).toBe(
-      'Numa ruína antiga, sob busca por artefatos ancestrais, ' +
-        'a Figura Política/Diplomata descobre que a cura existe, e é fabricada com a própria doença.',
+  it('monta o bloco inteiro', () => {
+    expect(redigir(sorteio, MOLDE, 'Invasão Alienígena')).toBe(
+      'Essa é uma ficção científica de invasão alienígena.\n\n'
+      + 'Um(a) Xenobiólogo(a) que é cego(a) de um olho.\n'
+      + 'Um(a) Contrabandista que é egocêntrico(a).\n\n'
+      + 'Tudo começa num laboratório secreto.\n\n'
+      + 'Importante: um personagem está de luto.',
     );
   });
 
-  /* "IA Aliada" e "IA Hostil" são os nomes que proíbem passar o arquétipo por
-     emMinuscula: a função abaixa a primeira letra, o que resolvia o artigo
-     grudado do acervo antigo ("A Ciborgue" → "a Ciborgue") e aqui estragaria a
-     sigla, produzindo "a iA Aliada". O artigo vem do campo próprio e o nome
-     entra intocado. */
-  it('preserva a sigla do nome, que não passa por emMinuscula', () => {
-    const sigla = { ...sorteio, arquetipo: { id: 'ia', nome: 'IA Aliada', artigo: 'a' as const, subgenero: 'comuns' } };
-    const frase = redigir(sigla, '{em:cenario}, sob {elemento}, {arquetipo} descobre que {complicacao}.');
-    expect(frase).toContain('a IA Aliada descobre que');
-    expect(frase).not.toContain('iA Aliada');
+  it('escreve o mundo inteiro em minúscula', () => {
+    const frase = redigir(sorteio, MOLDE, 'Space Opera');
+    expect(frase).toContain('ficção científica de space opera.');
   });
 
-  it('conjuga "impera" no singular quando o elemento é singular', () => {
-    const frase = redigir(sorteio, '{em:cenario}, onde {impera:elemento}, {arquetipo} descobre que {complicacao}.');
-    expect(frase).toContain('onde impera busca por artefatos ancestrais');
+  /* Com "Misturar mundos" a primeira linha recebe mais de um nome, já unido por
+     nomearMundos — e a minúscula precisa alcançar os dois. */
+  it('abaixa também o nome composto de mundos misturados', () => {
+    const frase = redigir(sorteio, MOLDE, 'Space Opera + Invasão Alienígena');
+    expect(frase).toContain('de space opera + invasão alienígena.');
   });
 
-  it('conjuga "impera" no plural quando o elemento é plural', () => {
-    const plural = { ...sorteio, elemento: { id: 'e2', nome: 'Comunidades de sobreviventes', subgenero: 'pos-apocaliptico' } };
-    const frase = redigir(plural, '{em:cenario}, onde {impera:elemento}, {arquetipo} descobre que {complicacao}.');
-    expect(frase).toContain('onde imperam comunidades de sobreviventes');
+  /* O nome entra como está guardado — nada de mexer em maiúscula na redação. O
+     mesmo texto aparece na carta e no guia, e um `toLowerCase` aqui estragaria
+     as siglas ("Engenheiro(a) de IA" viraria "engenheiro(a) de ia"). */
+  it('escreve o nome da profissão como está na lista', () => {
+    const frase = redigir(sorteio, MOLDE, 'Distopia');
+    expect(frase).toContain('\nUm(a) Xenobiólogo(a) que é cego(a) de um olho.');
+    expect(frase).toContain('\nUm(a) Contrabandista que é egocêntrico(a).');
   });
 
-  it('conjuga "é" no singular quando o elemento é singular', () => {
-    const frase = redigir(sorteio, '{em:cenario}, {elemento} {ser:elemento} a regra — e {arquetipo} descobre que {complicacao}.');
-    expect(frase).toContain('busca por artefatos ancestrais é a regra');
+  /* O "é" fica no molde só na linha da personalidade. Na de característica ele
+     vem de dentro do texto, e é o que deixa "tem cicatrizes nas mãos" conviver
+     com "é cego(a) de um olho" na mesma lista. */
+  it('não põe "é" antes da característica', () => {
+    const outro: Sorteio = {
+      ...sorteio,
+      personagemA: { ...sorteio.personagemA, caracteristica: 'tem cicatrizes nas mãos' },
+    };
+    const frase = redigir(outro, MOLDE, 'Distopia');
+    expect(frase).toContain('Um(a) Xenobiólogo(a) que tem cicatrizes nas mãos.');
+    expect(frase).not.toContain('que é tem cicatrizes');
   });
 
-  it('conjuga "são" no plural quando o elemento é plural', () => {
-    const plural = { ...sorteio, elemento: { id: 'e2', nome: 'Comunidades de sobreviventes', subgenero: 'pos-apocaliptico' } };
-    const frase = redigir(plural, '{em:cenario}, {elemento} {ser:elemento} a regra — e {arquetipo} descobre que {complicacao}.');
-    expect(frase).toContain('comunidades de sobreviventes são a regra');
+  it('contrai a preposição do local com "um"', () => {
+    expect(redigir(sorteio, MOLDE, 'Distopia')).toContain('Tudo começa num laboratório secreto.');
   });
 
-  it('resolve o pronome pelo gênero do arquétipo', () => {
-    const frase = redigir(sorteio, '{arquetipo} some {em:cenario} com {elemento} até {pronome} ver que {complicacao}.');
-    expect(frase).toContain('até ela ver que');
-  });
-
-  it('usa ele quando o arquétipo é masculino', () => {
-    const masculino = { ...sorteio, arquetipo: { id: 'b', nome: 'Hacker/Console Cowboy', artigo: 'o' as const, subgenero: 'cyberpunk' } };
-    const frase = redigir(masculino, '{arquetipo} some {em:cenario} com {elemento} até {pronome} ver que {complicacao}.');
-    expect(frase).toContain('até ele ver que');
-  });
-
-  it('contrai {de:elemento} quando o elemento começa com artigo — molde 4', () => {
-    const comArtigo = { ...sorteio, elemento: { id: 'e3', nome: 'A busca por autenticidade', subgenero: 'comuns' } };
-    // Fragmento antes de {de:elemento} para não sofrer a capitalização de
-    // início de frase — o molde 4 real também nunca abre a frase assim,
-    // vem sempre depois de {em:cenario}.
-    const frase = redigir(comArtigo, 'tudo bem, num mundo {de:elemento}: {arquetipo} descobre que {complicacao}.');
-    expect(frase).toContain('num mundo da busca por autenticidade');
-    expect(frase).not.toContain('de a busca');
-  });
-
-  it('{de:elemento} não contrai quando o elemento não começa com artigo', () => {
-    const frase = redigir(sorteio, 'tudo bem, num mundo {de:elemento}: {arquetipo} descobre que {complicacao}.');
-    expect(frase).toContain('num mundo de busca por artefatos ancestrais');
-  });
-
-  it('capitaliza somente a primeira letra da frase', () => {
-    const frase = redigir(sorteio, '{em:cenario}, sob {elemento}, {arquetipo} descobre que {complicacao}.');
-    expect(frase[0]).toBe('N');
-    expect(frase).toContain(', a Figura');
-  });
-
-  it('não deixa marcador por resolver', () => {
-    for (const molde of [
-      '{em:cenario} {elemento} {arquetipo} {complicacao} {pronome} {a:cenario} {impera:elemento} {ser:elemento} {de:elemento}.',
-    ]) {
-      expect(redigir(sorteio, molde)).not.toMatch(/\{|\}/);
-    }
+  it('contrai a preposição do local com "uma"', () => {
+    const outro: Sorteio = {
+      ...sorteio,
+      local: { ...sorteio.local, singular: 'uma órbita baixa' },
+    };
+    expect(redigir(outro, MOLDE, 'Distopia')).toContain('Tudo começa numa órbita baixa.');
   });
 });

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { CARACTERISTICAS } from './caracteristicas';
 import { FATOS } from './fatos';
+import { MOLDE } from './moldes';
 import { PERSONALIDADES } from './personalidades';
 import { PROFISSOES } from './profissoes';
 
@@ -74,5 +75,26 @@ describe('a forma do texto das três listas universais', () => {
 
   it('toda entrada começa em minúscula', () => {
     for (const texto of todas) expect(texto[0]).toBe(texto[0].toLowerCase());
+  });
+});
+
+describe('MOLDE', () => {
+  it('usa os seis marcadores', () => {
+    for (const marcador of [
+      '{mundo}', '{profissaoA}', '{caracteristica}',
+      '{profissaoB}', '{personalidade}', '{em:local}', '{fato}',
+    ]) {
+      expect(MOLDE).toContain(marcador);
+    }
+  });
+
+  it('termina em ponto final', () => {
+    expect(MOLDE.endsWith('.')).toBe(true);
+  });
+
+  /* Quatro linhas de texto separadas por linha em branco. Se alguém colar o
+     molde numa linha só, a premissa vira um parágrafo e o formato se perde. */
+  it('tem as quatro linhas separadas por linha em branco', () => {
+    expect(MOLDE.split('\n\n')).toHaveLength(4);
   });
 });
