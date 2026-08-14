@@ -20,7 +20,7 @@
 - **Nenhuma cor, tamanho de fonte ou opacidade da aurora muda.** As contas de [docs/verificacao-visual.md](../../verificacao-visual.md) não são refeitas.
 - **Nenhum arquivo de `src/content/` é criado, editado ou apagado**, com uma exceção nomeada: `src/content/paginas/prompt-ia.md`, reescrito na Task 5.
 - **Toda entrada das quatro listas novas começa em minúscula e não termina em ponto** — quem fecha a linha é o molde.
-- **`npx vitest run` e `npm run check` precisam passar** antes de cada commit: são os dois portões que o deploy roda.
+- **`npx vitest run` e `npm run check` precisam passar** antes de cada commit: são os dois portões que o deploy roda. **Exceção única e documentada:** ao fim da Task 1 a suíte fica vermelha de propósito, porque `complicacoes.ts` some antes de `sorteio.ts` ser reescrito. A Task 1 verifica só o próprio arquivo de teste; a Task 2 devolve a suíte ao verde. Nenhuma outra task pode commitar com teste falhando.
 
 ---
 
