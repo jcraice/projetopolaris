@@ -31,3 +31,11 @@ export type Opcoes = {
   misturarMundos: boolean;
   incluirComuns: boolean;
 };
+
+/* Sem `id` como as peças vindas de src/content/: profissão não é entrada de
+   coleção, não tem rota e não entra na busca.
+
+   A `descricao` não aparece no sorteio — ela existe para o guia em
+   /guia-de-personagens/, e mora aqui junto do nome porque os dois descrevem a
+   mesma peça. Separá-los em dois arquivos os faria divergir na primeira edição. */
+export type Profissao = { nome: string; subgenero: string; descricao: string };
