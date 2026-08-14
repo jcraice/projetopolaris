@@ -59,10 +59,10 @@ Descrição do arquétipo em um ou dois parágrafos.
 ```
 
 O nome vai sem artigo — é assim que ele aparece no catálogo. O artigo definido
-fica no campo `artigo` (`a` ou `o`), que o gerador de premissas usa tanto para
-montar a frase quanto para a concordância do pronome, e por isso é obrigatório.
-O campo `subgenero` deve corresponder ao identificador de um arquivo já
-existente em `src/content/subgeneros/`.
+fica no campo `artigo` (`a` ou `o`), que registra o gênero do arquétipo no
+acervo; é obrigatório e sem valor padrão de propósito, para nenhum arquétipo
+novo nascer masculino em silêncio. O campo `subgenero` deve corresponder ao
+identificador de um arquivo já existente em `src/content/subgeneros/`.
 
 Depois de adicionar ou editar um arquivo, rode `npm run build` para
 confirmar que o conteúdo passa na validação de esquema, e `npx vitest run`
@@ -71,7 +71,8 @@ para garantir que nada mais quebrou.
 ## Licenças
 
 - O código-fonte está sob licença MIT — veja [`LICENSE`](./LICENSE).
-- O conteúdo editorial (arquétipos, cenários, elementos narrativos, textos
-  das páginas e o banco de complicações) está sob Creative Commons Atribuição
-  4.0 Internacional (CC BY 4.0) — veja
+- O conteúdo editorial (arquétipos, cenários, elementos narrativos, livros,
+  textos das páginas e as listas do gerador — profissões, características,
+  personalidades e fatos) está sob Creative Commons Atribuição 4.0
+  Internacional (CC BY 4.0) — veja
   [`LICENSE-CONTEUDO.md`](./LICENSE-CONTEUDO.md).

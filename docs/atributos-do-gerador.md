@@ -1,445 +1,332 @@
 # Atributos do gerador
 
-Tudo o que o gerador de premissas pode sortear, em um lugar só. Existe
-porque duas das peças — a complicação e o molde da frase — não aparecem em
-página nenhuma do site: elas se dissolvem dentro da premissa gerada, e a
-única forma de conhecer o repertório inteiro era rolar o gerador até cansar.
+Tudo o que o gerador de premissas pode sortear, em um lugar só. Existe porque
+três das quatro listas de peças — características, personalidades e fatos — e
+o molde do bloco não aparecem em página nenhuma do site: eles se dissolvem
+dentro da premissa gerada, e a única forma de conhecer o repertório inteiro é
+rolar o gerador até cansar. A quarta lista, as profissões, ganhou página própria
+em [`/guia-de-personagens/`](../src/pages/guia-de-personagens.astro) — mas o
+inventário continua sendo o único lugar que junta as quatro num documento só,
+por isso ela também está aqui.
 
-As três primeiras peças são o acervo editorial e têm página própria; estão
-aqui para o documento ficar completo, mas quem quiser lê-las com a descrição
-de cada uma deve ir às páginas de catálogo.
+Arquétipos e elementos narrativos tinham seção neste documento numa versão
+anterior do gerador. Saíram do sorteio nesta reescrita — a premissa passou a
+girar em torno de dois personagens, um local e um fato — mas continuam com
+página própria em `/arquetipos/` e `/elementos/`, na busca e em `/mundos/`.
+Livros nunca entraram no gerador: são leitura de apoio, não peça de combinação.
 
-> Contagens conferidas na data em que este documento foi escrito. Entrada
-> nova em `src/content/` ou em `complicacoes.ts` desatualiza os números
-> daqui — ver a lista de lugares que envelhecem em silêncio no CLAUDE.md.
+> Contagens conferidas na data em que este documento foi escrito. Entrada nova
+> em `src/lib/gerador/*.ts` ou em `src/content/cenarios/` desatualiza os
+> números daqui — ver a lista de lugares que envelhecem em silêncio no
+> CLAUDE.md.
 
 ## O que compõe uma premissa
 
 | Peça | De onde vem | Onde aparece |
 | --- | --- | --- |
-| Mundo | escolha de quem usa, entre 6 | filtra o sorteio; não entra na frase, só no prompt de IA |
-| Arquétipo | `src/content/arquetipos/` (76) | carta na tela **e** frase |
-| Cenário | `src/content/cenarios/` (60) | carta na tela **e** frase |
-| Elemento narrativo | `src/content/elementos/` (60) | carta na tela **e** frase |
-| Complicação | `src/lib/gerador/complicacoes.ts` (40) | **só na frase** |
-| Molde | `src/lib/gerador/moldes.ts` (10) | é a forma da frase |
-
-Os livros do acervo não entram no gerador: são leitura de apoio, não peça de
-combinação.
+| Mundo | escolha de quem usa, entre 6 | filtra o sorteio; não entra no bloco, só na primeira linha do prompt de IA |
+| Profissão (Personagem A e B) | `src/lib/gerador/profissoes.ts` (60) | carta na tela **e** bloco; a `descricao` de cada uma só aparece em `/guia-de-personagens/`, fora do gerador |
+| Característica (Personagem A) | `src/lib/gerador/caracteristicas.ts` (30) | carta na tela **e** bloco |
+| Personalidade (Personagem B) | `src/lib/gerador/personalidades.ts` (30) | carta na tela **e** bloco |
+| Local | `src/content/cenarios/` (60) | carta na tela **e** bloco |
+| Fato | `src/lib/gerador/fatos.ts` (40) | **só no bloco** |
+| Molde | `src/lib/gerador/moldes.ts` (1) | é a forma do bloco |
 
 ## As peças invisíveis
 
-### Complicações — 40, em 7 famílias
+### Profissões — 60, dez por mundo
 
-É o que vem depois de "descobre que", "precisa aceitar que", "entende tarde
-demais que". Cada uma começa em minúscula e não termina em ponto justamente
-para encaixar ali. A família existe para o sorteio não repetir o mesmo tipo
-de virada em duas rodadas seguidas — nem a complicação, nem a família dela.
+O **quem**, dos dois personagens da premissa. Cada profissão tem um `nome` — que
+entra sem alteração na carta, no bloco e no guia — e uma `descricao`, que só
+aparece em [`/guia-de-personagens/`](../src/pages/guia-de-personagens.astro).
+Os nomes vêm sem gênero marcado: a autora escreveu no masculino e pediu "(a)"
+onde a concordância pede, cobrindo substantivo e adjetivo juntos
+("Executivo(a) Corporativo(a)"). Onde a palavra é invariável, fica limpa
+("Hacker", "Contrabandista", "Fixer").
 
-**Traição e confiança** (6)
+**Cyberpunk**
 
-- quem pagou pelo serviço já sabia a resposta que mandou buscar
-- o aviso que evitou a morte veio de quem mais lucraria com ela
-- a única pessoa digna de confiança ali cumpre ordens desde o primeiro dia
-- a escolha não foi por competência, e sim por ser fácil de descartar depois
-- alguém do mesmo lado já negociou a rendição de todos, e negociou bem
-- o segredo foi guardado a vida inteira por quem prometeu revelá-lo
+| Profissão | Descrição |
+| --- | --- |
+| Hacker | Invasores de redes neurais e construtos de dados corporativos. |
+| Samurai de Rua | Mercenários e guarda-costas com modificações cibernéticas pesadas. |
+| Cirurgião(ã) de Rua | Médicos clandestinos que instalam, removem ou consertam implantes ilegais. |
+| Executivo(a) Corporativo(a) | Burocratas implacáveis que gerenciam os interesses das megacorporações. |
+| Corretor(a) de Dados | Traficantes de informações secretas, segredos industriais e chantagens. |
+| Mensageiro(a) Neural | Contrabandistas que transportam dados sensíveis criptografados em seus próprios cérebros. |
+| Detetive Particular | Investigadores cínicos que navegam pelo submundo para resolver crimes que a polícia ignora. |
+| Caçador(a) de Recompensas | Profissionais focados em rastrear devedores de corporações ou criminosos foragidos. |
+| Técnico(a) de Drones | Operadores e engenheiros de vigilância e combate remoto. |
+| Engenheiro(a) de IA | Programadores que tentam controlar (ou libertar) inteligências artificiais rebeldes. |
 
-**O custo moral** (6)
+**Distopia**
 
-- salvar a maioria exige entregar exatamente quem confiou primeiro
-- a solução funciona, e funciona porque alguém aceitou não voltar
-- o certo e o possível apontam para lados opostos, e só há tempo para um
-- fazer a coisa certa agora condena quem vier depois
-- o silêncio custa uma vida por dia, e falar custa todas de uma vez
-- existe uma saída limpa, e ela serve para uma pessoa só
+| Profissão | Descrição |
+| --- | --- |
+| Agente de Supressão | Fiscais encarregados de monitorar e punir desvios ideológicos. |
+| Reescritor(a) Histórico(a) | Funcionários do governo responsáveis por alterar documentos e livros para apagar a verdade. |
+| Operário(a) de Base | Trabalhadores de fábricas ou minas que sustentam a elite, geralmente vivendo em condições desumanas. |
+| Líder da Resistência | Estrategistas clandestinos que organizam rebeliões contra o sistema. |
+| Propagandista do Estado | Criadores de mídia focados em manter a população dócil e alienada. |
+| Geneticista | Cientistas que determinam o destino e a função social dos cidadãos antes mesmo do nascimento. |
+| Coletor(a) de Rações | Burocratas que distribuem (e muitas vezes desviam) recursos escassos como comida e água. |
+| Contrabandista de Artefatos Antigos | Pessoas que vendem itens do "mundo anterior" (livros reais, discos, arte). |
+| Médico(a) de Triagem Social | Profissionais que decidem quem vive ou morre com base na utilidade para o estado. |
+| Infiltrado(a) | Espiões da resistência trabalhando dentro da máquina do governo. |
 
-**Identidade e revelação** (6)
+**Invasão Alienígena**
 
-- a lembrança mais antiga que possui foi plantada, e plantada com capricho
-- o inimigo procurado há anos usa o próprio rosto
-- pertence, por nascimento, ao lado que jurou destruir
-- o nome que carrega pertenceu antes a outra pessoa, e essa pessoa não morreu
-- existe para isso desde antes de nascer, e nunca houve escolha nenhuma
-- a assinatura no documento que condenou todo mundo é a sua
+| Profissão | Descrição |
+| --- | --- |
+| Xenobiólogo(a) | Cientistas encarregados de entender a anatomia, fraquezas e evolução dos invasores. |
+| Fuzileiro(a) de Defesa Terrestre | A linha de frente militar humana contra as forças extraterrestres. |
+| Linguista | Especialistas desesperados para decifrar as comunicações ou motivos alienígenas. |
+| Piloto de Caça | Condutores de veículos atmosféricos ou robôs gigantes na defesa aérea e terrestre. |
+| Engenheiro(a) de Engenharia Reversa | Técnicos que desmontam naves abatidas para adaptar armas alienígenas para uso humano. |
+| Líder de Milícia | Civis que assumem o comando de grupos de resistência armada após o colapso dos governos. |
+| Negociador(a) Interespécies | Diplomatas tentando evitar a extinção através do diálogo. |
+| Médico(a) de Combate | Cirurgiões de campo lidando com armas de plasma e ferimentos desconhecidos. |
+| Catador(a) de Tecnologia | Sobreviventes que exploram os destroços das batalhas em busca de baterias e armas. |
+| Estrategista de Defesa Orbital | Generais que coordenam a defesa do planeta a partir de bunkers subterrâneos ou satélites. |
 
-**Tempo e urgência** (6)
+**Pós Apocalíptico**
 
-- o prazo que parecia longo já venceu em algum lugar
-- cada tentativa de consertar aproxima o desastre em um dia
-- a decisão precisa ser tomada antes de existir informação suficiente
-- o resgate está a caminho e chega depois do que acontecer primeiro
-- há uma janela, e ela se fecha com alguém ainda do lado de dentro
-- o aviso chegou no tempo certo, mas para a pessoa errada
+| Profissão | Descrição |
+| --- | --- |
+| Catador(a) | Exploradores de ruínas urbanas em busca de comida enlatada, remédios e peças úteis. |
+| Mecânico(a) de Sucata | Engenheiros capazes de fazer um gerador ou um carro funcionar com arame e peças velhas. |
+| Líder de Assentamento | Figuras políticas ou ditadores locais que mantêm a ordem em comunidades de sobreviventes. |
+| Mercador(a) Itinerante | Mascates que viajam entre assentamentos trocando balas por água ou remédios. |
+| Guarda de Caravana | Mercenários contratados para proteger mercadores contra saqueadores e mutantes. |
+| Agricultor(a) de Subsistência | Fazendeiros que tentam cultivar alimentos em solo irradiado ou estéril. |
+| Curandeiro(a) | Médicos que utilizam plantas e conhecimentos antigos na ausência de antibióticos modernos. |
+| Senhor(a) da Guerra | Líderes brutais que controlam recursos vitais (como água ou gasolina) pela força. |
+| Arquivista do Velho Mundo | Guardiões do conhecimento que tentam preservar livros e história humana. |
+| Rastreador(a) | Sobreviventes solitários especialistas em ler o ambiente e encontrar caça ou pessoas perdidas. |
 
-**O preço do poder** (6)
+**Space Opera**
 
-- a única ferramenta capaz de vencer cobra um pedaço de quem a usa
-- aceitar a ajuda oferecida significa dever um favor impagável
-- usar a arma uma vez basta para nunca mais conseguir largá-la
-- a cura existe, e é fabricada com a própria doença
-- o comando só obedece a quem já perdeu o que amava
-- quem detém o poder o mantém justamente por não usá-lo
+| Profissão | Descrição |
+| --- | --- |
+| Capitão(ã) de Nave Estelar | Líderes carismáticos e independentes que comandam tripulações mercenárias ou contrabandistas. |
+| Navegador(a) | Matemáticos e pilotos responsáveis por calcular saltos hiperespaciais sem bater em supernovas. |
+| Embaixador(a) Galáctico(a) | Representantes de planetas ou federações em concílios alienígenas complexos. |
+| Engenheiro(a) Chefe | Os mecânicos geniais que mantêm os motores de dobra funcionando quando tudo dá errado. |
+| Aristocrata Exilado(a) | Membros da nobreza intergaláctica tentando recuperar seus tronos ou fugindo de impérios opressores. |
+| Caçador(a) de Recompensas Espacial | Rastreadores implacáveis que cruzam a galáxia atrás de alvos valiosos. |
+| Xenoantropólogo(a) | Estudiosos dedicados a compreender as culturas e religiões de milhares de espécies diferentes. |
+| Contrabandista | Mercadores que evitam bloqueios imperiais para transportar cargas ilegais e valiosas. |
+| Comandante de Frota | Estrategistas militares que lideram batalhas com milhares de cruzadores estelares. |
+| Membro da Patrulha Espacial | Soldados treinados para invasões em gravidade zero e abordagens de naves. |
 
-**O inimigo que não é inimigo** (5)
+**Viagem no Tempo**
 
-- o outro lado tem razão, e provar isso não muda o que precisa ser feito
-- o monstro está fazendo exatamente o que qualquer um faria no lugar dele
-- a ordem absurda recebida era a única capaz de evitar algo pior
-- quem deveria ser resgatado não quer sair de onde está
-- a vitória já aconteceu, e ninguém percebeu porque não se parece com vitória
+| Profissão | Descrição |
+| --- | --- |
+| Agente da Polícia Temporal | Oficiais da lei dedicados a caçar criminosos que tentam alterar eventos do passado. |
+| Piloto de Máquina do Tempo | Os testadores e viajantes pioneiros que navegam pelas correntes do tempo. |
+| Historiador(a) de Campo | Acadêmicos que viajam a épocas passadas para observação direta, com a regra estrita de nunca interferir. |
+| Físico(a) Quântico(a) Estrutural | Os inventores geniais e teóricos que mantêm as máquinas do tempo funcionando e calculam as ramificações. |
+| Investigador(a) de Paradoxo | Detetives especializados em descobrir onde a linha do tempo foi fraturada e como consertá-la. |
+| Turista Temporal | Viajantes ricos que pagam fortunas para assistir a eventos históricos (e frequentemente causam problemas). |
+| Contrabandista de Anacronismos | Ladrões que roubam artefatos famosos (como a verdadeira Monalisa) antes de serem destruídos ou perdidos na história original. |
+| Guardião(ã) da Linha do Tempo | Observadores fixos em séculos específicos, encarregados de garantir que certos eventos ocorram exatamente como deveriam. |
+| Técnico(a) de Extração | Especialistas focados em resgatar pessoas do passado milissegundos antes de suas mortes registradas. |
+| Fixer | Profissionais cuja única função é apagar rastros materiais (celulares, roupas modernas) deixados acidentalmente no passado. |
 
-**Perda e memória** (5)
+### Características — 30
 
-- lembrar a verdade exige perder tudo o que veio depois dela
-- a prova procurada existe apenas na cabeça de quem já esqueceu
-- voltar continua sendo possível, mas não há mais para onde
-- todo mundo mudou de lugar, menos quem ficou esperando
-- a casa continua lá, intacta, e é isso que torna impossível voltar
+O traço do Personagem A. Cada entrada já vem com o verbo ("é", "tem", "usa",
+"não sente"...), porque o molde escreve `{profissaoA} que {caracteristica}` sem
+verbo próprio — é o que deixa "é cego(a) de um olho" e "tem cicatrizes nas mãos"
+conviverem na mesma lista sem precisar de duas.
 
-### Moldes de frase — 10
+- é cego(a) de um olho
+- tem cicatrizes nas mãos
+- é muito mais alto(a) que todo mundo ali
+- tem uma tatuagem que não sabe explicar
+- anda com dificuldade desde criança
+- tem as mãos sempre frias
+- perdeu dois dedos
+- tem uma queimadura no pescoço
+- é surdo(a) de um ouvido
+- tem cabelo branco desde os vinte anos
+- tem olhos de cores diferentes
+- usa um braço mecânico mal ajustado
+- é pequeno(a) e passa despercebido(a)
+- tem uma voz rouca que não melhora
+- tem uma marca de nascença no rosto
+- respira com esforço
+- tem os dentes da frente quebrados
+- carrega um tremor na mão direita
+- tem calos de quem trabalha com corda
+- é magro(a) demais para a idade
+- tem uma cicatriz atravessando a sobrancelha
+- não sente dor
+- tem manchas na pele que ninguém soube diagnosticar
+- usa óculos grossos e não enxerga sem eles
+- tem ombros largos de nadador(a)
+- anda com um mancar antigo
+- tem uma prótese na perna
+- tem as unhas sempre roídas
+- tem uma cicatriz de queimadura na palma da mão
+- é ruivo(a), o que naquele lugar chama atenção
 
-A premissa é sempre um destes moldes preenchido. O molde é sorteado à parte,
-a cada clique em Gerar, mesmo que as peças estejam travadas — por isso a
-mesma combinação pode voltar escrita de outro jeito.
+### Personalidades — 30
 
-1. `{em:cenario}, sob {elemento}, {arquetipo} descobre que {complicacao}.`
-2. `{em:cenario}, onde {impera:elemento}, {arquetipo} precisa aceitar que {complicacao}.`
-3. `{em:cenario}, {elemento} {ser:elemento} a regra — e {arquetipo} descobre que {complicacao}.`
-4. `tudo começa {em:cenario}, num mundo {de:elemento}: {arquetipo} descobre que {complicacao}.`
-5. `{arquetipo} sobrevive {em:cenario}, onde {impera:elemento}, até {pronome} descobrir que {complicacao}.`
-6. `{em:cenario}, com {elemento} por todo lado, {arquetipo} entende tarde demais que {complicacao}.`
-7. `ninguém avisou {arquetipo} de que, {em:cenario} sob {elemento}, {complicacao}.`
-8. `{em:cenario}, {arquetipo} enfrenta {elemento} e precisa aceitar que {complicacao}.`
-9. `{arquetipo} chega {a:cenario} e encontra {elemento}. O que ninguém contou: {complicacao}.`
-10. `há {elemento} {em:cenario}, e {arquetipo} descobre tarde demais que {complicacao}.`
+O traço do Personagem B. Ao contrário das características, entra sem verbo: o
+molde escreve `{profissaoB} que é {personalidade}`, com o "é" já fixo ali, então
+aqui só cabe o adjetivo ou o sintagma que o segue.
 
-Os marcadores carregam a regência, e é isso que faz a frase concordar:
+- egocêntrico(a)
+- leal demais
+- incapaz de mentir
+- de poucas palavras
+- desconfiado(a) de todo mundo
+- impaciente
+- covarde, e sabe disso
+- generoso(a) até o prejuízo
+- teimoso(a)
+- viciado(a) em risco
+- sarcástico(a)
+- obcecado(a) por ordem
+- incapaz de pedir ajuda
+- maternal com quem não devia
+- rancoroso(a)
+- otimista sem motivo
+- curioso(a) além da conta
+- orgulhoso(a) demais para recuar
+- calculista
+- distraído(a)
+- rígido(a) com regras
+- cínico(a)
+- protetor(a) de quem é mais fraco
+- mentiroso(a) por hábito
+- ingênuo(a)
+- ciumento(a)
+- incapaz de ficar parado(a)
+- severo(a) consigo mesmo(a)
+- sedento(a) por reconhecimento
+- paciente até o limite
+
+### Fatos — 40
+
+O que vem depois de "Importante:". Substituem as antigas complicações — mas com
+uma diferença de forma: as complicações vinham depois de "descobre que" e podiam
+não ter sujeito próprio ("pertence, por nascimento, ao lado que jurou
+destruir"). O fato entra sozinho, então cada um é uma oração completa que fala
+dos dois personagens de fora, sem se grudar em nenhum dos dois. Não há mais
+famílias — a única regra é não repetir o fato da rodada anterior.
+
+- um personagem está de luto
+- os dois já se conheceram antes
+- um dos dois está mentindo sobre o nome
+- chove sem parar há trinta dias
+- um dos dois deve dinheiro ao outro
+- ninguém ali sabe usar uma arma
+- um dos dois foi enviado para vigiar o outro
+- os dois são procurados por motivos diferentes
+- um deles tem menos de uma semana de vida
+- o lugar vai ser evacuado em dois dias
+- um dos dois já esteve preso
+- eles são a última esperança de alguém que não sabem quem é
+- um dos dois não consegue dormir
+- existe uma criança escondida ali
+- um dos dois trabalha para quem eles estão fugindo
+- a comida acaba antes do fim da semana
+- um dos dois perdeu a família no mesmo dia
+- os dois se odeiam e precisam um do outro
+- um deles carrega uma carta que não abriu
+- ninguém pode saber que eles estiveram ali
+- um dos dois é o único que sabe voltar
+- há um corpo que ninguém enterrou
+- um deles reconhece o lugar e não diz nada
+- os dois assinaram um acordo que não leram
+- um dos dois está armado e o outro não sabe
+- o rádio parou de responder há três dias
+- um deles é irmão de quem eles procuram
+- eles têm um prazo e não sabem qual
+- um dos dois já tentou desistir uma vez
+- existe uma testemunha viva
+- o combustível dá para a ida, não para a volta
+- um dos dois está doente e esconde
+- eles carregam algo que não abriram
+- alguém está seguindo os dois desde o começo
+- um deles tem medo do escuro
+- a rota que eles conhecem não existe mais
+- um dos dois prometeu voltar e não vai conseguir
+- ninguém acredita na versão que eles vão contar
+- um deles guarda a chave de algo que perdeu
+- há um terceiro que os dois preferem não mencionar
+
+## O molde
+
+Um molde só, `MOLDE`, no lugar dos dez que existiam antes de o gerador
+combinar dois personagens em vez de um arquétipo. A variedade que os dez moldes
+davam passou para o tamanho das listas: dentro de um mundo já são 10 × 9
+profissões (a segunda não repete a primeira) × 30 características × 30
+personalidades × 10 locais × 40 fatos.
+
+```
+Essa é uma ficção científica de {mundo}.
+
+Um(a) {profissaoA} que {caracteristica}.
+Um(a) {profissaoB} que é {personalidade}.
+
+Tudo começa {em:local}.
+
+Importante: {fato}.
+```
+
+As quebras de linha são parte do molde, não um efeito de página: a premissa
+virou um bloco de quatro linhas, e é por isso que o parágrafo da premissa em
+`gerador.astro` precisa de `white-space: pre-wrap` — sem ele o navegador
+colapsaria tudo numa linha só.
 
 | Marcador | O que entra no lugar |
 | --- | --- |
-| `{arquetipo}` | artigo + nome, como está no acervo: **a IA Emergente**. O nome não é abaixado, senão viraria "iA Emergente" |
-| `{em:cenario}` | "em" + o cenário, contraído: em + uma → **numa**, em + as → **nas** |
-| `{a:cenario}` | "a" + o cenário, **sem** contrair: sai "chega **a uma** base espacial". Só "em" e "de" contraem |
-| `{elemento}` | o título do elemento com a inicial abaixada: **a busca por autenticidade** |
-| `{de:elemento}` | "de" + o elemento, contraído só com artigo definido: de + a → **da**. "de uma" fica assim mesmo, porque "duma" não é o registro do site |
-| `{impera:elemento}` | o verbo **e** o elemento juntos: "onde **impera a busca**…" ou "onde **imperam os implantes**…" |
-| `{ser:elemento}` | só o verbo, concordando: **é** ou **são** |
-| `{pronome}` | **ela** ou **ele**, pelo artigo do arquétipo |
+| `{mundo}` | o nome do mundo (ou dos mundos, unidos por " + " com "Misturar mundos"), com a inicial abaixada |
+| `{profissaoA}` | o `nome` da profissão do Personagem A, como está na lista — sem abaixar inicial, para não estragar siglas ("Engenheiro(a) de IA") |
+| `{caracteristica}` | o traço do Personagem A, já com verbo embutido: "é cego(a) de um olho" |
+| `{profissaoB}` | o `nome` da profissão do Personagem B, como está na lista |
+| `{personalidade}` | o traço do Personagem B, sem verbo — o "é" que o precede está fixo no molde |
+| `{em:local}` | "em" + o `singular` do cenário, contraído: em + uma → **numa**, em + um → **num** |
+| `{fato}` | o fato sorteado, sozinho, sem alteração |
 
-O número do elemento — singular ou plural — sai de uma heurística de
-superfície sobre o título, não de um campo do frontmatter: é o que decide
-entre "impera" e "imperam". Ela tem exceções nomeadas e está comentada em
-detalhe em `src/lib/gerador/redacao.ts`. E a primeira letra da premissa é
-sempre erguida no fim, depois de o molde estar montado — por isso os moldes
-começam em minúscula.
-
-Existe ainda um `{cenario}` sem preposição, que o código sabe preencher mas
-que nenhum dos dez moldes usa hoje.
-
-## As peças que têm página
-
-### Arquétipos — 76
-
-Dez por mundo, mais um arquétipo felino em cada, mais um pool de dez comuns
-que serve a todos. O felino entra no sorteio como qualquer outro. Os comuns
-só entram com a caixa "Incluir os 10 arquétipos comuns" marcada.
-
-**Space Opera** (11)
-
-- Comandante Carismático
-- Piloto Habilidoso
-- Tirano Galáctico
-- Aliado Alienígena
-- Fora-da-Lei com Código
-- Especialista Técnico
-- Figura Política/Diplomata
-- Companheiro de Bordo
-- Veterano de Guerra
-- Recruta em Formação
-- Observador Espacial — *felino*
-
-**Distopia** (11)
-
-- Protagonista Desperto
-- Rosto do Regime
-- Organizador Clandestino
-- Colaborador do Sistema
-- Autoridade Ameaçadora
-- Fiel Verdadeiro
-- Par que Desperta a Rebeldia
-- Arquiteto do Controle
-- Delator
-- Mártir da Resistência
-- Infiltrado Silencioso — *felino*
-
-**Cyberpunk** (11)
-
-- Hacker/Console Cowboy
-- Fundador Recluso
-- Detetive Decadente
-- Humano Aumentado
-- IA Emergente
-- Fixer/Informante
-- Executivo Corporativo
-- Mercenário Urbano
-- Andróide em Busca de Humanidade
-- Vítima da Desigualdade
-- Parceiro de Sombra — *felino*
-
-**Pós Apocalíptico** (11)
-
-- Sobrevivente Solitário
-- Líder de Comunidade
-- Senhor da Guerra Local
-- Criança das Ruínas
-- Batedor do Bando
-- Guardião do Conhecimento Perdido
-- Curandeiro da Comunidade
-- Fanático Religioso
-- Mutante/Infectado
-- Utopista Reconstrutor
-- Vigia dos Suprimentos — *felino*
-
-**Invasão Alienígena** (11)
-
-- Cientista Comunicador
-- Militar Linha-Dura
-- Alienígena Invasor
-- Alienígena Incompreendido
-- Civil que Vira Herói
-- Agente do Encobrimento
-- Cético Convertido
-- Jornalista/Testemunha
-- Colaborador dos Invasores
-- Refugiado da Invasão
-- Guardião Invisível — *felino*
-
-**Viagem no Tempo** (11)
-
-- Viajante Acidental
-- Inventor da Máquina do Tempo
-- Desertor da Patrulha
-- Vilão Revisionista
-- Duplo do Protagonista
-- Vítima do Paradoxo
-- Investigador de Anomalias
-- Figura Histórica Encontrada
-- Perseguidor Temporal
-- Burocrata Temporal
-- Batedor das Eras — *felino*
-
-**10 Arquétipos Comuns** (10) — servem a qualquer mundo
-
-- Cientista/Inventor
-- Explorador
-- IA Aliada
-- IA Hostil
-- Visionário Ignorado
-- Burocrata do Sistema
-- Outsider/Rebelde
-- Intérprete
-- Mentor
-- Outro
-
-### Cenários — 60
-
-O **onde**. A forma entre parênteses é a que entra na frase, contraída com a
-preposição do molde — é ela que faz "numa base espacial" sair certo.
-
-**Space Opera** (10)
-
-- Metrópoles Galácticas (uma metrópole galáctica)
-- Fronteiras Hostis (uma fronteira hostil)
-- Estações e Bases Espaciais (uma base espacial)
-- Ruínas Antigas (uma ruína antiga)
-- Corpos Celestes Perigosos (um corpo celeste perigoso)
-- Mundos Elementais Extremos (um mundo elemental extremo)
-- Sistemas Estelares Exóticos (um sistema estelar exótico)
-- Naves e Frotas Nômades (uma frota nômade)
-- Vazios Cósmicos (um vazio cósmico)
-- Conexões Interdimensionais (uma conexão interdimensional)
-
-**Distopia** (10)
-
-- Megacidades sufocantes (uma megacidade sufocante)
-- Postos de controle interno (um posto de controle interno)
-- Zonas de segregação (uma zona de segregação)
-- Infraestruturas decadentes (uma infraestrutura decadente)
-- Blocos residenciais sem portas (um bloco residencial sem portas)
-- Tribunais populares (um tribunal popular)
-- Setores industriais opressivos (um setor industrial opressivo)
-- Espaços de resistência subterrânea (um espaço de resistência subterrânea)
-- Dormitórios coletivos numerados (um dormitório coletivo numerado)
-- Distritos-modelo para visitantes (um distrito-modelo para visitantes)
-
-**Cyberpunk** (10)
-
-- Megacidades superpovoadas (uma megacidade superpovoada)
-- Subsolo e galerias de manutenção (uma galeria de manutenção)
-- Paisagens sensoriais intensas (uma paisagem sensorial intensa)
-- Mercados marginais (um mercado marginal)
-- Áreas corporativas exclusivas (uma área corporativa exclusiva)
-- Bairros dominados por facções (um bairro dominado por facções)
-- Espaços de vício e fuga (um espaço de vício e fuga)
-- Cortiços de cápsula (um cortiço de cápsula)
-- Cenários ambientais hostis (um cenário ambiental hostil)
-- Habitats artificiais (um habitat artificial)
-
-**Pós Apocalíptico** (10)
-
-- Cidades em ruínas (uma cidade em ruínas)
-- Estradas infinitas (uma estrada infinita)
-- Comunidades fortificadas (uma comunidade fortificada)
-- Terras devastadas (uma terra devastada)
-- Mercados improvisados (um mercado improvisado)
-- Ruínas tecnológicas (uma ruína tecnológica)
-- Áreas de ameaça constante (uma área de ameaça constante)
-- Oásis raros (um oásis raro)
-- Abrigos subterrâneos (um abrigo subterrâneo)
-- Ferrovias tomadas pelo mato (uma ferrovia tomada pelo mato)
-
-**Invasão Alienígena** (10)
-
-- Cidades devastadas (uma cidade devastada)
-- Campos de refugiados (um campo de refugiados)
-- Naves-mãe orbitais (um naves-mãe orbital)
-- Bases alienígenas na superfície (uma base alienígena na superfície)
-- Ambientes de resistência urbana (um ambiente de resistência urbana)
-- Territórios dominados (um território dominado)
-- Zonas de quarentena humana (uma zona de quarentena humana)
-- Fortalezas governamentais (uma fortaleza governamental)
-- Campos de batalha globais (um campo de batalha global)
-- Destroços de nave abatida (um destroço de nave abatida)
-
-**Viagem no Tempo** (10)
-
-- Futuros utópicos reluzentes (um futuro utópico reluzente)
-- Futuros distópicos arruinados (um futuro distópico arruinado)
-- Passados históricos recriados (um passado histórico recriado)
-- Museus de um futuro que não aconteceu (um museu de um futuro que não aconteceu)
-- Cidades repetindo o mesmo dia (uma cidade repetindo o mesmo dia)
-- Laboratórios e máquinas do tempo (uma máquina do tempo)
-- Eras primitivas (uma era primitiva)
-- Cidades futuristas divergentes (uma cidade futurista divergente)
-- Territórios fora do tempo (um território fora do tempo)
-- Memoriais e ruínas temporais (uma ruína temporal)
-
-### Elementos narrativos — 60
-
-O **quê** / que força. É a peça que o prompt de IA manda ser o motor do
-conflito, e não pano de fundo.
-
-**Space Opera** (10)
-
-- Bloqueio de rotas e cerco a planetas
-- Sucessão dinástica contestada
-- Culturas alienígenas diversas
-- Tecnologia de dobra espacial
-- Busca por artefatos ancestrais
-- Profecias e lendas cósmicas
-- Poderes psíquicos ou místicos
-- Conspirações políticas de larga escala
-- Escassez do combustível de dobra
-- Comércio interestelar
-
-**Distopia** (10)
-
-- Racionamento como forma de obediência
-- Vigilância onipresente
-- Propaganda estatal massiva
-- Supressão da individualidade
-- Memória histórica alterada
-- Estratificação social por categorias
-- Travessia clandestina de fronteira
-- Busca pela verdade oculta
-- Penas e punições severas
-- Restrições à expressão artística
-
-**Cyberpunk** (10)
-
-- Implantes cibernéticos e biônicos
-- Interfaces neurais diretas
-- Consciências gravadas
-- Realidade virtual e espaços digitais
-- Sistemas de vigilância avançados
-- Dívida como forma de servidão
-- Divisão social extrema
-- A busca por autenticidade
-- Corpos e órgãos como mercadoria
-- Hacktivismo e subversão digital
-
-**Pós Apocalíptico** (10)
-
-- Escassez de recursos vitais
-- Sementes e bancos genéticos disputados
-- Cultura da sucata e reaproveitamento
-- Emergência de novas crenças ou cultos
-- Interações com fauna e flora mutantes
-- Formação de novas leis e códigos morais
-- Degradação ambiental severa
-- O papel da memória e do legado
-- O retorno da eletricidade
-- Doença sem nome e sem cura
-
-**Invasão Alienígena** (10)
-
-- Primeiro contato hostil
-- Tecnologia alienígena superior
-- Infiltração e disfarce alienígena
-- Assimilação cultural ou biológica
-- Cativeiro e experimentação humana
-- Estratégias de guerrilha e sabotagem
-- Engenharia reversa de tecnologia alienígena
-- Vulnerabilidades inesperadas dos invasores
-- Desespero e colapso social
-- Silêncio absoluto dos invasores
-
-**Viagem no Tempo** (10)
-
-- Paradoxos temporais
-- Efeito borboleta
-- Loops temporais
-- Conflito entre destino e livre-arbítrio
-- Encontros consigo mesmo
-- Viagem sem retorno possível
-- Múltiplas linhas temporais
-- Viagens ao passado para corrigir erros
-- Ameaça de anacronismos
-- Consequências físicas da viagem temporal
-
-## Quantas premissas diferentes existem
-
-Dentro de um mundo só, sem misturar e sem os comuns:
-
-| Mundo | Arquétipos | Cenários | Elementos | Combinações de peças |
-| --- | --- | --- | --- | --- |
-| Space Opera | 11 | 10 | 10 | 1.100 |
-| Distopia | 11 | 10 | 10 | 1.100 |
-| Cyberpunk | 11 | 10 | 10 | 1.100 |
-| Pós Apocalíptico | 11 | 10 | 10 | 1.100 |
-| Invasão Alienígena | 11 | 10 | 10 | 1.100 |
-| Viagem no Tempo | 11 | 10 | 10 | 1.100 |
-
-São 6.600 trios de peças somando os seis mundos. Cada trio ainda recebe
-uma das 40 complicações e um dos 10 moldes, o que dá
-2.640.000 premissas distintas.
-
-Ligando "misturar mundos", cada peça pode vir de qualquer lugar e a conta
-passa a ser 66 × 60 × 60 = 237.600 trios, ou
-95.040.000 premissas. Com os comuns também ligados, os arquétipos sobem
-de 66 para 76 e o total chega a
-109.440.000.
+O "Um(a)" que abre as duas linhas de personagem está escrito no molde, não nas
+profissões: as 60 abrem todas com o mesmo artigo indefinido, então não há o que
+sortear ali, e o `nome` guardado fica idêntico ao que aparece na carta e no
+guia. É a diferença em relação ao local, que carrega o artigo dentro de
+`cenarios.singular` porque varia entre "um" e "uma".
 
 ## Regras do sorteio
 
-- **Travar uma peça** congela arquétipo, cenário ou elemento, nos três
-  cadeados. A complicação nunca trava: ela muda a cada rodada, e a família
-  dela também não se repete de uma rodada para a seguinte.
-- **Misturar mundos** deixa cada peça vir de um mundo diferente. O nome do
-  mundo no prompt de IA vira a lista dos que apareceram, na ordem das cartas.
-- **Incluir os comuns** acrescenta os dez arquétipos comuns ao sorteio. Eles
-  não são um mundo: não têm página em `/mundos/` e não entram na linha
-  "Mundo:" do prompt.
-- **Trocar qualquer opção** zera o sorteio e os cadeados, para não sobrar
-  peça travada de um mundo que não está mais selecionado.
+- **Travar Personagem A, Personagem B ou Local** congela a peça correspondente
+  na rolagem seguinte, nos três cadeados.
+- **O fato nunca trava** e nunca repete o da rodada anterior — travar as três
+  cartas e continuar clicando em Gerar é o uso que o cadeado sempre teve:
+  segurar o elenco e o lugar e deixar só o fato mudar.
+- **Os dois personagens nunca saem com a mesma profissão.** A checagem olha
+  para os dois lados: se o Personagem B está travado, é o A que evita a
+  profissão dele ao sortear; nos outros casos, A sai livre e B evita a
+  profissão que A acabou de tirar.
+- **Filtro por mundo só existe em profissões e locais.** Características,
+  personalidades e fatos são universais — não pertencem a subgênero nenhum — e
+  entram sempre da lista inteira, mesmo com um mundo escolhido.
+- **Misturar mundos** deixa profissão e local virem de qualquer um dos seis. O
+  nome do mundo no prompt de IA vira a lista dos que apareceram, na ordem das
+  cartas (Personagem A, Personagem B, Local), sem repetir um mundo usado por
+  mais de uma peça.
+- **Trocar qualquer opção do formulário** zera o sorteio e os três cadeados,
+  para não sobrar peça travada de um mundo que não está mais selecionado.
+
+## Quantas premissas diferentes existem
+
+Dentro de um mundo só: 10 profissões para o Personagem A × 9 para o Personagem B
+(a lista menos a que A já usou) × 30 características × 30 personalidades × 10
+locais × 40 fatos — **32.400.000** premissas, cerca de 32 milhões, sem sair do
+mundo escolhido.
+
+Com "Misturar mundos" ligado, profissão e local passam a vir de qualquer um dos
+seis: 60 × 59 × 30 × 30 × 60 × 40 — **7.646.400.000** premissas, cerca de 7,6
+bilhões.

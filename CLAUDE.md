@@ -95,23 +95,26 @@ Zod isolados em [src/lib/schemas.ts](src/lib/schemas.ts) para poderem ser
 testados fora do Astro. Regras do esquema que não são óbvias:
 
 - `arquetipos.nome` vai **sem** artigo ("IA Emergente", "Duplo do Protagonista")
-  e o artigo definido mora em `arquetipos.artigo` (`a` ou `o`). O gerador tira
-  dali as duas coisas: o artigo que abre a frase ("a IA Emergente descobre que…") e
-  o gênero do `{pronome}`. O campo é obrigatório e **não tem padrão** de
-  propósito — um padrão faria todo arquétipo novo nascer masculino em silêncio.
-  Por isso também o nome do arquétipo nunca passa por `emMinuscula` em
-  [redacao.ts](src/lib/gerador/redacao.ts): não há artigo grudado para abaixar, e
-  a função estragaria as siglas ("IA Aliada" → "iA Aliada"). Os elementos
-  continuam precisando dela, porque os títulos deles abrem com artigo.
+  e o artigo definido mora em `arquetipos.artigo` (`a` ou `o`). O campo continua
+  obrigatório e **sem padrão** de propósito — um padrão faria todo arquétipo novo
+  nascer masculino em silêncio —, mas não é mais o gerador quem o lê: arquétipos
+  saíram do sorteio, e o `{pronome}` que a concordância resolvia a partir dele
+  saiu junto. `artigo` continua obrigatório porque é o que registra o gênero de
+  cada arquétipo no acervo, não porque algo o consome hoje.
 - `cenarios.singular` precisa começar com "um " ou "uma " — é a forma que entra
-  nos moldes de frase, contraída com preposição.
+  no molde da premissa como `{em:local}`, contraída com a preposição.
 - `subgeneros.mundo: false` marca um pool que não é um mundo (hoje só
-  `comuns.md`, os 10 arquétipos comuns): não gera página em `/mundos/` e só
-  entra no gerador quando "incluir comuns" está ligado.
+  `comuns.md`, os 10 arquétipos comuns): não gera página em `/mundos/`. Chegou a
+  entrar no gerador quando a caixa "Incluir os 10 arquétipos comuns" estava
+  ligada; a caixa saiu do formulário junto com os arquétipos, que deixaram de
+  entrar no sorteio — o pool continua vivo só no catálogo, em
+  `/arquetipos/comuns/`.
 - `subgenero` com `mundo: true` exige `aurora` (trio de cores hex).
 - `arquetipos.felino: true` marca o arquétipo bônus, renderizado à parte com
-  etiqueta própria. Ele aparece na página de catálogo à parte, fica de fora da
-  amostra de `/mundos/` e **entra** no sorteio do gerador — decisão da autora.
+  etiqueta própria. Ele aparece na página de catálogo à parte e fica de fora da
+  amostra de `/mundos/`. Chegou a **entrar** no sorteio do gerador — decisão da
+  autora —, mas não entra mais: arquétipos saíram do gerador inteiro, felino
+  incluído.
 - `subgeneros.abertura{Arquetipos,Cenarios,Elementos}` são os parágrafos que
   abrem as três páginas de catálogo daquele mundo, um por tipo, porque cada um
   fala do que está listado abaixo dele. Todos opcionais (`comuns` só tem
@@ -154,15 +157,18 @@ elas são o que a grade de duas dimensões existe para fazer.
 
 O tamanho do acervo (hoje 76 arquétipos — 10 por mundo mais o felino, e mais 10
 comuns —, 60 cenários, 60 elementos, 36 livros) está escrito por extenso em
-sete lugares que nenhum teste confere: [README.md](README.md),
-[sobre.md](src/content/paginas/sobre.md), o rótulo de "incluir comuns" e o
-comentário dos pools em [gerador.astro](src/pages/gerador.astro), o `nome` de
+seis lugares que nenhum teste confere: [README.md](README.md),
+[sobre.md](src/content/paginas/sobre.md), o comentário sobre os cenários em
+[gerador.astro](src/pages/gerador.astro), o `nome` de
 [comuns.md](src/content/subgeneros/comuns.md), os dois comentários de
 [mundos/[subgenero].astro](src/pages/mundos/[subgenero].astro) (o pool comuns e
 a posição do felino) e
 [docs/atributos-do-gerador.md](docs/atributos-do-gerador.md), que lista o acervo
-verbete a verbete. Entrada nova em `src/content/` desatualiza os sete em
-silêncio — os de `mundos/` já tinham ficado para trás uma vez.
+verbete a verbete. Entrada nova em `src/content/` desatualiza os seis em
+silêncio — os de `mundos/` já tinham ficado para trás uma vez. Eram sete até a
+premissa virar personagens: o rótulo "Incluir os 10 arquétipos comuns" saiu do
+formulário do gerador junto com a caixa, porque arquétipos deixaram de entrar
+no sorteio — não sobrou rótulo para desatualizar no lugar dele.
 
 **Prosa não mora em componente.** Os textos da home, das páginas de índice, de
 Sobre, de Estilos e do 404 vêm da coleção `paginas` (`src/content/paginas/*.md`),
@@ -194,62 +200,97 @@ outras quatro filtram, senão gerariam `/cenarios/comuns/` e afins vazias.
 
 [src/lib/gerador/](src/lib/gerador/) é um conjunto de funções puras, exportadas
 por `index.ts` (ponto único de entrada; nada fora da pasta importa os arquivos
-internos). Fluxo: `sortear()` escolhe arquétipo + cenário + elemento +
-complicação respeitando travas e filtros, e `redigir()` encaixa o sorteio num
-dos `MOLDES`.
+internos). Fluxo: `sortear()` escolhe **dois personagens, um local e um fato** —
+o Personagem A é profissão + característica, o Personagem B é profissão +
+personalidade — respeitando travas e filtros, e `redigir()` encaixa o sorteio no
+`MOLDE` único.
 
-`sortear` recebe o sorteio anterior e nunca repete a complicação nem a família
-dela em duas rodadas seguidas — as travas (`Travas`) só congelam as três peças
-do acervo, e a complicação sempre muda.
+As travas (`Travas`) são `personagemA`, `personagemB` e `local`: travar uma
+congela a peça correspondente na rolagem seguinte. **O fato não tem cadeado e
+nunca repete o da rodada anterior** — travar as três cartas e continuar
+clicando em Gerar é o uso que o cadeado sempre teve, segurar o elenco e o lugar
+e deixar só o fato mudar. `sortear` também garante que os dois personagens nunca
+saiam com a mesma profissão, checando nos dois sentidos — se o Personagem B está
+travado, é o A que evita a profissão dele ao sortear; nos outros casos A sai
+livre e B evita a que A acabou de tirar.
 
 [docs/atributos-do-gerador.md](docs/atributos-do-gerador.md) é o inventário do
-que o gerador pode produzir — as três coleções verbete a verbete, as 40
-complicações por família, os 10 moldes com a tabela de marcadores e as regras
-do sorteio. Existe porque complicação e molde não aparecem em página nenhuma do
-site: só se conhece o repertório rolando o gerador. Mexeu em `complicacoes.ts`,
-em `moldes.ts` ou no acervo? O documento envelhece junto.
+que o gerador pode produzir — as quatro listas verbete a verbete, o molde com a
+tabela de marcadores e as regras do sorteio. Existe porque três das quatro
+listas — características, personalidades e fatos — e o molde não aparecem em
+página nenhuma do site: só se conhece o repertório rolando o gerador (a quarta,
+as profissões, ganhou `/guia-de-personagens/`, mas o inventário continua sendo
+o único lugar que junta as quatro num documento só). Mexeu em qualquer uma das
+quatro listas ou no molde? O documento envelhece junto.
 
-**As complicações são a exceção à regra de prosa em Markdown**: o banco vive em
-[complicacoes.ts](src/lib/gerador/complicacoes.ts) porque é peça de molde, não
-texto de página — mas é conteúdo editorial (CC BY, como o resto do acervo), não
-código. Cada complicação começa em minúscula e não termina em ponto, senão não
-encaixa depois de "descobre que". [dados.test.ts](src/lib/gerador/dados.test.ts)
-tranca as contagens (7 famílias, 40 complicações, 10 moldes): incluir uma
-complicação nova é editar esses números junto.
+**As quatro listas são a exceção à regra de prosa em Markdown**: moram em
+[profissoes.ts](src/lib/gerador/profissoes.ts),
+[caracteristicas.ts](src/lib/gerador/caracteristicas.ts),
+[personalidades.ts](src/lib/gerador/personalidades.ts) e
+[fatos.ts](src/lib/gerador/fatos.ts) porque são peça de molde, não texto de
+página — mas são conteúdo editorial (CC BY, como o resto do acervo), não código.
+Características, personalidades e fatos começam em minúscula e não terminam em
+ponto, senão não encaixam depois de "que" ou de "Importante:". Profissões são a
+exceção dentro da exceção: abrem com maiúscula e não terminam em ponto, porque
+são nome de arquétipo como os do catálogo — só a `descricao` de cada uma, que
+não entra no sorteio e só aparece no guia, é frase inteira e termina em ponto.
+[dados.test.ts](src/lib/gerador/dados.test.ts) tranca as contagens (60
+profissões, dez por mundo; 30 características; 30 personalidades; 40 fatos):
+incluir uma entrada nova é editar esses números junto.
 
-Nos `MOLDES` os marcadores carregam a regência — `{em:cenario}`, `{a:cenario}`,
-`{de:elemento}`, `{impera:elemento}`, `{ser:elemento}`, `{pronome}` —, e o teste
-exige que todo molde use as quatro peças e termine em ponto final. Molde novo
-sem uma das peças quebra a suíte, não o build.
+**Um molde só**, `MOLDE`, com sete marcadores — `{mundo}`, `{profissaoA}`,
+`{caracteristica}`, `{profissaoB}`, `{personalidade}`, `{em:local}`, `{fato}` —
+no lugar dos dez que existiam antes: a variedade que os moldes múltiplos davam
+passou para o tamanho das listas. A premissa deixou de ser uma frase corrida e
+virou um bloco de quatro linhas — as quebras de linha estão dentro do próprio
+molde, e é por isso que o parágrafo da premissa em `gerador.astro` precisa de
+`white-space: pre-wrap`. O teste exige que `MOLDE` use os sete marcadores,
+termine em ponto final e tenha as quatro linhas separadas por linha em branco.
 
 `sortear` recebe `aleatorio: () => number` como parâmetro justamente para os
 testes serem determinísticos — não chame `Math.random()` dentro da lib. Quem
-injeta o acaso de verdade é o `<script>` de `gerador.astro`, que também sorteia
-o molde.
+injeta o acaso de verdade é o `<script>` de `gerador.astro`.
 
-[src/pages/gerador.astro](src/pages/gerador.astro) injeta os pools inteiros como
-JSON estático no HTML em tempo de build e liga tudo com um `<script>` sem
-framework. Zero requisição em runtime.
+[src/pages/gerador.astro](src/pages/gerador.astro) injeta como JSON estático só
+os **locais** — os 60 cenários, que vêm de uma coleção e só existem em tempo de
+build. As outras três listas universais não precisam de importação própria no
+`<script>`: entram por dentro de `sortear()`, que já as usa internamente. Só
+`PROFISSOES` é importada à parte, porque o `<script>` monta `pools.profissoes`
+com ela antes de filtrar por mundo. Nenhuma das quatro listas passa por JSON,
+diferente dos locais.
 
 A mesma página também monta, a partir do mesmo sorteio, um prompt pronto para
 colar numa IA de texto. O molde é conteúdo da autora — não código — em
-[prompt-ia.md](src/content/paginas/prompt-ia.md), com quatro marcadores em
-maiúsculas (`[MUNDO]`, `[ARQUÉTIPO]`, `[CENÁRIO]`, `[ELEMENTO NARRATIVO]`) que
-`montarPrompt()` ([prompt.ts](src/lib/gerador/prompt.ts)) substitui pelos
+[prompt-ia.md](src/content/paginas/prompt-ia.md), com cinco marcadores em
+maiúsculas (`[MUNDO]`, `[PERSONAGEM A]`, `[PERSONAGEM B]`, `[LOCAL]`, `[FATO]`)
+que `montarPrompt()` ([prompt.ts](src/lib/gerador/prompt.ts)) substitui pelos
 valores sorteados. Um marcador desconhecido faz `montarPrompt` lançar — e o
 frontmatter de `gerador.astro` chama a função uma vez com valores de descarte
 só para isso acontecer em `npm run build`, e não em produção no navegador de
 alguém.
 
-**Concordância gramatical** é a parte delicada:
-[redacao.ts](src/lib/gerador/redacao.ts) resolve contração de preposição
-(`em`+`uma` → `numa`), gênero pelo artigo e número do elemento por heurística de
-superfície (`numeroDe`). Essa heurística tem exceções nomeadas e comentários
-longos explicando por que cada alternativa mais simples foi descartada —
-**leia os comentários antes de mexer**, e prefira ampliar uma lista nomeada a
-inventar uma regra nova. Cada ajuste ali merece um caso em
-[redacao.test.ts](src/lib/gerador/redacao.test.ts) com o título real do acervo
-que motivou a mudança.
+**Concordância gramatical** encolheu para uma função só:
+[redacao.ts](src/lib/gerador/redacao.ts) resolve a contração de preposição
+(`contrair`, `em`+`uma` → `numa`). O gênero não precisa mais de heurística: as
+profissões, características e personalidades carregam o "(a)" dentro do próprio
+texto ("Executivo(a) Corporativo(a)", "egocêntrico(a)"), porque a premissa nunca
+mais se refere a ninguém por pronome — o antigo `{pronome}` não existe.
+`numeroDe` e `generoDe` saíram junto, com as constantes e os comentários que as
+sustentavam.
+
+[src/pages/guia-de-personagens.astro](src/pages/guia-de-personagens.astro) é a
+página que mostra as 60 profissões com a `descricao` de cada uma. A `descricao`
+mora dentro do mesmo objeto que o `nome`, em `profissoes.ts` — os dois vivem
+juntos porque descrevem a mesma peça, e separá-los em arquivos diferentes os
+faria divergir na primeira edição. A rota fica **fora do
+[Nav](src/components/Nav.astro), sem rota por mundo e fora da busca**: o
+[índice de busca](src/pages/indice-busca.json.ts) é montado só a partir das
+quatro coleções de `src/content/`, e profissão não é coleção — não há nada para
+excluir dali de propósito, é ausência por natureza. Ficar fora do menu não é
+esquecimento: é a decisão que impede as profissões de virarem um segundo
+catálogo de "quem", competindo com os arquétipos — ver
+[docs/revisao-de-repeticoes.md](docs/revisao-de-repeticoes.md). O único caminho
+até a página é o link no fim de `gerador.astro`.
 
 ### Interatividade sem framework
 
