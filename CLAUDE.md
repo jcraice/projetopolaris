@@ -130,9 +130,18 @@ nunca alfabética por acidente.
 **O corpo de arquétipo, cenário e elemento entra na página como texto puro**
 (`{entrada.body}` dentro de um `<p>`), sem passar por `render()` — Markdown no
 corpo apareceria literal, com asterisco e tudo. São um parágrafo só, por isso a
-economia. Só `livros` chama `render()`, porque cada livro tem vários parágrafos
-(edição, comentário, sinopse). Verbete que precisar de dois parágrafos ou de
-ênfase muda a página junto, não só o Markdown.
+economia. Das quatro coleções do acervo, só `livros` chama `render()`, porque
+cada livro tem vários parágrafos (edição, comentário, sinopse). Verbete que
+precisar de dois parágrafos ou de ênfase muda a página junto, não só o Markdown.
+(A coleção `paginas` é outra história: toda entrada dela passa por `render()`,
+porque é prosa corrida com títulos e listas.)
+
+**Todo verbete do site sai de [Cartao.astro](src/components/Cartao.astro)** — as
+páginas de catálogo e `/mundos/` só montam a lista e passam título, corpo e
+âncora. É lá que mora o `id` que a busca usa como destino, o
+`scroll-margin-top: 96px` que compensa a barra fixa e a `.etiqueta` do marcador,
+que hoje só o arquétipo felino recebe. Aparência de verbete se muda ali, uma vez,
+não página por página.
 
 **Antes de acrescentar ou trocar verbete, ler
 [docs/revisao-de-repeticoes.md](docs/revisao-de-repeticoes.md).** É o critério
