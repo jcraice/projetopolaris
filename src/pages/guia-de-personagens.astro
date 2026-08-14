@@ -1,0 +1,84 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { PROFISSOES } from '../lib/gerador';
+
+/* Guia do gerador, não um quinto catálogo. Por isso a página não entra no Nav,
+   não tem rota por mundo e não aparece na busca — o índice da busca é montado a
+   partir das quatro coleções de src/content/, e as profissões não são coleção,
+   então não há nada a excluir. O único caminho até aqui é o link no fim de
+   gerador.astro. Uma página fora do menu parece esquecimento; é decisão. */
+const subgeneros = await getCollection('subgeneros');
+const mundos = subgeneros
+  .filter((s) => s.data.mundo)
+  .sort((a, b) => a.data.ordem - b.data.ordem);
+
+const base = import.meta.env.BASE_URL;
+const raiz = base.endsWith('/') ? base : base + '/';
+---
+<Base titulo="Guia de personagens">
+  <h1>Guia de personagens</h1>
+
+  <p class="abertura">
+    As profissões que o gerador sorteia, com o que cada uma é. São dez por mundo,
+    e o mundo escolhido no gerador decide de quais dez os dois personagens saem.
+  </p>
+
+  {mundos.map((mundo) => (
+    <section class="bloco">
+      <h2>{mundo.data.nome}</h2>
+      <dl class="profissoes">
+        {PROFISSOES.filter((p) => p.subgenero === mundo.id).map((profissao) => (
+          <div class="profissao">
+            <dt>{profissao.nome}</dt>
+            <dd>{profissao.descricao}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  ))}
+
+  <p class="volta"><a href={`${raiz}gerador/`}>Voltar ao gerador</a></p>
+</Base>
+
+<style>
+  /* .bloco não dá espaço entre um irmão e o seguinte, só o preenchimento
+     interno — são seis seções em sequência, e sem isto as seis caixas, todas
+     do mesmo fundo, se encostariam e leriam como uma só. */
+  .bloco + .bloco {
+    margin-block-start: 24px;
+  }
+
+  /* <dl> porque é exatamente isto: uma lista de termos e suas definições. O
+     <div> em volta de cada par existe para o grid tratar o par como uma unidade
+     — sem ele, dt e dd viram itens soltos e desalinham. */
+  .profissoes {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .profissao {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  /* Mesmo peso e cor do título de verbete do catálogo: quem separa um termo do
+     seguinte é o espaço, não moldura nem cor de acento. */
+  dt {
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--texto-forte);
+  }
+
+  dd {
+    margin: 0;
+    color: var(--texto);
+  }
+
+  .volta {
+    margin-top: 32px;
+  }
+</style>

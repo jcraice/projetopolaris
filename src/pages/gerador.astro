@@ -46,6 +46,9 @@ const CARTAS = [
   { tipo: 'personagemB', rotulo: 'Personagem B' },
   { tipo: 'local', rotulo: 'Local' },
 ] as const;
+
+const base = import.meta.env.BASE_URL;
+const raiz = base.endsWith('/') ? base : base + '/';
 ---
 <Base titulo="Gerador">
   <h1>Gerador de combinações</h1>
@@ -125,6 +128,13 @@ const CARTAS = [
     <button type="button" class="botao" id="copiar-prompt">Copiar prompt</button>
     <span class="aviso" id="aviso-prompt" role="status"></span>
   </div>
+
+  {/* Único caminho até o guia: ele não está no Nav nem na busca, por decisão de
+      projeto — é material de apoio do gerador, não um catálogo do site. */}
+  <p class="guia">
+    Não conhece alguma das profissões?
+    <a href={`${raiz}guia-de-personagens/`}>Veja o guia de personagens</a>.
+  </p>
 
   {/* is:inline porque isto é dado, não código: sem a diretiva o Astro trata o
       bloco como script a processar e emite um aviso em `npm run check`. */}
