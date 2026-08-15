@@ -11,8 +11,6 @@ Foram anos de pequenos avanços. Sempre que tinha um tempo livre, voltava ao pro
 
 Hoje, este é um projeto no ar: são 6 subgêneros de ficção científica, cada um com 10 arquétipos listados e um arquétipo felino de bônus, além de cenários, elementos narrativos e livros de referência, cada um com seu nome e descrição detalhada.
 
-O gerador, que já foi só um plano, ressurgiu — agora como complemento a esse acervo. Ele sorteia um arquétipo, um cenário e um elemento narrativo do mundo que você escolher e devolve uma premissa pronta para começar. Se a combinação não servir, trave o que gostou e gere de novo.
-
 Meu desejo é que este espaço seja o ponto de partida para quem trava na página em branco. Criar personagens do zero pode ser tão desafiador: você tem a ideia, mas não sabe por onde começar. Aqui, você encontra ferramentas práticas, uma vasta biblioteca de arquétipos, cenários e elementos narrativos que funcionam como guias de missão. Com dicas de aplicação e inspiração visual, você não precisa mais partir do nada, basta escolher um ponto de partida e deixar a criatividade decolar. Seja autor, mestre de RPG ou artista, este é o seu laboratório.
 
 Espero que faça bom uso do site e que ele se torne seu aliado na criação de histórias e personagens memoráveis. Se tiver sugestões, ideias de melhorias ou encontrar algum erro, fique à vontade para enviar um [e-mail](mailto:projetopolaris84@gmail.com).

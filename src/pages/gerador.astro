@@ -65,10 +65,14 @@ const raiz = base.endsWith('/') ? base : base + '/';
 
       O conteúdo é montado pelo <script> a partir de partes(): sem JavaScript o
       bloco fica vazio, como já ficava antes. */}
-  <section class="bloco bloco-premissa" aria-labelledby="premissa-titulo">
-    <h2 id="premissa-titulo">Premissa gerada</h2>
+  {/* Sem título visível, por decisão da autora: o bloco é a premissa, e um
+      "Premissa gerada" em cima dela só repetia em palavras o que a frase já
+      mostra. O nome sobrevive em aria-label — apagar o <h2> tirava também o
+      rótulo que o leitor de tela usa para anunciar a região, e aí o bloco
+      chegaria como uma seção sem nome. */}
+  <section class="bloco bloco-premissa" aria-label="Premissa gerada">
     {/* aria-live no parágrafo, e não na seção inteira: na seção, cada clique
-        em Gerar faria o leitor de tela reler também o título. Os quatro cadeados
+        em Gerar faria o leitor de tela reler também o rótulo. Os quatro cadeados
         moram dentro da região viva, e o custo é que a releitura pode incluir os
         rótulos deles — aceito em vez de duplicar a premissa num parágrafo
         escondido (dois textos que podem divergir) ou de tirar o aria-live e
