@@ -205,23 +205,36 @@ o Personagem A é profissão + característica, o Personagem B é profissão +
 personalidade — respeitando travas e filtros, e `redigir()` encaixa o sorteio no
 `MOLDE` único.
 
-As travas (`Travas`) são `personagemA`, `personagemB` e `local`: travar uma
-congela a peça correspondente na rolagem seguinte. **O fato não tem cadeado e
-nunca repete o da rodada anterior** — travar as três cartas e continuar
-clicando em Gerar é o uso que o cadeado sempre teve, segurar o elenco e o lugar
-e deixar só o fato mudar. `sortear` também garante que os dois personagens nunca
-saiam com a mesma profissão, checando nos dois sentidos — se o Personagem B está
-travado, é o A que evita a profissão dele ao sortear; nos outros casos A sai
-livre e B evita a que A acabou de tirar.
+A página não empilha mais três cartas acima da premissa — a premissa **é** a
+interface. O que o sorteio traz aparece em `--destaque` dentro da própria
+frase (as duas profissões, os dois traços, o local e o fato, mais o nome do
+mundo), e cada linha travável termina num cadeado pequeno e inline, em vez de
+um cadeado por carta.
+
+As travas (`Travas`) cobrem as quatro linhas traváveis da premissa —
+`personagemA`, `personagemB`, `local` e `fato`: travar uma congela a peça
+correspondente na rolagem seguinte, num cadeado no fim daquela linha. **O fato
+passa a travar.** Era a única peça sem cadeado, de propósito, para que travar
+tudo e continuar clicando em Gerar seguisse trocando alguma coisa; com um
+cadeado por linha, deixá-lo de fora faria a última linha parecer esquecimento
+em vez de decisão — a autora escolheu a coerência. Solto, o fato continua sem
+repetir o da rodada anterior; travado, ele fica parado como as outras três
+peças. A linha do mundo é a única sem cadeado nenhum: quem manda nela é o
+seletor de Mundo, no alto da página, não um botão dentro do texto. `sortear`
+também garante que os dois personagens nunca saiam com a mesma profissão,
+checando nos dois sentidos — se o Personagem B está travado, é o A que evita a
+profissão dele ao sortear; nos outros casos A sai livre e B evita a que A
+acabou de tirar.
 
 [docs/atributos-do-gerador.md](docs/atributos-do-gerador.md) é o inventário do
 que o gerador pode produzir — as quatro listas verbete a verbete, o molde com a
-tabela de marcadores e as regras do sorteio. Existe porque três das quatro
-listas — características, personalidades e fatos — e o molde não aparecem em
-página nenhuma do site: só se conhece o repertório rolando o gerador (a quarta,
-as profissões, ganhou `/guia-de-personagens/`, mas o inventário continua sendo
-o único lugar que junta as quatro num documento só). Mexeu em qualquer uma das
-quatro listas ou no molde? O documento envelhece junto.
+tabela de marcadores, a tabela de qual marcador trava qual linha e as regras do
+sorteio. Existe porque três das quatro listas — características, personalidades
+e fatos — e o molde não aparecem em página nenhuma do site: só se conhece o
+repertório rolando o gerador (a quarta, as profissões, ganhou
+`/guia-de-personagens/`, mas o inventário continua sendo o único lugar que
+junta as quatro num documento só). Mexeu em qualquer uma das quatro listas, no
+molde ou na tabela de travas? O documento envelhece junto.
 
 **As quatro listas são a exceção à regra de prosa em Markdown**: moram em
 [profissoes.ts](src/lib/gerador/profissoes.ts),
@@ -246,6 +259,26 @@ virou um bloco de quatro linhas — as quebras de linha estão dentro do própri
 molde, e é por isso que o parágrafo da premissa em `gerador.astro` precisa de
 `white-space: pre-wrap`. O teste exige que `MOLDE` use os sete marcadores,
 termine em ponto final e tenha as quatro linhas separadas por linha em branco.
+Ao lado do `MOLDE`, em [moldes.ts](src/lib/gerador/moldes.ts), mora
+`TRAVA_DO_MARCADOR`: uma tabela ligando marcador a trava (`{profissaoA}` →
+`personagemA`, `{profissaoB}` → `personagemB`, `{em:local}` → `local`,
+`{fato}` → `fato`). `{mundo}` fica de fora de propósito — aquela linha não
+ganha cadeado —, e `{caracteristica}`/`{personalidade}` também, porque dividem
+linha com a profissão do mesmo personagem e o cadeado é da linha inteira, não
+da peça.
+
+**`partes()`, em [redacao.ts](src/lib/gerador/redacao.ts), é a irmã de
+`redigir()`.** A página precisa saber onde cada peça começa e termina para
+pintá-la de `--destaque` e para saber em qual linha pôr o cadeado — informação
+que não dá para recuperar de volta de uma string pronta. `partes(sorteio,
+molde, mundo)` devolve uma `Linha[]` (tipo `Linha = { trechos: Trecho[]; trava:
+keyof Travas | null }`, uma por linha do molde, inclusive as vazias, para a
+premissa copiada ter as mesmas quebras que a da tela) lendo `TRAVA_DO_MARCADOR`
+para preencher `trava`. **`redigir()` passou a ser só a junção de `partes()`**
+— os trechos de cada linha concatenados, as linhas unidas por `\n` — e é isso
+que garante que o texto da tela e o texto que "Copiar premissa" leva para a
+área de transferência não têm como divergir: os dois saem da mesma passada
+sobre o molde, não de duas implementações que podem desalinhar.
 
 `sortear` recebe `aleatorio: () => number` como parâmetro justamente para os
 testes serem determinísticos — não chame `Math.random()` dentro da lib. Quem
@@ -269,14 +302,15 @@ frontmatter de `gerador.astro` chama a função uma vez com valores de descarte
 só para isso acontecer em `npm run build`, e não em produção no navegador de
 alguém.
 
-**Concordância gramatical** encolheu para uma função só:
+**Concordância gramatical** encolheu para uma função:
 [redacao.ts](src/lib/gerador/redacao.ts) resolve a contração de preposição
-(`contrair`, `em`+`uma` → `numa`). O gênero não precisa mais de heurística: as
-profissões, características e personalidades carregam o "(a)" dentro do próprio
-texto ("Executivo(a) Corporativo(a)", "egocêntrico(a)"), porque a premissa nunca
-mais se refere a ninguém por pronome — o antigo `{pronome}` não existe.
-`numeroDe` e `generoDe` saíram junto, com as constantes e os comentários que as
-sustentavam.
+(`contrair`, `em`+`uma` → `numa`) — é o único ponto de concordância que sobrou.
+O gênero não precisa mais de heurística: as profissões, características e
+personalidades carregam o "(a)" dentro do próprio texto ("Executivo(a)
+Corporativo(a)", "egocêntrico(a)"), porque a premissa nunca mais se refere a
+ninguém por pronome — o antigo `{pronome}` não existe. `numeroDe` e `generoDe`
+saíram junto, com as constantes e os comentários que as sustentavam. É no mesmo
+arquivo, ao lado de `contrair`, que moram `partes()` e `redigir()` — ver acima.
 
 [src/pages/guia-de-personagens.astro](src/pages/guia-de-personagens.astro) é a
 página que mostra as 60 profissões com a `descricao` de cada uma. A `descricao`
@@ -337,7 +371,12 @@ O HTML que sai de `render()` de uma entrada Markdown **não** recebe o atributo 
 escopo do Astro — estilizá-lo pede um contêiner escopado e `:global()` dentro
 dele (`.conteudo :global(h2)`), como em
 [estilos.astro](src/pages/estilos.astro). Sem isso a regra é descartada em
-silêncio, o que parece um seletor errado e não é.
+silêncio, o que parece um seletor errado e não é. A mesma armadilha vale para
+nó criado por JavaScript em runtime, dentro de um `<script>` — ele também não
+carrega o atributo de escopo, mesmo morando dentro de um contêiner escopado.
+Foi o que aconteceu com `.sorteado`, os `<span>` que `montarPremissa()` cria em
+[gerador.astro](src/pages/gerador.astro): a correção foi
+`.premissa :global(.sorteado)`.
 
 A aurora recebe o trio de cores do subgênero por prop de `Base` e o converte em
 `conic-gradient` por `gradienteConico()` ([aurora.ts](src/lib/aurora.ts)), que
@@ -355,11 +394,14 @@ e isso cria duas amarras que o CSS não consegue impor sozinho:
 - A escada de `z-index` é curta e proposital: aurora em `-1`, Nav em `10`, e em
   `20` as duas coisas que abrem por cima da página — a lista de resultados da
   busca e o submenu do "Mais". As duas moram dentro do Nav, e o empate não
-  importa porque estão em pontas opostas da fileira. O `10` do Nav existe porque
-  o cadeado do gerador é `absolute` e vem depois no documento — sem ele,
-  passaria por cima da barra ao rolar. E como o Nav abre um contexto de
-  empilhamento, valor novo acima de `20` em componente de página não vence a
-  barra; vai por dentro dela ou não vai.
+  importa porque estão em pontas opostas da fileira. O `10` do Nav vinha do
+  cadeado do gerador, que era `absolute` e ancorado no canto de uma carta;
+  desde que a premissa virou a própria interface o cadeado é `inline-flex`
+  dentro do texto e não precisa mais dessa amarra, mas o valor ficou — é ele
+  que sustenta o contexto de empilhamento que a busca e o "Mais" usam para
+  abrir por cima do resto da página. E como o Nav abre esse contexto, valor
+  novo acima de `20` em componente de página não vence a barra; vai por dentro
+  dela ou não vai.
 - **Painel que flutua sobre a página é opaco** (`--fundo`), nunca `--painel`. O
   token de painel é translúcido nos dois temas (0,8 no escuro, 0,05 no claro) e
   deixa passar o que está embaixo — o submenu do "Mais" abre justo em cima do

@@ -24,20 +24,20 @@ Livros nunca entraram no gerador: são leitura de apoio, não peça de combinaç
 
 | Peça | De onde vem | Onde aparece |
 | --- | --- | --- |
-| Mundo | escolha de quem usa, entre 6 | filtra o sorteio; não entra no bloco, só na primeira linha do prompt de IA |
-| Profissão (Personagem A e B) | `src/lib/gerador/profissoes.ts` (60) | carta na tela **e** bloco; a `descricao` de cada uma só aparece em `/guia-de-personagens/`, fora do gerador |
-| Característica (Personagem A) | `src/lib/gerador/caracteristicas.ts` (30) | carta na tela **e** bloco |
-| Personalidade (Personagem B) | `src/lib/gerador/personalidades.ts` (30) | carta na tela **e** bloco |
-| Local | `src/content/cenarios/` (60) | carta na tela **e** bloco |
-| Fato | `src/lib/gerador/fatos.ts` (40) | **só no bloco** |
-| Molde | `src/lib/gerador/moldes.ts` (1) | é a forma do bloco |
+| Mundo | escolha de quem usa, entre 6 | filtra o sorteio; aparece na primeira linha da premissa e do prompt de IA — sem cadeado, porque quem trava a linha é o seletor de Mundo |
+| Profissão (Personagem A e B) | `src/lib/gerador/profissoes.ts` (60) | premissa, em `--destaque`; a `descricao` de cada uma só aparece em `/guia-de-personagens/`, fora do gerador |
+| Característica (Personagem A) | `src/lib/gerador/caracteristicas.ts` (30) | premissa, em `--destaque` |
+| Personalidade (Personagem B) | `src/lib/gerador/personalidades.ts` (30) | premissa, em `--destaque` |
+| Local | `src/content/cenarios/` (60) | premissa, em `--destaque`, já contraído com a preposição |
+| Fato | `src/lib/gerador/fatos.ts` (40) | premissa, em `--destaque` — trava com cadeado próprio, como as outras três peças |
+| Molde | `src/lib/gerador/moldes.ts` (1) | é a forma da premissa |
 
 ## As peças invisíveis
 
 ### Profissões — 60, dez por mundo
 
 O **quem**, dos dois personagens da premissa. Cada profissão tem um `nome` — que
-entra sem alteração na carta, no bloco e no guia — e uma `descricao`, que só
+entra sem alteração na premissa e no guia — e uma `descricao`, que só
 aparece em [`/guia-de-personagens/`](../src/pages/guia-de-personagens.astro).
 Os nomes vêm sem gênero marcado: a autora escreveu no masculino e pediu "(a)"
 onde a concordância pede, cobrindo substantivo e adjetivo juntos
@@ -295,17 +295,42 @@ colapsaria tudo numa linha só.
 
 O "Um(a)" que abre as duas linhas de personagem está escrito no molde, não nas
 profissões: as 60 abrem todas com o mesmo artigo indefinido, então não há o que
-sortear ali, e o `nome` guardado fica idêntico ao que aparece na carta e no
+sortear ali, e o `nome` guardado fica idêntico ao que aparece na premissa e no
 guia. É a diferença em relação ao local, que carrega o artigo dentro de
 `cenarios.singular` porque varia entre "um" e "uma".
 
+### Os cadeados traváveis
+
+A premissa é a própria interface do gerador: cada linha travável termina num
+cadeado pequeno, e é esta tabela — `TRAVA_DO_MARCADOR`, ao lado do `MOLDE` em
+[moldes.ts](../src/lib/gerador/moldes.ts) — que diz qual marcador põe cadeado em
+qual linha.
+
+| Marcador | Trava |
+| --- | --- |
+| `{profissaoA}` | `personagemA` |
+| `{profissaoB}` | `personagemB` |
+| `{em:local}` | `local` |
+| `{fato}` | `fato` |
+| `{mundo}` | nenhuma — quem trava a linha é o seletor de Mundo, no alto da página |
+
+`{caracteristica}` e `{personalidade}` não têm entrada própria: cada uma divide
+a linha com a profissão do mesmo personagem, e o cadeado é da linha inteira, não
+da peça. Um cadeado por peça (seis ícones dentro do texto corrido) foi
+considerado e recusado pela autora, por picotar a leitura.
+
 ## Regras do sorteio
 
-- **Travar Personagem A, Personagem B ou Local** congela a peça correspondente
-  na rolagem seguinte, nos três cadeados.
-- **O fato nunca trava** e nunca repete o da rodada anterior — travar as três
-  cartas e continuar clicando em Gerar é o uso que o cadeado sempre teve:
-  segurar o elenco e o lugar e deixar só o fato mudar.
+- **Travar Personagem A, Personagem B, Local ou Fato** congela a peça
+  correspondente na rolagem seguinte, num cadeado por linha travável — quatro
+  ao todo. A linha do mundo é a única sem cadeado: quem manda nela é o seletor
+  de Mundo, no alto da página.
+- **O fato passa a travar.** Era a única peça sem cadeado, de propósito, para
+  que travar tudo e continuar clicando em Gerar seguisse trocando alguma
+  coisa. Com um cadeado no fim de cada linha da premissa, deixá-lo de fora
+  faria a última linha parecer esquecimento em vez de decisão — a autora
+  escolheu a coerência. Solto, o fato continua sem repetir o da rodada
+  anterior; travado, ele fica parado como as outras três peças.
 - **Os dois personagens nunca saem com a mesma profissão.** A checagem olha
   para os dois lados: se o Personagem B está travado, é o A que evita a
   profissão dele ao sortear; nos outros casos, A sai livre e B evita a
@@ -314,10 +339,10 @@ guia. É a diferença em relação ao local, que carrega o artigo dentro de
   personalidades e fatos são universais — não pertencem a subgênero nenhum — e
   entram sempre da lista inteira, mesmo com um mundo escolhido.
 - **Misturar mundos** deixa profissão e local virem de qualquer um dos seis. O
-  nome do mundo no prompt de IA vira a lista dos que apareceram, na ordem das
-  cartas (Personagem A, Personagem B, Local), sem repetir um mundo usado por
-  mais de uma peça.
-- **Trocar qualquer opção do formulário** zera o sorteio e os três cadeados,
+  nome do mundo no prompt de IA vira a lista dos que apareceram, na ordem
+  Personagem A, Personagem B, Local, sem repetir um mundo usado por mais de
+  uma peça.
+- **Trocar qualquer opção do formulário** zera o sorteio e os quatro cadeados,
   para não sobrar peça travada de um mundo que não está mais selecionado.
 
 ## Quantas premissas diferentes existem
