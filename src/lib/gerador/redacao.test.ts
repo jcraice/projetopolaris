@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { contrair, redigir } from './redacao';
+import { contrair, partes, redigir } from './redacao';
 import { MOLDE } from './moldes';
 import type { Sorteio } from './tipos';
 
@@ -119,5 +119,61 @@ describe('redigir', () => {
       local: { ...sorteio.local, singular: 'uma órbita baixa' },
     };
     expect(redigir(outro, MOLDE, 'Distopia')).toContain('Tudo começa numa órbita baixa.');
+  });
+});
+
+describe('partes', () => {
+  const linhas = () => partes(sorteio, MOLDE, 'Invasão Alienígena');
+  const texto = (i: number) => linhas()[i].trechos.map((t) => t.texto).join('');
+  const sorteados = (i: number) => linhas()[i].trechos.filter((t) => t.sorteado).map((t) => t.texto);
+
+  /* Oito linhas, não cinco: as três em branco entram como linhas de trechos
+     vazios. É o que faz a premissa copiada ter as mesmas quebras da tela. */
+  it('devolve uma linha por linha do molde, com as vazias no lugar', () => {
+    const r = linhas();
+    expect(r).toHaveLength(8);
+    expect(r.map((l) => l.trechos.length === 0)).toEqual(
+      [false, true, false, false, true, false, true, false],
+    );
+  });
+
+  it('marca como sorteado só o que o sorteio trouxe', () => {
+    expect(sorteados(0)).toEqual(['invasão alienígena']);
+    expect(sorteados(2)).toEqual(['Xenobiólogo(a)', 'é cego(a) de um olho']);
+    expect(sorteados(3)).toEqual(['Contrabandista', 'egocêntrico(a)']);
+    expect(sorteados(5)).toEqual(['num laboratório secreto']);
+    expect(sorteados(7)).toEqual(['um personagem está de luto']);
+  });
+
+  it('deixa o texto fixo do molde fora do amarelo', () => {
+    const fixos = linhas().flatMap((l) => l.trechos.filter((t) => !t.sorteado).map((t) => t.texto));
+    expect(fixos).toContain('Essa é uma ficção científica de ');
+    expect(fixos).toContain('Um(a) ');
+    expect(fixos).toContain(' que é ');
+    expect(fixos).toContain('Tudo começa ');
+    expect(fixos).toContain('Importante: ');
+  });
+
+  /* A linha do mundo é a única com peça sorteada e sem cadeado: quem manda nela
+     é o seletor de Mundo, no alto da página. */
+  it('põe a trava certa em cada linha, e nenhuma na do mundo', () => {
+    expect(linhas().map((l) => l.trava)).toEqual([
+      null, null, 'personagemA', 'personagemB', null, 'local', null, 'fato',
+    ]);
+  });
+
+  it('entrega o local já contraído, num trecho só', () => {
+    expect(texto(5)).toBe('Tudo começa num laboratório secreto.');
+  });
+
+  it('lança em marcador que não existe', () => {
+    expect(() => partes(sorteio, 'Um(a) {profissaoC}.', 'Distopia'))
+      .toThrow(/marcador desconhecido/i);
+  });
+
+  /* O contrato entre as duas: o que se copia é a junção do que se vê. */
+  it('junta de volta exatamente o que redigir devolve', () => {
+    const junto = linhas().map((l) => l.trechos.map((t) => t.texto).join('')).join('\n');
+    expect(junto).toBe(redigir(sorteio, MOLDE, 'Invasão Alienígena'));
   });
 });

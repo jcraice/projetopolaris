@@ -1,3 +1,5 @@
+import type { Travas } from './tipos';
+
 /* Um molde só, no lugar dos dez que existiam. A variedade passou para as
    listas: dentro de um mundo são 10 × 9 profissões × 30 características × 30
    personalidades × 10 locais × 40 fatos, cerca de 32 milhões de premissas.
@@ -22,3 +24,20 @@ Um(a) {profissaoB} que é {personalidade}.
 Tudo começa {em:local}.
 
 Importante: {fato}.`;
+
+/* Qual marcador põe cadeado na linha onde aparece. É o que faz a premissa poder
+   ser a interface do gerador: `partes()` lê esta tabela para saber que a linha do
+   personagem A trava `personagemA`, e a do mundo não trava nada.
+
+   `{mundo}` fica de fora de propósito — quem manda naquela linha é o seletor de
+   Mundo, no alto da página, e um cadeado ali competiria com ele. `{caracteristica}`
+   e `{personalidade}` também ficam de fora: cada uma divide a linha com a profissão
+   do mesmo personagem, e o cadeado é da linha inteira. Foi decisão da autora, que
+   recusou um cadeado por peça — seis ícones dentro do texto corrido picotam a
+   leitura. */
+export const TRAVA_DO_MARCADOR: Record<string, keyof Travas> = {
+  '{profissaoA}': 'personagemA',
+  '{profissaoB}': 'personagemB',
+  '{em:local}': 'local',
+  '{fato}': 'fato',
+};

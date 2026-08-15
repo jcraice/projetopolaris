@@ -1,4 +1,5 @@
-import type { Sorteio } from './tipos';
+import { TRAVA_DO_MARCADOR } from './moldes';
+import type { Sorteio, Travas } from './tipos';
 
 const CONTRACOES: Record<string, Record<string, string>> = {
   em: { um: 'num', uma: 'numa', o: 'no', a: 'na', os: 'nos', as: 'nas' },
@@ -16,22 +17,76 @@ export function contrair(preposicao: 'em' | 'a' | 'de', sintagma: string): strin
   return fundido ? `${fundido} ${resto.join(' ')}` : `${preposicao} ${sintagma}`;
 }
 
-/* `mundo` chega pronto de nomearMundos() — pode ser um nome ("Space Opera") ou
+/* Um pedaço de linha da premissa. `sorteado` é o que a página pinta de
+   --destaque: é a diferença entre o que a máquina trouxe e o texto fixo do
+   molde. */
+export type Trecho = { texto: string; sorteado: boolean };
+
+/* Uma linha da premissa, com a trava que o cadeado do fim dela aciona. `trava`
+   é null na linha do mundo, a única sem cadeado, e nas linhas em branco. */
+export type Linha = { trechos: Trecho[]; trava: keyof Travas | null };
+
+/* O valor de cada marcador do molde.
+
+   `mundo` chega pronto de nomearMundos() — pode ser um nome ("Space Opera") ou
    vários unidos por " + " quando "Misturar mundos" está ligado. A minúscula é
    aplicada aqui, e não lá, porque o prompt de IA usa o mesmo valor e quer o
    nome como está escrito na coleção.
 
    O nome da profissão entra como está na lista, sem tocar em maiúscula: ele já
-   nasce com a inicial certa, e é o mesmo texto que o guia e a carta mostram. */
-export function redigir(sorteio: Sorteio, molde: string, mundo: string): string {
-  const { personagemA, personagemB, local, fato } = sorteio;
+   nasce com a inicial certa, e é o mesmo texto que o guia mostra. */
+const VALOR: Record<string, (sorteio: Sorteio, mundo: string) => string> = {
+  '{mundo}': (_, mundo) => mundo.toLocaleLowerCase('pt-BR'),
+  '{profissaoA}': (s) => s.personagemA.profissao.nome,
+  '{caracteristica}': (s) => s.personagemA.caracteristica,
+  '{profissaoB}': (s) => s.personagemB.profissao.nome,
+  '{personalidade}': (s) => s.personagemB.personalidade,
+  '{em:local}': (s) => contrair('em', s.local.singular),
+  '{fato}': (s) => s.fato,
+};
 
-  return molde
-    .replaceAll('{mundo}', mundo.toLocaleLowerCase('pt-BR'))
-    .replaceAll('{profissaoA}', personagemA.profissao.nome)
-    .replaceAll('{caracteristica}', personagemA.caracteristica)
-    .replaceAll('{profissaoB}', personagemB.profissao.nome)
-    .replaceAll('{personalidade}', personagemB.personalidade)
-    .replaceAll('{em:local}', contrair('em', local.singular))
-    .replaceAll('{fato}', fato);
+// Captura o delimitador junto para o split devolver texto e marcador alternados.
+const MARCADOR = /(\{[^}]+\})/;
+
+/* A premissa dividida em linhas e trechos, para a página saber onde cada peça
+   começa e termina — sem isso não há como pintar de amarelo só o que foi
+   sorteado, nem pôr o cadeado na linha certa.
+
+   As linhas em branco do molde entram como linhas de trechos vazios, e não são
+   descartadas: é o que faz a premissa copiada ter as mesmas quebras que a da
+   tela. */
+export function partes(sorteio: Sorteio, molde: string, mundo: string): Linha[] {
+  return molde.split('\n').map((linha) => {
+    const trechos: Trecho[] = [];
+    let trava: keyof Travas | null = null;
+
+    for (const pedaco of linha.split(MARCADOR)) {
+      if (!pedaco) continue;
+
+      if (!MARCADOR.test(pedaco)) {
+        trechos.push({ texto: pedaco, sorteado: false });
+        continue;
+      }
+
+      const valor = VALOR[pedaco];
+      /* Falhar alto em vez de imprimir "{profissaoC}" na cara de quem está
+         usando: o molde é constante e dados.test.ts tranca os marcadores dele,
+         então chegar aqui significa que alguém editou um sem editar o outro. */
+      if (!valor) throw new Error(`marcador desconhecido no molde: ${pedaco}`);
+
+      trechos.push({ texto: valor(sorteio, mundo), sorteado: true });
+      trava = TRAVA_DO_MARCADOR[pedaco] ?? trava;
+    }
+
+    return { trechos, trava };
+  });
+}
+
+/* A premissa como texto corrido — o que "Copiar premissa" leva para a área de
+   transferência. Junção de partes(), e não uma segunda passada de substituição,
+   para o texto da tela e o texto copiado não terem como divergir. */
+export function redigir(sorteio: Sorteio, molde: string, mundo: string): string {
+  return partes(sorteio, molde, mundo)
+    .map((linha) => linha.trechos.map((trecho) => trecho.texto).join(''))
+    .join('\n');
 }

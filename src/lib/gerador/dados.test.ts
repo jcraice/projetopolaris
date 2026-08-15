@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { CARACTERISTICAS } from './caracteristicas';
 import { FATOS } from './fatos';
-import { MOLDE } from './moldes';
+import { MOLDE, TRAVA_DO_MARCADOR } from './moldes';
 import { PERSONALIDADES } from './personalidades';
 import { PROFISSOES } from './profissoes';
 
@@ -96,5 +96,31 @@ describe('MOLDE', () => {
      molde numa linha só, a premissa vira um parágrafo e o formato se perde. */
   it('tem as quatro linhas separadas por linha em branco', () => {
     expect(MOLDE.split('\n\n')).toHaveLength(4);
+  });
+});
+
+describe('TRAVA_DO_MARCADOR', () => {
+  it('cobre os quatro marcadores traváveis', () => {
+    expect(TRAVA_DO_MARCADOR).toEqual({
+      '{profissaoA}': 'personagemA',
+      '{profissaoB}': 'personagemB',
+      '{em:local}': 'local',
+      '{fato}': 'fato',
+    });
+  });
+
+  /* O mundo tem seletor próprio no alto da página; um cadeado na linha dele
+     competiria com o seletor. Característica e personalidade dividem a linha com
+     a profissão do mesmo personagem, e o cadeado é da linha inteira. */
+  it('não trava o mundo nem os dois traços', () => {
+    for (const marcador of ['{mundo}', '{caracteristica}', '{personalidade}']) {
+      expect(TRAVA_DO_MARCADOR).not.toHaveProperty(marcador);
+    }
+  });
+
+  it('só usa marcadores que existem no molde', () => {
+    for (const marcador of Object.keys(TRAVA_DO_MARCADOR)) {
+      expect(MOLDE).toContain(marcador);
+    }
   });
 });
