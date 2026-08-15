@@ -182,8 +182,8 @@ const raiz = base.endsWith('/') ? base : base + '/';
     justify-content: center;
     vertical-align: -0.2em;
     /* 28px de área tocável, acima dos 24px do WCAG 2.2 AA, com um ícone de 16px
-       dentro. Encolheu em relação ao tamanho anterior porque agora fica no meio
-       do texto, e a autora pediu que fosse sutil. */
+       dentro. Era 36/20 enquanto o cadeado morava no canto de uma carta;
+       encolheu ao vir para o meio do texto, e a autora pediu que fosse sutil. */
     width: 28px;
     height: 28px;
     /* Cola o cadeado na linha que ele trava, e o afasta do ponto final. */
@@ -241,11 +241,12 @@ const raiz = base.endsWith('/') ? base : base + '/';
     white-space: pre-wrap;
   }
 
-  /* O que o sorteio trouxe, destacado dentro da própria frase. --destaque nos
-     dois temas: o amarelo no escuro e o laranja no claro. Sobre o fundo do bloco
-     dá 6,78:1 no pior mundo escuro e 4,59:1 no claro; acima dos 4,5:1 que texto
-     comum exige, com folga pequena no claro — mais um motivo para o --destaque
-     do tema claro não poder clarear.
+  /* O que o sorteio trouxe, destacado dentro da própria frase — é isto que
+     tomou o lugar da pilha de cartas que ficava acima da premissa repetindo o
+     que ela já dizia. --destaque nos dois temas: o amarelo no escuro e o laranja
+     no claro. Sobre o fundo do bloco dá 6,78:1 no pior mundo escuro e 4,59:1 no
+     claro; acima dos 4,5:1 que texto comum exige, com folga pequena no claro —
+     mais um motivo para o --destaque do tema claro não poder clarear.
 
      `:global()` porque estes spans nascem do JavaScript, em montarPremissa(), e
      por isso não recebem o atributo de escopo que o Astro põe na marcação
