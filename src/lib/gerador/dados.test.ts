@@ -79,7 +79,7 @@ describe('a forma do texto das três listas universais', () => {
 });
 
 describe('MOLDE', () => {
-  it('usa os seis marcadores', () => {
+  it('usa os sete marcadores', () => {
     for (const marcador of [
       '{mundo}', '{profissaoA}', '{caracteristica}',
       '{profissaoB}', '{personalidade}', '{em:local}', '{fato}',

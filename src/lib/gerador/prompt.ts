@@ -42,7 +42,7 @@ const MARCADORES: Record<string, keyof ValoresDoPrompt> = {
 };
 
 /* Marcador é colchete com só maiúsculas e espaço dentro — é a convenção dos
-   quatro que existem. A definição é estreita de propósito: um "[ver nota]" em
+   cinco que existem. A definição é estreita de propósito: um "[ver nota]" em
    minúsculas no meio da prosa continua sendo texto, e a autora pode escrever
    colchetes no prompt-ia.md sem que a montagem pare de funcionar. */
 const MARCADOR_QUE_SOBROU = /\[\p{Lu}[\p{Lu} ]*\]/u;
