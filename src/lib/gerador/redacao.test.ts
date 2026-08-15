@@ -88,7 +88,7 @@ describe('redigir', () => {
   });
 
   /* O nome entra como está guardado — nada de mexer em maiúscula na redação. O
-     mesmo texto aparece na carta e no guia, e um `toLowerCase` aqui estragaria
+     mesmo texto aparece na premissa e no guia, e um `toLowerCase` aqui estragaria
      as siglas ("Engenheiro(a) de IA" viraria "engenheiro(a) de ia"). */
   it('escreve o nome da profissão como está na lista', () => {
     const frase = redigir(sorteio, MOLDE, 'Distopia');

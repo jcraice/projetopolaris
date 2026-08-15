@@ -10,7 +10,7 @@ import type { Travas } from './tipos';
 
    O "Um(a)" está aqui e não na lista de profissões: as 60 abrem com o mesmo
    artigo, então não há o que sortear, e o nome guardado fica idêntico ao que
-   aparece no guia e na carta. É a diferença em relação ao local, que carrega o
+   aparece no guia e na premissa. É a diferença em relação ao local, que carrega o
    artigo dentro de `cenarios.singular` porque varia entre "um" e "uma".
 
    Repare no "é": ele está no molde só na linha da personalidade. Na linha da

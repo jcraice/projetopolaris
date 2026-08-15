@@ -59,8 +59,8 @@ pede sempre pelo papel.
 segue em 0,8.
 
 > **Atualização depois da medição.** As molduras douradas saíram do site por
-> decisão editorial — primeiro dos verbetes do catálogo, depois das três cartas
-> do gerador. Nos dois casos o painel saiu junto, e o texto passou a ficar
+> decisão editorial — primeiro dos verbetes do catálogo, depois da interface do
+> gerador. Nos dois casos o painel saiu junto, e o texto passou a ficar
 > direto sobre o céu. Restam sobre painel a navegação, os pilares da home e o
 > card do gerador na home. A tabela acima vale para esses três; para todo o
 > resto, use a próxima.
@@ -205,6 +205,8 @@ claro que o céu, então clareava o fundo e derrubava o corpo de texto para
 a 45% — escurece em vez de clarear, e o texto sobe de 4,71 para **6,90**, o
 destaque para **6,78** e o apagado de 2,12 para 3,38.
 
+Esses números se aplicam ao `.sorteado`, o texto em `--destaque` dentro da premissa sorteada no gerador. Agora é texto comum (não mais um rótulo pequeno), então os 4,59:1 do tema claro passam dos 4,5:1 exigidos com folga pequena — o que reforça a regra de que o `--destaque` do tema claro não pode clarear.
+
 Nenhum ajuste de opacidade resolve: para `--apagado` passar em 4,5:1 sobre o
 céu, a aurora teria que cair para 0,135, o que apaga a identidade visual do
 site. As saídas reais são dar fundo de painel a esses trechos (rodapé, legenda,
@@ -283,7 +285,7 @@ troca da etiqueta de `--destaque` para `--apoio` dentro de um pilar preenchido,
 com a observação de que os dois acentos separavam 2,40:1. Os pilares da home não
 contêm etiqueta nenhuma — são um `h2` e um `p` dentro de um link —, e a regra saiu
 do CSS. Hoje a etiqueta aparece em três lugares e nenhum é um pilar: o marcador
-do arquétipo felino, as marcas de mundo das cartas do gerador e o "Erro 404". Em
+do arquétipo felino, na interface do gerador e o "Erro 404". Em
 todos, ela fica sobre o fundo da página. A separação entre os dois acentos
 continua registrada — **2,59:1** com o laranja — porque é útil saber, não porque
 algum lugar dependa dela.
@@ -318,9 +320,9 @@ Verificado por leitura do CSS; falta a confirmação visual no navegador.
   `.busca` no máximo 320px.
 - Todos os agrupamentos horizontais — navegação, links, pilares, sumário,
   ações do gerador — usam `flex-wrap: wrap`.
-- As cartas do gerador já são uma coluna em qualquer largura
-  (`.pilha-cartas` é `flex-direction: column`, decisão de projeto), então
-  empilham por construção, não por media query.
+- A premissa sorteada é sempre uma coluna em qualquer largura (texto é
+  `display: block`, decisão de projeto), então empilha por construção, não
+  por media query.
 - `html` tem `overflow-x: hidden`, que impede a rolagem horizontal mesmo se algo
   vazar. O `body` **não** tem, de propósito: com um eixo em hidden ele viraria
   contêiner de rolagem e a barra do topo, que é sticky, se fixaria em relação a

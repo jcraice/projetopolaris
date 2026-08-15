@@ -10,7 +10,7 @@ export function nomearMundos(
     return id ? (nomes[id] ?? id) : '';
   }
 
-  /* A ordem é a das cartas na tela — personagem A, personagem B, local — e o
+  /* A ordem é a das linhas da premissa — personagem A, personagem B, local — e o
      Set preserva a ordem de inserção, então "Distopia + Cyberpunk" sai na ordem
      em que a pessoa lê as peças, não em ordem alfabética nem de coleção.
 

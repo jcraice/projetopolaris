@@ -21,10 +21,9 @@ const { titulo, ancora, marcador } = Astro.props;
 
 <style>
   /* Sem moldura e sem painel de propósito: os verbetes de uma seção formam um
-     bloco contínuo, separado por espaço em branco, e não uma fileira de caixas
-     emolduradas. Quem ainda tem moldura é a .carta do gerador, escopada na
-     própria gerador.astro, porque lá ela carrega significado — vira outra cor
-     quando a peça está travada. */
+     bloco contínuo, separado por espaço em branco. A moldura e a cor são
+     responsabilidades da premissa sorteada no gerador, onde os trechos destacados
+     ganham cor quando as peças estão destravadas ou mudam de cor quando travadas. */
   .verbete {
     display: flex;
     flex-direction: column;

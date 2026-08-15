@@ -173,18 +173,17 @@ const raiz = base.endsWith('/') ? base : base + '/';
     outline-offset: 3px;
   }
 
-  /* O cadeado agora vive dentro do texto da premissa, no fim da linha que trava,
-     em vez de ancorado no canto de uma carta. inline-flex para acompanhar a
-     linha; vertical-align porque, solto na linha de base, o ícone desce e
-     desalinha em relação às letras. */
+  /* O cadeado vive dentro do texto da premissa, no fim da linha que trava.
+     inline-flex para acompanhar a linha; vertical-align porque, solto na linha
+     de base, o ícone desce e desalinha em relação às letras. */
   .cadeado {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     vertical-align: -0.2em;
     /* 28px de área tocável, acima dos 24px do WCAG 2.2 AA, com um ícone de 16px
-       dentro. Era 36/20 quando o cadeado morava na carta; encolheu porque agora
-       fica no meio do texto, e a autora pediu que fosse sutil. */
+       dentro. Encolheu em relação ao tamanho anterior porque agora fica no meio
+       do texto, e a autora pediu que fosse sutil. */
     width: 28px;
     height: 28px;
     /* Cola o cadeado na linha que ele trava, e o afasta do ponto final. */
@@ -242,12 +241,11 @@ const raiz = base.endsWith('/') ? base : base + '/';
     white-space: pre-wrap;
   }
 
-  /* O que o sorteio trouxe, dentro da própria frase — é isto que substituiu a
-     pilha de cartas. --destaque nos dois temas: o amarelo no escuro e o laranja
-     no claro. Sobre o fundo do bloco dá 6,78:1 no pior mundo escuro e 4,59:1 no
-     claro, a mesma medida que o rótulo das cartas tinha; acima dos 4,5:1 que
-     texto comum exige, com folga pequena no claro — mais um motivo para o
-     --destaque do tema claro não poder clarear.
+  /* O que o sorteio trouxe, destacado dentro da própria frase. --destaque nos
+     dois temas: o amarelo no escuro e o laranja no claro. Sobre o fundo do bloco
+     dá 6,78:1 no pior mundo escuro e 4,59:1 no claro; acima dos 4,5:1 que texto
+     comum exige, com folga pequena no claro — mais um motivo para o --destaque
+     do tema claro não poder clarear.
 
      `:global()` porque estes spans nascem do JavaScript, em montarPremissa(), e
      por isso não recebem o atributo de escopo que o Astro põe na marcação
