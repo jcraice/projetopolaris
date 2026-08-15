@@ -97,10 +97,13 @@ const linksDeMais = [
   .nav {
     position: sticky;
     top: 0;
-    /* Acima de qualquer descendente posicionado do <main>: o cadeado do gerador
-       é absolute e, sem isto, pintaria por cima da barra ao rolar, porque vem
-       depois na ordem do documento. A lista da busca (z-index: 20) segue
-       funcionando dentro do contexto de empilhamento que este z-index cria. */
+    /* Acima de qualquer descendente posicionado do <main>, que vem depois na
+       ordem do documento e sem isto pintaria por cima da barra ao rolar. O caso
+       que motivou o valor era o cadeado do gerador, na época `absolute` no canto
+       de uma carta; as cartas foram apagadas e o cadeado hoje é `inline-flex` no
+       meio do texto, mas a regra continua valendo para o próximo elemento
+       posicionado que apareça. A lista da busca (z-index: 20) segue funcionando
+       dentro do contexto de empilhamento que este z-index cria. */
     z-index: 10;
     display: flex;
     flex-wrap: wrap;
