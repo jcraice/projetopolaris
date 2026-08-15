@@ -368,7 +368,7 @@ const raiz = base.endsWith('/') ? base : base + '/';
   const premissa = document.getElementById('premissa')!;
   const prompt = document.getElementById('prompt')!;
 
-  const travas: Travas = { personagemA: false, personagemB: false, local: false };
+  const travas: Travas = { personagemA: false, personagemB: false, local: false, fato: false };
   const TIPOS = ['personagemA', 'personagemB', 'local'] as const;
 
   // Único estado guardado do gerador, e vive só em memória: nada é escrito no

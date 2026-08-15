@@ -51,10 +51,15 @@ export function sortear(
     personalidade: escolher(PERSONALIDADES, aleatorio),
   };
 
-  /* O fato não tem cadeado e nunca repete o da rodada anterior. As complicações
-     de antes tinham famílias e a regra evitava repetir a família também; os
-     fatos são uma lista só, e a regra é só não repetir o último. */
-  const fato = escolher(FATOS.filter((f) => f !== anterior?.fato), aleatorio);
+  /* Solto, o fato nunca repete o da rodada anterior. As complicações de antes
+     tinham famílias e a regra evitava repetir a família também; os fatos são uma
+     lista só, e a regra é só não repetir o último.
+
+     A trava vem antes do filtro, e não depois: travado, o fato é justamente o
+     anterior — a única coisa que o filtro de não-repetição sabe excluir. */
+  const fato = travas.fato && anterior
+    ? anterior.fato
+    : escolher(FATOS.filter((f) => f !== anterior?.fato), aleatorio);
 
   return {
     personagemA,

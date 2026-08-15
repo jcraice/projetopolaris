@@ -24,7 +24,21 @@ export type Pools = {
   locais: PecaCenario[];
 };
 
-export type Travas = { personagemA: boolean; personagemB: boolean; local: boolean };
+/* Uma trava por linha travável da premissa — a do mundo não existe porque quem
+   manda naquela linha é o seletor de Mundo, não um cadeado.
+
+   `fato` entrou quando a premissa virou a interface do gerador. Antes ele era a
+   única peça sem cadeado, de propósito: com as cartas na tela, travar as três e
+   clicar em "Gerar" precisava continuar trocando alguma coisa. Com um cadeado no
+   fim de cada linha, a última linha sem ícone pareceria esquecimento em vez de
+   decisão — escolha da autora. A regra de não repetir o fato anterior continua
+   valendo quando ele está solto. */
+export type Travas = {
+  personagemA: boolean;
+  personagemB: boolean;
+  local: boolean;
+  fato: boolean;
+};
 
 /* `incluirComuns` saiu junto com os arquétipos: a caixa existia para somar ao
    sorteio os 10 arquétipos comuns, e sem arquétipos no gerador não há o que

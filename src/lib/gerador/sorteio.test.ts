@@ -17,7 +17,8 @@ const pools: Pools = {
   ],
 };
 
-const SEM_TRAVA: Travas = { personagemA: false, personagemB: false, local: false };
+const SEM_TRAVA: Travas = { personagemA: false, personagemB: false, local: false, fato: false };
+const TUDO_TRAVADO: Travas = { personagemA: true, personagemB: true, local: true, fato: true };
 const base: Opcoes = { subgenero: 'cyberpunk', misturarMundos: false };
 const zero = () => 0;
 
@@ -55,7 +56,7 @@ describe('sortear', () => {
     for (let i = 0; i < 100; i++) {
       anterior = sortear(
         pools, { ...base, misturarMundos: true },
-        { personagemA: true, personagemB: false, local: false }, anterior, Math.random,
+        { personagemA: true, personagemB: false, local: false, fato: false }, anterior, Math.random,
       );
       expect(anterior.personagemA.profissao.nome).not.toBe(anterior.personagemB.profissao.nome);
     }
@@ -68,7 +69,7 @@ describe('sortear', () => {
     for (let i = 0; i < 100; i++) {
       anterior = sortear(
         pools, { ...base, misturarMundos: true },
-        { personagemA: false, personagemB: true, local: false }, anterior, Math.random,
+        { personagemA: false, personagemB: true, local: false, fato: false }, anterior, Math.random,
       );
       expect(anterior.personagemA.profissao.nome).not.toBe(anterior.personagemB.profissao.nome);
     }
@@ -77,12 +78,9 @@ describe('sortear', () => {
   it('preserva cada peça travada', () => {
     const anterior = sortear(pools, { ...base, misturarMundos: true }, SEM_TRAVA, null, () => 0.9);
     const novo = sortear(
-      pools, { ...base, misturarMundos: true },
-      { personagemA: true, personagemB: true, local: true }, anterior, () => 0,
+      pools, { ...base, misturarMundos: true }, TUDO_TRAVADO, anterior, () => 0,
     );
-    expect(novo.personagemA).toEqual(anterior.personagemA);
-    expect(novo.personagemB).toEqual(anterior.personagemB);
-    expect(novo.local).toEqual(anterior.local);
+    expect(novo).toEqual(anterior);
   });
 
   it('nunca repete o fato da rolagem anterior', () => {
@@ -94,16 +92,31 @@ describe('sortear', () => {
     }
   });
 
-  /* O fato é a única peça sem cadeado: travar as três cartas e continuar
-     clicando em Gerar é o uso que o cadeado sempre teve — segurar o elenco e o
-     lugar e rolar só o que complica. */
-  it('traz fato novo mesmo com as três travas ligadas', () => {
-    const todas: Travas = { personagemA: true, personagemB: true, local: true };
+  /* O uso que o cadeado sempre teve: segurar o elenco e o lugar e rolar só o que
+     complica. Antes valia por regra, porque o fato não travava; agora vale por
+     escolha, deixando o cadeado do fato aberto. */
+  it('troca só o fato quando as outras três estão travadas', () => {
+    const soOFato: Travas = { personagemA: true, personagemB: true, local: true, fato: false };
     let anterior: Sorteio | null = sortear(pools, base, SEM_TRAVA, null, Math.random);
     for (let i = 0; i < 50; i++) {
-      const atual = sortear(pools, base, todas, anterior, Math.random);
+      const atual = sortear(pools, base, soOFato, anterior, Math.random);
       expect(atual.fato).not.toBe(anterior!.fato);
+      expect(atual.personagemA).toEqual(anterior!.personagemA);
+      expect(atual.personagemB).toEqual(anterior!.personagemB);
+      expect(atual.local).toEqual(anterior!.local);
       anterior = atual;
+    }
+  });
+
+  /* O espelho: travado, o fato é o único valor que o filtro de não-repetição
+     sabe excluir, então a ordem entre trava e filtro importa. */
+  it('preserva o fato quando ele está travado', () => {
+    const soOFatoTravado: Travas = { ...SEM_TRAVA, fato: true };
+    let anterior: Sorteio | null = sortear(pools, base, SEM_TRAVA, null, Math.random);
+    const primeiro = anterior.fato;
+    for (let i = 0; i < 20; i++) {
+      anterior = sortear(pools, base, soOFatoTravado, anterior, Math.random);
+      expect(anterior.fato).toBe(primeiro);
     }
   });
 

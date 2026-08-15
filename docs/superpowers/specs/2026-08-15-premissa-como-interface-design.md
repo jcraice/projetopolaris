@@ -162,6 +162,16 @@ linha do molde aparecerem. Os cadeados são `inline-flex` dentro do texto.
 **"Copiar premissa" copia `redigir()`**, não o `textContent` do contêiner — os
 botões não contribuem com texto, mas depender disso seria frágil.
 
+**O `aria-live="polite"` continua no parágrafo da premissa**, como hoje. A
+diferença é que agora existem quatro botões dentro da região viva, e há um custo:
+dependendo do leitor de tela, a releitura a cada "Gerar" pode incluir os rótulos
+dos cadeados. Foi aceito em vez das alternativas — duplicar a premissa num
+parágrafo escondido só para o leitor de tela, ou tirar o `aria-live` e deixar
+quem não enxerga sem saber que a premissa mudou. O primeiro põe o mesmo texto em
+dois lugares que podem divergir; o segundo é pior para quem o `aria-live` serve.
+Cada cadeado leva `aria-label` dizendo o que trava ("Travar personagem A",
+"Travar local", "Travar fato").
+
 ## 7. O que não muda
 
 - O sorteio, tirando a trava nova do fato.
