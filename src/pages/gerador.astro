@@ -39,14 +39,6 @@ const locais = (await getCollection('cenarios')).map((c) => ({
   id: c.id, nome: c.data.titulo, subgenero: c.data.subgenero, singular: c.data.singular,
 }));
 
-// Rótulo fixo de cada carta — não depende do sorteio, por isso é escrito em
-// build, diferente de {etiqueta} e {nome}, que o script preenche a cada rolagem.
-const CARTAS = [
-  { tipo: 'personagemA', rotulo: 'Personagem A' },
-  { tipo: 'personagemB', rotulo: 'Personagem B' },
-  { tipo: 'local', rotulo: 'Local' },
-] as const;
-
 const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : base + '/';
 ---
@@ -66,56 +58,50 @@ const raiz = base.endsWith('/') ? base : base + '/';
     </fieldset>
   </form>
 
-  <section id="cartas" class="pilha-cartas bloco" aria-live="polite" aria-label="Peças sorteadas">
-    {CARTAS.map(({ tipo, rotulo }) => (
-      <article class="carta" data-carta={tipo}>
-        <div class="carta__topo">
-          <h2 class="carta__papel">{rotulo}</h2>
-          <span class="etiqueta" data-papel="etiqueta"></span>
-        </div>
-        <p class="carta__nome" data-papel="nome"></p>
-        <p class="carta__traco" data-papel="traco"></p>
-        {/* O rótulo fica no aria-label e não muda com o estado: aria-pressed já
-            faz o leitor de tela anunciar "pressionado"/"não pressionado", e um
-            rótulo que também virasse "Destravar" diria a mesma coisa duas
-            vezes, uma delas invertida. */}
-        <button
-          type="button"
-          class="cadeado"
-          data-travar={tipo}
-          aria-pressed="false"
-          aria-label={`Travar ${rotulo.toLowerCase()}`}
-        >
-          <svg class="cadeado__aberto" viewBox="0 0 24 24" width="20" height="20"
-               fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="4" y="11" width="16" height="10" rx="2" />
-            <path d="M8 11V7a4 4 0 0 1 7.5-2" />
-          </svg>
-          <svg class="cadeado__fechado" viewBox="0 0 24 24" width="20" height="20"
-               fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="4" y="11" width="16" height="10" rx="2" />
-            <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-          </svg>
-        </button>
-      </article>
-    ))}
-  </section>
-  <div class="acoes">
-    <button type="button" class="botao botao--principal" id="sortear">Gerar</button>
-  </div>
+  {/* A premissa é a interface do gerador: não existe mais uma pilha de cartas
+      repetindo, acima dela, o que a frase já diz. O que o sorteio trouxe aparece
+      em --destaque dentro do próprio texto, e o cadeado de cada linha trava
+      aquela peça.
 
+      O conteúdo é montado pelo <script> a partir de partes(): sem JavaScript o
+      bloco fica vazio, como já ficava antes. */}
   <section class="bloco bloco-premissa" aria-labelledby="premissa-titulo">
     <h2 id="premissa-titulo">Premissa gerada</h2>
     {/* aria-live no parágrafo, e não na seção inteira: na seção, cada clique
-        em Gerar faria o leitor de tela reler também o título. */}
-    <p id="premissa" class="abertura" aria-live="polite"></p>
+        em Gerar faria o leitor de tela reler também o título. Os quatro cadeados
+        moram dentro da região viva, e o custo é que a releitura pode incluir os
+        rótulos deles — aceito em vez de duplicar a premissa num parágrafo
+        escondido (dois textos que podem divergir) ou de tirar o aria-live e
+        deixar quem não enxerga sem saber que a premissa mudou. */}
+    <p id="premissa" class="premissa" aria-live="polite"></p>
   </section>
   <div class="acoes">
+    <button type="button" class="botao botao--principal" id="sortear">Gerar</button>
     <button type="button" class="botao" id="copiar-premissa">Copiar premissa</button>
     <span class="aviso" id="aviso-premissa" role="status"></span>
   </div>
+
+  {/* O botão vive aqui, num <template>, e não numa string dentro do script: o
+      SVG continua sendo marcação legível, e o script só clona. O rótulo fica no
+      aria-label e não muda com o estado — aria-pressed já faz o leitor de tela
+      anunciar "pressionado"/"não pressionado", e um rótulo que também virasse
+      "Destravar" diria a mesma coisa duas vezes, uma delas invertida. */}
+  <template id="modelo-cadeado">
+    <button type="button" class="cadeado" aria-pressed="false">
+      <svg class="cadeado__aberto" viewBox="0 0 24 24" width="16" height="16"
+           fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="4" y="11" width="16" height="10" rx="2" />
+        <path d="M8 11V7a4 4 0 0 1 7.5-2" />
+      </svg>
+      <svg class="cadeado__fechado" viewBox="0 0 24 24" width="16" height="16"
+           fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="4" y="11" width="16" height="10" rx="2" />
+        <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+      </svg>
+    </button>
+  </template>
 
   <section class="bloco bloco-prompt" aria-labelledby="prompt-titulo">
     <h2 id="prompt-titulo">Crie enredos com sua IA favorita</h2>
@@ -187,38 +173,22 @@ const raiz = base.endsWith('/') ? base : base + '/';
     outline-offset: 3px;
   }
 
-  /* Decisão de projeto: os cartões ficam empilhados em coluna, não em grade. */
-  .pilha-cartas {
-    display: flex;
-    flex-direction: column;
-    /* Era 16px quando cada carta tinha moldura. Sem ela, é o espaço que separa
-       uma peça da outra, como nos verbetes do catálogo. */
-    gap: 28px;
-  }
-
-  /* Sem moldura nem painel, como o catálogo. O estado de trava, que antes era
-     a borda mudando de cor, passou inteiro para o cadeado. */
-  .carta {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    /* Reserva a coluna do cadeado, que é absoluto no canto: sem isto, um nome
-       de peça comprido passaria por baixo do ícone. */
-    padding-right: 40px;
-  }
-
+  /* O cadeado agora vive dentro do texto da premissa, no fim da linha que trava,
+     em vez de ancorado no canto de uma carta. inline-flex para acompanhar a
+     linha; vertical-align porque, solto na linha de base, o ícone desce e
+     desalinha em relação às letras. */
   .cadeado {
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    /* 36px de área tocável, acima dos 24px do WCAG 2.2 AA, com um ícone de
-       20px dentro — discreto de ver, confortável de acertar no celular. */
-    width: 36px;
-    height: 36px;
+    vertical-align: -0.2em;
+    /* 28px de área tocável, acima dos 24px do WCAG 2.2 AA, com um ícone de 16px
+       dentro. Era 36/20 quando o cadeado morava na carta; encolheu porque agora
+       fica no meio do texto, e a autora pediu que fosse sutil. */
+    width: 28px;
+    height: 28px;
+    /* Cola o cadeado na linha que ele trava, e o afasta do ponto final. */
+    margin-inline-start: 6px;
     padding: 0;
     border: 0;
     background: transparent;
@@ -256,54 +226,37 @@ const raiz = base.endsWith('/') ? base : base + '/';
     display: block;
   }
 
-  .carta__topo {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
+  /* pre-wrap porque a premissa é um bloco de linhas, não um parágrafo corrido:
+     as quebras vêm do MOLDE e precisam aparecer na tela. Mesmo motivo do
+     .prompt__texto logo abaixo.
 
-  /* --destaque nos dois temas: o amarelo no escuro e o laranja no claro. A
-     primeira versão usava --apoio no claro, mas o azul-tinta ficou escuro
-     demais para servir de destaque. Sobre o fundo do bloco dá 6,78:1 no pior
-     mundo escuro e 4,59:1 no claro. */
-  .carta__papel {
+     line-height maior que a do prompt porque agora há cadeados de 28px no meio
+     das linhas: com o espaçamento apertado, o ícone de uma linha encostava no
+     texto da seguinte. */
+  .premissa {
     margin: 0;
-    font-size: 0.95rem;
-    color: var(--destaque);
-  }
-
-  .carta__nome {
-    margin: 0;
-    min-height: 1.5em;
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: var(--texto-forte);
-  }
-
-  /* Segunda linha da carta de personagem: o traço sorteado, mais discreto que a
-     profissão porque é qualificador dela, não outra peça. --texto, e não
-     --apagado: precisa dos 4,5:1 de texto comum sobre o fundo. */
-  .carta__traco {
-    margin: 0;
-    font-size: 1rem;
-    color: var(--texto);
-  }
-
-  /* A carta do local não tem traço, e o parágrafo vazio somaria um espaço que
-     desalinharia as três cartas. */
-  .carta__traco:empty {
-    display: none;
-  }
-
-  /* pre-wrap porque a premissa deixou de ser uma frase e virou um bloco de quatro
-     linhas: as quebras vêm do MOLDE e precisam aparecer na tela. Mesmo motivo do
-     .prompt__texto logo abaixo. */
-  .bloco-premissa #premissa {
     min-height: 1.6em;
     font-size: 1.15rem;
+    line-height: 1.7;
     color: var(--texto-forte);
     white-space: pre-wrap;
+  }
+
+  /* O que o sorteio trouxe, dentro da própria frase — é isto que substituiu a
+     pilha de cartas. --destaque nos dois temas: o amarelo no escuro e o laranja
+     no claro. Sobre o fundo do bloco dá 6,78:1 no pior mundo escuro e 4,59:1 no
+     claro, a mesma medida que o rótulo das cartas tinha; acima dos 4,5:1 que
+     texto comum exige, com folga pequena no claro — mais um motivo para o
+     --destaque do tema claro não poder clarear.
+
+     `:global()` porque estes spans nascem do JavaScript, em montarPremissa(), e
+     por isso não recebem o atributo de escopo que o Astro põe na marcação
+     escrita no arquivo. Sem ele a regra é descartada em silêncio e o amarelo
+     simplesmente não aparece — o mesmo cuidado que o HTML vindo de render()
+     exige. O `.premissa` na frente mantém o escopo: quem é global é só o filho. */
+  .premissa :global(.sorteado) {
+    color: var(--destaque);
+    font-weight: 700;
   }
 
   /* pre-wrap, e não <pre>: as quebras de linha do prompt-ia.md fazem parte do
@@ -351,7 +304,7 @@ const raiz = base.endsWith('/') ? base : base + '/';
 </style>
 
 <script>
-  import { montarPrompt, nomearMundos, sortear, redigir, MOLDE, PROFISSOES } from '../lib/gerador';
+  import { montarPrompt, nomearMundos, partes, sortear, redigir, MOLDE, PROFISSOES } from '../lib/gerador';
   import type { Opcoes, PecaCenario, Pools, Sorteio, Travas } from '../lib/gerador';
 
   const locais: PecaCenario[] = JSON.parse(document.getElementById('locais')!.textContent!);
@@ -369,7 +322,6 @@ const raiz = base.endsWith('/') ? base : base + '/';
   const prompt = document.getElementById('prompt')!;
 
   const travas: Travas = { personagemA: false, personagemB: false, local: false, fato: false };
-  const TIPOS = ['personagemA', 'personagemB', 'local'] as const;
 
   // Único estado guardado do gerador, e vive só em memória: nada é escrito no
   // navegador (sem localStorage, sem conta, sem link compartilhável), por
@@ -384,39 +336,65 @@ const raiz = base.endsWith('/') ? base : base + '/';
     };
   };
 
-  /* Cada carta mostra a peça que tem mundo (a profissão, ou o local) e, nas
-     duas de personagem, o traço embaixo. A etiqueta sai sempre da peça de
-     mundo — característica e personalidade são universais e não têm o que
-     etiquetar.
+  /* A estrutura da premissa é montada uma vez, no carregamento, e não a cada
+     rolagem: o MOLDE é fixo, então os spans e os cadeados estão sempre nos
+     mesmos lugares e só o texto dos sorteados muda. Reconstruir tudo a cada
+     "Gerar" tiraria o foco do teclado de quem está navegando pelos cadeados e
+     obrigaria a religar os ouvintes de clique.
 
-     O `tipo` de cada ramo é conferido separadamente (em vez de indexar
-     `s[tipo]` uma única vez e decidir o traço depois) porque `s[tipo]` com
-     `tipo` ainda em união não estreita o tipo do valor: o TypeScript não
-     consegue provar que checar `tipo === 'personagemA'` depois já garante
-     `personagem.caracteristica`. */
-  const conteudoDaCarta = (s: Sorteio, tipo: (typeof TIPOS)[number]) => {
-    if (tipo === 'local') {
-      return { nome: s.local.nome, traco: '', subgenero: s.local.subgenero };
-    }
-    if (tipo === 'personagemA') {
-      const { profissao, caracteristica } = s.personagemA;
-      return { nome: profissao.nome, traco: caracteristica, subgenero: profissao.subgenero };
-    }
-    const { profissao, personalidade } = s.personagemB;
-    return { nome: profissao.nome, traco: personalidade, subgenero: profissao.subgenero };
+     Guarda os spans sorteados na ordem em que aparecem; pintar() os percorre na
+     mesma ordem que partes() devolve. */
+  const sorteados: HTMLElement[] = [];
+
+  const ROTULO: Record<keyof Travas, string> = {
+    personagemA: 'personagem A',
+    personagemB: 'personagem B',
+    local: 'local',
+    fato: 'fato',
   };
 
-  function pintar(sorteio: Sorteio, opcoes: Opcoes) {
-    for (const tipo of TIPOS) {
-      const carta = document.querySelector(`[data-carta="${tipo}"]`)!;
-      const { nome, traco, subgenero } = conteudoDaCarta(sorteio, tipo);
-      carta.querySelector('[data-papel="nome"]')!.textContent = nome;
-      carta.querySelector('[data-papel="traco"]')!.textContent = traco;
-      carta.querySelector('[data-papel="etiqueta"]')!.textContent = subgenero.replace(/-/g, ' ');
+  function montarPremissa(sorteio: Sorteio, mundo: string) {
+    const modeloCadeado = document.getElementById('modelo-cadeado') as HTMLTemplateElement;
+
+    for (const linha of partes(sorteio, MOLDE, mundo)) {
+      for (const trecho of linha.trechos) {
+        const span = document.createElement('span');
+        span.textContent = trecho.texto;
+        // O texto fixo do molde é escrito aqui e nunca mais: só os sorteados
+        // entram na lista que pintar() reescreve a cada rolagem.
+        if (trecho.sorteado) {
+          span.className = 'sorteado';
+          sorteados.push(span);
+        }
+        premissa.append(span);
+      }
+
+      if (linha.trava) {
+        const botao = modeloCadeado.content.firstElementChild!.cloneNode(true) as HTMLButtonElement;
+        botao.dataset.travar = linha.trava;
+        botao.setAttribute('aria-label', `Travar ${ROTULO[linha.trava]}`);
+        premissa.append(botao);
+      }
+
+      // A quebra é um nó de texto de verdade, e não uma margem: o contêiner é
+      // pre-wrap, e é ela que reproduz o MOLDE linha por linha.
+      premissa.append('\n');
     }
 
+    // O MOLDE não termina em quebra; a do último laço sobra.
+    premissa.lastChild?.remove();
+  }
+
+  function pintar(sorteio: Sorteio, opcoes: Opcoes) {
     const mundo = nomearMundos(sorteio, opcoes, nomesDosMundos);
-    premissa.textContent = redigir(sorteio, MOLDE, mundo);
+
+    if (sorteados.length === 0) montarPremissa(sorteio, mundo);
+
+    const valores = partes(sorteio, MOLDE, mundo)
+      .flatMap((linha) => linha.trechos)
+      .filter((trecho) => trecho.sorteado);
+    valores.forEach((trecho, i) => { sorteados[i].textContent = trecho.texto; });
+
     prompt.textContent = montarPrompt(modeloDoPrompt, {
       mundo,
       // O "Um(a)" vem escrito aqui e no MOLDE, e não da lista, porque as 60
@@ -453,24 +431,33 @@ const raiz = base.endsWith('/') ? base : base + '/';
   const avisoDaPremissa = document.getElementById('aviso-premissa')!;
   const avisoDoPrompt = document.getElementById('aviso-prompt')!;
 
+  /* Copia redigir(), e não o textContent do contêiner: os cadeados não somam
+     texto, mas depender disso seria frágil, e redigir() é a mesma junção de
+     partes() que desenhou a tela. */
   document.getElementById('copiar-premissa')!.addEventListener('click', () => {
-    copiar(premissa.textContent ?? '', avisoDaPremissa, 'Premissa copiada.');
+    const opcoes = lerOpcoes();
+    const texto = atual ? redigir(atual, MOLDE, nomearMundos(atual, opcoes, nomesDosMundos)) : '';
+    copiar(texto, avisoDaPremissa, 'Premissa copiada.');
   });
 
   document.getElementById('copiar-prompt')!.addEventListener('click', () => {
     copiar(prompt.textContent ?? '', avisoDoPrompt, 'Prompt copiado.');
   });
 
-  for (const botao of document.querySelectorAll<HTMLButtonElement>('[data-travar]')) {
-    botao.addEventListener('click', () => {
-      const tipo = botao.dataset.travar as keyof Travas;
-      travas[tipo] = !travas[tipo];
-      // aria-pressed é o estado inteiro: o CSS troca o cadeado aberto pelo
-      // fechado a partir dele. Nada de mexer no conteúdo do botão aqui —
-      // escrever textContent apagaria os dois SVGs de dentro dele.
-      botao.setAttribute('aria-pressed', String(travas[tipo]));
-    });
-  }
+  /* Um ouvinte no contêiner, e não um por botão: os cadeados só existem depois
+     que montarPremissa() roda, e um laço sobre [data-travar] aqui não acharia
+     nada — este script executa antes da primeira rolagem. */
+  premissa.addEventListener('click', (evento) => {
+    const botao = (evento.target as HTMLElement).closest<HTMLButtonElement>('[data-travar]');
+    if (!botao) return;
+
+    const tipo = botao.dataset.travar as keyof Travas;
+    travas[tipo] = !travas[tipo];
+    // aria-pressed é o estado inteiro: o CSS troca o cadeado aberto pelo
+    // fechado a partir dele. Nada de mexer no conteúdo do botão aqui —
+    // escrever textContent apagaria os dois SVGs de dentro dele.
+    botao.setAttribute('aria-pressed', String(travas[tipo]));
+  });
 
   // Trocar de mundo (ou qualquer opção do formulário) zera o sorteio anterior:
   // sem isto, uma peça travada do mundo antigo sobreviveria e contradiria a
@@ -479,10 +466,9 @@ const raiz = base.endsWith('/') ? base : base + '/';
   // aria-pressed="true", para peças que não estão mais travadas.
   form.addEventListener('change', () => {
     atual = null;
-    for (const tipo of TIPOS) {
-      travas[tipo] = false;
-      document.querySelector<HTMLButtonElement>(`[data-travar="${tipo}"]`)!
-        .setAttribute('aria-pressed', 'false');
+    for (const tipo of Object.keys(travas) as (keyof Travas)[]) travas[tipo] = false;
+    for (const botao of premissa.querySelectorAll('[data-travar]')) {
+      botao.setAttribute('aria-pressed', 'false');
     }
     rolar();
   });
