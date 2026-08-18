@@ -163,6 +163,17 @@ aplica a este elemento.
 A sombra deslocada de 4px em `--apoio` põe a segunda cor de acento na peça sem
 carregar texto, e por isso não responde a mínimo de contraste.
 
+**Nomes dos mundos no guia de personagens: texto em `--destaque`, não pastilha.**
+Os seis `h2` de
+[`/guia-de-personagens/`](../src/pages/guia-de-personagens.astro) ficam dentro de
+um `.bloco`, onde o acento mede **6,78:1** no escuro e **4,59:1** no claro — folga
+até no critério de texto pequeno, e o `h2` tem 24px. Por isso aqui a cor pôde ir
+na letra em vez do preenchimento: o problema que criou a pastilha nas páginas de
+mundo era o `h2` claro se confundir com os títulos de verbete logo abaixo, e o
+mesmo acontecia aqui com os sessenta termos do `<dl>`. O `.bloco` já dá o
+contraste que o céu não daria — direto sobre o céu o número cairia para 4,27 no
+pior mundo, ainda acima dos 3:1 de texto grande, mas sem esta folga.
+
 **A sombra fica nos dois temas, e isso é exceção à regra do `.botao`.**
 [global.css](../src/styles/global.css) tira a sombra deslocada dos botões no tema
 claro, por ela ser recurso de pôster que brilha sobre o céu escuro e pesa sobre
@@ -365,3 +376,12 @@ mundo virarem pastilha preenchida:
 A pastilha não tem mais nenhuma regra condicionada ao tema: uma declaração só,
 `box-shadow: 4px 4px 0 var(--apoio)`, que os tokens resolvem para violeta no
 escuro e azul-tinta no claro.
+
+Refeita em 18 de agosto de 2026, depois de os nomes dos mundos no guia de
+personagens passarem a `--destaque`:
+
+| Comando | Resultado |
+|---|---|
+| `npx vitest run` | 87 testes, 10 arquivos |
+| `npm run check` | 51 arquivos, 0 erros, 0 avisos, 0 hints |
+| `npm run build` | 41 páginas |

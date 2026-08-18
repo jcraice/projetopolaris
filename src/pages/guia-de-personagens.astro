@@ -65,6 +65,15 @@ const raiz = base.endsWith('/') ? base : base + '/';
     gap: 6px;
   }
 
+  /* O nome do mundo em acento, por escolha da autora: são seis seções seguidas,
+     todas do mesmo fundo, e sem cor o h2 ficava igual aos sessenta termos
+     abaixo dele. Contraste sobre --bloco: 6,78:1 no escuro e 4,59:1 no claro
+     (docs/verificacao-visual.md) — passa até no critério de texto pequeno, e
+     este h2 tem 24px. */
+  h2 {
+    color: var(--destaque);
+  }
+
   /* Mesmo peso e cor do título de verbete do catálogo: quem separa um termo do
      seguinte é o espaço, não moldura nem cor de acento. */
   dt {

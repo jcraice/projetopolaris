@@ -44,95 +44,101 @@ onde a concordância pede, cobrindo substantivo e adjetivo juntos
 ("Executivo(a) Corporativo(a)"). Onde a palavra é invariável, fica limpa
 ("Hacker", "Contrabandista", "Fixer").
 
+A `descricao` está no **singular** — o guia descreve o personagem que vai sair
+sorteado, um só, não a categoria inteira — e por isso carrega o mesmo "(a)" dos
+nomes: quase toda ela começa por um substantivo com gênero. Onde o "(a)" não
+produz o feminino correto ("ladrão" faz "ladra"), a frase é refeita com palavra
+invariável em vez de forçar a marcação.
+
 **Cyberpunk**
 
 | Profissão | Descrição |
 | --- | --- |
-| Hacker | Invasores de redes neurais e construtos de dados corporativos. |
-| Samurai de Rua | Mercenários e guarda-costas com modificações cibernéticas pesadas. |
-| Cirurgião(ã) de Rua | Médicos clandestinos que instalam, removem ou consertam implantes ilegais. |
-| Executivo(a) Corporativo(a) | Burocratas implacáveis que gerenciam os interesses das megacorporações. |
-| Corretor(a) de Dados | Traficantes de informações secretas, segredos industriais e chantagens. |
-| Mensageiro(a) Neural | Contrabandistas que transportam dados sensíveis criptografados em seus próprios cérebros. |
-| Detetive Particular | Investigadores cínicos que navegam pelo submundo para resolver crimes que a polícia ignora. |
-| Caçador(a) de Recompensas | Profissionais focados em rastrear devedores de corporações ou criminosos foragidos. |
-| Técnico(a) de Drones | Operadores e engenheiros de vigilância e combate remoto. |
-| Engenheiro(a) de IA | Programadores que tentam controlar (ou libertar) inteligências artificiais rebeldes. |
+| Hacker | Invasor(a) de redes neurais e construtos de dados corporativos. |
+| Samurai de Rua | Mercenário(a) ou guarda-costas com modificações cibernéticas pesadas. |
+| Cirurgião(ã) de Rua | Médico(a) clandestino(a) que instala, remove ou conserta implantes ilegais. |
+| Executivo(a) Corporativo(a) | Burocrata implacável que gerencia os interesses das megacorporações. |
+| Corretor(a) de Dados | Traficante de informações secretas, segredos industriais e chantagens. |
+| Mensageiro(a) Neural | Contrabandista que transporta dados sensíveis criptografados no próprio cérebro. |
+| Detetive Particular | Investigador(a) cínico(a) que navega pelo submundo para resolver crimes que a polícia ignora. |
+| Caçador(a) de Recompensas | Profissional focado(a) em rastrear devedores de corporações ou criminosos foragidos. |
+| Técnico(a) de Drones | Operador(a) e engenheiro(a) de vigilância e combate remoto. |
+| Engenheiro(a) de IA | Programador(a) que tenta controlar (ou libertar) inteligências artificiais rebeldes. |
 
 **Distopia**
 
 | Profissão | Descrição |
 | --- | --- |
-| Agente de Supressão | Fiscais encarregados de monitorar e punir desvios ideológicos. |
-| Reescritor(a) Histórico(a) | Funcionários do governo responsáveis por alterar documentos e livros para apagar a verdade. |
-| Operário(a) de Base | Trabalhadores de fábricas ou minas que sustentam a elite, geralmente vivendo em condições desumanas. |
-| Líder da Resistência | Estrategistas clandestinos que organizam rebeliões contra o sistema. |
-| Propagandista do Estado | Criadores de mídia focados em manter a população dócil e alienada. |
-| Geneticista | Cientistas que determinam o destino e a função social dos cidadãos antes mesmo do nascimento. |
-| Coletor(a) de Rações | Burocratas que distribuem (e muitas vezes desviam) recursos escassos como comida e água. |
-| Contrabandista de Artefatos Antigos | Pessoas que vendem itens do "mundo anterior" (livros reais, discos, arte). |
-| Médico(a) de Triagem Social | Profissionais que decidem quem vive ou morre com base na utilidade para o estado. |
-| Infiltrado(a) | Espiões da resistência trabalhando dentro da máquina do governo. |
+| Agente de Supressão | Fiscal encarregado(a) de monitorar e punir desvios ideológicos. |
+| Reescritor(a) Histórico(a) | Funcionário(a) do governo responsável por alterar documentos e livros para apagar a verdade. |
+| Operário(a) de Base | Trabalhador(a) de fábrica ou mina que sustenta a elite, geralmente vivendo em condições desumanas. |
+| Líder da Resistência | Estrategista clandestino(a) que organiza rebeliões contra o sistema. |
+| Propagandista do Estado | Criador(a) de mídia focado(a) em manter a população dócil e alienada. |
+| Geneticista | Cientista que determina o destino e a função social dos cidadãos antes mesmo do nascimento. |
+| Coletor(a) de Rações | Burocrata que distribui (e muitas vezes desvia) recursos escassos como comida e água. |
+| Contrabandista de Artefatos Antigos | Pessoa que vende itens do "mundo anterior" (livros reais, discos, arte). |
+| Médico(a) de Triagem Social | Profissional que decide quem vive ou morre com base na utilidade para o estado. |
+| Infiltrado(a) | Espião(ã) da resistência trabalhando dentro da máquina do governo. |
 
 **Invasão Alienígena**
 
 | Profissão | Descrição |
 | --- | --- |
-| Xenobiólogo(a) | Cientistas encarregados de entender a anatomia, fraquezas e evolução dos invasores. |
-| Fuzileiro(a) de Defesa Terrestre | A linha de frente militar humana contra as forças extraterrestres. |
-| Linguista | Especialistas desesperados para decifrar as comunicações ou motivos alienígenas. |
-| Piloto de Caça | Condutores de veículos atmosféricos ou robôs gigantes na defesa aérea e terrestre. |
-| Engenheiro(a) de Engenharia Reversa | Técnicos que desmontam naves abatidas para adaptar armas alienígenas para uso humano. |
-| Líder de Milícia | Civis que assumem o comando de grupos de resistência armada após o colapso dos governos. |
-| Negociador(a) Interespécies | Diplomatas tentando evitar a extinção através do diálogo. |
-| Médico(a) de Combate | Cirurgiões de campo lidando com armas de plasma e ferimentos desconhecidos. |
-| Catador(a) de Tecnologia | Sobreviventes que exploram os destroços das batalhas em busca de baterias e armas. |
-| Estrategista de Defesa Orbital | Generais que coordenam a defesa do planeta a partir de bunkers subterrâneos ou satélites. |
+| Xenobiólogo(a) | Cientista encarregado(a) de entender a anatomia, as fraquezas e a evolução dos invasores. |
+| Fuzileiro(a) de Defesa Terrestre | Soldado(a) na linha de frente militar humana contra as forças extraterrestres. |
+| Linguista | Especialista desesperado(a) para decifrar as comunicações ou motivos alienígenas. |
+| Piloto de Caça | Condutor(a) de veículos atmosféricos ou robôs gigantes na defesa aérea e terrestre. |
+| Engenheiro(a) de Engenharia Reversa | Técnico(a) que desmonta naves abatidas para adaptar armas alienígenas para uso humano. |
+| Líder de Milícia | Civil que assume o comando de um grupo de resistência armada após o colapso dos governos. |
+| Negociador(a) Interespécies | Diplomata tentando evitar a extinção através do diálogo. |
+| Médico(a) de Combate | Cirurgião(ã) de campo lidando com armas de plasma e ferimentos desconhecidos. |
+| Catador(a) de Tecnologia | Sobrevivente que explora os destroços das batalhas em busca de baterias e armas. |
+| Estrategista de Defesa Orbital | General que coordena a defesa do planeta a partir de bunkers subterrâneos ou satélites. |
 
 **Pós Apocalíptico**
 
 | Profissão | Descrição |
 | --- | --- |
-| Catador(a) | Exploradores de ruínas urbanas em busca de comida enlatada, remédios e peças úteis. |
-| Mecânico(a) de Sucata | Engenheiros capazes de fazer um gerador ou um carro funcionar com arame e peças velhas. |
-| Líder de Assentamento | Figuras políticas ou ditadores locais que mantêm a ordem em comunidades de sobreviventes. |
-| Mercador(a) Itinerante | Mascates que viajam entre assentamentos trocando balas por água ou remédios. |
-| Guarda de Caravana | Mercenários contratados para proteger mercadores contra saqueadores e mutantes. |
-| Agricultor(a) de Subsistência | Fazendeiros que tentam cultivar alimentos em solo irradiado ou estéril. |
-| Curandeiro(a) | Médicos que utilizam plantas e conhecimentos antigos na ausência de antibióticos modernos. |
-| Senhor(a) da Guerra | Líderes brutais que controlam recursos vitais (como água ou gasolina) pela força. |
-| Arquivista do Velho Mundo | Guardiões do conhecimento que tentam preservar livros e história humana. |
-| Rastreador(a) | Sobreviventes solitários especialistas em ler o ambiente e encontrar caça ou pessoas perdidas. |
+| Catador(a) | Explorador(a) de ruínas urbanas em busca de comida enlatada, remédios e peças úteis. |
+| Mecânico(a) de Sucata | Engenheiro(a) capaz de fazer um gerador ou um carro funcionar com arame e peças velhas. |
+| Líder de Assentamento | Figura política ou ditador(a) local que mantém a ordem numa comunidade de sobreviventes. |
+| Mercador(a) Itinerante | Mascate que viaja entre assentamentos trocando balas por água ou remédios. |
+| Guarda de Caravana | Mercenário(a) contratado(a) para proteger mercadores contra saqueadores e mutantes. |
+| Agricultor(a) de Subsistência | Fazendeiro(a) que tenta cultivar alimentos em solo irradiado ou estéril. |
+| Curandeiro(a) | Médico(a) que utiliza plantas e conhecimentos antigos na ausência de antibióticos modernos. |
+| Senhor(a) da Guerra | Líder brutal que controla recursos vitais (como água ou gasolina) pela força. |
+| Arquivista do Velho Mundo | Guardião(ã) do conhecimento que tenta preservar livros e história humana. |
+| Rastreador(a) | Sobrevivente solitário(a) especialista em ler o ambiente e encontrar caça ou pessoas perdidas. |
 
 **Space Opera**
 
 | Profissão | Descrição |
 | --- | --- |
-| Capitão(ã) de Nave Estelar | Líderes carismáticos e independentes que comandam tripulações mercenárias ou contrabandistas. |
-| Navegador(a) | Matemáticos e pilotos responsáveis por calcular saltos hiperespaciais sem bater em supernovas. |
-| Embaixador(a) Galáctico(a) | Representantes de planetas ou federações em concílios alienígenas complexos. |
-| Engenheiro(a) Chefe | Os mecânicos geniais que mantêm os motores de dobra funcionando quando tudo dá errado. |
-| Aristocrata Exilado(a) | Membros da nobreza intergaláctica tentando recuperar seus tronos ou fugindo de impérios opressores. |
-| Caçador(a) de Recompensas Espacial | Rastreadores implacáveis que cruzam a galáxia atrás de alvos valiosos. |
-| Xenoantropólogo(a) | Estudiosos dedicados a compreender as culturas e religiões de milhares de espécies diferentes. |
-| Contrabandista | Mercadores que evitam bloqueios imperiais para transportar cargas ilegais e valiosas. |
-| Comandante de Frota | Estrategistas militares que lideram batalhas com milhares de cruzadores estelares. |
-| Membro da Patrulha Espacial | Soldados treinados para invasões em gravidade zero e abordagens de naves. |
+| Capitão(ã) de Nave Estelar | Líder carismático(a) e independente que comanda uma tripulação mercenária ou contrabandista. |
+| Navegador(a) | Matemático(a) e piloto responsável por calcular saltos hiperespaciais sem bater em supernovas. |
+| Embaixador(a) Galáctico(a) | Representante de um planeta ou federação em concílios alienígenas complexos. |
+| Engenheiro(a) Chefe | O(A) mecânico(a) genial que mantém os motores de dobra funcionando quando tudo dá errado. |
+| Aristocrata Exilado(a) | Membro(a) da nobreza intergaláctica tentando recuperar seu trono ou fugindo de um império opressor. |
+| Caçador(a) de Recompensas Espacial | Rastreador(a) implacável que cruza a galáxia atrás de alvos valiosos. |
+| Xenoantropólogo(a) | Estudioso(a) dedicado(a) a compreender as culturas e religiões de milhares de espécies diferentes. |
+| Contrabandista | Mercador(a) que evita bloqueios imperiais para transportar cargas ilegais e valiosas. |
+| Comandante de Frota | Estrategista militar que lidera batalhas com milhares de cruzadores estelares. |
+| Membro da Patrulha Espacial | Soldado(a) treinado(a) para invasões em gravidade zero e abordagens de naves. |
 
 **Viagem no Tempo**
 
 | Profissão | Descrição |
 | --- | --- |
-| Agente da Polícia Temporal | Oficiais da lei dedicados a caçar criminosos que tentam alterar eventos do passado. |
-| Piloto de Máquina do Tempo | Os testadores e viajantes pioneiros que navegam pelas correntes do tempo. |
-| Historiador(a) de Campo | Acadêmicos que viajam a épocas passadas para observação direta, com a regra estrita de nunca interferir. |
-| Físico(a) Quântico(a) Estrutural | Os inventores geniais e teóricos que mantêm as máquinas do tempo funcionando e calculam as ramificações. |
-| Investigador(a) de Paradoxo | Detetives especializados em descobrir onde a linha do tempo foi fraturada e como consertá-la. |
-| Turista Temporal | Viajantes ricos que pagam fortunas para assistir a eventos históricos (e frequentemente causam problemas). |
-| Contrabandista de Anacronismos | Ladrões que roubam artefatos famosos (como a verdadeira Monalisa) antes de serem destruídos ou perdidos na história original. |
-| Guardião(ã) da Linha do Tempo | Observadores fixos em séculos específicos, encarregados de garantir que certos eventos ocorram exatamente como deveriam. |
-| Técnico(a) de Extração | Especialistas focados em resgatar pessoas do passado milissegundos antes de suas mortes registradas. |
-| Fixer | Profissionais cuja única função é apagar rastros materiais (celulares, roupas modernas) deixados acidentalmente no passado. |
+| Agente da Polícia Temporal | Oficial da lei dedicado(a) a caçar criminosos que tentam alterar eventos do passado. |
+| Piloto de Máquina do Tempo | O(A) testador(a) e viajante pioneiro(a) que navega pelas correntes do tempo. |
+| Historiador(a) de Campo | Acadêmico(a) que viaja a épocas passadas para observação direta, com a regra estrita de nunca interferir. |
+| Físico(a) Quântico(a) Estrutural | O(A) inventor(a) genial e teórico(a) que mantém as máquinas do tempo funcionando e calcula as ramificações. |
+| Investigador(a) de Paradoxo | Detetive especializado(a) em descobrir onde a linha do tempo foi fraturada e como consertá-la. |
+| Turista Temporal | Viajante rico(a) que paga fortunas para assistir a eventos históricos (e frequentemente causa problemas). |
+| Contrabandista de Anacronismos | Especialista em roubar artefatos famosos (como a verdadeira Monalisa) antes de serem destruídos ou perdidos na história original. |
+| Guardião(ã) da Linha do Tempo | Observador(a) fixo(a) num século específico, com a incumbência de garantir que certos eventos ocorram exatamente como deveriam. |
+| Técnico(a) de Extração | Especialista focado(a) em resgatar pessoas do passado milissegundos antes de suas mortes registradas. |
+| Fixer | Profissional cuja única função é apagar rastros materiais (celulares, roupas modernas) deixados acidentalmente no passado. |
 
 ### Características — 30
 
