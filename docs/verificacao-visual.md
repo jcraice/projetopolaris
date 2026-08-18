@@ -163,14 +163,17 @@ aplica a este elemento.
 A sombra deslocada de 4px em `--apoio` põe a segunda cor de acento na peça sem
 carregar texto, e por isso não responde a mínimo de contraste.
 
-**Nomes dos mundos no guia de personagens: texto em `--destaque`, não pastilha.**
-Os seis `h2` de
-[`/guia-de-personagens/`](../src/pages/guia-de-personagens.astro) ficam dentro de
-um `.bloco`, onde o acento mede **6,78:1** no escuro e **4,59:1** no claro — folga
-até no critério de texto pequeno, e o `h2` tem 24px. Por isso aqui a cor pôde ir
+**Títulos dentro de `.bloco`: texto em `--destaque`, não pastilha.** São dois
+lugares, medidos juntos porque a situação é a mesma: os seis `h2` de
+[`/guia-de-personagens/`](../src/pages/guia-de-personagens.astro), um por mundo,
+e o "Crie enredos com sua IA favorita" do
+[gerador](../src/pages/gerador.astro). Os dois ficam dentro de um `.bloco`, onde
+o acento mede **6,78:1** no escuro e **4,59:1** no claro — folga até no critério
+de texto pequeno, e o `h2` tem 24px. Por isso aqui a cor pôde ir
 na letra em vez do preenchimento: o problema que criou a pastilha nas páginas de
-mundo era o `h2` claro se confundir com os títulos de verbete logo abaixo, e o
-mesmo acontecia aqui com os sessenta termos do `<dl>`. O `.bloco` já dá o
+mundo era o `h2` claro se confundir com o que vem logo abaixo dele — os títulos
+de verbete lá, os sessenta termos do `<dl>` no guia, o texto do prompt no
+gerador. O `.bloco` já dá o
 contraste que o céu não daria — direto sobre o céu o número cairia para 4,27 no
 pior mundo, ainda acima dos 3:1 de texto grande, mas sem esta folga.
 

@@ -109,9 +109,10 @@ const raiz = base.endsWith('/') ? base : base + '/';
 
   <section class="bloco bloco-prompt" aria-labelledby="prompt-titulo">
     <h2 id="prompt-titulo">Crie enredos com sua IA favorita</h2>
-    {/* Sem aria-live, ao contrário da premissa: são cerca de trezentas palavras,
-        e relê-las a cada clique em Gerar tornaria a página impraticável com
-        leitor de tela. Quem quiser o texto chega nele navegando. */}
+    {/* Sem aria-live, ao contrário da premissa: é um bloco de várias linhas que
+        repete as peças já anunciadas acima, e relê-lo a cada clique em Gerar
+        tornaria a página impraticável com leitor de tela. Quem quiser o texto
+        chega nele navegando. */}
     <p id="prompt" class="prompt__texto"></p>
   </section>
   <div class="acoes">
@@ -260,6 +261,15 @@ const raiz = base.endsWith('/') ? base : base + '/';
   .premissa :global(.sorteado) {
     color: var(--destaque);
     font-weight: 700;
+  }
+
+  /* O título do bloco do prompt em acento, por escolha da autora — é o único
+     título de seção da página, e sem cor ele se perdia entre a premissa acima e
+     o texto do prompt logo abaixo. Sobre --bloco o acento mede 6,78:1 no escuro
+     e 4,59:1 no claro (docs/verificacao-visual.md): passa até no critério de
+     texto pequeno, e este h2 tem 24px. */
+  .bloco-prompt h2 {
+    color: var(--destaque);
   }
 
   /* pre-wrap, e não <pre>: as quebras de linha do prompt-ia.md fazem parte do
