@@ -20,13 +20,13 @@ Mais do que regras rígidas, a ficção científica é feita de possibilidades. 
 
 Na ficção científica, a riqueza do gênero vai muito além dos arquétipos individuais. Existem estilos e abordagens, como Hard SF e Soft SF (ficção cientifica rigorosa e ficção científica social), que moldam profundamente as obras, mesmo sem gerar arquétipos próprios. Outros estilos, como o Afrofuturismo e a Ficção Científica Feminista, também oferecem perspectivas únicas que influenciam temas, personagens e ambientações. Este guia foi criado para ajudar quem quer compreender e combinar diferentes estilos narrativos e elementos criativos, enriquecendo histórias ou projetos de qualquer mídia.
 
-Hard SF foca na precisão científica e nos detalhes técnicos, explorando como as leis da física moldam o enredo.
+**Hard SF** foca na precisão científica e nos detalhes técnicos, explorando como as leis da física moldam o enredo.
 
-Soft SF privilegia aspectos sociais e humanos, usando a ciência como pano de fundo para conflitos e relações.
+**Soft SF** privilegia aspectos sociais e humanos, usando a ciência como pano de fundo para conflitos e relações.
 
-Afrofuturismo combina cultura africana e tecnologia para criar narrativas que celebram identidades negras e imaginam futuros libertadores.
+**Afrofuturismo** combina cultura africana e tecnologia para criar narrativas que celebram identidades negras e imaginam futuros libertadores.
 
-FC Feminista destaca perspectivas de gênero, questionando hierarquias e valorizando personagens e temas centrados em experiências femininas.
+**FC Feminista** destaca perspectivas de gênero, questionando hierarquias e valorizando personagens e temas centrados em experiências femininas.
 
 </div>
 
