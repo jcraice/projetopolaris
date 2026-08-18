@@ -81,7 +81,10 @@ const raiz = base.endsWith('/') ? base : base + '/';
   </section>
   <div class="acoes">
     <button type="button" class="botao botao--principal" id="sortear">Gerar</button>
-    <button type="button" class="botao" id="copiar-premissa">Copiar premissa</button>
+    {/* Rótulo visível curto, nome acessível completo: são dois botões de copiar
+        na página, e "Copiar" sozinho não diria a um leitor de tela qual dos dois
+        é. O aria-label começa pelo texto visível, como o WCAG 2.5.3 pede. */}
+    <button type="button" class="botao" id="copiar-premissa" aria-label="Copiar premissa">Copiar</button>
     <span class="aviso" id="aviso-premissa" role="status"></span>
   </div>
 
@@ -288,14 +291,25 @@ const raiz = base.endsWith('/') ? base : base + '/';
      escrito, e a ação que opera sobre aquilo mora do lado de fora. Cada botão
      continua encostado no bloco a que pertence — três caixas, três ações —, e é
      ele que agora separa uma caixa da seguinte, que de outro modo se
-     encostariam por terem o mesmo fundo. Em coluna porque o aviso de "copiado"
-     vem junto, logo abaixo do próprio botão. */
+     encostariam por terem o mesmo fundo.
+
+     Em linha, por escolha da autora: Gerar e Copiar são as duas ações da
+     premissa e ficam lado a lado. O aviso de "copiado" vem junto no mesmo
+     contêiner, e é o flex-basis de 100% que o joga para uma linha só dele,
+     abaixo dos botões — sem isso ele entraria na fileira e empurraria o par
+     para a esquerda toda vez que a mensagem aparecesse. O wrap resolve a tela
+     estreita sem media query: não cabendo os dois, o segundo desce. */
   .acoes {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 8px 12px;
     margin: 16px 0 32px;
+  }
+
+  .acoes .aviso {
+    flex-basis: 100%;
   }
 
   /* Um aviso por botão de copiar, logo abaixo dele: a confirmação aparece onde
