@@ -1,8 +1,11 @@
 ---
 import Busca from './Busca.astro';
+import { ehPaginaAtual } from '../lib/navegacao';
 
 const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : `${base}/`;
+
+const caminho = Astro.url.pathname;
 
 // As três coleções que o gerador combina, mais a própria ação de gerar: é o
 // que fica visível na barra. O resto entra no menu "Mais" — são páginas que se
@@ -19,6 +22,10 @@ const linksDeMais = [
   { rotulo: 'Livros', href: `${raiz}livros` },
   { rotulo: 'Sobre', href: `${raiz}sobre` },
 ];
+
+// O botão acende junto quando a página aberta é uma das três de dentro dele:
+// fechado, o menu esconderia a única marca de onde a pessoa está.
+const maisEhAtual = linksDeMais.some((link) => ehPaginaAtual(caminho, link.href));
 ---
 <header class="nav">
   <a class="nav__marca" href={base}>POLARIS</a>
@@ -46,7 +53,9 @@ const linksDeMais = [
   </button>
   <nav class="nav__links" id="nav-links" aria-label="Navegação principal">
     {links.map((link) => (
-      <a href={link.href}>{link.rotulo}</a>
+      <a href={link.href} aria-current={ehPaginaAtual(caminho, link.href) ? 'page' : undefined}>
+        {link.rotulo}
+      </a>
     ))}
     {/* Mesmo contrato do botão do menu: nasce com [hidden] e só aparece pelo
         JavaScript. Sem script os três links de dentro ficam soltos na barra,
@@ -55,7 +64,7 @@ const linksDeMais = [
     <div class="nav__mais">
       <button
         type="button"
-        class="nav__mais-botao"
+        class:list={['nav__mais-botao', maisEhAtual && 'nav__mais-botao--atual']}
         id="abrir-mais"
         hidden
         aria-expanded="false"
@@ -70,7 +79,9 @@ const linksDeMais = [
       </button>
       <div class="nav__submenu" id="submenu-mais">
         {linksDeMais.map((link) => (
-          <a href={link.href}>{link.rotulo}</a>
+          <a href={link.href} aria-current={ehPaginaAtual(caminho, link.href) ? 'page' : undefined}>
+            {link.rotulo}
+          </a>
         ))}
       </div>
     </div>
@@ -169,6 +180,27 @@ const linksDeMais = [
 
   .nav__links a:hover {
     color: var(--destaque);
+  }
+
+  /* A página aberta fica pintada com --flutuante, a mesma superfície do painel
+     do "Mais": marcar onde a pessoa está não introduz nenhum tom novo na
+     barra, é a cor de fundo que ela já tinha.
+
+     O recuo lateral cresce de 4 para 10px e a margem negativa devolve os 6px,
+     então a caixa de fora do link continua do mesmo tamanho e nada na fileira
+     se desloca ao trocar de página — o mesmo arranjo do botão aberto. O que a
+     pintura ganha são 6px dos 12 de intervalo de cada lado; os outros 6
+     continuam de barra, separando o link pintado dos vizinhos.
+
+     Quem manda aqui é o aria-current, não uma classe: a mesma marca que o
+     leitor de tela anuncia é a que o olho vê, sem um segundo estado para
+     divergir dela. */
+  .nav__links a[aria-current='page'],
+  .nav__mais-botao--atual {
+    background: var(--flutuante);
+    border-radius: var(--raio);
+    padding-inline: 10px;
+    margin-inline: -6px;
   }
 
   .nav__mais {
@@ -291,6 +323,17 @@ const linksDeMais = [
 
   .nav__submenu a:hover {
     background: color-mix(in srgb, var(--apoio) 25%, transparent);
+  }
+
+  /* Dentro do painel aberto a pintura da barra não serve: o painel já é
+     --flutuante, e o link atual sumiria de violeta sobre violeta. Aqui ele usa
+     a mesma camada do item sob o cursor, que é a única superfície mais alta
+     que o painel tem. Os recuos voltam aos do painel — os -6px da barra o
+     fariam vazar pelas laterais. */
+  .nav__mais-botao:not([hidden]) ~ .nav__submenu a[aria-current='page'] {
+    background: color-mix(in srgb, var(--apoio) 25%, transparent);
+    margin-inline: 0;
+    padding-inline: 10px;
   }
 
   @keyframes submenu-surgir {
@@ -442,6 +485,22 @@ const linksDeMais = [
          lista rolar, e o alvo de toque de 40px (os 10px de padding em cima e
          embaixo) some junto. */
       flex-shrink: 0;
+    }
+
+    /* Dentro do menu recolhido a página atual é uma faixa, não uma pastilha:
+       aqui os links já ocupam a linha inteira, e os -6px da barra larga fariam
+       a pintura vazar para fora da coluna. */
+    .nav__abrir[aria-expanded='true'] ~ .nav__links a[aria-current='page'] {
+      margin-inline: 0;
+      padding-inline: 8px;
+    }
+
+    /* Aqui não existe painel — os três links do "Mais" viraram irmãos dos
+       outros quatro —, então o de dentro dele volta a ser faixa como o resto,
+       desfazendo a regra do painel aberto. */
+    .nav__abrir[aria-expanded='true'] ~ .nav__links .nav__submenu a[aria-current='page'] {
+      background: var(--flutuante);
+      padding-inline: 8px;
     }
 
     /* A marca empurra o resto para a direita e os dois ícones ficam colados,

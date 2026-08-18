@@ -347,6 +347,24 @@ Mexer no que está na barra pede refazer a conta de largura que está comentada
 no `@media` de [Nav.astro](src/components/Nav.astro): o ponto de quebra sai
 dessa soma, não de uma medida de tablet.
 
+**A página aberta fica pintada na barra**, em `--flutuante` — a mesma superfície
+do painel do "Mais", para marcar onde a pessoa está sem inventar tom novo. Quem
+decide é `ehPaginaAtual()` ([navegacao.ts](src/lib/navegacao.ts)), que compara
+por **prefixo**: `/arquetipos/cyberpunk/` mantém "Arquétipos" aceso, senão a
+marca apagaria justo nas páginas de catálogo. A função não serve para a raiz do
+site — todo caminho começa por ela —, e é por isso que a marca POLARIS fica de
+fora: ela não é item de menu. Estar numa página de `/mundos/` também não acende
+nada, porque não há link de mundos na barra.
+
+O estado mora no `aria-current="page"` do próprio link, não numa classe: a marca
+que o leitor de tela anuncia é a mesma que o CSS pinta, sem um segundo estado
+para divergir dela — o mesmo princípio do `aria-expanded` dos três expansíveis.
+As duas exceções são o botão "Mais", que ganha a classe
+`nav__mais-botao--atual` quando a página aberta é uma das três de dentro dele
+(fechado, o menu esconderia a única marca), e o link atual **dentro** do painel
+aberto, que troca `--flutuante` pela camada do item sob o cursor — sobre o
+painel, que já é `--flutuante`, ele sumiria de violeta sobre violeta.
+
 ### Estilo nas páginas
 
 Os tokens de cor moram todos em [global.css](src/styles/global.css), importado

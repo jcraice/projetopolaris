@@ -75,6 +75,10 @@ tabela.
 
 ### O painel do submenu "Mais": `--flutuante`
 
+`--flutuante` pinta duas coisas: o painel do submenu e o link da página aberta
+na barra. As duas medições são a mesma, porque o texto e a superfície são os
+mesmos — o que muda é só o tamanho da mancha.
+
 O submenu é opaco de propósito (abre em cima do `h1`), mas deixou de ser
 `--fundo` puro, que fazia dele a coisa mais escura da tela. É `--apoio`
 misturado ao fundo, e o item sob o cursor soma outros 25% de `--apoio` por
