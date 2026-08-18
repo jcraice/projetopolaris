@@ -401,12 +401,23 @@ e isso cria duas amarras que o CSS não consegue impor sozinho:
   que sustenta o contexto de empilhamento que a busca e o "Mais" usam para
   abrir por cima do resto da página. E como o Nav abre esse contexto, valor
   novo acima de `20` em componente de página não vence a barra; vai por dentro
-  dela ou não vai.
-- **Painel que flutua sobre a página é opaco** (`--fundo`), nunca `--painel`. O
-  token de painel é translúcido nos dois temas (0,8 no escuro, 0,05 no claro) e
-  deixa passar o que está embaixo — o submenu do "Mais" abre justo em cima do
-  `h1`, e com `--painel` o título aparecia atrás dos links. `backdrop-filter`
-  não resolve texto sobre texto.
+  dela ou não vai. O submenu, das duas, é a que não flutua: ela se pendura na
+  barra, e o `top: calc(100% + 18px)` que faz isso depende de `.nav__links` e
+  `.nav__mais` esticarem na altura da barra (`align-self: stretch`) — os 18px
+  são o recuo de baixo mais a borda. Mexeu no `padding` da barra ou tirou um
+  dos dois `stretch`? O encaixe sai torto, e nada no CSS explica por quê.
+- **Painel que flutua sobre a página é opaco** — `--flutuante`, nunca
+  `--painel`. O token de painel é translúcido nos dois temas (0,8 no escuro,
+  0,05 no claro) e deixa passar o que está embaixo: o submenu do "Mais" abre
+  justo em cima do `h1`, e com `--painel` o título aparecia atrás dos links.
+  `backdrop-filter` não resolve texto sobre texto. E no escuro `--painel` é a
+  mesma cor de `--fundo` a 80%, então nem serve de atalho para clarear painel
+  nenhum. Opaco também não quer dizer `--fundo` puro: aí o painel virava a
+  coisa mais escura da tela, mais escura que a própria barra, que a aurora
+  tinge — foi recusado. `--flutuante` é `--apoio` misturado ao fundo (14% no
+  escuro, 8% no claro), a mesma receita de `--bloco`. A lista da busca é a
+  exceção que continua em `--painel` com desfoque: ela abre sobre texto
+  corrido, não sobre o título.
 
 ### Busca
 

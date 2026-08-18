@@ -142,6 +142,14 @@ const linksDeMais = [
        por conta própria — sem isso, padding somado ao intervalo antigo faria
        a navegação quebrar em mais fileiras no celular. */
     gap: 12px;
+    /* Estica na altura da barra para o submenu poder se pendurar nela: o `top`
+       do painel conta a partir do fim de .nav__mais, e sem isto esse fim
+       ficaria no meio da barra, à mercê da altura da busca e dos dois ícones —
+       o encaixe sairia desalinhado por alguns pixels sem nada no CSS explicar
+       por quê. O align-items devolve os links ao centro, que é onde eles
+       estavam quando a lista tinha a altura do próprio conteúdo. */
+    align-self: stretch;
+    align-items: center;
   }
 
   .nav__links a {
@@ -168,6 +176,9 @@ const linksDeMais = [
     display: flex;
     align-items: center;
     gap: 12px;
+    /* Pelo mesmo motivo de .nav__links: é o fim deste elemento que o `top` do
+       painel usa como origem. */
+    align-self: stretch;
   }
 
   /* Sem JavaScript o botão não existe e isto é o que se vê: os três links em
@@ -201,6 +212,17 @@ const linksDeMais = [
     color: var(--destaque);
   }
 
+  /* Aberto, o botão deixa de ser um botão solto e vira o topo do painel: mesmo
+     fundo, cantos arredondados só em cima. O recuo lateral cresce para o do
+     painel e a margem negativa devolve a diferença, então nada na barra se
+     desloca no instante em que o menu abre. */
+  .nav__mais-botao:not([hidden])[aria-expanded='true'] {
+    background: var(--flutuante);
+    border-radius: var(--raio) var(--raio) 0 0;
+    padding-inline: 10px;
+    margin-inline: -6px;
+  }
+
   .nav__mais-botao:focus-visible {
     outline: 3px solid var(--apoio);
     outline-offset: 2px;
@@ -218,30 +240,42 @@ const linksDeMais = [
     transform: rotate(180deg);
   }
 
-  /* Existindo o botão, os três links viram painel flutuante: borda de destaque
-     e a mesma entrada de 0,12s da lista de resultados da busca, porque são as
-     duas únicas coisas do site que abrem por cima da página.
+  /* Existindo o botão, os três links viram painel, com a mesma entrada de
+     0,12s da lista de resultados da busca, porque são as duas únicas coisas do
+     site que abrem por cima da página.
 
-     O que muda em relação à busca é o fundo, e é de propósito: --fundo opaco em
-     vez de --painel com blur. O --painel é translúcido nos dois temas — 0,8 no
-     escuro e 0,05 no claro — e este menu abre bem em cima do h1, que é o texto
+     Ele não flutua e não tem moldura: encosta na linha da barra, com os cantos
+     de cima retos, e o botão acende no mesmo fundo — os dois leem como uma
+     peça só pendurada na barra. A moldura de 2px em --destaque que havia aqui
+     foi recusada pela autora: uma caixinha boiando com contorno amarelo era a
+     coisa mais chamativa da tela, para um menu de três páginas que se visita
+     uma vez.
+
+     O que muda em relação à busca é o fundo, e é de propósito: --flutuante
+     opaco em vez de --painel com blur. O --painel é translúcido nos dois temas
+     — e no escuro é a mesma cor de --fundo a 80%, então nem serviria de atalho
+     para clarear o painel — e este menu abre bem em cima do h1, que é o texto
      maior e mais colorido da página. No claro o título aparecia inteiro atrás
      dos links; no escuro, borrado mas ainda legível. Texto por cima de texto
-     não se resolve com blur, se resolve tapando. */
+     não se resolve com blur, se resolve tapando. Por que --flutuante e não
+     --fundo puro está no comentário do token, em global.css. */
   .nav__mais-botao:not([hidden]) ~ .nav__submenu {
     position: absolute;
     z-index: 20;
-    top: calc(100% + 6px);
-    left: 0;
+    /* Os 18px são o que sobra da barra debaixo da lista de links: 16px de
+       recuo mais os 2px da borda de baixo. É o align-self: stretch de
+       .nav__links e .nav__mais que faz essa conta fechar. Mexeu no padding da
+       barra? Este número muda junto. */
+    top: calc(100% + 18px);
+    left: -6px;
     display: none;
     flex-direction: column;
     align-items: stretch;
     gap: 0;
     min-width: 180px;
     padding: 4px;
-    background: var(--fundo);
-    border: 2px solid var(--destaque);
-    border-radius: var(--raio);
+    background: var(--flutuante);
+    border-radius: 0 0 var(--raio) var(--raio);
     animation: submenu-surgir 0.12s ease-out;
   }
 
@@ -346,6 +380,9 @@ const linksDeMais = [
     .nav__abrir[aria-expanded='true'] ~ .nav__links {
       display: flex;
       flex-direction: column;
+      /* Desfaz o align-items: center da regra base, que aqui centralizaria os
+         links na horizontal e encolheria as bordas de baixo junto com eles. */
+      align-items: stretch;
       gap: 0;
       width: 100%;
       order: 5;

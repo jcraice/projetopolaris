@@ -73,6 +73,29 @@ Mesmo nesse extremo, `--texto` fica em ~7,5:1 e `--texto-forte` em ~11:1: os
 dois continuam passando, mas o pior caso da navegação não é mais o número da
 tabela.
 
+### O painel do submenu "Mais": `--flutuante`
+
+O submenu é opaco de propósito (abre em cima do `h1`), mas deixou de ser
+`--fundo` puro, que fazia dele a coisa mais escura da tela. É `--apoio`
+misturado ao fundo, e o item sob o cursor soma outros 25% de `--apoio` por
+cima. Nenhuma combinação chega perto do limite:
+
+| Tema | Superfície | Composição | `--texto` | Sob o cursor |
+|---|---|---|---|---|
+| escuro | `#221B30` | `--apoio` 14% em `#0b0b0e` | 11,37 | 7,51 |
+| claro | `#E4E7EB` | `--apoio` 8% em `#f5f7f9` | 9,93 | 6,18 |
+
+Para comparação, o `--fundo` puro que estava aqui antes dava 13,49 no escuro e
+11,47 no claro: a troca custa contraste e ainda sobra folga de mais do dobro do
+mínimo nos dois temas.
+
+**O que foi recusado.** Dar ao painel a translucidez da barra (`--painel` com
+`blur(9px)`) foi medido e descartado. No escuro `--painel` é `rgba(11, 11, 14,
+0.8)` — a mesma cor de `--fundo` —, então não clareia nada; e onde o `h1`
+dourado passa por baixo, o fundo do painel vira algo perto de `#3C300B`. O
+texto ainda passa ali (8,90:1), o que é justamente o ponto: **a recusa foi
+visual, não de acessibilidade** — o painel deixava de ser uma superfície só.
+
 ## Contraste direto sobre o céu
 
 Fora dos painéis — os verbetes do catálogo, os parágrafos de abertura, os

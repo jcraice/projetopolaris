@@ -29,6 +29,19 @@
   --texto: #d5d5df;
   --apagado: #8e8e9c;
   --painel: rgba(11, 11, 14, 0.8);
+
+  /* A superfície dos painéis que abrem por cima da página — hoje só o submenu
+     "Mais". Precisa ser opaca: aquele menu abre bem em cima do h1, e véu
+     translúcido deixa o título passar por trás dos links. O --painel não serve
+     nem como atalho: no escuro ele é a mesma cor de --fundo a 80%, ou seja,
+     não clarearia nada e ainda traria o título de volta.
+
+     Mas opaca não quer dizer preta. Em --fundo puro o painel virava a coisa
+     mais escura da tela — mais escura que a barra, que a aurora tinge —, e foi
+     essa mancha que a autora recusou. Os 14% de --apoio são a mesma receita de
+     --bloco, o fundo dos blocos do gerador: o painel fica parente de uma
+     superfície que o site já tem, em vez de inventar uma. */
+  --flutuante: color-mix(in srgb, var(--apoio) 14%, var(--fundo));
   --borda-suave: rgba(255, 255, 255, 0.16);
 
   /* Fundo dos dois blocos do gerador. É --apoio misturado a 20% no fundo da
@@ -86,6 +99,10 @@
   --texto: #2f3540;
   --apagado: #5b6472;
   --painel: rgba(20, 24, 31, 0.05);
+  /* No claro o problema é o oposto: o fundo já é quase branco, e sem tom
+     próprio o painel sem moldura se confundia com a página atrás dele. 8% do
+     azul-tinta bastam para separá-lo sem traço nenhum. */
+  --flutuante: color-mix(in srgb, var(--apoio) 8%, var(--fundo));
   --borda-suave: rgba(20, 24, 31, 0.18);
   /* Sem céu para escurecer, aqui basta um véu de --apoio quase transparente
      sobre o branco: o corpo de texto fica em 10,28:1 e o destaque em 4,94:1. */
