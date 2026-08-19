@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Cartao from '../../components/Cartao.astro';
+import { ilustracaoDe } from '../../lib/ilustracoes';
 import { paraAncora } from '../../lib/texto';
 
 export async function getStaticPaths() {
@@ -26,7 +27,12 @@ const felino = fichas.find((f) => f.data.felino);
     ))}
     {felino && (
       <section aria-label="Arquétipo felino">
-        <Cartao marcador="Arquétipo Felino" titulo={felino.data.nome} ancora={paraAncora(felino.data.nome)}>
+        <Cartao
+          marcador="Arquétipo Felino"
+          titulo={felino.data.nome}
+          ancora={paraAncora(felino.data.nome)}
+          ilustracao={ilustracaoDe(felino.data)}
+        >
           <p>{felino.body}</p>
         </Cartao>
       </section>

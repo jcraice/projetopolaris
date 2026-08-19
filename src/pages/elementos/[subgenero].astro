@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Cartao from '../../components/Cartao.astro';
+import { ilustracaoDe } from '../../lib/ilustracoes';
 import { paraAncora } from '../../lib/texto';
 
 export async function getStaticPaths() {
@@ -23,7 +24,7 @@ const elementos = (await getCollection('elementos', (e) => e.data.subgenero === 
   {subgenero.data.aberturaElementos && <p class="abertura">{subgenero.data.aberturaElementos}</p>}
   <div class="bloco">
     {elementos.map((e) => (
-      <Cartao titulo={e.data.titulo} ancora={paraAncora(e.data.titulo)}>
+      <Cartao titulo={e.data.titulo} ancora={paraAncora(e.data.titulo)} ilustracao={ilustracaoDe(e.data)}>
         <p>{e.body}</p>
       </Cartao>
     ))}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { esquemaArquetipo, esquemaCenario, esquemaSubgenero } from './schemas';
+import { esquemaArquetipo, esquemaCenario, esquemaElemento, esquemaSubgenero } from './schemas';
 
 describe('esquemaSubgenero', () => {
   it('exige aurora quando é um mundo', () => {
@@ -83,6 +83,53 @@ describe('esquemaArquetipo', () => {
     });
     expect(r.success).toBe(false);
   });
+
+  const base = { nome: 'Observador Espacial', artigo: 'o', subgenero: 'space-opera', ordem: 11 };
+
+  it('aceita ficha sem ilustração — é o caso dos outros 75 arquétipos', () => {
+    expect(esquemaArquetipo.safeParse(base).success).toBe(true);
+  });
+
+  it('aceita ilustração acompanhada do texto alternativo', () => {
+    const r = esquemaArquetipo.safeParse({
+      ...base, ilustracao: 'observador-espacial', ilustracaoAlt: 'Gato preto sentado.',
+    });
+    expect(r.success).toBe(true);
+  });
+
+  /* Imagem sem descrição é verbete que some para quem usa leitor de tela.
+     O esquema recusa em vez de deixar a página sair com alt vazio. */
+  it('recusa ilustração sem texto alternativo', () => {
+    const r = esquemaArquetipo.safeParse({ ...base, ilustracao: 'observador-espacial' });
+    expect(r.success).toBe(false);
+  });
+
+  it('deixa passar texto alternativo sozinho, que não renderiza nada', () => {
+    const r = esquemaArquetipo.safeParse({ ...base, ilustracaoAlt: 'Gato preto sentado.' });
+    expect(r.success).toBe(true);
+  });
+});
+
+/* A regra de ilustração é uma peça só, compartilhada pelos três esquemas do
+   acervo. Este teste existe para o dia em que alguém acrescentar um quarto e
+   esquecer de encaixá-la — ou tirar o `.refine` de um deles sem perceber. */
+describe('ilustração nas três coleções do acervo', () => {
+  const fichas = {
+    arquetipo: [esquemaArquetipo, { nome: 'X', artigo: 'o', subgenero: 'space-opera', ordem: 1 }],
+    cenario: [esquemaCenario, { titulo: 'X', singular: 'uma x', subgenero: 'space-opera', ordem: 1 }],
+    elemento: [esquemaElemento, { titulo: 'X', subgenero: 'space-opera', ordem: 1 }],
+  } as const;
+
+  for (const [tipo, [esquema, base]] of Object.entries(fichas)) {
+    it(`${tipo}: aceita ilustração com texto alternativo`, () => {
+      const r = esquema.safeParse({ ...base, ilustracao: 'x', ilustracaoAlt: 'Um desenho.' });
+      expect(r.success).toBe(true);
+    });
+
+    it(`${tipo}: recusa ilustração sem texto alternativo`, () => {
+      expect(esquema.safeParse({ ...base, ilustracao: 'x' }).success).toBe(false);
+    });
+  }
 });
 
 describe('esquemaCenario', () => {

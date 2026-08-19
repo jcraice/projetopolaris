@@ -119,6 +119,20 @@ testados fora do Astro. Regras do esquema que não são óbvias:
   amostra de `/mundos/`. Chegou a **entrar** no sorteio do gerador — decisão da
   autora —, mas não entra mais: arquétipos saíram do gerador inteiro, felino
   incluído.
+- `ilustracao` e `ilustracaoAlt` existem nas **três** coleções do acervo —
+  arquétipos, cenários e elementos —, por uma peça compartilhada no alto de
+  [schemas.ts](src/lib/schemas.ts). `ilustracao` guarda o **nome-base** de um
+  desenho em `src/assets/ilustracoes/`, sem sufixo nem extensão. Um nome para
+  dois arquivos: `-tema-claro.png` e `-tema-escuro.png`. São dois porque o traço
+  precisa ser escuro sobre papel claro e claro sobre fundo escuro, e o tema do
+  site é o atributo `data-tema` que um botão escreve — não a preferência do
+  sistema. `<picture>` com consulta de mídia daria a versão errada a quem trocar
+  o tema na mão. `ilustracaoAlt` é obrigatório junto (um `.refine` recusa um sem
+  o outro): imagem sem descrição é verbete que some para quem usa leitor de
+  tela. É por causa desse `.refine` que os três esquemas não são objetos
+  simples — quem acrescentar uma quarta coleção ao acervo precisa encaixar a
+  peça, e há teste em [schemas.test.ts](src/lib/schemas.test.ts) cobrando isso
+  das três.
 - `subgeneros.abertura{Arquetipos,Cenarios,Elementos}` são os parágrafos que
   abrem as três páginas de catálogo daquele mundo, um por tipo, porque cada um
   fala do que está listado abaixo dele. Todos opcionais (`comuns` só tem
@@ -148,6 +162,67 @@ páginas de catálogo e `/mundos/` só montam a lista e passam título, corpo e
 `scroll-margin-top: 96px` que compensa a barra fixa e a `.etiqueta` do marcador,
 que hoje só o arquétipo felino recebe. Aparência de verbete se muda ali, uma vez,
 não página por página.
+
+**O verbete ilustrado** é o mesmo Cartão com um desenho ao lado do texto. Hoje
+são três, todos do Space Opera: o Observador Espacial (o felino), Estações e
+Bases Espaciais e Sucessão dinástica contestada.
+
+**A ilustração fecha a página, sempre no último verbete da lista** — decisão da
+autora. Nos arquétipos esse último é o felino, que já vinha destacado; nos
+outros dois é só o de maior `ordem`. Quem escolhe é o frontmatter, não a
+página — o código só desenha quem declarar `ilustracao`.
+
+Como o lugar é a última posição e não um verbete em particular, **a lista é que
+se ajusta ao desenho**: Estações e Bases Espaciais e Sucessão dinástica
+contestada foram deslocados para o fim porque casavam melhor com a sonda e com o
+trono do que os que estavam lá. Deslocados, não trocados — o item vai para o fim
+e os demais fecham fila mantendo a ordem entre si, que é o que preserva a
+sequência da autora. **Reordenar cenário ou elemento mexe em `/mundos/`**, que
+mostra os três primeiros de cada tipo: essas duas mudanças tiraram Estações e
+Sucessão da amostra e puseram Ruínas Antigas e Tecnologia de dobra espacial no
+lugar.
+
+Por isso **os arquivos de desenho têm nome de página, não de verbete** —
+`cenarios-space-opera`, não `estacoes-e-bases-espaciais`. O verbete debaixo do
+desenho já mudou uma vez e vai mudar de novo; a página, não.
+
+Como o desenho mora no verbete de `ordem` 10 ou 11, ele **não aparece em
+`/mundos/`**, que mostra os três primeiros de cada tipo. É o mesmo lugar de onde
+o felino já ficava de fora.
+
+Três coisas no arranjo não são óbvias:
+
+- Todo verbete, ilustrado ou não, embrulha o texto num `.verbete__texto`. O
+  invólucro existe só para o caso ilustrado — é ele que vira a coluna ao lado do
+  desenho —, mas envolve sempre porque `<slot />` só pode aparecer **uma vez**
+  num componente Astro: dois ramos de marcação, um com invólucro e outro sem,
+  deixariam o corpo vazio em um dos dois.
+- O arranjo é `flex`, não `grid`. Com grade o desenho precisaria atravessar as
+  linhas do texto por `grid-row: 1 / -1`, e num contêiner sem linhas declaradas
+  esse `-1` aponta para a **primeira** linha: o desenho ocupava uma célula só e
+  jogava a etiqueta e o título para lugares errados. Já aconteceu.
+- As duas versões do desenho são irmãs e quem esconde uma é a classe de tema.
+  Por isso o seletor `.ilustracao img` **não** declara `display` — ele tem um
+  tipo a mais que `.ilustracao__tema-claro` e venceria por especificidade, e as
+  duas versões do gato apareciam empilhadas. Já aconteceu também.
+
+A busca dos dois arquivos a partir do nome-base é
+[src/lib/ilustracoes.ts](src/lib/ilustracoes.ts), compartilhada pelas três
+páginas de catálogo. É o único arquivo de `src/lib/` sem teste ao lado, e de
+propósito: `import.meta.glob` é do Vite e só existe dentro do build.
+
+O par de arquivos sai de [scripts/gerar-ilustracao.py](scripts/gerar-ilustracao.py),
+que corta o original na caixa do desenho, encaixa numa **caixa** de 560px de
+lado e inverte o traço para a versão do tema escuro — preservando o que é
+colorido, que é pigmento escolhido e não traço. Caixa e não largura fixa porque
+os desenhos têm formatos muito diferentes: igualados pela largura, o trono da
+Sucessão dinástica contestada ficaria com quase o dobro da altura do gato e
+abriria um vão enorme ao lado de um verbete de duas linhas. O Cartão lê a largura do
+próprio arquivo e mostra na metade — a caixa de 280px na tela.
+
+Os originais em tamanho cheio ficam em `src/assets/ilustracoes/original/`,
+versionados, porque sem eles não há como refazer nada. É script de uso ocasional
+e por isso pede Pillow sem declará-lo no projeto.
 
 **Antes de acrescentar ou trocar verbete, ler
 [docs/revisao-de-repeticoes.md](docs/revisao-de-repeticoes.md).** É o critério

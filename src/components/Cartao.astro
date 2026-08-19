@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 interface Props {
   titulo: string;
   ancora: string;
@@ -8,15 +11,65 @@ interface Props {
      O felino é outra coisa: não é o mundo, é a natureza do arquétipo, e essa
      informação não aparece em nenhum outro lugar da página. */
   marcador?: string;
+  /* Um desenho ao lado do texto. Chegam as duas versões do mesmo desenho, não
+     uma: o traço precisa ser claro no tema escuro e escuro no claro, e o tema
+     do site é um atributo que um botão escreve, não a preferência do sistema —
+     nenhuma consulta de mídia acerta isso. Quem troca é o CSS lá embaixo.
+
+     Mora aqui, e não na página de arquétipos, porque aparência de verbete é
+     responsabilidade do Cartão: se um cenário ganhar ilustração amanhã, ela
+     entra igual sem a página inventar um segundo jeito de dispor as colunas. */
+  ilustracao?: {
+    temaClaro: ImageMetadata;
+    temaEscuro: ImageMetadata;
+    alt: string;
+  };
 }
-const { titulo, ancora, marcador } = Astro.props;
+const { titulo, ancora, marcador, ilustracao } = Astro.props;
+
+/* Largura de exibição, tirada do próprio arquivo: o gerador encaixa todo
+   desenho numa caixa de 560px de lado, então a metade das medidas reais é a
+   caixa de 280px na tela. Fixar um número aqui deformaria os desenhos altos —
+   o trono do Comércio interestelar tem quase o dobro da altura do gato. */
+const metade = (imagem?: ImageMetadata) => (imagem ? Math.round(imagem.width / 2) : 0);
 ---
-<article class="verbete" id={ancora}>
-  {marcador && <span class="etiqueta">{marcador}</span>}
-  <h3>{titulo}</h3>
-  <div class="corpo">
-    <slot />
+<article class:list={['verbete', ilustracao && 'verbete--ilustrado']} id={ancora}>
+  {/* O invólucro existe para o verbete ilustrado: é ele que vira a coluna de
+      texto ao lado do desenho. Envolve sempre, mesmo sem ilustração, porque
+      <slot /> só pode aparecer uma vez num componente Astro — dois ramos de
+      marcação, um com invólucro e outro sem, deixariam o corpo vazio num dos
+      dois. Sem ilustração ele é um filho único e não muda nada na tela. */}
+  <div class="verbete__texto">
+    {marcador && <span class="etiqueta">{marcador}</span>}
+    <h3>{titulo}</h3>
+    <div class="corpo">
+      <slot />
+    </div>
   </div>
+  {ilustracao && (
+    <div class="ilustracao">
+      <Image
+        class="ilustracao__tema-escuro"
+        src={ilustracao.temaEscuro}
+        alt={ilustracao.alt}
+        width={metade(ilustracao.temaEscuro)}
+        densities={[1, 2]}
+        loading="lazy"
+      />
+      {/* A mesma imagem descrita duas vezes seria lida duas vezes por leitor de
+          tela, e só uma das duas está visível em cada tema. A que o tema não
+          escolheu sai da árvore de acessibilidade com alt vazio. */}
+      <Image
+        class="ilustracao__tema-claro"
+        src={ilustracao.temaClaro}
+        alt=""
+        aria-hidden="true"
+        width={metade(ilustracao.temaClaro)}
+        densities={[1, 2]}
+        loading="lazy"
+      />
+    </div>
+  )}
 </article>
 
 <style>
@@ -27,7 +80,6 @@ const { titulo, ancora, marcador } = Astro.props;
   .verbete {
     display: flex;
     flex-direction: column;
-    gap: 8px;
     /* Era 16px com moldura em volta. Sem ela, o espaço é a única coisa que
        separa um verbete do próximo, então precisa ser maior que o intervalo
        interno de 8px para a leitura não virar uma parede de texto. */
@@ -61,6 +113,12 @@ const { titulo, ancora, marcador } = Astro.props;
      padrão — sem isto, o marcador vira uma barra da largura toda do verbete.
      align-self aqui, nunca align-items no .verbete (isso encolheria o .corpo,
      que precisa da largura toda para a barra lateral). */
+  .verbete__texto {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
   .etiqueta {
     align-self: flex-start;
   }
@@ -82,5 +140,78 @@ const { titulo, ancora, marcador } = Astro.props;
 
   .corpo :global(p + p) {
     margin-top: 10px;
+  }
+
+  /* O verbete ilustrado vira uma linha: a coluna de texto de um lado, o desenho
+     do outro. Flex e não grade — a grade precisaria fazer o desenho atravessar
+     as linhas do texto com `grid-row: 1 / -1`, e num contêiner sem linhas
+     declaradas esse -1 aponta para a primeira linha, não para a última: o
+     desenho ocupava uma célula só e empurrava a etiqueta e o título para
+     lugares errados. Com flex não há linha nenhuma para contar. */
+  .verbete--ilustrado {
+    flex-direction: row;
+    /* Pelo topo, por escolha da autora. O desenho é bem mais alto que as duas
+       linhas de texto do verbete, então a sobra de altura tem de ir para algum
+       lugar: centrado, ela se partia em dois vãos — um antes da etiqueta e
+       outro antes da epígrafe —, e era o de cima que incomodava, porque
+       parecia distância a mais entre dois verbetes irmãos. Assim a etiqueta
+       encosta no verbete anterior como as outras e a sobra fica toda embaixo,
+       onde lê como recuo do bloco. */
+    align-items: flex-start;
+    gap: 32px;
+  }
+
+  /* Sem o min-width a coluna de texto não encolhe abaixo do tamanho do seu
+     conteúdo e empurra o desenho para fora da página em tela estreita. */
+  .verbete--ilustrado .verbete__texto {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ilustracao {
+    flex: none;
+  }
+
+  /* Sem `display` aqui de propósito: as duas imagens são irmãs e quem decide
+     qual aparece são as regras de tema logo abaixo. Um `display: block` neste
+     seletor venceria por especificidade — ele tem um tipo a mais que as classes
+     de tema — e as duas versões do gato apareceriam empilhadas. */
+  .ilustracao :global(img) {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* O escuro é o tema padrão e o único que existe sem JavaScript, então é a
+     versão de traço claro que nasce visível. O claro entra por data-tema na
+     raiz — o mesmo gatilho que Base.astro escreve antes da primeira pintura,
+     e por isso a troca não pisca. */
+  .ilustracao__tema-escuro {
+    display: block;
+  }
+
+  .ilustracao__tema-claro {
+    display: none;
+  }
+
+  :root[data-tema='claro'] .ilustracao__tema-escuro {
+    display: none;
+  }
+
+  :root[data-tema='claro'] .ilustracao__tema-claro {
+    display: block;
+  }
+
+  /* Abaixo da coluna estreita não há espaço para duas faixas: o desenho desce
+     para baixo do texto, centrado, e o verbete volta a ser uma coluna só. */
+  @media (max-width: 640px) {
+    .verbete--ilustrado {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+    }
+
+    .ilustracao {
+      align-self: center;
+    }
   }
 </style>
