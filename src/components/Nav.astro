@@ -19,7 +19,6 @@ const links = [
 
 const linksDeMais = [
   { rotulo: 'Estilos', href: `${raiz}estilos` },
-  { rotulo: 'Livros', href: `${raiz}livros` },
   { rotulo: 'Sobre', href: `${raiz}sobre` },
 ];
 
@@ -391,13 +390,16 @@ const maisEhAtual = linksDeMais.some((link) => ehPaginaAtual(caminho, link.href)
   }
 
   /* O ponto de quebra não é uma medida redonda de tablet: quem manda é a soma do
-     conteúdo, e ela mudou quando três links entraram no menu "Mais". Medido no
-     navegador, a barra numa linha só pede 862px — 102 da marca, 468 dos quatro
-     links mais o botão "Mais", 180 da busca (o min-width dela, que é o quanto
-     ela cede antes de apertar), 36 do botão de tema, 36 dos três intervalos de
-     12px e 40 dos dois recuos de 20px, que é o valor de --recuo abaixo de
-     1280px. Eram cerca de 1030px com os sete links soltos, e por isso o ponto
-     ficava em 1080.
+     conteúdo, e ela mudou quando os links de leitura entraram no menu "Mais".
+     Medido no navegador, a barra numa linha só pede 862px — 102 da marca, 468
+     dos quatro links mais o botão "Mais", 180 da busca (o min-width dela, que é
+     o quanto ela cede antes de apertar), 36 do botão de tema, 36 dos três
+     intervalos de 12px e 40 dos dois recuos de 20px, que é o valor de --recuo
+     abaixo de 1280px. Eram cerca de 1030px na época em que todos os links
+     ficavam soltos na barra, e por isso o ponto ficava em 1080.
+
+     O que entra e sai do painel do "Mais" não mexe nesta conta — só o que fica
+     na barra conta. Foi o caso de Livros, que saiu do painel sem mover o 920.
 
      Os 920px de hoje guardam a mesma folga de uns 50px que o 1080 guardava:
      abaixo dela o header se desfaz item a item — primeiro o botão de tema cai

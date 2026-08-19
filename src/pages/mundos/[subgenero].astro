@@ -1,5 +1,5 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Cartao from '../../components/Cartao.astro';
 import { paraAncora } from '../../lib/texto';
@@ -36,15 +36,6 @@ const elementos = (await getCollection('elementos', (e) => e.data.subgenero === 
   .sort(porOrdem)
   .slice(0, PREVIA);
 
-const livros = (await getCollection('livros', (l) => l.data.subgenero === subgenero.id))
-  .sort(porOrdem)
-  .slice(0, PREVIA);
-// Cada livro tem vários parágrafos (edição, comentário, sinopse) — precisa de render()
-// de verdade, diferente das outras coleções, que são prosa de um parágrafo só.
-const livrosRenderizados = await Promise.all(
-  livros.map(async (l) => ({ entrada: l, Content: (await render(l)).Content })),
-);
-
 const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : `${base}/`;
 ---
@@ -56,7 +47,6 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
     <a href="#arquetipos">Arquétipos</a>
     <a href="#cenarios">Cenários</a>
     <a href="#elementos">Elementos Narrativos</a>
-    <a href="#livros">Livros</a>
   </nav>
 
   <section id="arquetipos" aria-labelledby="arquetipos-titulo">
@@ -95,19 +85,6 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
     ))}
   </section>
 
-  <section id="livros" aria-labelledby="livros-titulo">
-    <div class="titulo-linha">
-      <h2 id="livros-titulo">Livros</h2>
-      <a class="ver-tudo" href={`${raiz}livros/${subgenero.id}/`}>Ver todos →</a>
-    </div>
-    {livrosRenderizados.map(({ entrada, Content }) => (
-      <Cartao titulo={entrada.data.titulo} ancora={`livros-${paraAncora(entrada.data.titulo)}`}>
-        <p class="autor">{entrada.data.autor}</p>
-        <Content />
-      </Cartao>
-    ))}
-  </section>
-
   {subgenero.data.citacao && (
     <blockquote>{subgenero.data.citacao}<cite>{subgenero.data.citacaoAutor}</cite></blockquote>
   )}
@@ -140,7 +117,7 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
     margin-block-start: 40px;
   }
 
-  /* As quatro seções são alvo do sumário logo acima. Sem folga, o <h2> para
+  /* As três seções são alvo do sumário logo acima. Sem folga, o <h2> para
      debaixo da barra fixa do topo. Os mesmos 96px do scroll-margin-top dos
      verbetes em Cartao.astro, pelo mesmo motivo: a barra recolhida tem cerca de
      68px e o resto é respiro. */

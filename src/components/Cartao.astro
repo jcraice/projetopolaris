@@ -32,7 +32,7 @@ const { titulo, ancora, marcador } = Astro.props;
        separa um verbete do próximo, então precisa ser maior que o intervalo
        interno de 8px para a leitura não virar uma parede de texto. */
     margin-block-end: 32px;
-    /* Os mesmos 96px do scroll-margin-top das quatro section[id] em
+    /* Os mesmos 96px do scroll-margin-top das três section[id] em
        mundos/[subgenero].astro, pelo mesmo motivo: dar folga para o título não
        parar debaixo da barra fixa do topo. Os dois valores devem mudar
        juntos. */
@@ -65,9 +65,11 @@ const { titulo, ancora, marcador } = Astro.props;
     align-self: flex-start;
   }
 
-  /* A barra lateral de --apoio cerca o conjunto do conteúdo, não cada parágrafo —
-     necessário porque o corpo pode vir de render() com múltiplos <p> (livros).
-     Com a moldura fora, é ela que marca onde um verbete começa e termina. */
+  /* A barra lateral de --apoio cerca o conjunto do conteúdo, não cada parágrafo.
+     Hoje todo verbete é um parágrafo só, mas a regra continua valendo para o
+     conjunto: verbete que um dia precise de dois já nasce cercado por inteiro,
+     em vez de ganhar uma barra por parágrafo. Com a moldura fora, é ela que
+     marca onde um verbete começa e termina. */
   .corpo {
     border-left: 3px solid var(--apoio);
     padding-left: 10px;

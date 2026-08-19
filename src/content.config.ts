@@ -3,7 +3,7 @@ import { glob } from 'astro/loaders';
 import type { BaseSchema } from 'astro/content/config';
 import {
   esquemaArquetipo, esquemaCenario, esquemaElemento,
-  esquemaLivro, esquemaPagina, esquemaSubgenero,
+  esquemaPagina, esquemaSubgenero,
 } from './lib/schemas';
 
 const colecao = <S extends BaseSchema>(pasta: string, schema: S) =>
@@ -14,6 +14,5 @@ export const collections = {
   arquetipos: colecao('arquetipos', esquemaArquetipo),
   cenarios: colecao('cenarios', esquemaCenario),
   elementos: colecao('elementos', esquemaElemento),
-  livros: colecao('livros', esquemaLivro),
   paginas: colecao('paginas', esquemaPagina),
 };

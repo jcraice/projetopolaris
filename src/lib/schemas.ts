@@ -57,13 +57,6 @@ export const esquemaElemento = z.object({
   ordem: z.number().int().nonnegative(),
 });
 
-export const esquemaLivro = z.object({
-  titulo: z.string().min(1),
-  autor: z.string().min(1),
-  subgenero: z.string().min(1),
-  ordem: z.number().int().nonnegative(),
-});
-
 /* Os três campos opcionais servem só à home hoje: são frases soltas que a página
    encaixa em lugares diferentes da estrutura — subtítulo abaixo do título,
    chamada dentro do card do gerador, citação no fim — e por isso não cabem no

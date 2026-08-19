@@ -26,8 +26,8 @@ describe('ehPaginaAtual', () => {
   });
 
   it('funciona com o site publicado numa subpasta', () => {
-    expect(ehPaginaAtual('/projetopolaris/livros/', '/projetopolaris/livros')).toBe(true);
-    expect(ehPaginaAtual('/projetopolaris/livros/', '/projetopolaris/sobre')).toBe(false);
+    expect(ehPaginaAtual('/projetopolaris/estilos/', '/projetopolaris/estilos')).toBe(true);
+    expect(ehPaginaAtual('/projetopolaris/estilos/', '/projetopolaris/sobre')).toBe(false);
   });
 
   it('acende em tudo se receber a raiz — por isso a marca POLARIS não a usa', () => {

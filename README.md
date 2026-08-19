@@ -2,11 +2,11 @@
 
 Catálogo de arquétipos de ficção científica, organizado por subgênero, com um
 gerador de premissas que roda inteiramente no navegador. O acervo cobre
-arquétipos de personagem, cenários, elementos narrativos e livros de referência,
-e é publicado como site estático no GitHub Pages.
+arquétipos de personagem, cenários e elementos narrativos, e é publicado
+como site estático no GitHub Pages.
 
 O site está no ar em **https://jcraice.github.io/projetopolaris/**, com 76
-arquétipos, 60 cenários, 60 elementos narrativos e 36 livros. São seis mundos —
+arquétipos, 60 cenários e 60 elementos narrativos. São seis mundos —
 Cyberpunk, Distopia, Invasão Alienígena, Pós Apocalíptico, Space Opera e Viagem
 no Tempo — com 11 arquétipos, 10 cenários e 10 elementos cada, mais um pool de
 10 arquétipos comuns que serve a todos. Tem busca em todo o acervo e tema claro
@@ -102,7 +102,7 @@ para garantir que nada mais quebrou.
 ## Licenças
 
 - O código-fonte está sob licença MIT — veja [`LICENSE`](./LICENSE).
-- O conteúdo editorial (arquétipos, cenários, elementos narrativos, livros,
+- O conteúdo editorial (arquétipos, cenários, elementos narrativos,
   textos das páginas e as listas do gerador — profissões, características,
   personalidades e fatos) está sob Creative Commons Atribuição 4.0
   Internacional (CC BY 4.0) — veja

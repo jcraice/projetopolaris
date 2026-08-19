@@ -13,7 +13,6 @@ Arquétipos e elementos narrativos tinham seção neste documento numa versão
 anterior do gerador. Saíram do sorteio nesta reescrita — a premissa passou a
 girar em torno de dois personagens, um local e um fato — mas continuam com
 página própria em `/arquetipos/` e `/elementos/`, na busca e em `/mundos/`.
-Livros nunca entraram no gerador: são leitura de apoio, não peça de combinação.
 
 > Contagens conferidas na data em que este documento foi escrito. Entrada nova
 > em `src/lib/gerador/*.ts` ou em `src/content/cenarios/` desatualiza os

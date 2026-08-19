@@ -141,13 +141,11 @@ muda o desenho e não só um número:
   painel — `.lista-subgeneros a`, `.ver-tudo` e `.sumario a`. **Não atinge o
   `h1`**, que é acento mas tem 32px e por isso responde ao mínimo de 3:1.
 
-  **Resolvido para a linha de autor dos livros.** `.autor` (0,8rem) era o único
-  conteúdo permanente de texto pequeno em cor de acento, e por isso a reprovação
-  mais visível do site — 4,27:1. Quando os títulos de verbete perderam a cor, ele
-  virou também o elemento mais aparente do verbete, acima do próprio título do
-  livro. A autora aprovou passá-lo a `--texto`: **4,71:1** no pior mundo, e a
-  hierarquia volta à ordem. O que o distingue do corpo agora é peso, caixa alta e
-  corpo menor, não cor.
+  **Sem conteúdo permanente afetado.** A única ocorrência era `.autor` (0,8rem),
+  a linha de nome do autor nos verbetes de livro — a reprovação mais visível do
+  site, 4,27:1, corrigida na época passando-a a `--texto`. A coleção de livros
+  saiu do site e a classe saiu junto; não sobrou texto pequeno em cor de acento
+  fora dos estados de interação.
 
   Sobra a pendência só nos estados `:hover`, que são interação e não conteúdo.
 
@@ -176,9 +174,9 @@ fora dos preenchimentos. Tem 2em, ou 32px, em peso 900 — texto grande, mínimo
 mundos, e em cinco deles passaria até no critério de texto pequeno. Encolher o
 `h1` abaixo de 18,66px reprova.
 
-**Títulos de seção das páginas de mundo: pastilha preenchida.** Os quatro `h2` de
+**Títulos de seção das páginas de mundo: pastilha preenchida.** Os três `h2` de
 [`/mundos/[subgenero]/`](../src/pages/mundos/%5Bsubgenero%5D.astro) — Arquétipos,
-Cenários, Elementos Narrativos, Livros — herdavam `--texto-forte` e ficavam
+Cenários, Elementos Narrativos — herdavam `--texto-forte` e ficavam
 iguais aos títulos dos verbetes logo abaixo, que também são claros: a página
 inteira lia como um bloco só. Viraram pastilha preenchida por escolha da autora,
 no mesmo par que o `.botao--principal` e a `.etiqueta` já usam — fundo
@@ -239,7 +237,7 @@ de elemento de interface. `--apagado` foi descartado por ficar em 2,12.
 no catálogo, envolvendo os verbetes de `/arquetipos/`, `/cenarios/` e
 `/elementos/` por subgênero. Nesses lugares o texto não fica mais direto sobre
 o céu, e as razões da tabela acima sobem. Ficaram de fora, ainda sobre o céu:
-`/livros/` e as páginas de mundo, que reúnem os quatro tipos. A primeira
+as páginas de mundo, que reúnem os três tipos. A primeira
 tentativa foi o acento puro a 8% por cima, e ela **reprovava**: `--apoio` é mais
 claro que o céu, então clareava o fundo e derrubava o corpo de texto para
 4,45:1. O valor em uso é o acento misturado a 20% no fundo da página e aplicado

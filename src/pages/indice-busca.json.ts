@@ -6,11 +6,10 @@ export async function GET() {
   const base = import.meta.env.BASE_URL;
   const raiz = base.endsWith('/') ? base : `${base}/`;
 
-  const [arquetipos, cenarios, elementos, livros] = await Promise.all([
+  const [arquetipos, cenarios, elementos] = await Promise.all([
     getCollection('arquetipos'),
     getCollection('cenarios'),
     getCollection('elementos'),
-    getCollection('livros'),
   ]);
 
   const indice: ItemIndice[] = [
@@ -31,12 +30,6 @@ export async function GET() {
       tipo: 'elemento',
       subgenero: e.data.subgenero,
       url: `${raiz}elementos/${e.data.subgenero}/#${paraAncora(e.data.titulo)}`,
-    })),
-    ...livros.map((l) => ({
-      titulo: l.data.titulo,
-      tipo: 'livro',
-      subgenero: l.data.subgenero,
-      url: `${raiz}livros/${l.data.subgenero}/#${paraAncora(l.data.titulo)}`,
     })),
   ];
 
