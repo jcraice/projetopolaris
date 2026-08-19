@@ -82,10 +82,14 @@ Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md]
 Site estático em Astro. O acervo editorial é uma grade de duas dimensões —
 **tipo de recurso × subgênero** — e o site abre as duas entradas:
 
-- por tipo: `/arquetipos/`, `/cenarios/`, `/elementos/`, `/livros/`, cada um com
-  uma rota `[subgenero]` abaixo;
-- por mundo: `/mundos/[subgenero]/`, que junta os quatro tipos de um subgênero
+- por tipo: `/arquetipos/`, `/cenarios/`, `/elementos/`, cada um com uma rota
+  `[subgenero]` abaixo;
+- por mundo: `/mundos/[subgenero]/`, que junta os três tipos de um subgênero
   numa página só.
+
+Houve um quarto tipo, `/livros/` — seis listas de leitura por mundo. Saiu do
+site por decisão da autora, com a coleção inteira: o acervo é o que se combina
+para escrever, e leitura de apoio não se combina.
 
 ### Conteúdo
 
@@ -121,11 +125,10 @@ testados fora do Astro. Regras do esquema que não são óbvias:
   arquétipos), e por isso `esquemaSubgenero` é `.strict()`: os nomes são
   parecidos o suficiente para um `aberturaCenários` com acento ser descartado em
   silêncio pelo Zod, e a página abrir sem parágrafo sem ninguém reclamar.
-  Livros não tem abertura.
 - `subgeneros.citacao` e `citacaoAutor` são a epígrafe do mundo, repetida no
-  `<blockquote>` das cinco páginas daquele subgênero (os quatro catálogos e
+  `<blockquote>` das quatro páginas daquele subgênero (os três catálogos e
   `/mundos/`). Vem do frontmatter, não do corpo, justamente por aparecer em
-  cinco lugares. A `citacao` de `paginas/home.md` é outra coisa e não tem autor.
+  quatro lugares. A `citacao` de `paginas/home.md` é outra coisa e não tem autor.
 
 O campo `ordem` define a posição nos índices — a ordenação é sempre explícita,
 nunca alfabética por acidente.
@@ -133,11 +136,11 @@ nunca alfabética por acidente.
 **O corpo de arquétipo, cenário e elemento entra na página como texto puro**
 (`{entrada.body}` dentro de um `<p>`), sem passar por `render()` — Markdown no
 corpo apareceria literal, com asterisco e tudo. São um parágrafo só, por isso a
-economia. Das quatro coleções do acervo, só `livros` chama `render()`, porque
-cada livro tem vários parágrafos (edição, comentário, sinopse). Verbete que
-precisar de dois parágrafos ou de ênfase muda a página junto, não só o Markdown.
-(A coleção `paginas` é outra história: toda entrada dela passa por `render()`,
-porque é prosa corrida com títulos e listas.)
+economia, e hoje nenhuma das três coleções do acervo chama `render()` (a de
+livros chamava, porque cada livro tinha vários parágrafos; saiu com a coleção).
+Verbete que precisar de dois parágrafos ou de ênfase muda a página junto, não só
+o Markdown. (A coleção `paginas` é outra história: toda entrada dela passa por
+`render()`, porque é prosa corrida com títulos e listas.)
 
 **Todo verbete do site sai de [Cartao.astro](src/components/Cartao.astro)** — as
 páginas de catálogo e `/mundos/` só montam a lista e passam título, corpo e
@@ -156,7 +159,7 @@ Invasão × Campos de refugiados, Humano Aumentado × Implantes cibernéticos):
 elas são o que a grade de duas dimensões existe para fazer.
 
 O tamanho do acervo (hoje 76 arquétipos — 10 por mundo mais o felino, e mais 10
-comuns —, 60 cenários, 60 elementos, 36 livros) está escrito por extenso em
+comuns —, 60 cenários, 60 elementos) está escrito por extenso em
 seis lugares que nenhum teste confere: [README.md](README.md),
 [sobre.md](src/content/paginas/sobre.md), o comentário sobre os cenários em
 [gerador.astro](src/pages/gerador.astro), o `nome` de
@@ -183,18 +186,17 @@ As páginas de índice de arquétipos, cenários e elementos têm duas entradas 
 `<pagina>-como-usar.md` traz o bloco "Como usar esta página", que a página
 renderiza **depois** da lista. São dois arquivos porque `render()` devolve o
 Markdown inteiro de uma vez, e não há como intercalar a lista no meio dele.
-Livros não tem esse segundo arquivo.
 
 `/mundos/[subgenero]/` é porta de entrada, não catálogo: mostra três itens de
 cada tipo e manda para a página completa (e deixa o arquétipo felino de fora da
 amostra). Listar tudo ali esvazia o "Ver todos".
 
-As cinco rotas `[subgenero]` têm o mesmo `getStaticPaths` — `getCollection('subgeneros')`,
+As quatro rotas `[subgenero]` têm o mesmo `getStaticPaths` — `getCollection('subgeneros')`,
 um caminho por entrada —, com **uma assimetria de propósito**: só
 [arquetipos/[subgenero].astro](src/pages/arquetipos/[subgenero].astro) não
 filtra por `s.data.mundo`, porque `/arquetipos/comuns/` precisa existir. As
-outras quatro filtram, senão gerariam `/cenarios/comuns/` e afins vazias.
-"Uniformizar" as cinco apaga a página dos 10 comuns.
+outras três filtram, senão gerariam `/cenarios/comuns/` e afins vazias.
+"Uniformizar" as quatro apaga a página dos 10 comuns.
 
 ### Gerador de premissas
 
@@ -458,6 +460,19 @@ base `/`. Por isso **todo link interno precisa passar por
 `import.meta.env.BASE_URL`** (o padrão no código é normalizar com
 `base.endsWith('/') ? base : base + '/'`); um `href="/arquetipos/"` cru quebra
 em produção.
+
+**Dentro de Markdown a regra é a oposta: escreva o caminho cru.** Prosa da
+autora não tem como consultar `import.meta.env`, então quem conserta é
+`reescreverLinksInternos()`
+([src/lib/links-markdown.ts](src/lib/links-markdown.ts)), um plugin rehype
+ligado em `markdown.rehypePlugins` do
+[astro.config.ts](astro.config.ts): ele percorre o HTML já montado de todo
+Markdown e prefixa a base em todo `href` que começa por uma barra só. `mailto:`,
+protocolo, `//outro.site`, âncora e caminho relativo passam intactos. Um
+`[Gerador](/gerador/)` no Markdown é o jeito certo — e é o único link interno de
+conteúdo hoje, em [sobre.md](src/content/paginas/sobre.md). Sem o plugin ele
+funcionaria no `npm run dev` e daria 404 no ar, que é o pior jeito de quebrar:
+por isso o teste do plugin é o que segura essa garantia, não o build.
 
 [.github/workflows/deploy.yml](.github/workflows/deploy.yml) roda `npx vitest
 run` e `npm run check` antes do build e publica no GitHub Pages a partir de
