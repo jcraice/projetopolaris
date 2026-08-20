@@ -1,9 +1,10 @@
 """Gera as duas versões de tema de uma ilustração do acervo.
 
-O desenho da autora é traço escuro sobre fundo transparente: serve ao tema claro
-como está, e some no escuro, que é o padrão do site. Este script corta, reduz e
-produz a segunda versão invertendo só o traço — as partes coloridas passam
-intactas, porque cor é escolha do desenho e não consequência do tema.
+O desenho da autora é traço escuro sobre fundo claro: serve ao tema claro como
+está, e some no escuro, que é o padrão do site. Este script recorta o papel,
+corta, reduz e produz a segunda versão invertendo só o traço — as partes
+coloridas passam intactas, porque cor é escolha do desenho e não consequência
+do tema.
 
     python scripts/gerar-ilustracao.py src/assets/ilustracoes/original/<nome>.png
 
@@ -32,6 +33,36 @@ def eh_cor_escolhida(r: int, g: int, b: int) -> bool:
     """
     h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
     return s > 0.40 and v > 0.30
+
+
+def recortar_do_papel(imagem: Image.Image) -> Image.Image:
+    """Troca o fundo branco por transparência, quando o original vem com fundo.
+
+    Os primeiros desenhos chegaram já recortados, com o traço sobre nada; os
+    seguintes vieram como o desenho sai do programa da autora, traço escuro
+    sobre papel branco chapado. Se o alfa entrar aqui todo opaco, é o segundo
+    caso — e sem este passo o desenho apareceria dentro de um retângulo branco
+    no tema escuro.
+
+    O que vira alfa é a distância até o branco: quanto mais escuro o pixel,
+    mais opaco ele fica, e o traço volta a ser preto puro. É a conta inversa da
+    que o navegador faz ao compor sobre o fundo, então o resultado sobre papel
+    branco é idêntico ao original — o antisserrilhado e o traço fraco do lápis
+    inclusive. Cor escolhida não passa por isso: ela fica opaca e com o
+    pigmento intacto, senão o laranja clarearia junto com o papel.
+    """
+    if imagem.getchannel('A').getextrema()[0] < 255:
+        return imagem
+
+    saida = imagem.copy()
+    px = saida.load()
+    for y in range(saida.height):
+        for x in range(saida.width):
+            r, g, b, _ = px[x, y]
+            if eh_cor_escolhida(r, g, b):
+                continue
+            px[x, y] = (0, 0, 0, 255 - max(r, g, b))
+    return saida
 
 
 def cortar(imagem: Image.Image) -> Image.Image:
@@ -74,7 +105,7 @@ def caber_na_caixa(largura: int, altura: int) -> tuple[int, int]:
 
 
 def main(caminho: str) -> None:
-    original = cortar(Image.open(caminho).convert('RGBA'))
+    original = cortar(recortar_do_papel(Image.open(caminho).convert('RGBA')))
     largura, altura = caber_na_caixa(original.width, original.height)
 
     destino = os.path.dirname(os.path.dirname(os.path.abspath(caminho)))

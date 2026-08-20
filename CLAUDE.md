@@ -164,8 +164,10 @@ que hoje só o arquétipo felino recebe. Aparência de verbete se muda ali, uma 
 não página por página.
 
 **O verbete ilustrado** é o mesmo Cartão com um desenho ao lado do texto. Hoje
-são três, todos do Space Opera: o Observador Espacial (o felino), Estações e
-Bases Espaciais e Sucessão dinástica contestada.
+são oito: o arquétipo felino dos **seis** mundos — Parceiro de Sombra, Infiltrado
+Silencioso, Guardião Invisível, Vigia dos Suprimentos, Observador Espacial e
+Batedor das Eras — mais Estações e Bases Espaciais e Sucessão dinástica
+contestada, os dois do Space Opera que não são arquétipo.
 
 **A ilustração fecha a página, sempre no último verbete da lista** — decisão da
 autora. Nos arquétipos esse último é o felino, que já vinha destacado; nos
@@ -212,7 +214,10 @@ páginas de catálogo. É o único arquivo de `src/lib/` sem teste ao lado, e de
 propósito: `import.meta.glob` é do Vite e só existe dentro do build.
 
 O par de arquivos sai de [scripts/gerar-ilustracao.py](scripts/gerar-ilustracao.py),
-que corta o original na caixa do desenho, encaixa numa **caixa** de 560px de
+que recorta o papel branco quando o original vem com fundo (os primeiros
+chegaram já recortados, os gatos dos outros cinco mundos não — sem esse passo o
+desenho apareceria dentro de um retângulo branco no tema escuro), corta o
+original na caixa do desenho, encaixa numa **caixa** de 560px de
 lado e inverte o traço para a versão do tema escuro — preservando o que é
 colorido, que é pigmento escolhido e não traço. Caixa e não largura fixa porque
 os desenhos têm formatos muito diferentes: igualados pela largura, o trono da
