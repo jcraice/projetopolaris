@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Cartao from '../../components/Cartao.astro';
+import TrocarDeMundo from '../../components/TrocarDeMundo.astro';
 import { ilustracaoDe } from '../../lib/ilustracoes';
 import { paraAncora } from '../../lib/texto';
 
@@ -41,4 +42,5 @@ const felino = fichas.find((f) => f.data.felino);
   {subgenero.data.citacao && (
     <blockquote>{subgenero.data.citacao}<cite>{subgenero.data.citacaoAutor}</cite></blockquote>
   )}
+  <TrocarDeMundo tipo="arquetipos" atual={subgenero.id} />
 </Base>

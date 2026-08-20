@@ -148,6 +148,18 @@
   color: var(--fundo);
 }
 
+/* O mundo aberto, no claro, é a fileira ao contrário: as outras pílulas são
+   preenchidas em --apoio e esta fica vazada, com a letra e o traço na cor do
+   preenchimento delas. Repetir a receita do escuro — --flutuante no fundo —
+   não bastaria aqui, porque a letra continuaria em --fundo, quase branca sobre
+   uma superfície quase branca. Assim dá 11,46:1, e o contraste com as vizinhas
+   é de forma, não de mais uma cor. */
+:root[data-tema='claro'] .lista-subgeneros a[aria-current='page'] {
+  background: var(--flutuante);
+  border-color: var(--apoio);
+  color: var(--apoio);
+}
+
 * { box-sizing: border-box; }
 
 html {
@@ -263,6 +275,16 @@ a {
 .lista-subgeneros a:hover {
   color: var(--destaque);
   border-color: var(--destaque);
+}
+
+/* A pílula do mundo em que a pessoa está, quando a fileira aparece dentro de
+   uma página de mundo (TrocarDeMundo.astro). É a mesma superfície com que a
+   barra do topo marca a página aberta, para não inventar tom novo para dizer
+   "você está aqui" — 11,37:1 no escuro, a medição do submenu em
+   docs/verificacao-visual.md. Nos índices e na home nenhuma pílula é a atual,
+   e a regra não pega. */
+.lista-subgeneros a[aria-current='page'] {
+  background: var(--flutuante);
 }
 
 /* Agrupa sem emoldurar: cor quase transparente e espaço interno, nenhum traço.

@@ -278,6 +278,32 @@ filtra por `s.data.mundo`, porque `/arquetipos/comuns/` precisa existir. As
 outras três filtram, senão gerariam `/cenarios/comuns/` e afins vazias.
 "Uniformizar" as quatro apaga a página dos 10 comuns.
 
+**As três páginas de catálogo fecham com a fileira de mundos**
+([TrocarDeMundo.astro](src/components/TrocarDeMundo.astro)), depois da
+epígrafe: sem ela, trocar de mundo obrigava a subir na barra e voltar ao
+índice. A fileira leva ao **mesmo tipo** em outro mundo — de Arquétipos
+Cyberpunk para Arquétipos Distopia, não para `/mundos/cyberpunk/` —, e são
+links de verdade, sem JavaScript. Três coisas nela não são óbvias:
+
+- Ela reaproveita `.lista-subgeneros`, a mesma fileira da home e dos índices, e
+  a única regra nova é a da pílula do mundo aberto. Essa regra mora em
+  [global.css](src/styles/global.css), junto do resto da classe e não escopada
+  no componente: metade das regras de uma classe num arquivo e metade no outro
+  se perdem uma da outra — e o par de tema claro **precisa** estar lá, porque
+  `:root[data-tema='claro']` num `<style>` de componente recebe o atributo de
+  escopo e deixa de casar.
+- O mundo aberto **fica** na fileira, marcado por `aria-current="page"` como o
+  link da página atual na barra do topo, em vez de ser omitido: assim a fileira
+  não muda de largura nem de ordem a cada troca. É o que o rótulo "Trocar de
+  mundo" promete; "Outros mundos" pediria a lista sem ele. No claro a marca é a
+  fileira ao contrário — a pílula vazada entre as preenchidas —, porque repetir
+  o fundo `--flutuante` do escuro deixaria a letra em `--fundo`, quase branca
+  sobre superfície quase branca.
+- A fileira lista **só os seis mundos** (`mundo: true`), mas aparece também em
+  `/arquetipos/comuns/`, sem nenhuma pílula marcada. Não é descuido: o pool dos
+  comuns não é destino de troca, e aquela página é justamente a que ficaria sem
+  saída lateral nenhuma.
+
 ### Gerador de premissas
 
 [src/lib/gerador/](src/lib/gerador/) é um conjunto de funções puras, exportadas

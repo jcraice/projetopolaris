@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  /* O tipo de catálogo em que a pessoa está. A fileira leva ao mesmo tipo em
+     outro mundo — de Arquétipos Cyberpunk para Arquétipos Distopia, não para a
+     porta de entrada do mundo —, que é o que mantém a leitura no mesmo trilho. */
+  tipo: 'arquetipos' | 'cenarios' | 'elementos';
+  /* O mundo aberto, que ganha a marca de página atual. Em /arquetipos/comuns/
+     não corresponde a nenhuma pílula, e é de propósito: ver abaixo. */
+  atual: string;
+}
+
+const { tipo, atual } = Astro.props;
+
+/* Só os seis mundos: o pool dos 10 Arquétipos Comuns tem mundo: false e não é
+   destino de troca — a mesma regra que o mantém fora de /mundos/. Mas a página
+   /arquetipos/comuns/ recebe a fileira assim mesmo, com nenhuma pílula marcada:
+   ela é a única das quatro rotas [subgenero] que existe sem ser um mundo, e sem
+   isto continuaria sendo a única sem saída lateral nenhuma. */
+const mundos = (await getCollection('subgeneros', (s) => s.data.mundo)).sort(
+  (a, b) => a.data.ordem - b.data.ordem,
+);
+
+const base = import.meta.env.BASE_URL;
+const raiz = base.endsWith('/') ? base : `${base}/`;
+---
+{/* O mundo aberto fica na fileira, marcado, em vez de ser omitido: assim a
+    fileira é a mesma nas seis páginas — não muda de largura nem de ordem a cada
+    troca — e ainda diz onde a pessoa está. É o que o rótulo "Trocar de mundo"
+    promete; "Outros mundos" pediria a lista sem ele.
+
+    Quem carrega esse estado é o aria-current do próprio link, não uma classe,
+    pelo mesmo motivo da barra do topo: a marca que o leitor de tela anuncia é a
+    que o olho vê, sem um segundo estado para divergir dela. */}
+<nav class="trocar-de-mundo" aria-labelledby="trocar-de-mundo-titulo">
+  <h2 id="trocar-de-mundo-titulo">Trocar de mundo</h2>
+  <ul class="lista-subgeneros">
+    {mundos.map((m) => (
+      <li>
+        <a href={`${raiz}${tipo}/${m.id}/`} aria-current={m.id === atual ? 'page' : undefined}>
+          {m.data.nome}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .trocar-de-mundo {
+    margin-block-start: 48px;
+  }
+
+  /* Rótulo de fileira, não título de seção: a pastilha preenchida dos <h2> de
+     /mundos/ chamaria mais atenção que o último verbete logo acima. Fica no
+     --texto-forte que global.css já dá aos títulos — --apagado seria o tom
+     natural para uma legenda, mas sobre o céu ele está entre 2,12 e 2,67:1,
+     que é a pendência aberta em docs/verificacao-visual.md. Não somar caso
+     novo a ela. */
+  h2 {
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    margin-block-end: 16px;
+  }
+</style>

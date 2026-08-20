@@ -89,6 +89,15 @@ cima. Nenhuma combinação chega perto do limite:
 | escuro | `#221B30` | `--apoio` 14% em `#0b0b0e` | 11,37 | 7,51 |
 | claro | `#E4E7EB` | `--apoio` 8% em `#f5f7f9` | 9,93 | 6,18 |
 
+A mesma superfície marca o mundo aberto na fileira de mundos que fecha as
+páginas de catálogo ([TrocarDeMundo.astro](../src/components/TrocarDeMundo.astro)).
+No escuro é a medição de cima sem mudança: `--texto` sobre `#221B30`, **11,37**.
+No claro a pílula é vazada em vez de preenchida — as outras da fileira são
+`--fundo` sobre `--apoio` —, então o que se mede é `--apoio` sobre `#E4E7EB`:
+**11,46**. Preencher no claro como no escuro deixaria a letra em `--fundo`
+sobre superfície quase branca, e é por isso que os dois temas não usam a mesma
+receita aqui.
+
 Para comparação, o `--fundo` puro que estava aqui antes dava 13,49 no escuro e
 11,47 no claro: a troca custa contraste e ainda sobra folga de mais do dobro do
 mínimo nos dois temas.
