@@ -35,6 +35,15 @@ Valem para toda tarefa deste plano.
   literais.
 - **Corpo de verbete começa com maiúscula e termina em ponto**, nas duas
   coleções.
+- **Tom geral, não cena.** Decisão da autora no portão da Tarefa 5: o verbete
+  nomeia o tipo de lugar ou de força e para por aí — quem escreve a história é
+  que inventa o detalhe. A régua é o acervo que já existe, medido: **cenário
+  entre 10 e 15 palavras, elemento entre 8 e 12**, uma frase só. Os primeiros
+  dez cenários de FC Militar saíram com 23 palavras de média e os elementos com
+  18, com detalhe de cena inventado ("onde tripulações se revezam em turnos de
+  guarda"); a Tarefa 5b os refez. Comparar sempre com
+  `src/content/cenarios/pos-apocaliptico/` e `src/content/elementos/distopia/`
+  antes de dar um verbete por pronto.
 - **Título é frase, não manchete**: "Trincheiras orbitais", não "Trincheiras
   Orbitais".
 - **`singular` de cenário precisa começar com "um " ou "uma "** — o esquema
@@ -354,8 +363,8 @@ Nunca um lugar.
 
 | Ordem | Título |
 |---|---|
-| 1 | Cadeia de comando e insubordinação |
-| 2 | Ordem que ninguém quer cumprir |
+| 1 | Fogo amigo |
+| 2 | Segredo militar guardado da própria tropa |
 | 3 | Armamento experimental em teste de campo |
 | 4 | Perdas aceitáveis |
 | 5 | Propaganda de recrutamento |
@@ -491,6 +500,82 @@ vezes naquele subgênero.
 
 Se o tom precisar mudar, muda **aqui**, em 41 verbetes, e as Tarefas 6 a 17
 nascem já corrigidas.
+
+---
+
+## Tarefa 5b: Refazer o tom dos verbetes de FC Militar
+
+Saída do portão. A autora leu FC Militar e pediu duas correções: os dois
+primeiros elementos falavam da mesma tensão, e o tom dos verbetes escritos aqui
+é específico demais perto do acervo que já existe.
+
+**Arquivos:**
+- Apagar: `src/content/elementos/fc-militar/cadeia-de-comando-e-insubordinacao.md`
+- Apagar: `src/content/elementos/fc-militar/ordem-que-ninguem-quer-cumprir.md`
+- Criar: `fogo-amigo.md` e `segredo-militar-guardado-da-propria-tropa.md`, em
+  `src/content/elementos/fc-militar/`
+- Modificar: os 10 arquivos de `src/content/cenarios/fc-militar/`
+- Modificar: os 8 arquivos que ficam em `src/content/elementos/fc-militar/`
+- Modificar: `src/content/subgeneros/fc-militar.md` (a `aberturaElementos` cita
+  um elemento que deixou de existir)
+
+**Interfaces:**
+- Consome: tudo o que as Tarefas 2 a 4 criaram.
+- Produz: a régua de tom que as Tarefas 7, 8, 11, 12, 15 e 16 seguem.
+
+- [ ] **Passo 1: trocar os dois elementos**
+
+Sai "Cadeia de comando e insubordinação" (ordem 1) e sai "Ordem que ninguém quer
+cumprir" (ordem 2). Entram, nas mesmas ordens:
+
+| Ordem | Título |
+|---|---|
+| 1 | Fogo amigo |
+| 2 | Segredo militar guardado da própria tropa |
+
+Os dois que saem falavam da mesma coisa — a ordem que pesa sobre quem obedece. Os
+que entram cobrem o que faltava: o erro que mata do lado certo da linha, e a
+informação que o comando esconde da própria tropa. Nenhum dos dois repete os oito
+que ficam, e "Propaganda de recrutamento" é outra coisa: ela fala para fora, o
+segredo guarda para dentro.
+
+- [ ] **Passo 2: encurtar os 20 corpos**
+
+Reescrever o corpo dos 10 cenários e dos 10 elementos (os 8 que ficam mais os 2
+novos) na régua da restrição global: cenário entre 10 e 15 palavras, elemento
+entre 8 e 12, uma frase só, sem detalhe de cena inventado.
+
+O que sai é o específico demais. Exemplo do que está lá hoje e do alvo:
+
+> **Trincheiras orbitais**, hoje, com 27 palavras: "Anéis de casamatas blindadas
+> presos à órbita de um planeta em disputa, onde tripulações se revezam em turnos
+> de guarda sob fogo que vem tanto da superfície quanto do espaço aberto."
+>
+> Na régua do acervo, algo como: "Casamatas blindadas em órbita de um planeta em
+> disputa, sob fogo da superfície e do espaço."
+
+`titulo`, `singular`, `subgenero` e `ordem` **não mudam** em nenhum dos dez
+cenários nem nos oito elementos que ficam. Só o corpo.
+
+- [ ] **Passo 3: acertar a abertura dos elementos**
+
+`aberturaElementos` de `src/content/subgeneros/fc-militar.md` cita "Cadeia de
+comando e insubordinação", que deixou de existir. Trocar por um dos que ficam ou
+por um dos dois novos, mantendo três nomes citados e a forma do parágrafo. As
+outras duas aberturas ficam como estão.
+
+- [ ] **Passo 4: validar**
+
+Roda: `rm -rf .astro && npm run build && npx vitest run`
+Esperado: 38 páginas, 117 testes verdes. A contagem de elementos não muda —
+saíram dois e entraram dois.
+
+- [ ] **Passo 5: commit**
+
+```bash
+git add src/content/cenarios/fc-militar/ src/content/elementos/fc-militar/ src/content/subgeneros/fc-militar.md
+git commit -m "Encurta os verbetes de FC Militar e troca dois elementos"
+```
 
 ---
 
