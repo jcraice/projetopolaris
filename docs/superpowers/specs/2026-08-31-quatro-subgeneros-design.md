@@ -138,9 +138,9 @@ O campo `artigo` registra o gênero de cada um, como manda o esquema.
 | 5 | Barão dos Recursos | o | |
 | 6 | Jovem Geração Cobrando Contas | a | substantivo feminino |
 | 7 | Engenheiro de Geoengenharia | o | era "Engenheira de Geoengenharia" |
-| 8 | Povo do Saber Ancestral | o | era "Guardiã do Conhecimento Ancestral" — ver seção 9 |
+| 8 | Guardião do Saber Ancestral | o | era "Guardiã do Conhecimento Ancestral" — ver seção 9 |
 | 9 | Sobrevivente Enlutado pela Paisagem | o | era "Sobrevivente Enlutada pela Paisagem" |
-| 10 | Líder Comunitário Pós-Colapso | o | ver seção 9 |
+| 10 | Organizador da Adaptação Local | o | era "Líder Comunitário Pós-Colapso" — ver seção 9 |
 | 11 | Gato das Marés | o | `felino: true` |
 
 ### Primeiro Contato (`primeiro-contato`)
@@ -244,8 +244,7 @@ próprio em `redacao.test.ts`.
 
 ## 8. As epígrafes
 
-Frases de gente real. A autora **aprovou as três** que sobreviveram à troca de
-subgênero; a de FC Climática é proposta nova e ainda precisa do aval dela.
+Frases de gente real, **as quatro aprovadas pela autora**.
 
 | Subgênero | Frase | Autoria | Obra |
 |---|---|---|---|
@@ -255,12 +254,9 @@ subgênero; a de FC Climática é proposta nova e ainda precisa do aval dela.
 | Biopunk | "Você é meu criador, mas eu sou seu senhor." | Mary Shelley | *Frankenstein* |
 
 A tradução de cada frase é deste trabalho; a atribuição é que precisa estar
-certa, porque citação mal atribuída fica no ar com o nome de outra pessoa. Se a
-de Ghosh não convencer, a alternativa é o verso de Semente da Terra em *A
-Parábola do Semeador*, de Octavia E. Butler — "Todo o que tocas, tu mudas; tudo o
-que mudas, muda-te" —, com a ressalva de que Butler já assina a epígrafe de
-Viagem no Tempo e passaria a aparecer duas vezes. Em último caso o campo fica
-vazio até a autora escolher: ele é opcional.
+certa, porque citação mal atribuída fica no ar com o nome de outra pessoa. Ghosh
+escreveu justamente sobre a ficção não dar conta do clima, o que faz dele a
+assinatura certa num catálogo para quem escreve.
 
 ## 9. A revisão de repetições
 
@@ -272,21 +268,17 @@ do **Executivo Corporativo** (cyberpunk), e vira **Executor de Patentes** — no
 que diz o que ele faz e desfaz a colisão na busca.
 
 FC Climática é vizinha do Pós Apocalíptico, e a troca de Space Western por ela
-trouxe duas colisões novas que precisam de decisão:
+trouxe duas colisões que a autora resolveu renomeando:
 
 - **Guardiã do Conhecimento Ancestral** (climática) × **Guardião do Conhecimento
-  Perdido** (pós-apocalíptico) repetiam três palavras em quatro. A descrição da
-  autora fala de uma **comunidade** indígena ou tradicional, não de uma pessoa
-  guardiã, então este documento já registra o nome como **Povo do Saber
-  Ancestral**: mantém o sentido dela, desfaz a colisão e ainda diz que é um povo.
-  Precisa do aval da autora.
+  Perdido** (pós-apocalíptico) repetiam três palavras em quatro. Vira **Guardião
+  do Saber Ancestral**: o que os separa passa a ser o que cada um guarda — saber
+  ancestral que ainda se pratica contra conhecimento perdido que se resgata.
 - **Líder Comunitário Pós-Colapso** (climática) × **Líder de Comunidade**
-  (pós-apocalíptico). Aqui a sobreposição é de conteúdo, não só de nome: os dois
-  organizam comunidade depois que a instituição falhou. O que separa é a causa —
-  colapso climático contra colapso total — e a ênfase em adaptação local.
-  Recomendação: manter e registrar como sobreposição de propósito, porque os dois
-  subgêneros são vizinhos e a grade existe para mostrar isso. Se a autora
-  preferir separar, **Organizador da Adaptação Local** resolve.
+  (pós-apocalíptico) sobrepunham conteúdo, não só nome: os dois organizam
+  comunidade depois que a instituição falhou. Vira **Organizador da Adaptação
+  Local**, que troca a liderança pela função — adaptar o lugar onde se está — e
+  deixa de disputar o mesmo espaço.
 - **Cientista Dissidente** (climática), **Cientista de Guerra** (militar),
   **Cientista Cético** (primeiro contato) e **Cientista/Inventor** (comuns) fazem
   quatro cientistas no acervo. Cada um responde a uma pressão diferente —
