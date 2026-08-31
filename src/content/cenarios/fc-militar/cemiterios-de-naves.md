@@ -5,4 +5,4 @@ subgenero: fc-militar
 ordem: 10
 ---
 
-Destroços de caças e cruzadores empilhados nos limites de um campo de batalha antigo, vasculhados por sucateiros e desertores atrás do que ainda funciona.
+Destroços de caças e cruzadores acumulados nos limites de um campo de batalha antigo.

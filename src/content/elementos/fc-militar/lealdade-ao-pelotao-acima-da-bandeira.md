@@ -4,4 +4,4 @@ subgenero: fc-militar
 ordem: 9
 ---
 
-O vínculo entre companheiros de combate que pesa mais do que qualquer ideal que os enviou para a guerra.
+O vínculo entre companheiros de combate, mais forte que qualquer bandeira.

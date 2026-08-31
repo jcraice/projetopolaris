@@ -5,4 +5,4 @@ subgenero: fc-militar
 ordem: 2
 ---
 
-Porões apertados de naves lotadas de tropas em silêncio, contando os minutos até as portas se abrirem sobre o terreno inimigo.
+Porões apertados de naves lotadas de tropas, minutos antes do desembarque em território inimigo.

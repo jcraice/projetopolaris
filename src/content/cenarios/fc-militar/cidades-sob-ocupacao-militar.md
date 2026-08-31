@@ -5,4 +5,4 @@ subgenero: fc-militar
 ordem: 9
 ---
 
-Ruas sob toque de recolher e postos de controle em cada esquina, onde a população aprendeu a viver segundo as ordens de quem tomou a cidade.
+Ruas sob toque de recolher e postos de controle a cada esquina, sob tropas ocupantes.

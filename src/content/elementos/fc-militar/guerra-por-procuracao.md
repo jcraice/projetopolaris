@@ -4,4 +4,4 @@ subgenero: fc-militar
 ordem: 8
 ---
 
-O conflito que duas potências travam usando um terceiro como campo de batalha, sem sujar as próprias mãos.
+O conflito que duas potências travam por meio de um terceiro.
