@@ -23,6 +23,14 @@ Testes Python da migração (rodar de dentro de `scripts/`, os testes importam `
 cd scripts && python -m pytest
 ```
 
+As duas versões de tema de uma ilustração, só quando um desenho entra ou é
+retocado (pede Pillow, que o projeto não declara de propósito):
+
+```bash
+python -m pip install Pillow
+python scripts/gerar-ilustracao.py src/assets/ilustracoes/original/<nome>.png
+```
+
 Depois de adicionar ou editar Markdown em `src/content/`, `npm run build` é o
 que confirma que o frontmatter passa na validação Zod — não existe comando de
 lint separado para conteúdo.
@@ -35,7 +43,7 @@ Apague `.astro/` e reinicie o servidor.
 
 ## Restrições do projeto
 
-Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md](docs/superpowers/plans/2026-07-27-polaris.md)) e valem para código novo. As mudanças posteriores têm cada uma seu par de spec e plano em [docs/superpowers/](docs/superpowers/) — é lá que está o porquê de decisão que o código só mostra pronta (topo fixo, prompt do gerador, home reformulada):
+Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md](docs/superpowers/plans/2026-07-27-polaris.md)) e valem para código novo. As mudanças posteriores têm cada uma seu par de spec e plano em [docs/superpowers/](docs/superpowers/) — é lá que está o porquê de decisão que o código só mostra pronta (topo fixo, prompt do gerador, home reformulada, premissa de personagens, premissa como interface):
 
 - **Sem framework de interface.** Nada de React/Vue/Svelte. Interatividade em
   TypeScript puro dentro de `<script>` das páginas Astro.
@@ -570,15 +578,22 @@ em produção.
 **Dentro de Markdown a regra é a oposta: escreva o caminho cru.** Prosa da
 autora não tem como consultar `import.meta.env`, então quem conserta é
 `reescreverLinksInternos()`
-([src/lib/links-markdown.ts](src/lib/links-markdown.ts)), um plugin rehype
-ligado em `markdown.rehypePlugins` do
-[astro.config.ts](astro.config.ts): ele percorre o HTML já montado de todo
-Markdown e prefixa a base em todo `href` que começa por uma barra só. `mailto:`,
-protocolo, `//outro.site`, âncora e caminho relativo passam intactos. Um
+([src/lib/links-markdown.ts](src/lib/links-markdown.ts)), ligado em
+`markdown.processor` do [astro.config.ts](astro.config.ts): ele percorre o HTML
+já montado de todo Markdown e prefixa a base em todo `href` que começa por uma
+barra só. `mailto:`, protocolo, `//outro.site`, âncora e caminho relativo
+passam intactos. Um
 `[Gerador](/gerador/)` no Markdown é o jeito certo — e é o único link interno de
 conteúdo hoje, em [sobre.md](src/content/paginas/sobre.md). Sem o plugin ele
 funcionaria no `npm run dev` e daria 404 no ar, que é o pior jeito de quebrar:
 por isso o teste do plugin é o que segura essa garantia, não o build.
+
+Ele é um `hastPlugins` do **Sätteri**, o processador de Markdown nativo do
+Astro 7, e **não** um plugin rehype em `markdown.rehypePlugins`. A chave antiga
+continua existindo no tipo da configuração e é a que todo tutorial mostra, mas
+usá-la exige instalar `@astrojs/markdown-remark` e trocar o motor de Markdown do
+site inteiro por unified/remark — caro pelo lado errado, para consertar um
+`href`.
 
 [.github/workflows/deploy.yml](.github/workflows/deploy.yml) roda `npx vitest
 run` e `npm run check` antes do build e publica no GitHub Pages a partir de
