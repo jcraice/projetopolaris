@@ -5,4 +5,4 @@ subgenero: invasao-alienigena
 ordem: 1
 ---
 
-arranha-céus em ruínas, crateras abertas por armas alienígenas e ruas desertas.
+Arranha-céus em ruínas, crateras abertas por armas alienígenas e ruas desertas.

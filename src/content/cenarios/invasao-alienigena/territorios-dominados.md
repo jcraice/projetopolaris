@@ -5,4 +5,4 @@ subgenero: invasao-alienigena
 ordem: 6
 ---
 
-cidades convertidas em zonas alienígenas, com colheita de recursos ou campos de prisioneiros.
+Cidades convertidas em zonas alienígenas, com colheita de recursos ou campos de prisioneiros.

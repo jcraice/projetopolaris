@@ -5,4 +5,4 @@ subgenero: cyberpunk
 ordem: 6
 ---
 
-territórios controlados por gangues, milícias urbanas ou subculturas alternativas.
+Territórios controlados por gangues, milícias urbanas ou subculturas alternativas.

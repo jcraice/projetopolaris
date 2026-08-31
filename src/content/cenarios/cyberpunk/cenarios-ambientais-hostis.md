@@ -5,4 +5,4 @@ subgenero: cyberpunk
 ordem: 9
 ---
 
-chuvas ácidas, desastres climáticos, zonas tóxicas e ecossistemas degradados.
+Chuvas ácidas, desastres climáticos, zonas tóxicas e ecossistemas degradados.

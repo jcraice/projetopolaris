@@ -5,4 +5,4 @@ subgenero: cyberpunk
 ordem: 1
 ---
 
-arranha-céus colossais, bairros verticais e trânsito caótico em cidades sem limites.
+Arranha-céus colossais, bairros verticais e trânsito caótico em cidades sem limites.

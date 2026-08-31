@@ -5,4 +5,4 @@ subgenero: invasao-alienigena
 ordem: 3
 ---
 
-colossos pairando sobre a Terra, projetando sombra e lembrando constantemente a ocupação.
+Colossos pairando sobre a Terra, projetando sombra e lembrando constantemente a ocupação.

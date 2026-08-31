@@ -5,4 +5,4 @@ subgenero: cyberpunk
 ordem: 10
 ---
 
-estações orbitais, colônias em asteroides, arcologias fechadas, cidades submersas ou plataformas flutuantes.
+Estações orbitais, colônias em asteroides, arcologias fechadas, cidades submersas ou plataformas flutuantes.

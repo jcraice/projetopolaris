@@ -5,4 +5,4 @@ subgenero: pos-apocaliptico
 ordem: 7
 ---
 
-regiões dominadas por gangues, mutantes, zumbis ou predadores selvagens.
+Regiões dominadas por gangues, mutantes, zumbis ou predadores selvagens.

@@ -5,4 +5,4 @@ subgenero: distopia
 ordem: 6
 ---
 
-sessões públicas de julgamento em que a plateia participa da sentença.
+Sessões públicas de julgamento em que a plateia participa da sentença.

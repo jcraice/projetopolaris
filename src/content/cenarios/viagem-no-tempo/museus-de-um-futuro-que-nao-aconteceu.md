@@ -5,4 +5,4 @@ subgenero: viagem-no-tempo
 ordem: 4
 ---
 
-salas que expõem objetos de um amanhã cancelado por alguma viagem anterior.
+Salas que expõem objetos de um amanhã cancelado por alguma viagem anterior.

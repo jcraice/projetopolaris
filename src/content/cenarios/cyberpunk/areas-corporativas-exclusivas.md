@@ -5,4 +5,4 @@ subgenero: cyberpunk
 ordem: 5
 ---
 
-sedes blindadas e distritos de elite isolados do restante da cidade.
+Sedes blindadas e distritos de elite isolados do restante da cidade.

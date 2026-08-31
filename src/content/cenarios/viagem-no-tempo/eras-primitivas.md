@@ -5,4 +5,4 @@ subgenero: viagem-no-tempo
 ordem: 7
 ---
 
-cavernas, florestas pré-históricas e encontros com megafauna extinta.
+Cavernas, florestas pré-históricas e encontros com megafauna extinta.

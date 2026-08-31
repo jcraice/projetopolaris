@@ -5,4 +5,4 @@ subgenero: invasao-alienigena
 ordem: 7
 ---
 
-cercados onde os sobreviventes são separados, contados e examinados antes de qualquer outra coisa.
+Cercados onde os sobreviventes são separados, contados e examinados antes de qualquer outra coisa.

@@ -5,4 +5,4 @@ subgenero: invasao-alienigena
 ordem: 9
 ---
 
-praias, desertos, florestas e cidades transformados em cenários de guerra entre espécies.
+Praias, desertos, florestas e cidades transformados em cenários de guerra entre espécies.

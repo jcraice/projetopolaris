@@ -5,4 +5,4 @@ subgenero: pos-apocaliptico
 ordem: 10
 ---
 
-trilhos, vagões parados e estações engolidas pela vegetação, que ainda servem de rota.
+Trilhos, vagões parados e estações engolidas pela vegetação, que ainda servem de rota.

@@ -5,4 +5,4 @@ subgenero: pos-apocaliptico
 ordem: 2
 ---
 
-rodovias vazias, postos de gasolina destruídos e caravanas nômades atravessando o deserto.
+Rodovias vazias, postos de gasolina destruídos e caravanas nômades atravessando o deserto.

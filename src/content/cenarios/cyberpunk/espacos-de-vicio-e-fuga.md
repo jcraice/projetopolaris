@@ -5,4 +5,4 @@ subgenero: cyberpunk
 ordem: 7
 ---
 
-cassinos, bares, drogas sintéticas, clubes de realidade virtual e paraísos artificiais.
+Cassinos, bares, drogas sintéticas, clubes de realidade virtual e paraísos artificiais.

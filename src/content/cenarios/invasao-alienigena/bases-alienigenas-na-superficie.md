@@ -5,4 +5,4 @@ subgenero: invasao-alienigena
 ordem: 4
 ---
 
-construções estranhas, com arquitetura não humana e atmosfera hostil.
+Construções estranhas, com arquitetura não humana e atmosfera hostil.

@@ -5,4 +5,4 @@ subgenero: pos-apocaliptico
 ordem: 4
 ---
 
-desertos radioativos, florestas queimadas, mares secos e céus permanentemente cinzentos.
+Desertos radioativos, florestas queimadas, mares secos e céus permanentemente cinzentos.

@@ -5,4 +5,4 @@ subgenero: viagem-no-tempo
 ordem: 9
 ---
 
-bolsões isolados onde séculos coexistem, criando um mosaico anacrônico.
+Bolsões isolados onde séculos coexistem, criando um mosaico anacrônico.

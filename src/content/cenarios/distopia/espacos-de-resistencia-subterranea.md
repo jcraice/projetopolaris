@@ -5,4 +5,4 @@ subgenero: distopia
 ordem: 8
 ---
 
-esconderijos em túneis, redes de comunicação clandestinas e bases improvisadas.
+Esconderijos em túneis, redes de comunicação clandestinas e bases improvisadas.

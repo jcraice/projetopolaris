@@ -5,4 +5,4 @@ subgenero: invasao-alienigena
 ordem: 2
 ---
 
-instalações improvisadas onde sobreviventes tentam resistir em condições precárias.
+Instalações improvisadas onde sobreviventes tentam resistir em condições precárias.

@@ -5,4 +5,4 @@ subgenero: viagem-no-tempo
 ordem: 3
 ---
 
-palácios medievais, ruínas romanas ou campos de batalha de guerras icônicas.
+Palácios medievais, ruínas romanas ou campos de batalha de guerras icônicas.

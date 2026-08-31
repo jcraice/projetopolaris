@@ -5,4 +5,4 @@ subgenero: cyberpunk
 ordem: 8
 ---
 
-cabines empilhadas do tamanho de um corpo deitado, alugadas por hora a quem não tem endereço.
+Cabines empilhadas do tamanho de um corpo deitado, alugadas por hora a quem não tem endereço.

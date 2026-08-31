@@ -5,4 +5,4 @@ subgenero: distopia
 ordem: 9
 ---
 
-galpões de beliches idênticos, onde cada pessoa é uma cifra na parede.
+Galpões de beliches idênticos, onde cada pessoa é uma cifra na parede.

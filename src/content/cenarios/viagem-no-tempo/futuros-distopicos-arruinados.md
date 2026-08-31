@@ -5,4 +5,4 @@ subgenero: viagem-no-tempo
 ordem: 2
 ---
 
-metrópoles decadentes, guerras civis e regimes autoritários em eras vindouras.
+Metrópoles decadentes, guerras civis e regimes autoritários em eras vindouras.

@@ -5,4 +5,4 @@ subgenero: invasao-alienigena
 ordem: 10
 ---
 
-cascos partidos ainda quentes, disputados por quem quer entender e por quem quer esconder.
+Cascos partidos ainda quentes, disputados por quem quer entender e por quem quer esconder.

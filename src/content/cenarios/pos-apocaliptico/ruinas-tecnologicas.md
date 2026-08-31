@@ -5,4 +5,4 @@ subgenero: pos-apocaliptico
 ordem: 6
 ---
 
-abrigos nucleares abandonados, computadores quebrados, robôs enferrujados e satélites caindo.
+Abrigos nucleares abandonados, computadores quebrados, robôs enferrujados e satélites caindo.

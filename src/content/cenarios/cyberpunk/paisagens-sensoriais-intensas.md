@@ -5,4 +5,4 @@ subgenero: cyberpunk
 ordem: 3
 ---
 
-neon, hologramas, publicidade invasiva e poluição sonora e visual.
+Neon, hologramas, publicidade invasiva e poluição sonora e visual.

@@ -5,4 +5,4 @@ subgenero: pos-apocaliptico
 ordem: 1
 ---
 
-arranha-céus desmoronados, ruas cobertas por vegetação e carros enferrujados abandonados.
+Arranha-céus desmoronados, ruas cobertas por vegetação e carros enferrujados abandonados.

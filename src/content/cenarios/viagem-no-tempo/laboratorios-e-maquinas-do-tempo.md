@@ -5,4 +5,4 @@ subgenero: viagem-no-tempo
 ordem: 6
 ---
 
-instalações secretas, tecnologias imensas ou dispositivos portáteis que manipulam o tempo.
+Instalações secretas, tecnologias imensas ou dispositivos portáteis que manipulam o tempo.

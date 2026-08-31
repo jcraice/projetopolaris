@@ -5,4 +5,4 @@ subgenero: pos-apocaliptico
 ordem: 3
 ---
 
-vilas muradas, refúgios subterrâneos e assentamentos isolados em busca de segurança.
+Vilas muradas, refúgios subterrâneos e assentamentos isolados em busca de segurança.

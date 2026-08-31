@@ -5,4 +5,4 @@ subgenero: distopia
 ordem: 4
 ---
 
-metrôs quebrados, fábricas em ruínas e habitações insalubres que contrastam com centros de luxo.
+Metrôs quebrados, fábricas em ruínas e habitações insalubres que contrastam com centros de luxo.

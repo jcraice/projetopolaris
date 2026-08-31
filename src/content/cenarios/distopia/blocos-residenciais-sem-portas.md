@@ -5,4 +5,4 @@ subgenero: distopia
 ordem: 5
 ---
 
-prédios de moradia onde nenhum cômodo fecha e a vida privada acontece à vista de todos.
+Prédios de moradia onde nenhum cômodo fecha e a vida privada acontece à vista de todos.

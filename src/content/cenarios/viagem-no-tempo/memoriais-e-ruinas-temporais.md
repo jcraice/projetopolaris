@@ -5,4 +5,4 @@ subgenero: viagem-no-tempo
 ordem: 10
 ---
 
-locais marcados por viagens no tempo, com inscrições, máquinas abandonadas e paradoxos físicos visíveis.
+Locais marcados por viagens no tempo, com inscrições, máquinas abandonadas e paradoxos físicos visíveis.
