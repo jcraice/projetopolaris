@@ -18,14 +18,14 @@ export type Sorteio = {
 
 /* Só as duas peças que vêm de fora entram aqui. Características, personalidades
    e fatos são universais e a lib os importa direto, como fazia com as
-   complicações — não há o que filtrar por mundo neles. */
+   complicações — não há o que filtrar por subgênero neles. */
 export type Pools = {
   profissoes: Profissao[];
   locais: PecaCenario[];
 };
 
-/* Uma trava por linha travável da premissa — a do mundo não existe porque quem
-   manda naquela linha é o seletor de Mundo, não um cadeado.
+/* Uma trava por linha travável da premissa — a do subgênero não existe porque
+   quem manda naquela linha é o seletor de Subgênero, não um cadeado.
 
    `fato` entrou quando a premissa virou a interface do gerador. Antes ele era a
    única peça sem cadeado, de propósito: com as cartas na tela, travar as três e
@@ -45,5 +45,5 @@ export type Travas = {
    incluir. O pool `comuns` continua intacto no acervo e em /arquetipos/comuns/. */
 export type Opcoes = {
   subgenero: string | null;
-  misturarMundos: boolean;
+  misturarSubgeneros: boolean;
 };

@@ -8,7 +8,7 @@
 
 Levantamento das sobreposições entre **arquétipos**, **cenários** e **elementos
 narrativos**, feito depois de a lista de arquétipos ser substituída e a de
-elementos reduzida a dez por mundo.
+elementos reduzida a dez por subgênero.
 
 Cada linha traz **um** verbete que saiu e **o substituto** que entrou no lugar,
 para nenhuma lista encolher.
@@ -47,7 +47,7 @@ fazer.
 **Opcional:** `arq` Executivo Corporativo e `arq` Megacorporação são a pessoa e
 a instituição do mesmo eixo. Se quiser separar, o substituto natural é
 `arq` **Médica Clandestina** (*a*) — a ripperdoc, que amarra com os implantes e
-não existe em nenhum outro mundo.
+não existe em nenhum outro subgênero.
 
 ## Distopia
 
@@ -65,7 +65,7 @@ três níveis, e ainda com o cenário sendo a peça que não é um lugar.
 
 ## Invasão alienígena
 
-O mundo mais limpo dos seis: as sobreposições aqui são quase todas quem × onde,
+O subgênero mais limpo dos seis: as sobreposições aqui são quase todas quem × onde,
 que é legítimo.
 
 | # | Repetição | Fica | Sai | Entrou no lugar |
@@ -115,19 +115,19 @@ Ruínas Antigas / Busca por artefatos ancestrais.
 recriados, e o par Futuros utópicos reluzentes / Futuros distópicos arruinados,
 que é proposital.
 
-## Arquétipos comuns × arquétipos de mundo
+## Arquétipos comuns × arquétipos de subgênero
 
 Categoria à parte, e a mais fácil de passar despercebida: os comuns são
-genéricos de propósito, então alguns **contêm** um arquétipo de mundo. Com
+genéricos de propósito, então alguns **contêm** um arquétipo de subgênero. Com
 "incluir comuns" ligado, os dois caem no mesmo sorteio e podem sair juntos.
 
 | # | Repetição | Sai | Entrou no lugar |
 |---|---|---|---|
-| 1 | `comum` Sistema/Instituição Opressora ⊃ Estado Totalitário (distopia) · Megacorporação (cyberpunk) · Governo que Esconde a Verdade (invasão) · Organização Controladora (viagem) — cada mundo já tem a sua versão | **comum** Sistema/Instituição Opressora | `comum` **Burocrata do Sistema** (*o*) — a pessoa dentro da máquina, que nenhum mundo tem |
-| 2 | `comum` Soldado ⊃ Militar Linha-Dura (invasão) · Veterano de Guerra (space opera) | **comum** Soldado | `comum` **Intérprete** (*o*) — atravessa os seis mundos e não existe em nenhum |
+| 1 | `comum` Sistema/Instituição Opressora ⊃ Estado Totalitário (distopia) · Megacorporação (cyberpunk) · Governo que Esconde a Verdade (invasão) · Organização Controladora (viagem) — cada subgênero já tem a sua versão | **comum** Sistema/Instituição Opressora | `comum` **Burocrata do Sistema** (*o*) — a pessoa dentro da máquina, que nenhum subgênero tem |
+| 2 | `comum` Soldado ⊃ Militar Linha-Dura (invasão) · Veterano de Guerra (space opera) | **comum** Soldado | `comum` **Intérprete** (*o*) — atravessa os seis subgêneros e não existe em nenhum |
 
 **Ficam como estão:** Cientista/Inventor (é o comum mais canônico da ficção
-científica, e as versões de mundo são especializações claras), IA Aliada e IA
+científica, e as versões de subgênero são especializações claras), IA Aliada e IA
 Hostil (são dois papéis; a IA Emergente do cyberpunk é o despertar, outro
 assunto), Explorador, Mentor, Visionário Ignorado, Outsider/Rebelde, Outro.
 
@@ -135,7 +135,7 @@ assunto), Explorador, Mentor, Visionário Ignorado, Outsider/Rebelde, Outro.
 
 ## Resumo
 
-| Mundo | Saem | Entram |
+| Subgênero | Saem | Entram |
 |---|---|---|
 | Cyberpunk | 5 | 5 |
 | Distopia | 7 | 7 |
@@ -146,7 +146,7 @@ assunto), Explorador, Mentor, Visionário Ignorado, Outsider/Rebelde, Outro.
 | Comuns | 2 | 2 |
 | **Total** | **28** | **28** |
 
-Nenhuma lista muda de tamanho: continuam 11 arquétipos por mundo (10 + felino),
+Nenhuma lista muda de tamanho: continuam 11 arquétipos por subgênero (10 + felino),
 10 comuns, 10 cenários e 10 elementos.
 
 Os substitutos vêm com o título e, nos arquétipos, o artigo — falta escrever a

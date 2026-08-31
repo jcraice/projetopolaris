@@ -4,16 +4,16 @@ import Base from '../../layouts/Base.astro';
 import Cartao from '../../components/Cartao.astro';
 import { paraAncora } from '../../lib/texto';
 
-// O pool "10 Arquétipos Comuns" tem mundo: false — não é um mundo, então não
-// entra aqui. As seis páginas de mundo são as únicas geradas por esta rota.
+// O pool "10 Arquétipos Comuns" tem completo: false — não é um subgênero
+// completo, então não entra aqui. As seis páginas de subgênero são as únicas geradas por esta rota.
 export async function getStaticPaths() {
-  const subgeneros = await getCollection('subgeneros', (s) => s.data.mundo);
+  const subgeneros = await getCollection('subgeneros', (s) => s.data.completo);
   return subgeneros.map((s) => ({ params: { subgenero: s.id }, props: { subgenero: s } }));
 }
 
 const { subgenero } = Astro.props;
 
-// Esta página é a porta de entrada de um mundo, não o catálogo dele: mostra uma
+// Esta página é a porta de entrada de um subgênero, não o catálogo dele: mostra uma
 // amostra de cada tipo e manda para a página completa. Antes listava tudo, o
 // que deixava o "Ver todos" sem sentido — ele levava para a mesma coisa que já
 // estava na tela, depois de dezenas de verbetes de rolagem.
@@ -23,7 +23,7 @@ const porOrdem = (a: { data: { ordem: number } }, b: { data: { ordem: number } }
   a.data.ordem - b.data.ordem;
 
 // O arquétipo felino fica de fora da amostra e aparece só na página completa:
-// ele é o décimo primeiro de cada mundo, não um dos três primeiros.
+// ele é o décimo primeiro de cada subgênero, não um dos três primeiros.
 const arquetipos = (await getCollection('arquetipos', (a) => a.data.subgenero === subgenero.id && !a.data.felino))
   .sort(porOrdem)
   .slice(0, PREVIA);
@@ -39,11 +39,11 @@ const elementos = (await getCollection('elementos', (e) => e.data.subgenero === 
 const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : `${base}/`;
 ---
-<Base titulo={`Mundo ${subgenero.data.nome}`} aurora={subgenero.data.aurora}>
+<Base titulo={`Subgênero ${subgenero.data.nome}`} aurora={subgenero.data.aurora}>
   <h1>{subgenero.data.nome}</h1>
   <p class="abertura">{subgenero.body}</p>
 
-  <nav class="sumario" aria-label="Sumário do mundo">
+  <nav class="sumario" aria-label="Sumário do subgênero">
     <a href="#arquetipos">Arquétipos</a>
     <a href="#cenarios">Cenários</a>
     <a href="#elementos">Elementos Narrativos</a>
@@ -157,7 +157,7 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
      a sombra deslocada do .botao no claro, por ela ser recurso de pôster que
      pesa sobre fundo claro. Aqui a autora pediu para manter, para a pastilha
      ter a mesma forma nos dois temas. Não conflita na tela porque a página de
-     mundo não renderiza nenhum .botao — não há sombra ausente ao lado desta
+     subgênero não renderiza nenhum .botao — não há sombra ausente ao lado desta
      para destoar. Sendo cor por papel, no claro ela sai azul-tinta. */
   h2 {
     display: inline-flex;

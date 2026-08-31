@@ -10,7 +10,7 @@ const comoUsar = await getEntry('paginas', 'cenarios-como-usar');
 if (!comoUsar) throw new Error("página 'cenarios-como-usar' não encontrada em src/content/paginas");
 const { Content: ComoUsar } = await render(comoUsar);
 
-const subgeneros = (await getCollection('subgeneros', (s) => s.data.mundo)).sort(
+const subgeneros = (await getCollection('subgeneros', (s) => s.data.completo)).sort(
   (a, b) => a.data.ordem - b.data.ordem,
 );
 

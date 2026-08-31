@@ -2,7 +2,7 @@
 
 Registro da Task 14, atualizado a cada mudança de cor desde então. Refazer esta
 medição sempre que mudar `--painel`, `--bloco`, `--destaque`, `--apoio`, a
-opacidade da aurora, o trio de cores de algum mundo ou o tamanho de fonte de
+opacidade da aurora, o trio de cores de algum subgênero ou o tamanho de fonte de
 qualquer texto que use cor de acento.
 
 ## Como o contraste foi medido
@@ -12,7 +12,7 @@ O fundo atrás de um texto não é uma cor chapada — é uma pilha de três cam
 | Camada | Onde | Composição |
 |---|---|---|
 | fundo da página | `body` | `--fundo` `#0b0b0e`, opaco |
-| aurora | `.aurora` | gradiente cônico do mundo, `opacity: 0.36` sobre o fundo |
+| aurora | `.aurora` | gradiente cônico do subgênero, `opacity: 0.36` sobre o fundo |
 | painel | `.cartao`, `.nav`, `.pilar`, `.cta-gerador` | `--painel` `rgba(11, 11, 14, 0.8)` sobre a aurora |
 
 Daí saem as duas superfícies que importam:
@@ -26,7 +26,7 @@ O `blur(58px)` e o `backdrop-filter` não mudam a cor média, só a espalham —
 podem ser ignorados na conta. A razão de contraste é a fórmula WCAG 2.1
 (luminância relativa linearizada, `(L1 + 0,05) / (L2 + 0,05)`).
 
-**Pior caso por mundo.** Cada trio de aurora vira três faixas de 120° que giram
+**Pior caso por subgênero.** Cada trio de aurora vira três faixas de 120° que giram
 em 90 segundos, então toda região da tela passa por baixo de todas as três
 cores. A medição usa sempre a cor mais clara do trio: é o instante mais
 desfavorável, e ele acontece de verdade em todas as páginas.
@@ -45,7 +45,7 @@ pede sempre pelo papel.
 
 É onde vive quase todo o texto do site — cartões, navegação, pilares da home.
 
-| Mundo | Pior cor | `--texto` | `--ouro` | `--violeta` | `--apagado` |
+| Subgênero | Pior cor | `--texto` | `--ouro` | `--violeta` | `--apagado` |
 |---|---|---|---|---|---|
 | Cyberpunk | `#00e5ff` | 12,14 | 11,00 | 6,04 | 5,47 |
 | Distopia | `#ffb03a` | 12,21 | 11,06 | 6,07 | 5,50 |
@@ -54,7 +54,7 @@ pede sempre pelo papel.
 | Space Opera | `#ffc300` | 12,12 | 10,98 | 6,03 | 5,46 |
 | Viagem no Tempo | `#ffd66e` | 11,95 | 10,83 | 5,95 | 5,39 |
 
-**Todas as combinações passam com folga em todos os seis mundos** — a menor é
+**Todas as combinações passam com folga em todos os seis subgêneros** — a menor é
 5,34:1, contra o mínimo de 4,5:1. O painel não precisou ser escurecido: o alfa
 segue em 0,8.
 
@@ -89,8 +89,8 @@ cima. Nenhuma combinação chega perto do limite:
 | escuro | `#221B30` | `--apoio` 14% em `#0b0b0e` | 11,37 | 7,51 |
 | claro | `#E4E7EB` | `--apoio` 8% em `#f5f7f9` | 9,93 | 6,18 |
 
-A mesma superfície marca o mundo aberto na fileira de mundos que fecha as
-páginas de catálogo ([TrocarDeMundo.astro](../src/components/TrocarDeMundo.astro)).
+A mesma superfície marca o subgênero aberto na fileira de subgêneros que fecha as
+páginas de catálogo ([TrocarDeSubgenero.astro](../src/components/TrocarDeSubgenero.astro)).
 No escuro é a medição de cima sem mudança: `--texto` sobre `#221B30`, **11,37**.
 No claro a pílula é vazada em vez de preenchida — as outras da fileira são
 `--fundo` sobre `--apoio` —, então o que se mede é `--apoio` sobre `#E4E7EB`:
@@ -112,10 +112,10 @@ visual, não de acessibilidade** — o painel deixava de ser uma superfície só
 ## Contraste direto sobre o céu
 
 Fora dos painéis — os verbetes do catálogo, os parágrafos de abertura, os
-títulos, o sumário dos mundos, o rodapé — o texto encosta no céu, que é bem
+títulos, o sumário dos subgêneros, o rodapé — o texto encosta no céu, que é bem
 mais claro que o painel. Foi aqui que a medição encontrou problema.
 
-| Mundo | `--texto` antes (0,42) | `--texto` agora (0,36) | `--texto-forte` | `--ouro` | `--apagado` | `--violeta` |
+| Subgênero | `--texto` antes (0,42) | `--texto` agora (0,36) | `--texto-forte` | `--ouro` | `--apagado` | `--violeta` |
 |---|---|---|---|---|---|---|
 | Cyberpunk | 4,53 | **5,46** | 7,95 | 4,94 | 2,46 | 2,72 |
 | Distopia | 4,99 | **5,92** | 8,63 | 5,37 | 2,67 | 2,95 |
@@ -127,10 +127,10 @@ mais claro que o painel. Foi aqui que a medição encontrou problema.
 ### Correção aplicada: aurora de 0,42 para 0,36
 
 Com a aurora em 0,42, o corpo de texto sobre o céu ficava abaixo de 4,5:1 em
-três dos seis mundos. O remédio previsto pelo plano é escurecer o fundo, nunca
+três dos seis subgêneros. O remédio previsto pelo plano é escurecer o fundo, nunca
 mexer no dourado e no violeta, que são fixos por decisão de projeto — então a
 opacidade da aurora em [`src/components/Aurora.astro`](../src/components/Aurora.astro)
-caiu para **0,36**. É o valor mais alto que ainda deixa o pior mundo passar
+caiu para **0,36**. É o valor mais alto que ainda deixa o pior subgênero passar
 (4,71:1). Acima de 0,37 o Invasão Alienígena volta a reprovar.
 
 ### Pendência: `--apagado` e links violeta fora do painel
@@ -141,11 +141,11 @@ muda o desenho e não só um número:
 - `--apagado` sobre o céu: 2,12 a 2,67 — usado no rodapé
   ([Base.astro](../src/layouts/Base.astro)), no `blockquote cite`
   ([global.css](../src/styles/global.css)), no "Ver todos →" das páginas de
-  mundo e na legenda e no aviso do gerador.
+  subgênero e na legenda e no aviso do gerador.
 - `--violeta` como cor de link sobre o céu: 2,34 a 2,95 — abaixo até do mínimo
   de 3:1 para elementos grandes.
-- `--ouro` sobre o céu, **só no mundo Invasão Alienígena**: 4,27, contra 4,5
-  exigidos. Nos outros cinco mundos fica entre 4,59 e 5,37, e dentro do painel
+- `--ouro` sobre o céu, **só no subgênero Invasão Alienígena**: 4,27, contra 4,5
+  exigidos. Nos outros cinco subgêneros fica entre 4,59 e 5,37, e dentro do painel
   passa em todos (10,7+). Atinge os estados `:hover` de texto pequeno fora do
   painel — `.lista-subgeneros a`, `.ver-tudo` e `.sumario a`. **Não atinge o
   `h1`**, que é acento mas tem 32px e por isso responde ao mínimo de 3:1.
@@ -158,7 +158,7 @@ muda o desenho e não só um número:
 
   Sobra a pendência só nos estados `:hover`, que são interação e não conteúdo.
 
-O corpo dos verbetes passa sobre o céu em todos os mundos — 4,71 a 5,92 para
+O corpo dos verbetes passa sobre o céu em todos os subgêneros — 4,71 a 5,92 para
 `--texto` — e o mesmo vale para os nomes das peças sorteadas no gerador, que
 usam `--texto-forte` (6,86 a 8,63). A barra lateral violeta do `.corpo` fica entre
 2,34 e 2,95, mas é divisória decorativa, não elemento de interface com
@@ -168,7 +168,7 @@ significado próprio.
 distinguir um verbete do outro sem moldura, e chegaram a ser `var(--apoio)` por
 um instante. A autora recusou as duas versões — quer o acento em um lugar só — e
 eles passaram a herdar `--texto-forte`. Sobre o céu isso dá **6,86 a 8,63:1**,
-folga até no critério de texto pequeno, contra os 4,27 do dourado no pior mundo.
+folga até no critério de texto pequeno, contra os 4,27 do dourado no pior subgênero.
 O que separa um verbete do próximo é o peso do título e a barra lateral do
 `.corpo`, em `--apoio`.
 
@@ -180,18 +180,18 @@ hierarquia e pode encolher sem reprovar.
 **Título da página em `--destaque`.** O `h1` é o único texto de acento que restou
 fora dos preenchimentos. Tem 2em, ou 32px, em peso 900 — texto grande, mínimo
 3:1 —, e o dourado sobre o céu fica entre **4,27 e 5,37:1**. Passa nos seis
-mundos, e em cinco deles passaria até no critério de texto pequeno. Encolher o
+subgêneros, e em cinco deles passaria até no critério de texto pequeno. Encolher o
 `h1` abaixo de 18,66px reprova.
 
-**Títulos de seção das páginas de mundo: pastilha preenchida.** Os três `h2` de
-[`/mundos/[subgenero]/`](../src/pages/mundos/%5Bsubgenero%5D.astro) — Arquétipos,
+**Títulos de seção das páginas de subgênero: pastilha preenchida.** Os três `h2` de
+[`/subgeneros/[subgenero]/`](../src/pages/subgeneros/%5Bsubgenero%5D.astro) — Arquétipos,
 Cenários, Elementos Narrativos — herdavam `--texto-forte` e ficavam
 iguais aos títulos dos verbetes logo abaixo, que também são claros: a página
 inteira lia como um bloco só. Viraram pastilha preenchida por escolha da autora,
 no mesmo par que o `.botao--principal` e a `.etiqueta` já usam — fundo
 `--destaque`, letra `--fundo`. Dá **12,22:1** no tema escuro e **5,12:1** no
 claro, folga até no critério de texto pequeno. Nenhum dos dois números depende do
-mundo: o preenchimento é opaco e tapa o céu, então a tabela por mundo não se
+subgênero: o preenchimento é opaco e tapa o céu, então a tabela por subgênero não se
 aplica a este elemento.
 
 A sombra deslocada de 4px em `--apoio` põe a segunda cor de acento na peça sem
@@ -199,24 +199,24 @@ carregar texto, e por isso não responde a mínimo de contraste.
 
 **Títulos dentro de `.bloco`: texto em `--destaque`, não pastilha.** São dois
 lugares, medidos juntos porque a situação é a mesma: os seis `h2` de
-[`/guia-de-personagens/`](../src/pages/guia-de-personagens.astro), um por mundo,
+[`/guia-de-personagens/`](../src/pages/guia-de-personagens.astro), um por subgênero,
 e o "Crie enredos com sua IA favorita" do
 [gerador](../src/pages/gerador.astro). Os dois ficam dentro de um `.bloco`, onde
 o acento mede **6,78:1** no escuro e **4,59:1** no claro — folga até no critério
 de texto pequeno, e o `h2` tem 24px. Por isso aqui a cor pôde ir
 na letra em vez do preenchimento: o problema que criou a pastilha nas páginas de
-mundo era o `h2` claro se confundir com o que vem logo abaixo dele — os títulos
+subgênero era o `h2` claro se confundir com o que vem logo abaixo dele — os títulos
 de verbete lá, os sessenta termos do `<dl>` no guia, o texto do prompt no
 gerador. O `.bloco` já dá o
 contraste que o céu não daria — direto sobre o céu o número cairia para 4,27 no
-pior mundo, ainda acima dos 3:1 de texto grande, mas sem esta folga.
+pior subgênero, ainda acima dos 3:1 de texto grande, mas sem esta folga.
 
 **A sombra fica nos dois temas, e isso é exceção à regra do `.botao`.**
 [global.css](../src/styles/global.css) tira a sombra deslocada dos botões no tema
 claro, por ela ser recurso de pôster que brilha sobre o céu escuro e pesa sobre
 fundo claro. A primeira versão desta pastilha seguia a mesma regra; a autora
 pediu para manter a sombra também no claro, para a peça ter a mesma forma nos
-dois temas. Não há conflito visual porque a página de mundo não renderiza nenhum
+dois temas. Não há conflito visual porque a página de subgênero não renderiza nenhum
 `.botao` — não existe sombra ausente ao lado desta para destoar. Como a cor vem
 por papel, no claro ela sai azul-tinta `#1b2a4a` em vez de violeta.
 
@@ -238,7 +238,7 @@ texto pequeno — a mesma reprovação do roxo-sobre-amarelo, em pior grau. Fora
 dela ele continua sobre o céu, com os mesmos 2,12 a 2,67 da pendência registrada
 acima; a mudança não melhora nem piora esse número.
 
-**Cadeado do gerador.** Usa `--texto` no estado destravado (4,71 no pior mundo)
+**Cadeado do gerador.** Usa `--texto` no estado destravado (4,71 no pior subgênero)
 e `--destaque` no travado (4,27) — os dois acima dos 3:1 que o WCAG 1.4.11 pede
 de elemento de interface. `--apagado` foi descartado por ficar em 2,12.
 
@@ -246,7 +246,7 @@ de elemento de interface. `--apagado` foi descartado por ficar em 2,12.
 no catálogo, envolvendo os verbetes de `/arquetipos/`, `/cenarios/` e
 `/elementos/` por subgênero. Nesses lugares o texto não fica mais direto sobre
 o céu, e as razões da tabela acima sobem. Ficaram de fora, ainda sobre o céu:
-as páginas de mundo, que reúnem os três tipos. A primeira
+as páginas de subgênero, que reúnem os três tipos. A primeira
 tentativa foi o acento puro a 8% por cima, e ela **reprovava**: `--apoio` é mais
 claro que o céu, então clareava o fundo e derrubava o corpo de texto para
 4,45:1. O valor em uso é o acento misturado a 20% no fundo da página e aplicado
@@ -269,7 +269,7 @@ por um script embutido no `<head>` antes da primeira pintura. Sem JavaScript o
 site fica escuro, que era o único tema até então.
 
 **Não há céu aqui**: a aurora é removida por completo (`display: none`) e o
-fundo é liso. Por isso a medição não depende de mundo nenhum — é uma tabela só,
+fundo é liso. Por isso a medição não depende de subgênero nenhum — é uma tabela só,
 igual em todas as páginas.
 
 **A paleta é outra, não o escuro clareado.** A primeira tentativa escureceu
@@ -321,7 +321,7 @@ página:
 | Elemento | Preenchimento | Texto | Razão |
 |---|---|---|---|
 | botão principal, etiqueta, pilares | `--destaque` | `--fundo` | 5,12 |
-| botões secundários, retângulos de mundo | `--apoio` | `--fundo` | 13,24 |
+| botões secundários, retângulos de subgênero | `--apoio` | `--fundo` | 13,24 |
 | os mesmos, no hover | trocam entre si | `--fundo` | 5,12 / 13,24 |
 
 Sobre `--bloco`, o véu de `--apoio` a 6% que agrupa as peças e a dica de enredo
@@ -402,7 +402,7 @@ paleta do tema claro:
 | `npm run build` | 40 páginas |
 
 Refeita em 7 de agosto de 2026, depois de os títulos de seção das páginas de
-mundo virarem pastilha preenchida:
+subgênero virarem pastilha preenchida:
 
 | Comando | Resultado |
 |---|---|
@@ -414,7 +414,7 @@ A pastilha não tem mais nenhuma regra condicionada ao tema: uma declaração s�
 `box-shadow: 4px 4px 0 var(--apoio)`, que os tokens resolvem para violeta no
 escuro e azul-tinta no claro.
 
-Refeita em 18 de agosto de 2026, depois de os nomes dos mundos no guia de
+Refeita em 18 de agosto de 2026, depois de os nomes dos subgêneros no guia de
 personagens passarem a `--destaque`:
 
 | Comando | Resultado |

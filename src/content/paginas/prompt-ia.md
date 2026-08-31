@@ -7,7 +7,7 @@ Você é um roteirista de ficção científica na fase de brainstorming. Seu obj
 
 A partir dos elementos abaixo, crie 3 opções diferentes de premissas (no máximo 150 palavras por opção):
 
-Mundo: [MUNDO]
+Subgênero: [SUBGENERO]
 Personagem A: [PERSONAGEM A]
 Personagem B: [PERSONAGEM B]
 Onde começa: [LOCAL]

@@ -1,11 +1,11 @@
 import type { Opcoes, Sorteio } from './tipos';
 
-export function nomearMundos(
+export function nomearSubgeneros(
   sorteio: Sorteio,
   opcoes: Opcoes,
   nomes: Record<string, string>,
 ): string {
-  if (!opcoes.misturarMundos) {
+  if (!opcoes.misturarSubgeneros) {
     const id = opcoes.subgenero;
     return id ? (nomes[id] ?? id) : '';
   }
@@ -15,7 +15,7 @@ export function nomearMundos(
      em que a pessoa lê as peças, não em ordem alfabética nem de coleção.
 
      O filtro do pool `comuns` que existia aqui saiu junto com os arquétipos: as
-     profissões pertencem aos seis mundos e a nenhum outro pool. */
+     profissões pertencem aos seis subgêneros e a nenhum outro pool. */
   const usados = [
     sorteio.personagemA.profissao.subgenero,
     sorteio.personagemB.profissao.subgenero,
@@ -26,7 +26,7 @@ export function nomearMundos(
 }
 
 export type ValoresDoPrompt = {
-  mundo: string;
+  subgenero: string;
   personagemA: string;
   personagemB: string;
   local: string;
@@ -34,7 +34,7 @@ export type ValoresDoPrompt = {
 };
 
 const MARCADORES: Record<string, keyof ValoresDoPrompt> = {
-  '[MUNDO]': 'mundo',
+  '[SUBGENERO]': 'subgenero',
   '[PERSONAGEM A]': 'personagemA',
   '[PERSONAGEM B]': 'personagemB',
   '[LOCAL]': 'local',

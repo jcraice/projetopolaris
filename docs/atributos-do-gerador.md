@@ -12,7 +12,7 @@ por isso ela também está aqui.
 Arquétipos e elementos narrativos tinham seção neste documento numa versão
 anterior do gerador. Saíram do sorteio nesta reescrita — a premissa passou a
 girar em torno de dois personagens, um local e um fato — mas continuam com
-página própria em `/arquetipos/` e `/elementos/`, na busca e em `/mundos/`.
+página própria em `/arquetipos/` e `/elementos/`, na busca e em `/subgeneros/`.
 
 > Contagens conferidas na data em que este documento foi escrito. Entrada nova
 > em `src/lib/gerador/*.ts` ou em `src/content/cenarios/` desatualiza os
@@ -23,7 +23,7 @@ página própria em `/arquetipos/` e `/elementos/`, na busca e em `/mundos/`.
 
 | Peça | De onde vem | Onde aparece |
 | --- | --- | --- |
-| Mundo | escolha de quem usa, entre 6 | filtra o sorteio; aparece na primeira linha da premissa e do prompt de IA — sem cadeado, porque quem trava a linha é o seletor de Mundo |
+| Subgênero | escolha de quem usa, entre 6 | filtra o sorteio; aparece na primeira linha da premissa e do prompt de IA — sem cadeado, porque quem trava a linha é o seletor de Subgênero |
 | Profissão (Personagem A e B) | `src/lib/gerador/profissoes.ts` (60) | premissa, em `--destaque`; a `descricao` de cada uma só aparece em `/guia-de-personagens/`, fora do gerador |
 | Característica (Personagem A) | `src/lib/gerador/caracteristicas.ts` (30) | premissa, em `--destaque` |
 | Personalidade (Personagem B) | `src/lib/gerador/personalidades.ts` (30) | premissa, em `--destaque` |
@@ -33,7 +33,7 @@ página própria em `/arquetipos/` e `/elementos/`, na busca e em `/mundos/`.
 
 ## As peças invisíveis
 
-### Profissões — 60, dez por mundo
+### Profissões — 60, dez por subgênero
 
 O **quem**, dos dois personagens da premissa. Cada profissão tem um `nome` — que
 entra sem alteração na premissa e no guia — e uma `descricao`, que só
@@ -268,12 +268,12 @@ famílias — a única regra é não repetir o fato da rodada anterior.
 
 Um molde só, `MOLDE`, no lugar dos dez que existiam antes de o gerador
 combinar dois personagens em vez de um arquétipo. A variedade que os dez moldes
-davam passou para o tamanho das listas: dentro de um mundo já são 10 × 9
+davam passou para o tamanho das listas: dentro de um subgênero já são 10 × 9
 profissões (a segunda não repete a primeira) × 30 características × 30
 personalidades × 10 locais × 40 fatos.
 
 ```
-Essa é uma ficção científica de {mundo}.
+Essa é uma ficção científica de {subgenero}.
 
 Um(a) {profissaoA} que {caracteristica}.
 Um(a) {profissaoB} que é {personalidade}.
@@ -290,7 +290,7 @@ colapsaria tudo numa linha só.
 
 | Marcador | O que entra no lugar |
 | --- | --- |
-| `{mundo}` | o nome do mundo (ou dos mundos, unidos por " + " com "Misturar mundos"), com a inicial abaixada |
+| `{subgenero}` | o nome do subgênero (ou dos subgêneros, unidos por " + " com "Misturar subgêneros"), com a inicial abaixada |
 | `{profissaoA}` | o `nome` da profissão do Personagem A, como está na lista — sem abaixar inicial, para não estragar siglas ("Engenheiro(a) de IA") |
 | `{caracteristica}` | o traço do Personagem A, já com verbo embutido: "é cego(a) de um olho" |
 | `{profissaoB}` | o `nome` da profissão do Personagem B, como está na lista |
@@ -317,7 +317,7 @@ qual linha.
 | `{profissaoB}` | `personagemB` |
 | `{em:local}` | `local` |
 | `{fato}` | `fato` |
-| `{mundo}` | nenhuma — quem trava a linha é o seletor de Mundo, no alto da página |
+| `{subgenero}` | nenhuma — quem trava a linha é o seletor de Subgênero, no alto da página |
 
 `{caracteristica}` e `{personalidade}` não têm entrada própria: cada uma divide
 a linha com a profissão do mesmo personagem, e o cadeado é da linha inteira, não
@@ -328,8 +328,8 @@ considerado e recusado pela autora, por picotar a leitura.
 
 - **Travar Personagem A, Personagem B, Local ou Fato** congela a peça
   correspondente na rolagem seguinte, num cadeado por linha travável — quatro
-  ao todo. A linha do mundo é a única sem cadeado: quem manda nela é o seletor
-  de Mundo, no alto da página.
+  ao todo. A linha do subgênero é a única sem cadeado: quem manda nela é o seletor
+  de Subgênero, no alto da página.
 - **O fato passa a travar.** Era a única peça sem cadeado, de propósito, para
   que travar tudo e continuar clicando em Gerar seguisse trocando alguma
   coisa. Com um cadeado no fim de cada linha da premissa, deixá-lo de fora
@@ -340,23 +340,23 @@ considerado e recusado pela autora, por picotar a leitura.
   para os dois lados: se o Personagem B está travado, é o A que evita a
   profissão dele ao sortear; nos outros casos, A sai livre e B evita a
   profissão que A acabou de tirar.
-- **Filtro por mundo só existe em profissões e locais.** Características,
+- **Filtro por subgênero só existe em profissões e locais.** Características,
   personalidades e fatos são universais — não pertencem a subgênero nenhum — e
-  entram sempre da lista inteira, mesmo com um mundo escolhido.
-- **Misturar mundos** deixa profissão e local virem de qualquer um dos seis. O
-  nome do mundo no prompt de IA vira a lista dos que apareceram, na ordem
-  Personagem A, Personagem B, Local, sem repetir um mundo usado por mais de
+  entram sempre da lista inteira, mesmo com um subgênero escolhido.
+- **Misturar subgêneros** deixa profissão e local virem de qualquer um dos seis. O
+  nome do subgênero no prompt de IA vira a lista dos que apareceram, na ordem
+  Personagem A, Personagem B, Local, sem repetir um subgênero usado por mais de
   uma peça.
 - **Trocar qualquer opção do formulário** zera o sorteio e os quatro cadeados,
-  para não sobrar peça travada de um mundo que não está mais selecionado.
+  para não sobrar peça travada de um subgênero que não está mais selecionado.
 
 ## Quantas premissas diferentes existem
 
-Dentro de um mundo só: 10 profissões para o Personagem A × 9 para o Personagem B
+Dentro de um subgênero só: 10 profissões para o Personagem A × 9 para o Personagem B
 (a lista menos a que A já usou) × 30 características × 30 personalidades × 10
 locais × 40 fatos — **32.400.000** premissas, cerca de 32 milhões, sem sair do
-mundo escolhido.
+subgênero escolhido.
 
-Com "Misturar mundos" ligado, profissão e local passam a vir de qualquer um dos
+Com "Misturar subgêneros" ligado, profissão e local passam a vir de qualquer um dos
 seis: 60 × 59 × 30 × 30 × 60 × 40 — **7.646.400.000** premissas, cerca de 7,6
 bilhões.

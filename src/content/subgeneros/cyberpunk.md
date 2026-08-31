@@ -1,7 +1,7 @@
 ---
 nome: "Cyberpunk"
 ordem: 3
-mundo: true
+completo: true
 aurora: ["#ff2d92", "#7c3aed", "#00e5ff"]
 citacao: "O céu sobre o porto tinha a cor de uma TV sintonizada em canal morto."
 citacaoAutor: "William Gibson"

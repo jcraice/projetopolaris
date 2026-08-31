@@ -3,40 +3,42 @@ import { getCollection } from 'astro:content';
 
 interface Props {
   /* O tipo de catálogo em que a pessoa está. A fileira leva ao mesmo tipo em
-     outro mundo — de Arquétipos Cyberpunk para Arquétipos Distopia, não para a
-     porta de entrada do mundo —, que é o que mantém a leitura no mesmo trilho. */
+     outro subgênero — de Arquétipos Cyberpunk para Arquétipos Distopia, não
+     para a porta de entrada do subgênero —, que é o que mantém a leitura no
+     mesmo trilho. */
   tipo: 'arquetipos' | 'cenarios' | 'elementos';
-  /* O mundo aberto, que ganha a marca de página atual. Em /arquetipos/comuns/
+  /* O subgênero aberto, que ganha a marca de página atual. Em /arquetipos/comuns/
      não corresponde a nenhuma pílula, e é de propósito: ver abaixo. */
   atual: string;
 }
 
 const { tipo, atual } = Astro.props;
 
-/* Só os seis mundos: o pool dos 10 Arquétipos Comuns tem mundo: false e não é
-   destino de troca — a mesma regra que o mantém fora de /mundos/. Mas a página
-   /arquetipos/comuns/ recebe a fileira assim mesmo, com nenhuma pílula marcada:
-   ela é a única das quatro rotas [subgenero] que existe sem ser um mundo, e sem
-   isto continuaria sendo a única sem saída lateral nenhuma. */
-const mundos = (await getCollection('subgeneros', (s) => s.data.mundo)).sort(
+/* Só os seis subgêneros completos: o pool dos 10 Arquétipos Comuns tem
+   completo: false e não é destino de troca — a mesma regra que o mantém fora
+   de /subgeneros/. Mas a página /arquetipos/comuns/ recebe a fileira assim
+   mesmo, com nenhuma pílula marcada: ela é a única das quatro rotas
+   [subgenero] que existe sem ser um subgênero completo, e sem isto
+   continuaria sendo a única sem saída lateral nenhuma. */
+const subgeneros = (await getCollection('subgeneros', (s) => s.data.completo)).sort(
   (a, b) => a.data.ordem - b.data.ordem,
 );
 
 const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : `${base}/`;
 ---
-{/* O mundo aberto fica na fileira, marcado, em vez de ser omitido: assim a
+{/* O subgênero aberto fica na fileira, marcado, em vez de ser omitido: assim a
     fileira é a mesma nas seis páginas — não muda de largura nem de ordem a cada
-    troca — e ainda diz onde a pessoa está. É o que o rótulo "Trocar de mundo"
-    promete; "Outros mundos" pediria a lista sem ele.
+    troca — e ainda diz onde a pessoa está. É o que o rótulo "Trocar de
+    subgênero" promete; "Outros subgêneros" pediria a lista sem ele.
 
     Quem carrega esse estado é o aria-current do próprio link, não uma classe,
     pelo mesmo motivo da barra do topo: a marca que o leitor de tela anuncia é a
     que o olho vê, sem um segundo estado para divergir dela. */}
-<nav class="trocar-de-mundo" aria-labelledby="trocar-de-mundo-titulo">
-  <h2 id="trocar-de-mundo-titulo">Trocar de mundo</h2>
+<nav class="trocar-de-subgenero" aria-labelledby="trocar-de-subgenero-titulo">
+  <h2 id="trocar-de-subgenero-titulo">Trocar de subgênero</h2>
   <ul class="lista-subgeneros">
-    {mundos.map((m) => (
+    {subgeneros.map((m) => (
       <li>
         <a href={`${raiz}${tipo}/${m.id}/`} aria-current={m.id === atual ? 'page' : undefined}>
           {m.data.nome}
@@ -47,12 +49,12 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
 </nav>
 
 <style>
-  .trocar-de-mundo {
+  .trocar-de-subgenero {
     margin-block-start: 48px;
   }
 
   /* Rótulo de fileira, não título de seção: a pastilha preenchida dos <h2> de
-     /mundos/ chamaria mais atenção que o último verbete logo acima. Fica no
+     /subgeneros/ chamaria mais atenção que o último verbete logo acima. Fica no
      --texto-forte que global.css já dá aos títulos — --apagado seria o tom
      natural para uma legenda, mas sobre o céu ele está entre 2,12 e 2,67:1,
      que é a pendência aberta em docs/verificacao-visual.md. Não somar caso

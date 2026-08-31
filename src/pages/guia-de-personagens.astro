@@ -4,13 +4,11 @@ import Base from '../layouts/Base.astro';
 import { PROFISSOES } from '../lib/gerador';
 
 /* Guia do gerador, não um quinto catálogo. Por isso a página não entra no Nav,
-   não tem rota por mundo e não aparece na busca — o índice da busca é montado a
+   não tem rota por subgênero e não aparece na busca — o índice da busca é montado a
    partir das quatro coleções de src/content/, e as profissões não são coleção,
    então não há nada a excluir. O único caminho até aqui é o link no fim de
    gerador.astro. Uma página fora do menu parece esquecimento; é decisão. */
-const subgeneros = await getCollection('subgeneros');
-const mundos = subgeneros
-  .filter((s) => s.data.mundo)
+const subgeneros = (await getCollection('subgeneros', (s) => s.data.completo))
   .sort((a, b) => a.data.ordem - b.data.ordem);
 
 const base = import.meta.env.BASE_URL;
@@ -20,15 +18,15 @@ const raiz = base.endsWith('/') ? base : base + '/';
   <h1>Guia de personagens</h1>
 
   <p class="abertura">
-    As profissões que o gerador sorteia, com o que cada uma é. São dez por mundo,
-    e o mundo escolhido no gerador decide de quais dez os dois personagens saem.
+    As profissões que o gerador sorteia, com o que cada uma é. São dez por subgênero,
+    e o subgênero escolhido no gerador decide de quais dez os dois personagens saem.
   </p>
 
-  {mundos.map((mundo) => (
+  {subgeneros.map((subgenero) => (
     <section class="bloco">
-      <h2>{mundo.data.nome}</h2>
+      <h2>{subgenero.data.nome}</h2>
       <dl class="profissoes">
-        {PROFISSOES.filter((p) => p.subgenero === mundo.id).map((profissao) => (
+        {PROFISSOES.filter((p) => p.subgenero === subgenero.id).map((profissao) => (
           <div class="profissao">
             <dt>{profissao.nome}</dt>
             <dd>{profissao.descricao}</dd>
@@ -65,7 +63,7 @@ const raiz = base.endsWith('/') ? base : base + '/';
     gap: 6px;
   }
 
-  /* O nome do mundo em acento, por escolha da autora: são seis seções seguidas,
+  /* O nome do subgênero em acento, por escolha da autora: são seis seções seguidas,
      todas do mesmo fundo, e sem cor o h2 ficava igual aos sessenta termos
      abaixo dele. Contraste sobre --bloco: 6,78:1 no escuro e 4,59:1 no claro
      (docs/verificacao-visual.md) — passa até no critério de texto pequeno, e

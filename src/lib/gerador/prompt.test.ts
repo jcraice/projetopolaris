@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { montarPrompt, nomearMundos } from './prompt';
+import { montarPrompt, nomearSubgeneros } from './prompt';
 import type { Opcoes, Sorteio } from './tipos';
 
 const nomes = {
@@ -27,19 +27,19 @@ const sorteio: Sorteio = {
   fato: 'um personagem está de luto',
 };
 
-const base: Opcoes = { subgenero: 'space-opera', misturarMundos: false };
+const base: Opcoes = { subgenero: 'space-opera', misturarSubgeneros: false };
 
-describe('nomearMundos', () => {
-  it('sem misturar, devolve o mundo do seletor', () => {
-    expect(nomearMundos(sorteio, base, nomes)).toBe('Space Opera');
+describe('nomearSubgeneros', () => {
+  it('sem misturar, devolve o subgênero do seletor', () => {
+    expect(nomearSubgeneros(sorteio, base, nomes)).toBe('Space Opera');
   });
 
-  it('misturando, devolve os mundos usados na ordem A, B, local', () => {
-    expect(nomearMundos(sorteio, { ...base, misturarMundos: true }, nomes))
+  it('misturando, devolve os subgêneros usados na ordem A, B, local', () => {
+    expect(nomearSubgeneros(sorteio, { ...base, misturarSubgeneros: true }, nomes))
       .toBe('Space Opera + Distopia + Cyberpunk');
   });
 
-  it('misturando, não repete um mundo usado por mais de uma peça', () => {
+  it('misturando, não repete um subgênero usado por mais de uma peça', () => {
     const mesmo: Sorteio = {
       ...sorteio,
       personagemB: {
@@ -51,13 +51,13 @@ describe('nomearMundos', () => {
       },
       local: { ...sorteio.local, subgenero: 'space-opera' },
     };
-    expect(nomearMundos(mesmo, { ...base, misturarMundos: true }, nomes)).toBe('Space Opera');
+    expect(nomearSubgeneros(mesmo, { ...base, misturarSubgeneros: true }, nomes)).toBe('Space Opera');
   });
 });
 
 describe('montarPrompt', () => {
   const valores = {
-    mundo: 'Space Opera',
+    subgenero: 'Space Opera',
     personagemA: 'Um(a) Contrabandista que é cego(a) de um olho',
     personagemB: 'Um(a) Reescritor(a) Histórico(a) que é egocêntrico(a)',
     local: 'Ruínas Antigas',
@@ -65,7 +65,7 @@ describe('montarPrompt', () => {
   };
 
   it('troca os cinco marcadores', () => {
-    const modelo = 'M: [MUNDO] A: [PERSONAGEM A] B: [PERSONAGEM B] L: [LOCAL] F: [FATO]';
+    const modelo = 'M: [SUBGENERO] A: [PERSONAGEM A] B: [PERSONAGEM B] L: [LOCAL] F: [FATO]';
     expect(montarPrompt(modelo, valores)).toBe(
       'M: Space Opera A: Um(a) Contrabandista que é cego(a) de um olho'
       + ' B: Um(a) Reescritor(a) Histórico(a) que é egocêntrico(a)'

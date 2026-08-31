@@ -20,7 +20,7 @@
                  etiqueta, pilares da home, cadeado travado. Título de verbete
                  não entra: já foi daqui e voltou para --texto-forte.
      --apoio     a interface em volta: links, botões secundários, contorno de
-                 foco, barra lateral dos verbetes, retângulos de mundo */
+                 foco, barra lateral dos verbetes, retângulos de subgênero */
   --destaque: var(--ouro);
   --apoio: var(--violeta);
 
@@ -47,7 +47,7 @@
   /* Fundo dos dois blocos do gerador. É --apoio misturado a 20% no fundo da
      página e aplicado a 45% — ou seja, escurece o céu em vez de clarear.
      A tentativa óbvia (o violeta puro a 8% por cima) derruba o corpo de texto
-     para 4,45:1 no mundo Invasão Alienígena, porque o violeta é mais claro que
+     para 4,45:1 no subgênero Invasão Alienígena, porque o violeta é mais claro que
      o céu: a cor que deveria dar destaque tirava legibilidade. Assim o texto
      sobe de 4,71 para 6,90. */
   --bloco: rgba(44, 34, 62, 0.45);
@@ -56,7 +56,7 @@
      passa de 1320px (1280 da coluna + as duas margens), vira o que sobrar
      dividido em dois: a página para de crescer e o excesso vira margem. Abaixo
      de 1320px nada muda, o que preserva o ponto de quebra de 1079px da
-     navegação e da lista de mundos.
+     navegação e da lista de subgêneros.
 
      O 100% é resolvido onde o token é usado, não aqui — custom property é
      substituída como texto e a porcentagem só se resolve na propriedade que a
@@ -132,7 +132,7 @@
   color: var(--fundo);
 }
 
-/* Os retângulos de mundo — na home e no topo de cada índice de seção — seguem
+/* Os retângulos de subgênero — na home e no topo de cada índice de seção — seguem
    os botões: preenchidos no claro, de contorno no escuro. A troca --apoio →
    --destaque no hover é a mesma de sempre, só que agora no preenchimento
    em vez de no traço. */
@@ -148,7 +148,7 @@
   color: var(--fundo);
 }
 
-/* O mundo aberto, no claro, é a fileira ao contrário: as outras pílulas são
+/* O subgênero aberto, no claro, é a fileira ao contrário: as outras pílulas são
    preenchidas em --apoio e esta fica vazada, com a letra e o traço na cor do
    preenchimento delas. Repetir a receita do escuro — --flutuante no fundo —
    não bastaria aqui, porque a letra continuaria em --fundo, quase branca sobre
@@ -203,7 +203,7 @@ h1, h2, h3 {
    sobrescrever o --texto-forte, e não junto, porque h2 e h3 continuam claros.
 
    Contraste: h1 é 2em, ou 32px, em peso 900 — texto grande para o WCAG, cujo
-   mínimo é 3:1. O dourado sobre o céu fica em 4,27:1 no pior mundo e o laranja do
+   mínimo é 3:1. O dourado sobre o céu fica em 4,27:1 no pior subgênero e o laranja do
    tema claro em 5,12:1. Encolher o h1 abaixo de 18,66px reprovaria; ver
    docs/verificacao-visual.md. */
 h1 {
@@ -252,7 +252,7 @@ a {
 
 /* Antes duplicado verbatim em arquetipos/cenarios/elementos/livros — index.astro
    (a grade de subgêneros) e [subgenero].astro (a citação de abertura). Consolidado
-   aqui na Task 8 para não criar uma quinta e sexta cópia com as páginas de mundo. */
+   aqui na Task 8 para não criar uma quinta e sexta cópia com as páginas de subgênero. */
 .lista-subgeneros {
   display: flex;
   flex-wrap: wrap;
@@ -277,8 +277,8 @@ a {
   border-color: var(--destaque);
 }
 
-/* A pílula do mundo em que a pessoa está, quando a fileira aparece dentro de
-   uma página de mundo (TrocarDeMundo.astro). É a mesma superfície com que a
+/* A pílula do subgênero em que a pessoa está, quando a fileira aparece dentro de
+   uma página de subgênero (TrocarDeSubgenero.astro). É a mesma superfície com que a
    barra do topo marca a página aberta, para não inventar tom novo para dizer
    "você está aqui" — 11,37:1 no escuro, a medição do submenu em
    docs/verificacao-visual.md. Nos índices e na home nenhuma pílula é a atual,

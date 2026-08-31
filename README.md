@@ -6,7 +6,7 @@ arquétipos de personagem, cenários e elementos narrativos, e é publicado
 como site estático no GitHub Pages.
 
 O site está no ar em **https://jcraice.github.io/projetopolaris/**, com 76
-arquétipos, 60 cenários e 60 elementos narrativos. São seis mundos —
+arquétipos, 60 cenários e 60 elementos narrativos. São seis subgêneros —
 Cyberpunk, Distopia, Invasão Alienígena, Pós Apocalíptico, Space Opera e Viagem
 no Tempo — com 11 arquétipos, 10 cenários e 10 elementos cada, mais um pool de
 10 arquétipos comuns que serve a todos. Tem busca em todo o acervo e tema claro
@@ -28,9 +28,9 @@ Tudo começa numa frota nômade.
 Importante: os dois já se conheceram antes.
 ```
 
-Cada peça vem de uma lista própria: **60 profissões** (dez por mundo), **30
+Cada peça vem de uma lista própria: **60 profissões** (dez por subgênero), **30
 características físicas**, **30 personalidades**, os **60 locais** do acervo de
-cenários e **40 fatos**. Dentro de um mundo só isso dá mais de 32 milhões de
+cenários e **40 fatos**. Dentro de um subgênero só isso dá mais de 32 milhões de
 premissas diferentes.
 
 A premissa é a própria interface. O que o sorteio trouxe aparece destacado

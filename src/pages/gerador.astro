@@ -3,8 +3,8 @@ import { getCollection, getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import { montarPrompt } from '../lib/gerador';
 
-const subgeneros = await getCollection('subgeneros');
-const mundos = subgeneros.filter((s) => s.data.mundo).sort((a, b) => a.data.ordem - b.data.ordem);
+const subgeneros = (await getCollection('subgeneros', (s) => s.data.completo))
+  .sort((a, b) => a.data.ordem - b.data.ordem);
 
 // O texto do prompt é conteúdo da autora, não código: mora em Markdown e é lido
 // como texto cru (`body`), nunca renderizado — o que a IA recebe é o que está
@@ -19,7 +19,7 @@ if (!modeloDoPrompt.body) throw new Error("página 'prompt-ia' está sem corpo e
 // chegar em produção e deixar o card do prompt vazio em silêncio.
 // Os valores são de descarte: quem importa aqui são os marcadores do modelo.
 montarPrompt(modeloDoPrompt.body, {
-  mundo: 'conferência',
+  subgenero: 'conferência',
   personagemA: 'conferência',
   personagemB: 'conferência',
   local: 'conferência',
@@ -27,9 +27,9 @@ montarPrompt(modeloDoPrompt.body, {
 });
 
 // Mapa de identificador para nome de exibição, para o prompt dizer "Space Opera"
-// e não "space-opera". Só os mundos entram; `comuns` não é mundo e nomearMundos
+// e não "space-opera". Só os subgêneros entram; `comuns` não é subgênero e nomearSubgeneros
 // o ignora.
-const nomesDosMundos = Object.fromEntries(mundos.map((m) => [m.id, m.data.nome]));
+const nomesDosSubgeneros = Object.fromEntries(subgeneros.map((m) => [m.id, m.data.nome]));
 
 // Só os locais vêm daqui: são os 60 cenários do acervo, lidos em build e
 // injetados como JSON estático. As profissões, características, personalidades
@@ -48,13 +48,13 @@ const raiz = base.endsWith('/') ? base : base + '/';
   <form id="opcoes">
     <fieldset>
       <legend>Opções do sorteio</legend>
-      <label for="opcoes-mundo">
-        Mundo
-        <select id="opcoes-mundo" name="subgenero">
-          {mundos.map((m) => <option value={m.id}>{m.data.nome}</option>)}
+      <label for="opcoes-subgenero">
+        Subgênero
+        <select id="opcoes-subgenero" name="subgenero">
+          {subgeneros.map((m) => <option value={m.id}>{m.data.nome}</option>)}
         </select>
       </label>
-      <label><input type="checkbox" name="misturarMundos" /> Misturar mundos</label>
+      <label><input type="checkbox" name="misturarSubgeneros" /> Misturar subgêneros</label>
     </fieldset>
   </form>
 
@@ -133,7 +133,7 @@ const raiz = base.endsWith('/') ? base : base + '/';
       bloco como script a processar e emite um aviso em `npm run check`. */}
   <script type="application/json" id="locais" is:inline set:html={JSON.stringify(locais)}></script>
   <script type="application/json" id="modelo-prompt" is:inline set:html={JSON.stringify(modeloDoPrompt.body)}></script>
-  <script type="application/json" id="nomes-dos-mundos" is:inline set:html={JSON.stringify(nomesDosMundos)}></script>
+  <script type="application/json" id="nomes-dos-subgeneros" is:inline set:html={JSON.stringify(nomesDosSubgeneros)}></script>
 </Base>
 
 <style>
@@ -202,7 +202,7 @@ const raiz = base.endsWith('/') ? base : base + '/';
     cursor: pointer;
     /* --texto, e não --apagado: o cadeado é elemento de interface e precisa de
        3:1 sobre o fundo. Direto sobre o céu o apagado fica em 2,1 no pior
-       mundo, e --destaque, do estado travado, em 4,3. */
+       subgênero, e --destaque, do estado travado, em 4,3. */
     color: var(--texto);
     transition: color 0.15s ease;
     border-radius: var(--raio);
@@ -252,7 +252,7 @@ const raiz = base.endsWith('/') ? base : base + '/';
   /* O que o sorteio trouxe, destacado dentro da própria frase — é isto que
      tomou o lugar da pilha de cartas que ficava acima da premissa repetindo o
      que ela já dizia. --destaque nos dois temas: o amarelo no escuro e o laranja
-     no claro. Sobre o fundo do bloco dá 6,78:1 no pior mundo escuro e 4,59:1 no
+     no claro. Sobre o fundo do bloco dá 6,78:1 no pior subgênero escuro e 4,59:1 no
      claro; acima dos 4,5:1 que texto comum exige, com folga pequena no claro —
      mais um motivo para o --destaque do tema claro não poder clarear.
 
@@ -331,13 +331,13 @@ const raiz = base.endsWith('/') ? base : base + '/';
 </style>
 
 <script>
-  import { montarPrompt, nomearMundos, partes, sortear, redigir, MOLDE, PROFISSOES } from '../lib/gerador';
+  import { montarPrompt, nomearSubgeneros, partes, sortear, redigir, MOLDE, PROFISSOES } from '../lib/gerador';
   import type { Opcoes, PecaCenario, Pools, Sorteio, Travas } from '../lib/gerador';
 
   const locais: PecaCenario[] = JSON.parse(document.getElementById('locais')!.textContent!);
   const modeloDoPrompt: string = JSON.parse(document.getElementById('modelo-prompt')!.textContent!);
-  const nomesDosMundos: Record<string, string> = JSON.parse(
-    document.getElementById('nomes-dos-mundos')!.textContent!,
+  const nomesDosSubgeneros: Record<string, string> = JSON.parse(
+    document.getElementById('nomes-dos-subgeneros')!.textContent!,
   );
 
   // As profissões vêm do módulo, os locais do JSON injetado: os dois se juntam
@@ -359,7 +359,7 @@ const raiz = base.endsWith('/') ? base : base + '/';
     const dados = new FormData(form);
     return {
       subgenero: String(dados.get('subgenero')),
-      misturarMundos: dados.get('misturarMundos') === 'on',
+      misturarSubgeneros: dados.get('misturarSubgeneros') === 'on',
     };
   };
 
@@ -380,10 +380,10 @@ const raiz = base.endsWith('/') ? base : base + '/';
     fato: 'fato',
   };
 
-  function montarPremissa(sorteio: Sorteio, mundo: string) {
+  function montarPremissa(sorteio: Sorteio, subgenero: string) {
     const modeloCadeado = document.getElementById('modelo-cadeado') as HTMLTemplateElement;
 
-    for (const linha of partes(sorteio, MOLDE, mundo)) {
+    for (const linha of partes(sorteio, MOLDE, subgenero)) {
       for (const trecho of linha.trechos) {
         const span = document.createElement('span');
         span.textContent = trecho.texto;
@@ -413,17 +413,17 @@ const raiz = base.endsWith('/') ? base : base + '/';
   }
 
   function pintar(sorteio: Sorteio, opcoes: Opcoes) {
-    const mundo = nomearMundos(sorteio, opcoes, nomesDosMundos);
+    const subgenero = nomearSubgeneros(sorteio, opcoes, nomesDosSubgeneros);
 
-    if (sorteados.length === 0) montarPremissa(sorteio, mundo);
+    if (sorteados.length === 0) montarPremissa(sorteio, subgenero);
 
-    const valores = partes(sorteio, MOLDE, mundo)
+    const valores = partes(sorteio, MOLDE, subgenero)
       .flatMap((linha) => linha.trechos)
       .filter((trecho) => trecho.sorteado);
     valores.forEach((trecho, i) => { sorteados[i].textContent = trecho.texto; });
 
     prompt.textContent = montarPrompt(modeloDoPrompt, {
-      mundo,
+      subgenero,
       // O "Um(a)" vem escrito aqui e no MOLDE, e não da lista, porque as 60
       // profissões abrem com o mesmo artigo — ver o comentário em moldes.ts.
       personagemA: `Um(a) ${sorteio.personagemA.profissao.nome} que ${sorteio.personagemA.caracteristica}`,
@@ -463,7 +463,7 @@ const raiz = base.endsWith('/') ? base : base + '/';
      partes() que desenhou a tela. */
   document.getElementById('copiar-premissa')!.addEventListener('click', () => {
     const opcoes = lerOpcoes();
-    const texto = atual ? redigir(atual, MOLDE, nomearMundos(atual, opcoes, nomesDosMundos)) : '';
+    const texto = atual ? redigir(atual, MOLDE, nomearSubgeneros(atual, opcoes, nomesDosSubgeneros)) : '';
     copiar(texto, avisoDaPremissa, 'Premissa copiada.');
   });
 
@@ -486,8 +486,8 @@ const raiz = base.endsWith('/') ? base : base + '/';
     botao.setAttribute('aria-pressed', String(travas[tipo]));
   });
 
-  // Trocar de mundo (ou qualquer opção do formulário) zera o sorteio anterior:
-  // sem isto, uma peça travada do mundo antigo sobreviveria e contradiria a
+  // Trocar de subgênero (ou qualquer opção do formulário) zera o sorteio anterior:
+  // sem isto, uma peça travada do subgênero antigo sobreviveria e contradiria a
   // opção recém-escolhida. As travas também zeram aqui — sortear() já as ignora
   // sem `anterior`, mas sem este trecho os cadeados continuariam fechados, com
   // aria-pressed="true", para peças que não estão mais travadas.

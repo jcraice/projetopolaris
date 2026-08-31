@@ -2,32 +2,32 @@ import { describe, expect, it } from 'vitest';
 import { esquemaArquetipo, esquemaCenario, esquemaElemento, esquemaSubgenero } from './schemas';
 
 describe('esquemaSubgenero', () => {
-  it('exige aurora quando é um mundo', () => {
-    const r = esquemaSubgenero.safeParse({ nome: 'Cyberpunk', ordem: 3, mundo: true });
+  it('exige aurora quando o subgênero é completo', () => {
+    const r = esquemaSubgenero.safeParse({ nome: 'Cyberpunk', ordem: 3, completo: true });
     expect(r.success).toBe(false);
   });
 
-  it('dispensa aurora quando não é um mundo', () => {
+  it('dispensa aurora quando o subgênero não é completo', () => {
     const r = esquemaSubgenero.safeParse({
-      nome: '10 Arquétipos Comuns', ordem: 7, mundo: false,
+      nome: '10 Arquétipos Comuns', ordem: 7, completo: false,
     });
     expect(r.success).toBe(true);
   });
 
-  it('assume mundo verdadeiro por padrão', () => {
+  it('assume completo verdadeiro por padrão', () => {
     const r = esquemaSubgenero.parse({
       nome: 'Cyberpunk', ordem: 3, aurora: ['#ff2d92', '#7c3aed', '#00e5ff'],
     });
-    expect(r.mundo).toBe(true);
+    expect(r.completo).toBe(true);
   });
 
-  it('recusa quando mundo e aurora são omitidos', () => {
+  it('recusa quando completo e aurora são omitidos', () => {
     const r = esquemaSubgenero.safeParse({ nome: 'Cyberpunk', ordem: 3 });
     expect(r.success).toBe(false);
   });
 
   // Uma abertura por tipo de página, e todas opcionais: `comuns` só tem
-  // arquétipos, e um mundo pode entrar no acervo antes de a autora escrever
+  // arquétipos, e um subgênero pode entrar no acervo antes de a autora escrever
   // os três parágrafos.
   it('aceita as três aberturas, e cada uma é opcional', () => {
     const comAberturas = esquemaSubgenero.safeParse({

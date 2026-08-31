@@ -104,18 +104,18 @@ def escrever_livros(livros: list[Livro], subgenero: str, destino: Path) -> int:
     return len(livros)
 
 
-def escrever_subgenero(chave: str, nome: str, ordem: int, destino: Path, *, mundo: bool = True,
+def escrever_subgenero(chave: str, nome: str, ordem: int, destino: Path, *, completo: bool = True,
                         aurora: list[str] | None = None, citacao: str | None = None,
                         citacao_autor: str | None = None, abertura_arquetipos: str | None = None,
                         corpo: str = "") -> Path:
     """Escreve destino/{chave}.md. `chave` é o identificador do subgênero
     (ex.: "cyberpunk"), usado como slug de pasta em outras coleções.
     `abertura_arquetipos` é o texto do callout da página de arquétipos
-    daquele subgênero (fala dos personagens do mundo); `corpo` é o texto do
-    callout da página de elementos (fala do mundo em geral) — dois textos
+    daquele subgênero (fala dos personagens do subgênero); `corpo` é o texto do
+    callout da página de elementos (fala do subgênero em geral) — dois textos
     diferentes, com funções diferentes no site."""
     destino.mkdir(parents=True, exist_ok=True)
-    frontmatter = {"nome": nome, "ordem": ordem, "mundo": mundo}
+    frontmatter = {"nome": nome, "ordem": ordem, "completo": completo}
     if aurora is not None:
         frontmatter["aurora"] = aurora
     if citacao is not None:

@@ -8,7 +8,7 @@ interface Props {
   /* Só o arquétipo felino passa este marcador. Antes existia uma etiqueta
      obrigatória que repetia o nome do subgênero em todo verbete — saiu porque
      quem está lendo a página de Space Opera já sabe que está em Space Opera.
-     O felino é outra coisa: não é o mundo, é a natureza do arquétipo, e essa
+     O felino é outra coisa: não é o subgênero, é a natureza do arquétipo, e essa
      informação não aparece em nenhum outro lugar da página. */
   marcador?: string;
   /* Um desenho ao lado do texto. Chegam as duas versões do mesmo desenho, não
@@ -85,7 +85,7 @@ const metade = (imagem?: ImageMetadata) => (imagem ? Math.round(imagem.width / 2
        interno de 8px para a leitura não virar uma parede de texto. */
     margin-block-end: 32px;
     /* Os mesmos 96px do scroll-margin-top das três section[id] em
-       mundos/[subgenero].astro, pelo mesmo motivo: dar folga para o título não
+       subgeneros/[subgenero].astro, pelo mesmo motivo: dar folga para o título não
        parar debaixo da barra fixa do topo. Os dois valores devem mudar
        juntos. */
     scroll-margin-top: 96px;
@@ -99,9 +99,10 @@ const metade = (imagem?: ImageMetadata) => (imagem ? Math.round(imagem.width / 2
      da página.
 
      Os 1.2rem existiam por contraste: em dourado o título ficava em 4,27:1 no
-     pior mundo e só passava por ser tratado como texto grande, acima de 18,66px.
-     Em --texto-forte esse piso desapareceu — são 6,86:1 no pior mundo, folga até
-     no critério de texto pequeno —, então o tamanho hoje é escolha de hierarquia
+     pior subgênero e só passava por ser tratado como texto grande, acima de
+     18,66px. Em --texto-forte esse piso desapareceu — são 6,86:1 no pior
+     subgênero, folga até no critério de texto pequeno —, então o tamanho
+     hoje é escolha de hierarquia
      e pode encolher sem reprovar. Ver docs/verificacao-visual.md. */
   .verbete h3 {
     margin: 0;

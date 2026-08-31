@@ -1,5 +1,5 @@
 // Botão que abre e fecha uma lista: o menu da navegação no celular e a lista de
-// mundos da home. Os dois têm o mesmo comportamento, então mora aqui em vez de
+// subgêneros da home. Os dois têm o mesmo comportamento, então mora aqui em vez de
 // ser copiado nos dois componentes.
 //
 // A decisão de estar aberto ou fechado vive num só lugar, o `aria-expanded` do
@@ -13,7 +13,7 @@ export function proximoEstado(atual: string | null): 'true' | 'false' {
 
 // O menu "Mais" da navegação flutua por cima da página, e por isso precisa
 // fechar sozinho — no Escape e no clique fora —, coisa que o menu do celular e
-// a lista de mundos da home não precisam, porque empurram o conteúdo em vez de
+// a lista de subgêneros da home não precisam, porque empurram o conteúdo em vez de
 // cobri-lo. A comparação da tecla mora aqui, e não no <script> do Nav, para
 // poder ser testada: o "Esc" é o nome que o Internet Explorer e o Edge antigo
 // mandavam em KeyboardEvent.key, e quem só compara com "Escape" deixa o menu

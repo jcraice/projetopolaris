@@ -9,7 +9,7 @@ function escolher<T>(lista: T[], aleatorio: () => number): T {
 }
 
 function pertence(peca: { subgenero: string }, opcoes: Opcoes): boolean {
-  return opcoes.misturarMundos || peca.subgenero === opcoes.subgenero;
+  return opcoes.misturarSubgeneros || peca.subgenero === opcoes.subgenero;
 }
 
 export function poolsFiltrados(pools: Pools, opcoes: Opcoes): Pools {

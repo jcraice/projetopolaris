@@ -5,21 +5,21 @@ import { MOLDE, TRAVA_DO_MARCADOR } from './moldes';
 import { PERSONALIDADES } from './personalidades';
 import { PROFISSOES } from './profissoes';
 
-const MUNDOS = [
+const SUBGENEROS = [
   'cyberpunk', 'distopia', 'invasao-alienigena',
   'pos-apocaliptico', 'space-opera', 'viagem-no-tempo',
 ];
 
 describe('PROFISSOES', () => {
-  it('tem sessenta profissões, dez por mundo', () => {
+  it('tem sessenta profissões, dez por subgênero', () => {
     expect(PROFISSOES).toHaveLength(60);
-    for (const mundo of MUNDOS) {
-      expect(PROFISSOES.filter((p) => p.subgenero === mundo)).toHaveLength(10);
+    for (const subgenero of SUBGENEROS) {
+      expect(PROFISSOES.filter((p) => p.subgenero === subgenero)).toHaveLength(10);
     }
   });
 
-  it('não usa nenhum mundo fora dos seis', () => {
-    for (const p of PROFISSOES) expect(MUNDOS).toContain(p.subgenero);
+  it('não usa nenhum subgênero fora dos seis', () => {
+    for (const p of PROFISSOES) expect(SUBGENEROS).toContain(p.subgenero);
   });
 
   it('não tem profissão repetida', () => {
@@ -81,7 +81,7 @@ describe('a forma do texto das três listas universais', () => {
 describe('MOLDE', () => {
   it('usa os sete marcadores', () => {
     for (const marcador of [
-      '{mundo}', '{profissaoA}', '{caracteristica}',
+      '{subgenero}', '{profissaoA}', '{caracteristica}',
       '{profissaoB}', '{personalidade}', '{em:local}', '{fato}',
     ]) {
       expect(MOLDE).toContain(marcador);
@@ -109,11 +109,11 @@ describe('TRAVA_DO_MARCADOR', () => {
     });
   });
 
-  /* O mundo tem seletor próprio no alto da página; um cadeado na linha dele
+  /* O subgênero tem seletor próprio no alto da página; um cadeado na linha dele
      competiria com o seletor. Característica e personalidade dividem a linha com
      a profissão do mesmo personagem, e o cadeado é da linha inteira. */
-  it('não trava o mundo nem os dois traços', () => {
-    for (const marcador of ['{mundo}', '{caracteristica}', '{personalidade}']) {
+  it('não trava o subgênero nem os dois traços', () => {
+    for (const marcador of ['{subgenero}', '{caracteristica}', '{personalidade}']) {
       expect(TRAVA_DO_MARCADOR).not.toHaveProperty(marcador);
     }
   });

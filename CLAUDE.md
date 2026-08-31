@@ -60,7 +60,7 @@ Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md]
   que chama o olho (título da página, botão principal, etiqueta, pilares,
   cadeado travado) e `--apoio` é a interface em volta
   (links, botões secundários, foco, barra lateral dos verbetes, retângulos de
-  mundo). `--ouro` e `--violeta` existem só como origem dos dois no tema escuro —
+  subgênero). `--ouro` e `--violeta` existem só como origem dos dois no tema escuro —
   componente nenhum deve consumi-los direto, porque no claro a paleta é outra
   (laranja-tijolo `#b34700` e azul-tinta `#1b2a4a`, sem relação com dourado e
   violeta).
@@ -78,7 +78,7 @@ Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md]
   pode clarear (`#b34700` dá 5,12:1 e é preenchimento com letra na cor do fundo,
   que exige 4,5), e a aurora só pode ir até 0,37 (hoje está em 0,36, em
   [Aurora.astro](src/components/Aurora.astro)). O `h1` em `--destaque` passa por
-  ser texto grande — 4,27:1 no pior mundo contra os 3:1 exigidos —, então
+  ser texto grande — 4,27:1 no pior subgênero contra os 3:1 exigidos —, então
   encolhê-lo abaixo de 18,66px reprova.
 - **`prefers-reduced-motion` respeitado** por qualquer animação.
 - **Tudo em português do Brasil**: identificadores, nomes de arquivo, interface,
@@ -92,10 +92,10 @@ Site estático em Astro. O acervo editorial é uma grade de duas dimensões —
 
 - por tipo: `/arquetipos/`, `/cenarios/`, `/elementos/`, cada um com uma rota
   `[subgenero]` abaixo;
-- por mundo: `/mundos/[subgenero]/`, que junta os três tipos de um subgênero
+- por subgênero: `/subgeneros/[subgenero]/`, que junta os três tipos de um subgênero
   numa página só.
 
-Houve um quarto tipo, `/livros/` — seis listas de leitura por mundo. Saiu do
+Houve um quarto tipo, `/livros/` — seis listas de leitura por subgênero. Saiu do
 site por decisão da autora, com a coleção inteira: o acervo é o que se combina
 para escrever, e leitura de apoio não se combina.
 
@@ -115,16 +115,16 @@ testados fora do Astro. Regras do esquema que não são óbvias:
   cada arquétipo no acervo, não porque algo o consome hoje.
 - `cenarios.singular` precisa começar com "um " ou "uma " — é a forma que entra
   no molde da premissa como `{em:local}`, contraída com a preposição.
-- `subgeneros.mundo: false` marca um pool que não é um mundo (hoje só
-  `comuns.md`, os 10 arquétipos comuns): não gera página em `/mundos/`. Chegou a
+- `subgeneros.completo: false` marca um pool que não é um subgênero completo (hoje só
+  `comuns.md`, os 10 arquétipos comuns): não gera página em `/subgeneros/`. Chegou a
   entrar no gerador quando a caixa "Incluir os 10 arquétipos comuns" estava
   ligada; a caixa saiu do formulário junto com os arquétipos, que deixaram de
   entrar no sorteio — o pool continua vivo só no catálogo, em
   `/arquetipos/comuns/`.
-- `subgenero` com `mundo: true` exige `aurora` (trio de cores hex).
+- `subgenero` com `completo: true` exige `aurora` (trio de cores hex).
 - `arquetipos.felino: true` marca o arquétipo bônus, renderizado à parte com
   etiqueta própria. Ele aparece na página de catálogo à parte e fica de fora da
-  amostra de `/mundos/`. Chegou a **entrar** no sorteio do gerador — decisão da
+  amostra de `/subgeneros/`. Chegou a **entrar** no sorteio do gerador — decisão da
   autora —, mas não entra mais: arquétipos saíram do gerador inteiro, felino
   incluído.
 - `ilustracao` e `ilustracaoAlt` existem nas **três** coleções do acervo —
@@ -142,14 +142,14 @@ testados fora do Astro. Regras do esquema que não são óbvias:
   peça, e há teste em [schemas.test.ts](src/lib/schemas.test.ts) cobrando isso
   das três.
 - `subgeneros.abertura{Arquetipos,Cenarios,Elementos}` são os parágrafos que
-  abrem as três páginas de catálogo daquele mundo, um por tipo, porque cada um
+  abrem as três páginas de catálogo daquele subgênero, um por tipo, porque cada um
   fala do que está listado abaixo dele. Todos opcionais (`comuns` só tem
   arquétipos), e por isso `esquemaSubgenero` é `.strict()`: os nomes são
   parecidos o suficiente para um `aberturaCenários` com acento ser descartado em
   silêncio pelo Zod, e a página abrir sem parágrafo sem ninguém reclamar.
-- `subgeneros.citacao` e `citacaoAutor` são a epígrafe do mundo, repetida no
+- `subgeneros.citacao` e `citacaoAutor` são a epígrafe do subgênero, repetida no
   `<blockquote>` das quatro páginas daquele subgênero (os três catálogos e
-  `/mundos/`). Vem do frontmatter, não do corpo, justamente por aparecer em
+  `/subgeneros/`). Vem do frontmatter, não do corpo, justamente por aparecer em
   quatro lugares. A `citacao` de `paginas/home.md` é outra coisa e não tem autor.
 
 O campo `ordem` define a posição nos índices — a ordenação é sempre explícita,
@@ -165,14 +165,14 @@ o Markdown. (A coleção `paginas` é outra história: toda entrada dela passa p
 `render()`, porque é prosa corrida com títulos e listas.)
 
 **Todo verbete do site sai de [Cartao.astro](src/components/Cartao.astro)** — as
-páginas de catálogo e `/mundos/` só montam a lista e passam título, corpo e
+páginas de catálogo e `/subgeneros/` só montam a lista e passam título, corpo e
 âncora. É lá que mora o `id` que a busca usa como destino, o
 `scroll-margin-top: 96px` que compensa a barra fixa e a `.etiqueta` do marcador,
 que hoje só o arquétipo felino recebe. Aparência de verbete se muda ali, uma vez,
 não página por página.
 
 **O verbete ilustrado** é o mesmo Cartão com um desenho ao lado do texto. Hoje
-são oito: o arquétipo felino dos **seis** mundos — Parceiro de Sombra, Infiltrado
+são oito: o arquétipo felino dos **seis** subgêneros — Parceiro de Sombra, Infiltrado
 Silencioso, Guardião Invisível, Vigia dos Suprimentos, Observador Espacial e
 Batedor das Eras — mais Estações e Bases Espaciais e Sucessão dinástica
 contestada, os dois do Space Opera que não são arquétipo.
@@ -187,7 +187,7 @@ se ajusta ao desenho**: Estações e Bases Espaciais e Sucessão dinástica
 contestada foram deslocados para o fim porque casavam melhor com a sonda e com o
 trono do que os que estavam lá. Deslocados, não trocados — o item vai para o fim
 e os demais fecham fila mantendo a ordem entre si, que é o que preserva a
-sequência da autora. **Reordenar cenário ou elemento mexe em `/mundos/`**, que
+sequência da autora. **Reordenar cenário ou elemento mexe em `/subgeneros/`**, que
 mostra os três primeiros de cada tipo: essas duas mudanças tiraram Estações e
 Sucessão da amostra e puseram Ruínas Antigas e Tecnologia de dobra espacial no
 lugar.
@@ -197,7 +197,7 @@ Por isso **os arquivos de desenho têm nome de página, não de verbete** —
 desenho já mudou uma vez e vai mudar de novo; a página, não.
 
 Como o desenho mora no verbete de `ordem` 10 ou 11, ele **não aparece em
-`/mundos/`**, que mostra os três primeiros de cada tipo. É o mesmo lugar de onde
+`/subgeneros/`**, que mostra os três primeiros de cada tipo. É o mesmo lugar de onde
 o felino já ficava de fora.
 
 Três coisas no arranjo não são óbvias:
@@ -223,7 +223,7 @@ propósito: `import.meta.glob` é do Vite e só existe dentro do build.
 
 O par de arquivos sai de [scripts/gerar-ilustracao.py](scripts/gerar-ilustracao.py),
 que recorta o papel branco quando o original vem com fundo (os primeiros
-chegaram já recortados, os gatos dos outros cinco mundos não — sem esse passo o
+chegaram já recortados, os gatos dos outros cinco subgêneros não — sem esse passo o
 desenho apareceria dentro de um retângulo branco no tema escuro), corta o
 original na caixa do desenho, encaixa numa **caixa** de 560px de
 lado e inverte o traço para a versão do tema escuro — preservando o que é
@@ -246,17 +246,17 @@ sobreposições que são de propósito e não devem ser "corrigidas" (Refugiado 
 Invasão × Campos de refugiados, Humano Aumentado × Implantes cibernéticos):
 elas são o que a grade de duas dimensões existe para fazer.
 
-O tamanho do acervo (hoje 76 arquétipos — 10 por mundo mais o felino, e mais 10
+O tamanho do acervo (hoje 76 arquétipos — 10 por subgênero mais o felino, e mais 10
 comuns —, 60 cenários, 60 elementos) está escrito por extenso em
 seis lugares que nenhum teste confere: [README.md](README.md),
 [sobre.md](src/content/paginas/sobre.md), o comentário sobre os cenários em
 [gerador.astro](src/pages/gerador.astro), o `nome` de
 [comuns.md](src/content/subgeneros/comuns.md), os dois comentários de
-[mundos/[subgenero].astro](src/pages/mundos/[subgenero].astro) (o pool comuns e
+[subgeneros/[subgenero].astro](src/pages/subgeneros/[subgenero].astro) (o pool comuns e
 a posição do felino) e
 [docs/atributos-do-gerador.md](docs/atributos-do-gerador.md), que lista o acervo
 verbete a verbete. Entrada nova em `src/content/` desatualiza os seis em
-silêncio — os de `mundos/` já tinham ficado para trás uma vez. Eram sete até a
+silêncio — os de `subgeneros/` já tinham ficado para trás uma vez. Eram sete até a
 premissa virar personagens: o rótulo "Incluir os 10 arquétipos comuns" saiu do
 formulário do gerador junto com a caixa, porque arquétipos deixaram de entrar
 no sorteio — não sobrou rótulo para desatualizar no lugar dele.
@@ -275,39 +275,39 @@ As páginas de índice de arquétipos, cenários e elementos têm duas entradas 
 renderiza **depois** da lista. São dois arquivos porque `render()` devolve o
 Markdown inteiro de uma vez, e não há como intercalar a lista no meio dele.
 
-`/mundos/[subgenero]/` é porta de entrada, não catálogo: mostra três itens de
+`/subgeneros/[subgenero]/` é porta de entrada, não catálogo: mostra três itens de
 cada tipo e manda para a página completa (e deixa o arquétipo felino de fora da
 amostra). Listar tudo ali esvazia o "Ver todos".
 
 As quatro rotas `[subgenero]` têm o mesmo `getStaticPaths` — `getCollection('subgeneros')`,
 um caminho por entrada —, com **uma assimetria de propósito**: só
 [arquetipos/[subgenero].astro](src/pages/arquetipos/[subgenero].astro) não
-filtra por `s.data.mundo`, porque `/arquetipos/comuns/` precisa existir. As
+filtra por `s.data.completo`, porque `/arquetipos/comuns/` precisa existir. As
 outras três filtram, senão gerariam `/cenarios/comuns/` e afins vazias.
 "Uniformizar" as quatro apaga a página dos 10 comuns.
 
-**As três páginas de catálogo fecham com a fileira de mundos**
-([TrocarDeMundo.astro](src/components/TrocarDeMundo.astro)), depois da
-epígrafe: sem ela, trocar de mundo obrigava a subir na barra e voltar ao
-índice. A fileira leva ao **mesmo tipo** em outro mundo — de Arquétipos
-Cyberpunk para Arquétipos Distopia, não para `/mundos/cyberpunk/` —, e são
+**As três páginas de catálogo fecham com a fileira de subgêneros**
+([TrocarDeSubgenero.astro](src/components/TrocarDeSubgenero.astro)), depois da
+epígrafe: sem ela, trocar de subgênero obrigava a subir na barra e voltar ao
+índice. A fileira leva ao **mesmo tipo** em outro subgênero — de Arquétipos
+Cyberpunk para Arquétipos Distopia, não para `/subgeneros/cyberpunk/` —, e são
 links de verdade, sem JavaScript. Três coisas nela não são óbvias:
 
 - Ela reaproveita `.lista-subgeneros`, a mesma fileira da home e dos índices, e
-  a única regra nova é a da pílula do mundo aberto. Essa regra mora em
+  a única regra nova é a da pílula do subgênero aberto. Essa regra mora em
   [global.css](src/styles/global.css), junto do resto da classe e não escopada
   no componente: metade das regras de uma classe num arquivo e metade no outro
   se perdem uma da outra — e o par de tema claro **precisa** estar lá, porque
   `:root[data-tema='claro']` num `<style>` de componente recebe o atributo de
   escopo e deixa de casar.
-- O mundo aberto **fica** na fileira, marcado por `aria-current="page"` como o
+- O subgênero aberto **fica** na fileira, marcado por `aria-current="page"` como o
   link da página atual na barra do topo, em vez de ser omitido: assim a fileira
   não muda de largura nem de ordem a cada troca. É o que o rótulo "Trocar de
-  mundo" promete; "Outros mundos" pediria a lista sem ele. No claro a marca é a
+  subgênero" promete; "Outros subgêneros" pediria a lista sem ele. No claro a marca é a
   fileira ao contrário — a pílula vazada entre as preenchidas —, porque repetir
   o fundo `--flutuante` do escuro deixaria a letra em `--fundo`, quase branca
   sobre superfície quase branca.
-- A fileira lista **só os seis mundos** (`mundo: true`), mas aparece também em
+- A fileira lista **só os seis subgêneros** (`completo: true`), mas aparece também em
   `/arquetipos/comuns/`, sem nenhuma pílula marcada. Não é descuido: o pool dos
   comuns não é destino de troca, e aquela página é justamente a que ficaria sem
   saída lateral nenhuma.
@@ -324,7 +324,7 @@ personalidade — respeitando travas e filtros, e `redigir()` encaixa o sorteio 
 A página não empilha mais três cartas acima da premissa — a premissa **é** a
 interface. O que o sorteio traz aparece em `--destaque` dentro da própria
 frase (as duas profissões, os dois traços, o local e o fato, mais o nome do
-mundo), e cada linha travável termina num cadeado pequeno e inline, em vez de
+subgênero), e cada linha travável termina num cadeado pequeno e inline, em vez de
 um cadeado por carta.
 
 As travas (`Travas`) cobrem as quatro linhas traváveis da premissa —
@@ -335,8 +335,8 @@ tudo e continuar clicando em Gerar seguisse trocando alguma coisa; com um
 cadeado por linha, deixá-lo de fora faria a última linha parecer esquecimento
 em vez de decisão — a autora escolheu a coerência. Solto, o fato continua sem
 repetir o da rodada anterior; travado, ele fica parado como as outras três
-peças. A linha do mundo é a única sem cadeado nenhum: quem manda nela é o
-seletor de Mundo, no alto da página, não um botão dentro do texto. `sortear`
+peças. A linha do subgênero é a única sem cadeado nenhum: quem manda nela é o
+seletor de Subgênero, no alto da página, não um botão dentro do texto. `sortear`
 também garante que os dois personagens nunca saiam com a mesma profissão,
 checando nos dois sentidos — se o Personagem B está travado, é o A que evita a
 profissão dele ao sortear; nos outros casos A sai livre e B evita a que A
@@ -364,10 +364,10 @@ exceção dentro da exceção: abrem com maiúscula e não terminam em ponto, po
 são nome de arquétipo como os do catálogo — só a `descricao` de cada uma, que
 não entra no sorteio e só aparece no guia, é frase inteira e termina em ponto.
 [dados.test.ts](src/lib/gerador/dados.test.ts) tranca as contagens (60
-profissões, dez por mundo; 30 características; 30 personalidades; 40 fatos):
+profissões, dez por subgênero; 30 características; 30 personalidades; 40 fatos):
 incluir uma entrada nova é editar esses números junto.
 
-**Um molde só**, `MOLDE`, com sete marcadores — `{mundo}`, `{profissaoA}`,
+**Um molde só**, `MOLDE`, com sete marcadores — `{subgenero}`, `{profissaoA}`,
 `{caracteristica}`, `{profissaoB}`, `{personalidade}`, `{em:local}`, `{fato}` —
 no lugar dos dez que existiam antes: a variedade que os moldes múltiplos davam
 passou para o tamanho das listas. A premissa deixou de ser uma frase corrida e
@@ -378,7 +378,7 @@ termine em ponto final e tenha as quatro linhas separadas por linha em branco.
 Ao lado do `MOLDE`, em [moldes.ts](src/lib/gerador/moldes.ts), mora
 `TRAVA_DO_MARCADOR`: uma tabela ligando marcador a trava (`{profissaoA}` →
 `personagemA`, `{profissaoB}` → `personagemB`, `{em:local}` → `local`,
-`{fato}` → `fato`). `{mundo}` fica de fora de propósito — aquela linha não
+`{fato}` → `fato`). `{subgenero}` fica de fora de propósito — aquela linha não
 ganha cadeado —, e `{caracteristica}`/`{personalidade}` também, porque dividem
 linha com a profissão do mesmo personagem e o cadeado é da linha inteira, não
 da peça.
@@ -387,7 +387,7 @@ da peça.
 `redigir()`.** A página precisa saber onde cada peça começa e termina para
 pintá-la de `--destaque` e para saber em qual linha pôr o cadeado — informação
 que não dá para recuperar de volta de uma string pronta. `partes(sorteio,
-molde, mundo)` devolve uma `Linha[]` (tipo `Linha = { trechos: Trecho[]; trava:
+molde, subgenero)` devolve uma `Linha[]` (tipo `Linha = { trechos: Trecho[]; trava:
 keyof Travas | null }`, uma por linha do molde, inclusive as vazias, para a
 premissa copiada ter as mesmas quebras que a da tela) lendo `TRAVA_DO_MARCADOR`
 para preencher `trava`. **`redigir()` passou a ser só a junção de `partes()`**
@@ -405,13 +405,13 @@ os **locais** — os 60 cenários, que vêm de uma coleção e só existem em te
 build. As outras três listas universais não precisam de importação própria no
 `<script>`: entram por dentro de `sortear()`, que já as usa internamente. Só
 `PROFISSOES` é importada à parte, porque o `<script>` monta `pools.profissoes`
-com ela antes de filtrar por mundo. Nenhuma das quatro listas passa por JSON,
+com ela antes de filtrar por subgênero. Nenhuma das quatro listas passa por JSON,
 diferente dos locais.
 
 A mesma página também monta, a partir do mesmo sorteio, um prompt pronto para
 colar numa IA de texto. O molde é conteúdo da autora — não código — em
 [prompt-ia.md](src/content/paginas/prompt-ia.md), com cinco marcadores em
-maiúsculas (`[MUNDO]`, `[PERSONAGEM A]`, `[PERSONAGEM B]`, `[LOCAL]`, `[FATO]`)
+maiúsculas (`[SUBGENERO]`, `[PERSONAGEM A]`, `[PERSONAGEM B]`, `[LOCAL]`, `[FATO]`)
 que `montarPrompt()` ([prompt.ts](src/lib/gerador/prompt.ts)) substitui pelos
 valores sorteados. Um marcador desconhecido faz `montarPrompt` lançar — e o
 frontmatter de `gerador.astro` chama a função uma vez com valores de descarte
@@ -433,7 +433,7 @@ página que mostra as 60 profissões com a `descricao` de cada uma. A `descricao
 mora dentro do mesmo objeto que o `nome`, em `profissoes.ts` — os dois vivem
 juntos porque descrevem a mesma peça, e separá-los em arquivos diferentes os
 faria divergir na primeira edição. A rota fica **fora do
-[Nav](src/components/Nav.astro), sem rota por mundo e fora da busca**: o
+[Nav](src/components/Nav.astro), sem rota por subgênero e fora da busca**: o
 [índice de busca](src/pages/indice-busca.json.ts) é montado só a partir das
 quatro coleções de `src/content/`, e profissão não é coleção — não há nada para
 excluir dali de propósito, é ausência por natureza. Ficar fora do menu não é
@@ -447,7 +447,7 @@ até a página é o link no fim de `gerador.astro`.
 Cada `<script>` de página ou componente importa funções puras de `src/lib/` e só
 faz a ligação com o DOM; a lógica testável fica na lib. O padrão de melhoria
 progressiva está em [expansivel.ts](src/lib/expansivel.ts), usado pelo menu do
-Nav, pelo submenu "Mais" e pela lista de mundos da home: o botão nasce com
+Nav, pelo submenu "Mais" e pela lista de subgêneros da home: o botão nasce com
 `[hidden]` no HTML e só aparece pelo JavaScript, então sem script a lista fica
 visível em vez de virar um menu que não abre. E o estado de aberto/fechado mora
 num lugar só, o `aria-expanded` do botão, com o CSS reagindo por seletor de
@@ -469,8 +469,8 @@ decide é `ehPaginaAtual()` ([navegacao.ts](src/lib/navegacao.ts)), que compara
 por **prefixo**: `/arquetipos/cyberpunk/` mantém "Arquétipos" aceso, senão a
 marca apagaria justo nas páginas de catálogo. A função não serve para a raiz do
 site — todo caminho começa por ela —, e é por isso que a marca POLARIS fica de
-fora: ela não é item de menu. Estar numa página de `/mundos/` também não acende
-nada, porque não há link de mundos na barra.
+fora: ela não é item de menu. Estar numa página de `/subgeneros/` também não acende
+nada, porque não há link de subgêneros na barra.
 
 O estado mora no `aria-current="page"` do próprio link, não numa classe: a marca
 que o leitor de tela anuncia é a mesma que o CSS pinta, sem um segundo estado
@@ -514,7 +514,7 @@ Foi o que aconteceu com `.sorteado`, os `<span>` que `montarPremissa()` cria em
 
 A aurora recebe o trio de cores do subgênero por prop de `Base` e o converte em
 `conic-gradient` por `gradienteConico()` ([aurora.ts](src/lib/aurora.ts)), que
-cai no `AURORA_PADRAO` quando a página não é de mundo.
+cai no `AURORA_PADRAO` quando a página não é de subgênero.
 
 **A barra do topo é `position: sticky`** ([Nav.astro](src/components/Nav.astro)),
 e isso cria duas amarras que o CSS não consegue impor sozinho:
@@ -522,7 +522,7 @@ e isso cria duas amarras que o CSS não consegue impor sozinho:
 - Todo alvo de âncora precisa de `scroll-margin-top: 96px`, senão o título para
   debaixo da barra. O valor está escrito duas vezes — em
   [Cartao.astro](src/components/Cartao.astro) e nas `section[id]` de
-  [mundos/[subgenero].astro](src/pages/mundos/[subgenero].astro) — e os dois
+  [subgeneros/[subgenero].astro](src/pages/subgeneros/[subgenero].astro) — e os dois
   mudam juntos. Quem chega às âncoras é a busca, então errar aqui quebra a
   busca, não a página.
 - A escada de `z-index` é curta e proposital: aurora em `-1`, Nav em `10`, e em

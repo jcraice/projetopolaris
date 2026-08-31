@@ -16,7 +16,7 @@ for (const campo of ['subtitulo', 'chamadaGerador', 'citacao'] as const) {
 
 const { Content } = await render(pagina);
 
-const mundos = (await getCollection('subgeneros', (s) => s.data.mundo)).sort(
+const subgeneros = (await getCollection('subgeneros', (s) => s.data.completo)).sort(
   (a, b) => a.data.ordem - b.data.ordem,
 );
 
@@ -60,24 +60,24 @@ const pilares = [
     ))}
   </div>
 
-  <section aria-labelledby="mundos-titulo">
-    <h2 id="mundos-titulo">Os mundos</h2>
+  <section aria-labelledby="subgeneros-titulo">
+    <h2 id="subgeneros-titulo">Os subgêneros</h2>
     {/* Mesmo mecanismo do menu da navegação: nasce escondido, só aparece por
         JavaScript, e sem script a lista dos seis fica visível como antes. */}
     <button
       type="button"
-      class="abrir-mundos"
-      id="abrir-mundos"
+      class="abrir-subgeneros"
+      id="abrir-subgeneros"
       hidden
       aria-expanded="false"
-      aria-controls="lista-mundos"
+      aria-controls="lista-de-subgeneros"
     >
-      Escolher um mundo
+      Escolher um subgênero
     </button>
-    <ul class="lista-subgeneros" id="lista-mundos">
-      {mundos.map((m) => (
+    <ul class="lista-subgeneros" id="lista-de-subgeneros">
+      {subgeneros.map((m) => (
         <li>
-          <a href={`${raiz}mundos/${m.id}/`}>{m.data.nome}</a>
+          <a href={`${raiz}subgeneros/${m.id}/`}>{m.data.nome}</a>
         </li>
       ))}
     </ul>
@@ -104,7 +104,7 @@ const pilares = [
   }
 
   /* 1.2rem e não menos, pela mesma razão dos títulos de verbete: sobre o céu o
-     --destaque fica em 4,27:1 no pior mundo, abaixo dos 4,5 que texto pequeno
+     --destaque fica em 4,27:1 no pior subgênero, abaixo dos 4,5 que texto pequeno
      exige, mas a partir de 18,66px em negrito o WCAG trata como texto grande e
      o mínimo cai para 3:1. 1.2rem dá 19,2px. Encolher aqui reprova o contraste. */
   .subtitulo {
@@ -190,14 +190,14 @@ const pilares = [
     border-color: var(--apoio);
   }
 
-  /* Os seis retângulos de mundo viram uma lista que abre em tela estreita.
+  /* Os seis retângulos de subgênero viram uma lista que abre em tela estreita.
 
      O ponto de quebra é o mesmo 1079px da navegação, e não por simetria: os
      seis nomes somam cerca de 1060px com o espaço entre eles — "Invasão
      Alienígena" e "Pós Apocalíptico" são largos — então é por volta daí que
      eles passariam para uma segunda linha. Recolher antes disso é o que evita
      vê-los quebrados no caminho até o celular. */
-  .abrir-mundos {
+  .abrir-subgeneros {
     display: none;
     align-items: center;
     gap: 8px;
@@ -217,38 +217,38 @@ const pilares = [
     border-radius: var(--raio);
   }
 
-  :global(html[data-tema='claro']) .abrir-mundos {
+  :global(html[data-tema='claro']) .abrir-subgeneros {
     background: var(--apoio);
     color: var(--fundo);
   }
 
-  .abrir-mundos::after {
+  .abrir-subgeneros::after {
     content: '▾';
   }
 
-  .abrir-mundos[aria-expanded='true']::after {
+  .abrir-subgeneros[aria-expanded='true']::after {
     content: '▴';
   }
 
-  .abrir-mundos:focus-visible {
+  .abrir-subgeneros:focus-visible {
     outline: 3px solid var(--apoio);
     outline-offset: 3px;
   }
 
-  .abrir-mundos[hidden] {
+  .abrir-subgeneros[hidden] {
     display: none;
   }
 
   @media (max-width: 1079px) {
-    .abrir-mundos:not([hidden]) {
+    .abrir-subgeneros:not([hidden]) {
       display: inline-flex;
     }
 
-    .abrir-mundos:not([hidden]) ~ .lista-subgeneros {
+    .abrir-subgeneros:not([hidden]) ~ .lista-subgeneros {
       display: none;
     }
 
-    .abrir-mundos[aria-expanded='true'] ~ .lista-subgeneros {
+    .abrir-subgeneros[aria-expanded='true'] ~ .lista-subgeneros {
       display: flex;
       flex-direction: column;
       margin-top: 12px;
@@ -283,5 +283,5 @@ const pilares = [
 <script>
   import { ligarExpansivel } from '../lib/expansivel';
 
-  ligarExpansivel(document.getElementById('abrir-mundos'));
+  ligarExpansivel(document.getElementById('abrir-subgeneros'));
 </script>

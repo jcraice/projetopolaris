@@ -23,20 +23,21 @@ export function contrair(preposicao: 'em' | 'a' | 'de', sintagma: string): strin
 export type Trecho = { texto: string; sorteado: boolean };
 
 /* Uma linha da premissa, com a trava que o cadeado do fim dela aciona. `trava`
-   é null na linha do mundo, a única sem cadeado, e nas linhas em branco. */
+   é null na linha do subgênero, a única sem cadeado, e nas linhas em branco. */
 export type Linha = { trechos: Trecho[]; trava: keyof Travas | null };
 
 /* O valor de cada marcador do molde.
 
-   `mundo` chega pronto de nomearMundos() — pode ser um nome ("Space Opera") ou
-   vários unidos por " + " quando "Misturar mundos" está ligado. A minúscula é
+   `subgenero` chega pronto de nomearSubgeneros() — pode ser um nome ("Space
+   Opera") ou vários unidos por " + " quando "Misturar subgêneros" está
+   ligado. A minúscula é
    aplicada aqui, e não lá, porque o prompt de IA usa o mesmo valor e quer o
    nome como está escrito na coleção.
 
    O nome da profissão entra como está na lista, sem tocar em maiúscula: ele já
    nasce com a inicial certa, e é o mesmo texto que o guia mostra. */
-const VALOR: Record<string, (sorteio: Sorteio, mundo: string) => string> = {
-  '{mundo}': (_, mundo) => mundo.toLocaleLowerCase('pt-BR'),
+const VALOR: Record<string, (sorteio: Sorteio, subgenero: string) => string> = {
+  '{subgenero}': (_, subgenero) => subgenero.toLocaleLowerCase('pt-BR'),
   '{profissaoA}': (s) => s.personagemA.profissao.nome,
   '{caracteristica}': (s) => s.personagemA.caracteristica,
   '{profissaoB}': (s) => s.personagemB.profissao.nome,
@@ -55,7 +56,7 @@ const MARCADOR = /(\{[^}]+\})/;
    As linhas em branco do molde entram como linhas de trechos vazios, e não são
    descartadas: é o que faz a premissa copiada ter as mesmas quebras que a da
    tela. */
-export function partes(sorteio: Sorteio, molde: string, mundo: string): Linha[] {
+export function partes(sorteio: Sorteio, molde: string, subgenero: string): Linha[] {
   return molde.split('\n').map((linha) => {
     const trechos: Trecho[] = [];
     let trava: keyof Travas | null = null;
@@ -74,7 +75,7 @@ export function partes(sorteio: Sorteio, molde: string, mundo: string): Linha[] 
          então chegar aqui significa que alguém editou um sem editar o outro. */
       if (!valor) throw new Error(`marcador desconhecido no molde: ${pedaco}`);
 
-      trechos.push({ texto: valor(sorteio, mundo), sorteado: true });
+      trechos.push({ texto: valor(sorteio, subgenero), sorteado: true });
       trava = TRAVA_DO_MARCADOR[pedaco] ?? trava;
     }
 
@@ -85,8 +86,8 @@ export function partes(sorteio: Sorteio, molde: string, mundo: string): Linha[] 
 /* A premissa como texto corrido — o que "Copiar premissa" leva para a área de
    transferência. Junção de partes(), e não uma segunda passada de substituição,
    para o texto da tela e o texto copiado não terem como divergir. */
-export function redigir(sorteio: Sorteio, molde: string, mundo: string): string {
-  return partes(sorteio, molde, mundo)
+export function redigir(sorteio: Sorteio, molde: string, subgenero: string): string {
+  return partes(sorteio, molde, subgenero)
     .map((linha) => linha.trechos.map((trecho) => trecho.texto).join(''))
     .join('\n');
 }

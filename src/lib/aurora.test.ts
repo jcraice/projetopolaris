@@ -7,7 +7,7 @@ describe('gradienteConico', () => {
     expect(css).toBe('conic-gradient(from 200deg, #ff2d92, #7c3aed, #00e5ff, #ff2d92)');
   });
 
-  it('cai na aurora padrão quando o subgênero não é um mundo', () => {
+  it('cai na aurora padrão quando o subgênero não é completo', () => {
     expect(gradienteConico(undefined)).toBe(gradienteConico(AURORA_PADRAO));
   });
 });

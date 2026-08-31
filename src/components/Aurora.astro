@@ -14,10 +14,10 @@ const { cores } = Astro.props;
     filter: blur(58px);
     /* 0.36, não 0.42: a medição da Task 14 (docs/verificacao-visual.md) mostrou
        que o corpo de texto que fica direto sobre o céu — fora de qualquer
-       cartão — caía para 3,85:1 no mundo Invasão Alienígena e 4,18:1 em Viagem
-       no Tempo, abaixo do mínimo de 4,5:1. Escurecer o céu é o remédio previsto
+       cartão — caía para 3,85:1 no subgênero Invasão Alienígena e 4,18:1
+       em Viagem no Tempo, abaixo do mínimo de 4,5:1. Escurecer o céu é o remédio previsto
        pelo plano; os acentos dourado e violeta são fixos e não se mexem. A
-       0,36 o pior caso dos seis mundos é 4,71:1. */
+       0,36 o pior caso dos seis subgêneros é 4,71:1. */
     opacity: 0.36;
     animation: girar 90s linear infinite;
   }
@@ -30,7 +30,7 @@ const { cores } = Astro.props;
     .aurora { animation: none; }
   }
 
-  /* No tema claro não existe céu: o fundo é liso e a cor de cada mundo aparece
+  /* No tema claro não existe céu: o fundo é liso e a cor de cada subgênero aparece
      só nos detalhes. Some a camada inteira em vez de clarear o gradiente —
      assim o navegador não fica compondo e girando uma superfície desfocada
      enorme à toa, que era o maior custo do site em celular fraco. */

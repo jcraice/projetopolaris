@@ -75,14 +75,14 @@ describe('redigir', () => {
     );
   });
 
-  it('escreve o mundo inteiro em minúscula', () => {
+  it('escreve o subgênero inteiro em minúscula', () => {
     const frase = redigir(sorteio, MOLDE, 'Space Opera');
     expect(frase).toContain('ficção científica de space opera.');
   });
 
-  /* Com "Misturar mundos" a primeira linha recebe mais de um nome, já unido por
-     nomearMundos — e a minúscula precisa alcançar os dois. */
-  it('abaixa também o nome composto de mundos misturados', () => {
+  /* Com "Misturar subgêneros" a primeira linha recebe mais de um nome, já unido por
+     nomearSubgeneros — e a minúscula precisa alcançar os dois. */
+  it('abaixa também o nome composto de subgêneros misturados', () => {
     const frase = redigir(sorteio, MOLDE, 'Space Opera + Invasão Alienígena');
     expect(frase).toContain('de space opera + invasão alienígena.');
   });
@@ -154,9 +154,9 @@ describe('partes', () => {
     expect(fixos).toContain('Importante: ');
   });
 
-  /* A linha do mundo é a única com peça sorteada e sem cadeado: quem manda nela
-     é o seletor de Mundo, no alto da página. */
-  it('põe a trava certa em cada linha, e nenhuma na do mundo', () => {
+  /* A linha do subgênero é a única com peça sorteada e sem cadeado: quem
+     manda nela é o seletor de Subgênero, no alto da página. */
+  it('põe a trava certa em cada linha, e nenhuma na do subgênero', () => {
     expect(linhas().map((l) => l.trava)).toEqual([
       null, null, 'personagemA', 'personagemB', null, 'local', null, 'fato',
     ]);

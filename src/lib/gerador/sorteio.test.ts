@@ -19,25 +19,25 @@ const pools: Pools = {
 
 const SEM_TRAVA: Travas = { personagemA: false, personagemB: false, local: false, fato: false };
 const TUDO_TRAVADO: Travas = { personagemA: true, personagemB: true, local: true, fato: true };
-const base: Opcoes = { subgenero: 'cyberpunk', misturarMundos: false };
+const base: Opcoes = { subgenero: 'cyberpunk', misturarSubgeneros: false };
 const zero = () => 0;
 
 describe('poolsFiltrados', () => {
-  it('mantém apenas o mundo escolhido', () => {
+  it('mantém apenas o subgênero escolhido', () => {
     const r = poolsFiltrados(pools, base);
     expect(r.profissoes.map((p) => p.nome)).toEqual(['Hacker', 'Corretor(a) de Dados']);
     expect(r.locais.map((l) => l.id)).toEqual(['c1']);
   });
 
-  it('deixa passar todos os mundos no modo misturar', () => {
-    const r = poolsFiltrados(pools, { ...base, misturarMundos: true });
+  it('deixa passar todos os subgêneros no modo misturar', () => {
+    const r = poolsFiltrados(pools, { ...base, misturarSubgeneros: true });
     expect(r.profissoes).toHaveLength(3);
     expect(r.locais).toHaveLength(2);
   });
 });
 
 describe('sortear', () => {
-  it('respeita o mundo escolhido', () => {
+  it('respeita o subgênero escolhido', () => {
     const s = sortear(pools, base, SEM_TRAVA, null, zero);
     expect(s.personagemA.profissao.subgenero).toBe('cyberpunk');
     expect(s.personagemB.profissao.subgenero).toBe('cyberpunk');
@@ -46,16 +46,16 @@ describe('sortear', () => {
 
   it('nunca dá a mesma profissão aos dois personagens', () => {
     for (let i = 0; i < 100; i++) {
-      const s = sortear(pools, { ...base, misturarMundos: true }, SEM_TRAVA, null, Math.random);
+      const s = sortear(pools, { ...base, misturarSubgeneros: true }, SEM_TRAVA, null, Math.random);
       expect(s.personagemA.profissao.nome).not.toBe(s.personagemB.profissao.nome);
     }
   });
 
   it('mantém profissões diferentes com o personagem A travado', () => {
-    let anterior: Sorteio | null = sortear(pools, { ...base, misturarMundos: true }, SEM_TRAVA, null, Math.random);
+    let anterior: Sorteio | null = sortear(pools, { ...base, misturarSubgeneros: true }, SEM_TRAVA, null, Math.random);
     for (let i = 0; i < 100; i++) {
       anterior = sortear(
-        pools, { ...base, misturarMundos: true },
+        pools, { ...base, misturarSubgeneros: true },
         { personagemA: true, personagemB: false, local: false, fato: false }, anterior, Math.random,
       );
       expect(anterior.personagemA.profissao.nome).not.toBe(anterior.personagemB.profissao.nome);
@@ -65,10 +65,10 @@ describe('sortear', () => {
   /* O caso espelhado do anterior, e o que motivou o pool de A ser filtrado: com
      B travado, é A que precisa desviar — sem isso, A cairia na profissão de B. */
   it('mantém profissões diferentes com o personagem B travado', () => {
-    let anterior: Sorteio | null = sortear(pools, { ...base, misturarMundos: true }, SEM_TRAVA, null, Math.random);
+    let anterior: Sorteio | null = sortear(pools, { ...base, misturarSubgeneros: true }, SEM_TRAVA, null, Math.random);
     for (let i = 0; i < 100; i++) {
       anterior = sortear(
-        pools, { ...base, misturarMundos: true },
+        pools, { ...base, misturarSubgeneros: true },
         { personagemA: false, personagemB: true, local: false, fato: false }, anterior, Math.random,
       );
       expect(anterior.personagemA.profissao.nome).not.toBe(anterior.personagemB.profissao.nome);
@@ -76,9 +76,9 @@ describe('sortear', () => {
   });
 
   it('preserva cada peça travada', () => {
-    const anterior = sortear(pools, { ...base, misturarMundos: true }, SEM_TRAVA, null, () => 0.9);
+    const anterior = sortear(pools, { ...base, misturarSubgeneros: true }, SEM_TRAVA, null, () => 0.9);
     const novo = sortear(
-      pools, { ...base, misturarMundos: true }, TUDO_TRAVADO, anterior, () => 0,
+      pools, { ...base, misturarSubgeneros: true }, TUDO_TRAVADO, anterior, () => 0,
     );
     expect(novo).toEqual(anterior);
   });
@@ -120,10 +120,10 @@ describe('sortear', () => {
     }
   });
 
-  /* As três listas universais não passam por Pools nem por filtro de mundo: a
+  /* As três listas universais não passam por Pools nem por filtro de subgênero: a
      lib as importa direto. Este caso tranca isso pelo comportamento — com um
-     mundo escolhido, o traço sorteado continua vindo da lista inteira. */
-  it('usa as listas universais mesmo com um mundo escolhido', () => {
+     subgênero escolhido, o traço sorteado continua vindo da lista inteira. */
+  it('usa as listas universais mesmo com um subgênero escolhido', () => {
     for (let i = 0; i < 50; i++) {
       const s = sortear(pools, base, SEM_TRAVA, null, Math.random);
       expect(CARACTERISTICAS).toContain(s.personagemA.caracteristica);
@@ -137,9 +137,9 @@ describe('sortear', () => {
     expect(() => sortear(vazio, base, SEM_TRAVA, null, zero)).toThrow(/sem peças/i);
   });
 
-  /* Um mundo com uma profissão só não consegue formar dois personagens
+  /* Um subgênero com uma profissão só não consegue formar dois personagens
      diferentes. Falhar alto é melhor do que devolver os dois iguais em
-     silêncio — e o acervo tem dez por mundo, então isto é guarda-corpo. */
+     silêncio — e o acervo tem dez por subgênero, então isto é guarda-corpo. */
   it('lança erro quando só há uma profissão para os dois personagens', () => {
     const soUma: Pools = {
       profissoes: [{ nome: 'Hacker', subgenero: 'cyberpunk', descricao: 'Invasores de redes neurais.' }],

@@ -3,8 +3,8 @@ import { z } from 'astro/zod';
 const cor = z.string().regex(/^#[0-9a-fA-F]{6}$/, 'cor deve ser hexadecimal de 6 dígitos');
 
 /* As três aberturas são os parágrafos que abrem as páginas de catálogo daquele
-   mundo — um por tipo, porque cada um fala do que está na lista abaixo dele.
-   Todas opcionais: `comuns` só tem arquétipos, e nada impede um mundo de entrar
+   subgênero — um por tipo, porque cada um fala do que está na lista abaixo dele.
+   Todas opcionais: `comuns` só tem arquétipos, e nada impede um subgênero de entrar
    no acervo antes de a autora escrever os três.
 
    `.strict()` porque os nomes são parecidos: sem ele um `aberturaCenários` com
@@ -14,7 +14,7 @@ export const esquemaSubgenero = z
   .object({
     nome: z.string().min(1),
     ordem: z.number().int().nonnegative(),
-    mundo: z.boolean().default(true),
+    completo: z.boolean().default(true),
     aurora: z.tuple([cor, cor, cor]).optional(),
     citacao: z.string().optional(),
     citacaoAutor: z.string().optional(),
@@ -23,8 +23,8 @@ export const esquemaSubgenero = z
     aberturaElementos: z.string().optional(),
   })
   .strict()
-  .refine((d) => !d.mundo || d.aurora !== undefined, {
-    message: 'subgênero com mundo verdadeiro precisa de aurora',
+  .refine((d) => !d.completo || d.aurora !== undefined, {
+    message: 'subgênero completo precisa de aurora',
     path: ['aurora'],
   });
 

@@ -54,14 +54,14 @@ SUBGENEROS = {
                         "arquetipos": "2b0dfe05-91a9-80a8-86d9-f6bc78362c2c",
                         "elementos": "2b1dfe05-91a9-807c-9410-c0802ef55499",
                         "cenarios": "2c5dfe05-91a9-8080-871a-f553d2afa05f"},
-    "comuns": {"nome": "20 Arquétipos Comuns", "ordem": 7, "mundo": False,
+    "comuns": {"nome": "20 Arquétipos Comuns", "ordem": 7, "completo": False,
                "arquetipos": "2b1dfe05-91a9-806d-a72c-f959b1d2a4af"},
 }
 LIVROS = "2b1dfe05-91a9-80d5-86bf-dba736b11deb"
 SOBRE = "2b1dfe05-91a9-8054-84e7-f5dbd5c6ad59"
 ESTILOS = "2b1dfe05-91a9-805e-ac0d-d5f3cb31fda3"
 
-# As quatro páginas-guia (uma por coleção "de mundo"). A de livros reaproveita
+# As quatro páginas-guia (uma por coleção "de subgênero"). A de livros reaproveita
 # o próprio LIVROS: é a mesma página raiz cujas subpáginas viram o catálogo.
 PAGINA_ARQUETIPOS = "2b0dfe05-91a9-80dc-aca4-d38567aa1486"
 PAGINA_CENARIOS = "2b0dfe05-91a9-8020-a7e4-c162fc742973"
@@ -149,7 +149,7 @@ def executar(destino: Path) -> dict:
     }
 
     for chave, info in SUBGENEROS.items():
-        mundo = info.get("mundo", True)
+        completo = info.get("completo", True)
 
         rm_arq = _carregar_com_retry(info["arquetipos"])
         linhas_arq = texto_dos_blocos(rm_arq, info["arquetipos"])
@@ -157,25 +157,25 @@ def executar(destino: Path) -> dict:
         n_arq = escrever_arquetipos(itens_arq, chave, destino / "arquetipos")
         resumo["arquetipos"][chave] = n_arq
 
-        # Descarte esperado: 2 linhas para subgêneros-mundo (cabeçalho
+        # Descarte esperado: 2 linhas para subgêneros completos (cabeçalho
         # "Arquétipo Felino" + citação final), 0 ou 1 para "comuns" (não tem
         # citação; o cabeçalho felino pode ou não existir).
         descartado = len(linhas_arq) - len(itens_arq)
-        if mundo and descartado != 2:
+        if completo and descartado != 2:
             resumo["avisos"].append(
                 f"arquetipos/{chave}: {len(linhas_arq)} linhas, {len(itens_arq)} itens "
                 f"(esperava descartar 2: cabeçalho felino + citação, descartou {descartado})"
             )
-        elif not mundo and descartado not in (0, 1):
+        elif not completo and descartado not in (0, 1):
             resumo["avisos"].append(
                 f"arquetipos/{chave}: {len(linhas_arq)} linhas, {len(itens_arq)} itens "
                 f"(descartou {descartado}, sem cabeçalho felino nem citação esperados)"
             )
 
-        citacao = citacao_da_pagina(linhas_arq) if mundo else None
+        citacao = citacao_da_pagina(linhas_arq) if completo else None
 
         # Abertura de arquétipos: o callout da própria página de arquétipos
-        # fala especificamente dos personagens daquele mundo (vira campo
+        # fala especificamente dos personagens daquele subgênero (vira campo
         # `aberturaArquetipos` no frontmatter do subgênero).
         abertura_arquetipos_textos = texto_dos_callouts(rm_arq, info["arquetipos"])
         abertura_arquetipos = "\n\n".join(_normalizar(t) for t in abertura_arquetipos_textos) or None
@@ -183,7 +183,7 @@ def executar(destino: Path) -> dict:
             resumo["avisos"].append(f"arquetipos/{chave}: nenhum callout de abertura encontrado")
 
         # Corpo do subgênero: o callout da página de ELEMENTOS fala do
-        # mundo/subgênero em geral — texto diferente do de cima, função
+        # subgênero em geral — texto diferente do de cima, função
         # diferente (vai no corpo do markdown, não no frontmatter).
         corpo = ""
         if "elementos" in info:
@@ -230,7 +230,7 @@ def executar(destino: Path) -> dict:
 
         escrever_subgenero(
             chave, info["nome"], info["ordem"], destino / "subgeneros",
-            mundo=mundo,
+            completo=completo,
             aurora=AURORAS.get(chave),
             citacao=citacao[0] if citacao else None,
             citacao_autor=citacao[1] if citacao else None,
@@ -244,16 +244,16 @@ def executar(destino: Path) -> dict:
             resumo["aberturas_recuperadas"] += 1
         if corpo_veio_do_notion:
             resumo["corpos_recuperados"] += 1
-        if mundo and not citacao:
+        if completo and not citacao:
             resumo["avisos"].append(f"subgeneros/{chave}: nenhuma citação encontrada na página de arquétipos")
 
-    # Livros: a raiz tem uma subpágina por subgênero-mundo; cada subpágina
+    # Livros: a raiz tem uma subpágina por subgênero completo; cada subpágina
     # tem o catálogo em blocos column_list (ver extrair.livros_da_pagina).
     rm_livros_raiz = _carregar_com_retry(LIVROS)
     bloco_raiz = rm_livros_raiz.get("block", {}).get(LIVROS, {}).get("value", {})
     if isinstance(bloco_raiz.get("value"), dict):
         bloco_raiz = bloco_raiz["value"]
-    nome_para_chave = {info["nome"].strip().lower(): chave for chave, info in SUBGENEROS.items() if info.get("mundo", True)}
+    nome_para_chave = {info["nome"].strip().lower(): chave for chave, info in SUBGENEROS.items() if info.get("completo", True)}
     subpaginas_encontradas = set()
     for filho_id in bloco_raiz.get("content") or []:
         filho = rm_livros_raiz.get("block", {}).get(filho_id, {}).get("value", {})
