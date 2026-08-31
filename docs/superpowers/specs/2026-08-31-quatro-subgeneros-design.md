@@ -42,7 +42,7 @@ sempre, cerca de 32 milhões de premissas.
 | Nome | Identificador | Ordem |
 |---|---|---|
 | FC Militar | `fc-militar` | 7 |
-| Space Western | `space-western` | 8 |
+| FC Climática | `fc-climatica` | 8 |
 | Primeiro Contato | `primeiro-contato` | 9 |
 | Biopunk | `biopunk` | 10 |
 
@@ -52,7 +52,12 @@ subgêneros novos nos índices.
 
 "FC Militar" é decisão da autora, tomada contra "Ficção Científica Militar", que
 faria o gerador escrever *"Essa é uma ficção científica de ficção científica
-militar."* A sigla cobra um ajuste no gerador — seção 7.
+militar."* "FC Climática" segue a mesma forma, e as duas siglas cobram um ajuste
+no gerador — seção 7.
+
+**FC Climática entrou no lugar de Space Western**, que chegou a ser desenhado
+aqui e foi trocado pela autora antes de qualquer verbete ser escrito. Onde este
+documento fala em quatro subgêneros, são estes quatro.
 
 ### As auroras
 
@@ -62,12 +67,13 @@ estão em uso:
 | Subgênero | Trio | Leitura |
 |---|---|---|
 | FC Militar | `#2f6b4f` `#c8b47a` `#ff5f45` | verde de campanha, cáqui, vermelho de fogo |
-| Space Western | `#ffb03a` `#7a1f2b` `#c8b47a` | âmbar de poeira, couro, cáqui |
+| FC Climática | `#ffb03a` `#1c5e8f` `#c8b47a` | âmbar de seca, azul de enchente, cáqui de terra rachada |
 | Primeiro Contato | `#35e5f0` `#1c5e8f` `#ffd66e` | ciano do sinal, azul profundo, areia |
 | Biopunk | `#6ee7a0` `#ff2d92` `#7c3aed` | verde de cultura, magenta de carne, violeta de laboratório |
 
 Primeiro Contato fica perto de Invasão Alienígena de propósito — os dois falam de
-chegada, e o que separa é a areia quente no lugar do verde-limão.
+chegada, e o que separa é a areia quente no lugar do verde-limão. FC Climática
+tem os dois extremos do desastre no mesmo trio: a seca e a água.
 
 ## 3. Contraste: por que nenhuma conta é refeita
 
@@ -82,7 +88,7 @@ As cores mais claras dos quatro trios novos são todas mais escuras que ela:
 | Subgênero | Pior cor | Luminância |
 |---|---|---|
 | FC Militar | `#c8b47a` | 0,4633 |
-| Space Western | `#ffb03a` | 0,5262 |
+| FC Climática | `#ffb03a` | 0,5262 |
 | Primeiro Contato | `#ffd66e` | 0,7048 |
 | Biopunk | `#6ee7a0` | 0,6300 |
 
@@ -121,21 +127,21 @@ O campo `artigo` registra o gênero de cada um, como manda o esquema.
 | 10 | Desertor em Fuga | o | |
 | 11 | Mascote de Trincheira | o | `felino: true` |
 
-### Space Western (`space-western`)
+### FC Climática (`fc-climatica`)
 
 | Ordem | Nome | `artigo` | |
 |---|---|---|---|
-| 1 | Pistoleiro Solitário | o | |
-| 2 | Caçador de Recompensas | o | era "Caçadora de Recompensas" |
-| 3 | Xerife da Fronteira | o | |
-| 4 | Barão da Companhia | o | |
-| 5 | Líder de Bando Fora-da-Lei | o | |
-| 6 | Contrabandista de Nave | o | |
-| 7 | Dono do Saloon | o | era "Dona do Saloon" |
-| 8 | Povo Nativo Deslocado | o | |
-| 9 | Curandeiro Itinerante | o | era "Curandeira Itinerante" |
-| 10 | Jogador Trapaceiro | o | era "Jogadora Trapaceira" |
-| 11 | Gato do Deserto | o | `felino: true` |
+| 1 | Cientista Dissidente | o | |
+| 2 | Refugiado Climático | o | era "Refugiada Climática" |
+| 3 | Executivo Poluidor | o | |
+| 4 | Ativista Radical | o | |
+| 5 | Barão dos Recursos | o | |
+| 6 | Jovem Geração Cobrando Contas | a | substantivo feminino |
+| 7 | Engenheiro de Geoengenharia | o | era "Engenheira de Geoengenharia" |
+| 8 | Povo do Saber Ancestral | o | era "Guardiã do Conhecimento Ancestral" — ver seção 9 |
+| 9 | Sobrevivente Enlutado pela Paisagem | o | era "Sobrevivente Enlutada pela Paisagem" |
+| 10 | Líder Comunitário Pós-Colapso | o | ver seção 9 |
+| 11 | Gato das Marés | o | `felino: true` |
 
 ### Primeiro Contato (`primeiro-contato`)
 
@@ -160,7 +166,7 @@ O campo `artigo` registra o gênero de cada um, como manda o esquema.
 | 1 | Bio-hacker Rebelde | o | |
 | 2 | Geneticista Renegado | o | |
 | 3 | Corpo Modificado | o | |
-| 4 | Executor Corporativo | o | ver seção 9 |
+| 4 | Executor de Patentes | o | era "Executor Corporativo" — ver seção 9 |
 | 5 | Híbrido Rejeitado | o | |
 | 6 | Bebê de Design | o | |
 | 7 | Traficante de Genes | o | |
@@ -188,23 +194,17 @@ também `singular`, que precisa começar por "um " ou "uma " porque é a forma q
 entra na premissa contraída com a preposição ("Tudo começa **numa** trincheira
 orbital").
 
-O acervo de hoje tem duas formas convivendo, e os 80 verbetes novos seguem a
-majoritária de cada coleção:
+**Corpo de verbete começa com maiúscula e termina em ponto**, nas duas coleções.
+Nos elementos isso já valia nos 60. Nos cenários convivia com a forma minúscula,
+em que o corpo completava a frase do título — *"sedes blindadas e distritos de
+elite..."* —, e a autora decidiu padronizar: os 50 cenários antigos que
+começavam em minúscula foram corrigidos antes deste trabalho começar, no commit
+`2fd2bff`. Os 80 verbetes novos já nascem na forma padronizada.
 
-- **Elemento** é frase inteira, com inicial maiúscula e ponto — assim nos 60 que
-  existem, sem exceção. *"Mentes copiadas para um suporte digital, que continuam
-  falando depois que o corpo acaba."*
-- **Cenário** é a frase que o título começa: inicial minúscula e ponto no fim, em
-  50 dos 60. *"sedes blindadas e distritos de elite isolados do restante da
-  cidade."* O título é o sujeito, o corpo completa.
-- **Título** é frase, não manchete: inicial maiúscula e o resto minúsculo
-  ("Áreas corporativas exclusivas"), como em 110 dos 120 verbetes.
-
-A exceção nos três pontos é o **Space Opera**, cujos dez cenários têm título em
-Caixa Alta e corpo começando com maiúscula. Ele fica como está — este trabalho
-não reescreve o acervo existente —, e se a autora preferir que a Caixa Alta seja
-o padrão, é ela quem decide, e aí a mudança é outra e alcança os seis subgêneros
-antigos.
+**Título é frase, não manchete**: inicial maiúscula e o resto minúsculo ("Áreas
+corporativas exclusivas"), como em 110 dos 120 verbetes. A exceção é o **Space
+Opera**, cujos dez cenários têm título em Caixa Alta; ela fica como está, porque
+a autora padronizou o corpo e não o título.
 
 ## 6. As 40 profissões do gerador
 
@@ -244,33 +244,56 @@ próprio em `redacao.test.ts`.
 
 ## 8. As epígrafes
 
-Quatro frases de gente real, propostas aqui para a autora conferir antes de
-publicar — citação mal atribuída é erro que fica no ar com o nome de outra
-pessoa. Se alguma não bater, o campo fica vazio até ela escolher outra: ele é
-opcional.
+Frases de gente real. A autora **aprovou as três** que sobreviveram à troca de
+subgênero; a de FC Climática é proposta nova e ainda precisa do aval dela.
 
 | Subgênero | Frase | Autoria | Obra |
 |---|---|---|---|
 | FC Militar | "A violência, a força nua, resolveu mais questões na história do que qualquer outro fator." | Robert A. Heinlein | *Tropas Estelares* |
-| Space Western | "O homem de preto fugiu pelo deserto, e o pistoleiro foi atrás." | Stephen King | *O Pistoleiro* |
+| FC Climática | "A crise climática é também uma crise da cultura, e portanto da imaginação." | Amitav Ghosh | *A Grande Loucura* |
 | Primeiro Contato | "Se somos os únicos, é um desperdício enorme de espaço." | Carl Sagan | *Contato* |
 | Biopunk | "Você é meu criador, mas eu sou seu senhor." | Mary Shelley | *Frankenstein* |
+
+A tradução de cada frase é deste trabalho; a atribuição é que precisa estar
+certa, porque citação mal atribuída fica no ar com o nome de outra pessoa. Se a
+de Ghosh não convencer, a alternativa é o verso de Semente da Terra em *A
+Parábola do Semeador*, de Octavia E. Butler — "Todo o que tocas, tu mudas; tudo o
+que mudas, muda-te" —, com a ressalva de que Butler já assina a epígrafe de
+Viagem no Tempo e passaria a aparecer duas vezes. Em último caso o campo fica
+vazio até a autora escolher: ele é opcional.
 
 ## 9. A revisão de repetições
 
 Os quatro subgêneros novos passam pelo mesmo crivo dos seis antigos, e o
 resultado entra em [revisao-de-repeticoes.md](../../revisao-de-repeticoes.md).
-Três casos já estão visíveis e precisam de decisão explícita no plano:
 
-- **Executor Corporativo** (biopunk) × **Executivo Corporativo** (cyberpunk).
-  Papéis diferentes — um é segurança armada de patente, o outro é burocrata de
-  megacorporação —, mas os nomes ficam a uma letra de distância na busca.
-  Recomendação: renomear o do biopunk para **Executor de Patentes**, que diz o
-  que ele faz e desfaz a colisão.
-- **Curandeiro Itinerante** (space western) × **Curandeiro Clandestino**
-  (biopunk) × **Curandeiro da Comunidade** (pós-apocalíptico). Três curandeiros,
-  mas cada um resolve uma escassez diferente: distância, ilegalidade e
-  comunidade. Recomendação: manter, e registrar como sobreposição de propósito.
+**Decidido pela autora:** **Executor Corporativo** (biopunk) ficava a uma letra
+do **Executivo Corporativo** (cyberpunk), e vira **Executor de Patentes** — nome
+que diz o que ele faz e desfaz a colisão na busca.
+
+FC Climática é vizinha do Pós Apocalíptico, e a troca de Space Western por ela
+trouxe duas colisões novas que precisam de decisão:
+
+- **Guardiã do Conhecimento Ancestral** (climática) × **Guardião do Conhecimento
+  Perdido** (pós-apocalíptico) repetiam três palavras em quatro. A descrição da
+  autora fala de uma **comunidade** indígena ou tradicional, não de uma pessoa
+  guardiã, então este documento já registra o nome como **Povo do Saber
+  Ancestral**: mantém o sentido dela, desfaz a colisão e ainda diz que é um povo.
+  Precisa do aval da autora.
+- **Líder Comunitário Pós-Colapso** (climática) × **Líder de Comunidade**
+  (pós-apocalíptico). Aqui a sobreposição é de conteúdo, não só de nome: os dois
+  organizam comunidade depois que a instituição falhou. O que separa é a causa —
+  colapso climático contra colapso total — e a ênfase em adaptação local.
+  Recomendação: manter e registrar como sobreposição de propósito, porque os dois
+  subgêneros são vizinhos e a grade existe para mostrar isso. Se a autora
+  preferir separar, **Organizador da Adaptação Local** resolve.
+- **Cientista Dissidente** (climática), **Cientista de Guerra** (militar),
+  **Cientista Cético** (primeiro contato) e **Cientista/Inventor** (comuns) fazem
+  quatro cientistas no acervo. Cada um responde a uma pressão diferente —
+  instituição, comando, evidência e curiosidade. Recomendação: manter; "Cientista
+  X" virou um tipo da casa, e o adjetivo é que carrega o verbete.
+- **Sobrevivente Enlutado pela Paisagem** (climática) × **Sobrevivente
+  Solitário** (pós-apocalíptico) dividem só o substantivo. Manter.
 - **Observador Benevolente** (primeiro contato) × **Observador Espacial** (o
   felino do space opera). Um é entidade alienígena, o outro é um gato.
   Recomendação: manter — o contexto da página separa os dois sem esforço.
@@ -323,8 +346,8 @@ conferência final com o site rodando.
 profissões, 3 aberturas e a epígrafe —, a autora lê, e só então os outros três.
 Não é entregar menos: é descobrir um erro de tom em 41 verbetes em vez de em 164.
 
-Os três subgêneros seguintes entram um a um, cada um completo, na ordem Space
-Western, Primeiro Contato e Biopunk. As contagens, os testes e os documentos da
+Os três subgêneros seguintes entram um a um, cada um completo, na ordem FC
+Climática, Primeiro Contato e Biopunk. As contagens, os testes e os documentos da
 seção 10 fecham no fim, de uma vez, quando os quatro estiverem no lugar — assim
 os números não são reescritos quatro vezes.
 
