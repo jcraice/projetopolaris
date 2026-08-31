@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { contrair, partes, redigir } from './redacao';
+import { abaixarNome, contrair, partes, redigir } from './redacao';
 import { MOLDE } from './moldes';
 import type { Sorteio } from './tipos';
 
@@ -64,6 +64,22 @@ describe('contrair', () => {
   });
 });
 
+describe('abaixarNome', () => {
+  it('abaixa nome comum inteiro', () => {
+    expect(abaixarNome('Space Opera')).toBe('space opera');
+  });
+
+  it('preserva a palavra que é toda maiúscula', () => {
+    expect(abaixarNome('FC Militar')).toBe('FC militar');
+  });
+
+  /* "Misturar subgêneros" une os nomes com " + " antes de chegar aqui, e a
+     regra precisa valer para cada palavra dos dois lados do sinal. */
+  it('preserva a sigla também em nome composto', () => {
+    expect(abaixarNome('FC Militar + Space Opera')).toBe('FC militar + space opera');
+  });
+});
+
 describe('redigir', () => {
   it('monta o bloco inteiro', () => {
     expect(redigir(sorteio, MOLDE, 'Invasão Alienígena')).toBe(
@@ -85,6 +101,10 @@ describe('redigir', () => {
   it('abaixa também o nome composto de subgêneros misturados', () => {
     const frase = redigir(sorteio, MOLDE, 'Space Opera + Invasão Alienígena');
     expect(frase).toContain('de space opera + invasão alienígena.');
+  });
+
+  it('escreve a sigla do subgênero sem abaixar', () => {
+    expect(redigir(sorteio, MOLDE, 'FC Militar')).toContain('ficção científica de FC militar.');
   });
 
   /* O nome entra como está guardado — nada de mexer em maiúscula na redação. O

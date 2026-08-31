@@ -2,7 +2,7 @@
 // hoje só src/pages/gerador.astro, mas evita que o consumidor precise saber
 // em qual arquivo interno cada peça mora (sorteio.ts, redacao.ts, moldes.ts).
 export { poolsFiltrados, sortear } from './sorteio';
-export { contrair, partes, redigir } from './redacao';
+export { abaixarNome, contrair, partes, redigir } from './redacao';
 export type { Linha, Trecho } from './redacao';
 export { MOLDE, TRAVA_DO_MARCADOR } from './moldes';
 export { PROFISSOES } from './profissoes';

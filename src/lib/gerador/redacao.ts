@@ -17,6 +17,20 @@ export function contrair(preposicao: 'em' | 'a' | 'de', sintagma: string): strin
   return fundido ? `${fundido} ${resto.join(' ')}` : `${preposicao} ${sintagma}`;
 }
 
+/* O nome do subgênero entra na premissa em minúscula ("Space Opera" vira "space
+   opera"), mas sigla não se abaixa: "FC Militar" viraria "fc militar", que lê
+   como erro de digitação. Palavra toda maiúscula fica intacta; o resto abaixa.
+
+   `nome` pode trazer mais de um subgênero unido por " + ", quando "Misturar
+   subgêneros" está ligado — a divisão por espaço já cobre esse caso, e o "+"
+   passa intacto por não ter letra minúscula para trocar. */
+export function abaixarNome(nome: string): string {
+  return nome
+    .split(' ')
+    .map((palavra) => (palavra === palavra.toLocaleUpperCase('pt-BR') ? palavra : palavra.toLocaleLowerCase('pt-BR')))
+    .join(' ');
+}
+
 /* Um pedaço de linha da premissa. `sorteado` é o que a página pinta de
    --destaque: é a diferença entre o que a máquina trouxe e o texto fixo do
    molde. */
@@ -37,7 +51,7 @@ export type Linha = { trechos: Trecho[]; trava: keyof Travas | null };
    O nome da profissão entra como está na lista, sem tocar em maiúscula: ele já
    nasce com a inicial certa, e é o mesmo texto que o guia mostra. */
 const VALOR: Record<string, (sorteio: Sorteio, subgenero: string) => string> = {
-  '{subgenero}': (_, subgenero) => subgenero.toLocaleLowerCase('pt-BR'),
+  '{subgenero}': (_, subgenero) => abaixarNome(subgenero),
   '{profissaoA}': (s) => s.personagemA.profissao.nome,
   '{caracteristica}': (s) => s.personagemA.caracteristica,
   '{profissaoB}': (s) => s.personagemB.profissao.nome,
