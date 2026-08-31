@@ -5,4 +5,4 @@ subgenero: primeiro-contato
 ordem: 3
 ---
 
-Áreas afastadas, cercadas às pressas, onde a nave alienígena escolheu tocar o solo terrestre.
+Áreas afastadas, cercadas às pressas ao redor do local de pouso da nave alienígena.

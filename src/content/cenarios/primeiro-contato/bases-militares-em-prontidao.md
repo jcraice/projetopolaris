@@ -5,4 +5,4 @@ subgenero: primeiro-contato
 ordem: 9
 ---
 
-Instalações armadas mantidas em alerta máximo caso o encontro com os visitantes dê errado.
+Instalações armadas, mantidas em alerta preventivo enquanto o encontro ainda pode terminar em diálogo.
