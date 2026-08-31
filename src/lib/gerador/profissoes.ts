@@ -95,4 +95,15 @@ export const PROFISSOES: Profissao[] = [
   { nome: 'Instrutor(a) de Recrutas', subgenero: 'fc-militar', descricao: 'Transforma civil em soldado no prazo curto que a guerra permite.' },
   { nome: 'Correspondente de Guerra', subgenero: 'fc-militar', descricao: 'Acompanha a tropa para contar o que acontece, sob censura do comando.' },
   { nome: 'Capelão(ã) Militar', subgenero: 'fc-militar', descricao: 'Escuta confissão antes do combate e enterra quem não voltou.' },
+
+  { nome: 'Hidrólogo(a)', subgenero: 'fc-climatica', descricao: 'Mede o que resta de água doce e diz a verdade que ninguém quer ouvir.' },
+  { nome: 'Engenheiro(a) de Diques', subgenero: 'fc-climatica', descricao: 'Levanta e remenda a barreira que segura o mar fora da cidade.' },
+  { nome: 'Agrônomo(a) de Cultivo Resistente', subgenero: 'fc-climatica', descricao: 'Procura a semente que ainda germina no clima que chegou.' },
+  { nome: 'Brigadista Florestal', subgenero: 'fc-climatica', descricao: 'Enfrenta o fogo em temporada que já não tem começo nem fim.' },
+  { nome: 'Piloto de Drone de Semeadura', subgenero: 'fc-climatica', descricao: 'Replanta encosta inteira do ar, onde ninguém consegue subir a pé.' },
+  { nome: 'Perito(a) em Seguro Climático', subgenero: 'fc-climatica', descricao: 'Calcula o preço do desastre e decide o que a apólice ainda cobre.' },
+  { nome: 'Coletor(a) de Água de Neblina', subgenero: 'fc-climatica', descricao: 'Tira do ar úmido o que a chuva parou de trazer.' },
+  { nome: 'Guarda de Reservatório', subgenero: 'fc-climatica', descricao: 'Vigia o que virou a coisa mais valiosa da região.' },
+  { nome: 'Meteorologista de Emergência', subgenero: 'fc-climatica', descricao: 'Decide a hora de mandar uma cidade inteira sair de casa.' },
+  { nome: 'Mediador(a) de Reassentamento', subgenero: 'fc-climatica', descricao: 'Negocia para onde vai quem perdeu o lugar onde morava.' },
 ];

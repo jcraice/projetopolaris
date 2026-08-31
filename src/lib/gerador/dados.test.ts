@@ -7,12 +7,12 @@ import { PROFISSOES } from './profissoes';
 
 const SUBGENEROS = [
   'cyberpunk', 'distopia', 'invasao-alienigena',
-  'pos-apocaliptico', 'space-opera', 'viagem-no-tempo', 'fc-militar',
+  'pos-apocaliptico', 'space-opera', 'viagem-no-tempo', 'fc-militar', 'fc-climatica',
 ];
 
 describe('PROFISSOES', () => {
   it('tem sessenta profissões, dez por subgênero', () => {
-    expect(PROFISSOES).toHaveLength(70);
+    expect(PROFISSOES).toHaveLength(80);
     for (const subgenero of SUBGENEROS) {
       expect(PROFISSOES.filter((p) => p.subgenero === subgenero)).toHaveLength(10);
     }
@@ -23,7 +23,7 @@ describe('PROFISSOES', () => {
   });
 
   it('não tem profissão repetida', () => {
-    expect(new Set(PROFISSOES.map((p) => p.nome)).size).toBe(70);
+    expect(new Set(PROFISSOES.map((p) => p.nome)).size).toBe(80);
   });
 
   /* A descrição é o corpo do guia em /guia-de-personagens/. Uma vazia passaria
@@ -31,7 +31,7 @@ describe('PROFISSOES', () => {
      que o guia existe para resolver. */
   it('toda profissão tem descrição própria', () => {
     for (const p of PROFISSOES) expect(p.descricao.trim().length).toBeGreaterThan(0);
-    expect(new Set(PROFISSOES.map((p) => p.descricao)).size).toBe(70);
+    expect(new Set(PROFISSOES.map((p) => p.descricao)).size).toBe(80);
   });
 
   /* Ao contrário das outras três listas, os nomes de profissão abrem com
