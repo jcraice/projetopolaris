@@ -106,4 +106,15 @@ export const PROFISSOES: Profissao[] = [
   { nome: 'Guarda de Reservatório', subgenero: 'fc-climatica', descricao: 'Vigia o que virou a coisa mais valiosa da região.' },
   { nome: 'Meteorologista de Emergência', subgenero: 'fc-climatica', descricao: 'Decide a hora de mandar uma cidade inteira sair de casa.' },
   { nome: 'Mediador(a) de Reassentamento', subgenero: 'fc-climatica', descricao: 'Negocia para onde vai quem perdeu o lugar onde morava.' },
+
+  { nome: 'Radioastrônomo(a)', subgenero: 'primeiro-contato', descricao: 'Passa a carreira ouvindo o céu e um dia escuta resposta.' },
+  { nome: 'Analista de Sinais', subgenero: 'primeiro-contato', descricao: 'Separa o que é ruído do que tem intenção dentro.' },
+  { nome: 'Tradutor(a) Simultâneo(a)', subgenero: 'primeiro-contato', descricao: 'Verte em tempo real uma fala que ninguém garante ter entendido.' },
+  { nome: 'Chefe de Protocolo', subgenero: 'primeiro-contato', descricao: 'Decide quem cumprimenta quem primeiro, quando não há precedente nenhum.' },
+  { nome: 'Assessor(a) de Imprensa', subgenero: 'primeiro-contato', descricao: 'Escolhe o que o público sabe e a que horas fica sabendo.' },
+  { nome: 'Bioeticista', subgenero: 'primeiro-contato', descricao: 'Pergunta o que é permitido fazer com o visitante — e com quem o recebe.' },
+  { nome: 'Operador(a) de Antena', subgenero: 'primeiro-contato', descricao: 'Aponta o prato e mantém o enlace de pé no turno da madrugada.' },
+  { nome: 'Psicólogo(a) de Crise', subgenero: 'primeiro-contato', descricao: 'Cuida de quem viu primeiro e não conseguiu voltar a dormir.' },
+  { nome: 'Documentarista', subgenero: 'primeiro-contato', descricao: 'Registra tudo, porque isso vai ser a memória da espécie.' },
+  { nome: 'Segurança de Perímetro', subgenero: 'primeiro-contato', descricao: 'Mantém a curiosidade humana do lado de fora da cerca.' },
 ];
