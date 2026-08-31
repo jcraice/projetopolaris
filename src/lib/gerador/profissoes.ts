@@ -84,4 +84,15 @@ export const PROFISSOES: Profissao[] = [
   { nome: 'Guardião(ã) da Linha do Tempo', subgenero: 'viagem-no-tempo', descricao: 'Observador(a) fixo(a) num século específico, com a incumbência de garantir que certos eventos ocorram exatamente como deveriam.' },
   { nome: 'Técnico(a) de Extração', subgenero: 'viagem-no-tempo', descricao: 'Especialista focado(a) em resgatar pessoas do passado milissegundos antes de suas mortes registradas.' },
   { nome: 'Fixer', subgenero: 'viagem-no-tempo', descricao: 'Profissional cuja única função é apagar rastros materiais (celulares, roupas modernas) deixados acidentalmente no passado.' },
+
+  { nome: 'Mecânico(a) de Exoesqueleto', subgenero: 'fc-militar', descricao: 'Quem mantém a armadura pesada de pé entre uma missão e outra.' },
+  { nome: 'Paramédico(a) de Combate', subgenero: 'fc-militar', descricao: 'Socorrista que trabalha sob fogo, com o que couber na mochila.' },
+  { nome: 'Operador(a) de Radar', subgenero: 'fc-militar', descricao: 'Vigia de turno que lê no ruído da tela o que ainda não apareceu.' },
+  { nome: 'Cozinheiro(a) de Rancho', subgenero: 'fc-militar', descricao: 'Alimenta o pelotão inteiro e ouve tudo o que se fala na fila.' },
+  { nome: 'Sapador(a)', subgenero: 'fc-militar', descricao: 'Abre caminho e desarma o que foi deixado para trás para matar.' },
+  { nome: 'Piloto de Transporte de Tropa', subgenero: 'fc-militar', descricao: 'Leva gente para a zona de pouso e tenta trazer todo mundo de volta.' },
+  { nome: 'Intendente', subgenero: 'fc-militar', descricao: 'Controla munição, ração e peça de reposição — e decide quem recebe primeiro.' },
+  { nome: 'Instrutor(a) de Recrutas', subgenero: 'fc-militar', descricao: 'Transforma civil em soldado no prazo curto que a guerra permite.' },
+  { nome: 'Correspondente de Guerra', subgenero: 'fc-militar', descricao: 'Acompanha a tropa para contar o que acontece, sob censura do comando.' },
+  { nome: 'Capelão(ã) Militar', subgenero: 'fc-militar', descricao: 'Escuta confissão antes do combate e enterra quem não voltou.' },
 ];
