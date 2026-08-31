@@ -244,8 +244,11 @@ normalização de gênero decidida na spec o traz para "Atirador de Elite", com
 - [ ] **Passo 4: validar o conteúdo**
 
 Roda: `rm -rf .astro && npm run build`
-Esperado: build completo, e a contagem de páginas sobe de 34 para 36 — entram
-`/arquetipos/fc-militar/` e `/subgeneros/fc-militar/`.
+Esperado: build completo, e a contagem de páginas sobe de 34 para **38**: as
+quatro rotas de um subgênero nascem junto com este arquivo, porque os
+`getStaticPaths` filtram por `completo: true` e não pela existência de verbete.
+`/cenarios/fc-militar/` e `/elementos/fc-militar/` nascem vazias e enchem nas
+Tarefas 3 e 4.
 
 Se o Zod reclamar, a mensagem diz o arquivo e o campo. Erro provável: esquecer
 `artigo`, que não tem padrão.
@@ -314,7 +317,8 @@ está dentro dele>
 - [ ] **Passo 2: validar**
 
 Roda: `npm run build`
-Esperado: build completo, mais uma página (`/cenarios/fc-militar/`).
+Esperado: build completo, ainda 38 páginas — `/cenarios/fc-militar/` já existe
+desde a Tarefa 2 e agora deixa de estar vazia.
 Erro provável: `singular` que não começa com "um " ou "uma " — o esquema recusa.
 
 - [ ] **Passo 3: conferir no gerador**
@@ -387,7 +391,7 @@ por letra.
 - [ ] **Passo 3: validar**
 
 Roda: `rm -rf .astro && npm run build`
-Esperado: 38 páginas. O `rm -rf .astro` aqui não é zelo: as aberturas mudaram
+Esperado: 38 páginas, as mesmas da Tarefa 2. O `rm -rf .astro` aqui não é zelo: as aberturas mudaram
 depois de o servidor já ter lido o arquivo uma vez.
 
 - [ ] **Passo 4: olhar as quatro páginas do subgênero**
