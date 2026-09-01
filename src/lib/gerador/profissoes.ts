@@ -117,4 +117,15 @@ export const PROFISSOES: Profissao[] = [
   { nome: 'Psicólogo(a) de Crise', subgenero: 'primeiro-contato', descricao: 'Cuida de quem viu primeiro e não conseguiu voltar a dormir.' },
   { nome: 'Documentarista', subgenero: 'primeiro-contato', descricao: 'Registra tudo, porque isso vai ser a memória da espécie.' },
   { nome: 'Segurança de Perímetro', subgenero: 'primeiro-contato', descricao: 'Mantém a curiosidade humana do lado de fora da cerca.' },
+
+  { nome: 'Biotécnico(a) de Bancada', subgenero: 'biopunk', descricao: 'Executa o protocolo que outra pessoa desenhou e assina o resultado.' },
+  { nome: 'Cultivador(a) de Órgãos', subgenero: 'biopunk', descricao: 'Cria tecido humano sob encomenda e conhece o prazo de cada peça.' },
+  { nome: 'Perito(a) em Patente Genética', subgenero: 'biopunk', descricao: 'Prova em juízo de quem é a sequência que está dentro de alguém.' },
+  { nome: 'Veterinário(a) de Híbridos', subgenero: 'biopunk', descricao: 'Atende o que a medicina humana e a animal recusam por não saber classificar.' },
+  { nome: 'Fiscal de Biossegurança', subgenero: 'biopunk', descricao: 'Lacra laboratório e assina o auto que fecha o lugar.' },
+  { nome: 'Corretor(a) de Genoma', subgenero: 'biopunk', descricao: 'Aproxima quem tem a sequência rara de quem paga por ela.' },
+  { nome: 'Enfermeiro(a) de Clínica Ilegal', subgenero: 'biopunk', descricao: 'Cuida do pós-operatório que nenhum hospital vai registrar.' },
+  { nome: 'Analista de Sequenciamento', subgenero: 'biopunk', descricao: 'Lê o genoma inteiro e percebe o que foi acrescentado nele.' },
+  { nome: 'Zelador(a) de Biotério', subgenero: 'biopunk', descricao: 'Alimenta e limpa a criação do laboratório, e vê o que ninguém anota.' },
+  { nome: 'Entregador(a) de Material Refrigerado', subgenero: 'biopunk', descricao: 'Transporta a caixa fria sem perguntar o que tem dentro.' },
 ];
