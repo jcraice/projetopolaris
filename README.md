@@ -5,10 +5,11 @@ gerador de premissas que roda inteiramente no navegador. O acervo cobre
 arquétipos de personagem, cenários e elementos narrativos, e é publicado
 como site estático no GitHub Pages.
 
-O site está no ar em **https://jcraice.github.io/projetopolaris/**, com 76
-arquétipos, 60 cenários e 60 elementos narrativos. São seis subgêneros —
-Cyberpunk, Distopia, Invasão Alienígena, Pós Apocalíptico, Space Opera e Viagem
-no Tempo — com 11 arquétipos, 10 cenários e 10 elementos cada, mais um pool de
+O site está no ar em **https://jcraice.github.io/projetopolaris/**, com 120
+arquétipos, 100 cenários e 100 elementos narrativos. São dez subgêneros —
+Cyberpunk, Distopia, Invasão Alienígena, Pós Apocalíptico, Space Opera, Viagem
+no Tempo, FC Militar, FC Climática, Primeiro Contato e Biopunk — com 11
+arquétipos, 10 cenários e 10 elementos cada, mais um pool de
 10 arquétipos comuns que serve a todos. Tem busca em todo o acervo e tema claro
 e escuro.
 
@@ -28,15 +29,15 @@ Tudo começa numa frota nômade.
 Importante: os dois já se conheceram antes.
 ```
 
-Cada peça vem de uma lista própria: **60 profissões** (dez por subgênero), **30
-características físicas**, **30 personalidades**, os **60 locais** do acervo de
+Cada peça vem de uma lista própria: **100 profissões** (dez por subgênero), **30
+características físicas**, **30 personalidades**, os **100 locais** do acervo de
 cenários e **40 fatos**. Dentro de um subgênero só isso dá mais de 32 milhões de
 premissas diferentes.
 
 A premissa é a própria interface. O que o sorteio trouxe aparece destacado
 dentro da frase, e cada linha tem um cadeado: trave o que gostou e gere de novo
 até o resto encaixar. Os dois personagens nunca saem com a mesma profissão, e as
-descrições das 60 estão em `/guia-de-personagens/`.
+descrições das 100 estão em `/guia-de-personagens/`.
 
 A página monta também um prompt pronto para colar numa IA de texto, com as
 mesmas peças.

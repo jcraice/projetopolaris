@@ -15,7 +15,7 @@ export function nomearSubgeneros(
      em que a pessoa lê as peças, não em ordem alfabética nem de coleção.
 
      O filtro do pool `comuns` que existia aqui saiu junto com os arquétipos: as
-     profissões pertencem aos seis subgêneros e a nenhum outro pool. */
+     profissões pertencem aos dez subgêneros e a nenhum outro pool. */
   const usados = [
     sorteio.personagemA.profissao.subgenero,
     sorteio.personagemB.profissao.subgenero,

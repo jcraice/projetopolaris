@@ -246,8 +246,8 @@ sobreposições que são de propósito e não devem ser "corrigidas" (Refugiado 
 Invasão × Campos de refugiados, Humano Aumentado × Implantes cibernéticos):
 elas são o que a grade de duas dimensões existe para fazer.
 
-O tamanho do acervo (hoje 76 arquétipos — 10 por subgênero mais o felino, e mais 10
-comuns —, 60 cenários, 60 elementos) está escrito por extenso em
+O tamanho do acervo (hoje 120 arquétipos — 10 por subgênero mais o felino, e mais 10
+comuns —, 100 cenários, 100 elementos) está escrito por extenso em
 seis lugares que nenhum teste confere: [README.md](README.md),
 [sobre.md](src/content/paginas/sobre.md), o comentário sobre os cenários em
 [gerador.astro](src/pages/gerador.astro), o `nome` de
@@ -307,7 +307,7 @@ links de verdade, sem JavaScript. Três coisas nela não são óbvias:
   fileira ao contrário — a pílula vazada entre as preenchidas —, porque repetir
   o fundo `--flutuante` do escuro deixaria a letra em `--fundo`, quase branca
   sobre superfície quase branca.
-- A fileira lista **só os seis subgêneros** (`completo: true`), mas aparece também em
+- A fileira lista **só os dez subgêneros** (`completo: true`), mas aparece também em
   `/arquetipos/comuns/`, sem nenhuma pílula marcada. Não é descuido: o pool dos
   comuns não é destino de troca, e aquela página é justamente a que ficaria sem
   saída lateral nenhuma.
@@ -363,7 +363,7 @@ ponto, senão não encaixam depois de "que" ou de "Importante:". Profissões sã
 exceção dentro da exceção: abrem com maiúscula e não terminam em ponto, porque
 são nome de arquétipo como os do catálogo — só a `descricao` de cada uma, que
 não entra no sorteio e só aparece no guia, é frase inteira e termina em ponto.
-[dados.test.ts](src/lib/gerador/dados.test.ts) tranca as contagens (60
+[dados.test.ts](src/lib/gerador/dados.test.ts) tranca as contagens (100
 profissões, dez por subgênero; 30 características; 30 personalidades; 40 fatos):
 incluir uma entrada nova é editar esses números junto.
 
@@ -401,7 +401,7 @@ testes serem determinísticos — não chame `Math.random()` dentro da lib. Quem
 injeta o acaso de verdade é o `<script>` de `gerador.astro`.
 
 [src/pages/gerador.astro](src/pages/gerador.astro) injeta como JSON estático só
-os **locais** — os 60 cenários, que vêm de uma coleção e só existem em tempo de
+os **locais** — os 100 cenários, que vêm de uma coleção e só existem em tempo de
 build. As outras três listas universais não precisam de importação própria no
 `<script>`: entram por dentro de `sortear()`, que já as usa internamente. Só
 `PROFISSOES` é importada à parte, porque o `<script>` monta `pools.profissoes`
@@ -429,7 +429,7 @@ saíram junto, com as constantes e os comentários que as sustentavam. É no mes
 arquivo, ao lado de `contrair`, que moram `partes()` e `redigir()` — ver acima.
 
 [src/pages/guia-de-personagens.astro](src/pages/guia-de-personagens.astro) é a
-página que mostra as 60 profissões com a `descricao` de cada uma. A `descricao`
+página que mostra as 100 profissões com a `descricao` de cada uma. A `descricao`
 mora dentro do mesmo objeto que o `nome`, em `profissoes.ts` — os dois vivem
 juntos porque descrevem a mesma peça, e separá-los em arquivos diferentes os
 faria divergir na primeira edição. A rota fica **fora do

@@ -124,7 +124,7 @@ genéricos de propósito, então alguns **contêm** um arquétipo de subgênero.
 | # | Repetição | Sai | Entrou no lugar |
 |---|---|---|---|
 | 1 | `comum` Sistema/Instituição Opressora ⊃ Estado Totalitário (distopia) · Megacorporação (cyberpunk) · Governo que Esconde a Verdade (invasão) · Organização Controladora (viagem) — cada subgênero já tem a sua versão | **comum** Sistema/Instituição Opressora | `comum` **Burocrata do Sistema** (*o*) — a pessoa dentro da máquina, que nenhum subgênero tem |
-| 2 | `comum` Soldado ⊃ Militar Linha-Dura (invasão) · Veterano de Guerra (space opera) | **comum** Soldado | `comum` **Intérprete** (*o*) — atravessa os seis subgêneros e não existe em nenhum |
+| 2 | `comum` Soldado ⊃ Militar Linha-Dura (invasão) · Veterano de Guerra (space opera) | **comum** Soldado | `comum` **Intérprete** (*o*) — atravessa os dez subgêneros e não existe em nenhum |
 
 **Ficam como estão:** Cientista/Inventor (é o comum mais canônico da ficção
 científica, e as versões de subgênero são especializações claras), IA Aliada e IA
@@ -153,3 +153,62 @@ Os substitutos vêm com o título e, nos arquétipos, o artigo — falta escreve
 descrição de cada um, que é o texto que aparece no verbete. Posso rascunhá-las
 seguindo o registro do acervo, para você revisar e reescrever o que não estiver
 na sua voz.
+
+---
+
+## Os quatro subgêneros novos
+
+FC Militar, FC Climática, Primeiro Contato e Biopunk entraram com o conteúdo já
+escrito e validado. A revisão aqui é a mesma dos seis originais — o mesmo
+critério quem/onde/o quê do topo do documento —, mas contra um acervo maior:
+agora um nome ou um conceito pode colidir não só dentro do próprio subgênero,
+mas com qualquer um dos outros nove.
+
+### Renomeados por colisão de nome
+
+Três arquétipos chegaram com um nome que já existia, com sentido próximo o
+bastante para confundir no sorteio ou na busca. A autora escolheu o novo nome
+em cada caso; a descrição não mudou.
+
+| Subgênero | Nome original | Renomeado para | Colidia com |
+|---|---|---|---|
+| Biopunk | Executor Corporativo | **Executor de Patentes** | `arq` Executivo Corporativo (Cyberpunk) |
+| FC Climática | Guardiã do Conhecimento Ancestral | **Guardião do Saber Ancestral** | `arq` Guardião do Conhecimento Perdido (Pós Apocalíptico) |
+| FC Climática | Líder Comunitário Pós-Colapso | **Organizador da Adaptação Local** | `arq` Líder de Comunidade (Pós Apocalíptico) |
+
+### Sobreposições que ficam de propósito
+
+Como nas seis primeiras seções, nem toda semelhança é repetição — é a grade de
+duas dimensões funcionando. Ficam como estão:
+
+- **Solastalgia** (`elem` FC Climática) × **Sobrevivente Enlutado pela
+  Paisagem** (`arq` FC Climática) — o par onde/quem de sempre, aqui na versão
+  quem × o quê: o elemento é a força (o luto por uma paisagem que não existe
+  mais), o arquétipo é a pessoa que a carrega. O verbete do arquétipo até cita
+  "solastalgia" no texto — é a mesma peça vista de dois ângulos, não uma
+  repetição a corrigir.
+- **Os quatro "Cientista X"** — Cientista Dissidente (FC Climática), Cientista
+  de Guerra (FC Militar), Cientista Comunicador (Invasão Alienígena) e
+  Cientista Cético (Primeiro Contato) — são a mesma lógica já registrada para
+  `comum` Cientista/Inventor: um papel canônico da ficção científica,
+  especializado por subgênero (quem soa o alarme do clima não é quem
+  desenvolve arma nem quem tenta decifrar um sinal). Repetir o nome-base é
+  esperado; o comum continua sendo a versão genérica, e nenhum dos quatro
+  soma ao `comum` no sorteio porque arquétipo não entra mais no gerador.
+- **Observador Benevolente** (`arq` Primeiro Contato) × **Observador
+  Espacial** (`arq` felino, Space Opera) — nome-eco, papel diferente: um é
+  entidade alienígena avançada que estuda a humanidade à distância; o outro é
+  o gato que observa a nave. Não há confusão possível na leitura do verbete, só
+  na primeira palavra do nome.
+- **Feiras de órgãos sob encomenda** (`cen` Biopunk) × **Corpos e órgãos como
+  mercadoria** (`elem` Cyberpunk) — onde × que força: o cenário é o mercado
+  itinerante onde a troca acontece, o elemento é a força que trata corpo como
+  mercadoria em qualquer lugar do Cyberpunk. O mesmo par já registrado para
+  Refugiado da Invasão × Campos de refugiados.
+- **Assimetria tecnológica** (`elem` Primeiro Contato) × **Tecnologia
+  alienígena superior** (`elem` Invasão Alienígena) — os dois falam de um
+  desnível tecnológico, mas por eixos diferentes: Primeiro Contato é sobre o
+  que se sabe (o desnível de conhecimento entre as duas espécies), Invasão
+  Alienígena é sobre o que mata (armamento e defesas que superam as humanas).
+  Trocar um subgênero pelo outro trocaria o tom da história inteira, então os
+  dois ficam.

@@ -5,7 +5,7 @@ import Cartao from '../../components/Cartao.astro';
 import { paraAncora } from '../../lib/texto';
 
 // O pool "10 Arquétipos Comuns" tem completo: false — não é um subgênero
-// completo, então não entra aqui. As seis páginas de subgênero são as únicas geradas por esta rota.
+// completo, então não entra aqui. As dez páginas de subgênero são as únicas geradas por esta rota.
 export async function getStaticPaths() {
   const subgeneros = await getCollection('subgeneros', (s) => s.data.completo);
   return subgeneros.map((s) => ({ params: { subgenero: s.id }, props: { subgenero: s } }));

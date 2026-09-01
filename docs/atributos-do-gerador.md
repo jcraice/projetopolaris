@@ -23,17 +23,17 @@ página própria em `/arquetipos/` e `/elementos/`, na busca e em `/subgeneros/`
 
 | Peça | De onde vem | Onde aparece |
 | --- | --- | --- |
-| Subgênero | escolha de quem usa, entre 6 | filtra o sorteio; aparece na primeira linha da premissa e do prompt de IA — sem cadeado, porque quem trava a linha é o seletor de Subgênero |
-| Profissão (Personagem A e B) | `src/lib/gerador/profissoes.ts` (60) | premissa, em `--destaque`; a `descricao` de cada uma só aparece em `/guia-de-personagens/`, fora do gerador |
+| Subgênero | escolha de quem usa, entre 10 | filtra o sorteio; aparece na primeira linha da premissa e do prompt de IA — sem cadeado, porque quem trava a linha é o seletor de Subgênero |
+| Profissão (Personagem A e B) | `src/lib/gerador/profissoes.ts` (100) | premissa, em `--destaque`; a `descricao` de cada uma só aparece em `/guia-de-personagens/`, fora do gerador |
 | Característica (Personagem A) | `src/lib/gerador/caracteristicas.ts` (30) | premissa, em `--destaque` |
 | Personalidade (Personagem B) | `src/lib/gerador/personalidades.ts` (30) | premissa, em `--destaque` |
-| Local | `src/content/cenarios/` (60) | premissa, em `--destaque`, já contraído com a preposição |
+| Local | `src/content/cenarios/` (100) | premissa, em `--destaque`, já contraído com a preposição |
 | Fato | `src/lib/gerador/fatos.ts` (40) | premissa, em `--destaque` — trava com cadeado próprio, como as outras três peças |
 | Molde | `src/lib/gerador/moldes.ts` (1) | é a forma da premissa |
 
 ## As peças invisíveis
 
-### Profissões — 60, dez por subgênero
+### Profissões — 100, dez por subgênero
 
 O **quem**, dos dois personagens da premissa. Cada profissão tem um `nome` — que
 entra sem alteração na premissa e no guia — e uma `descricao`, que só
@@ -138,6 +138,66 @@ invariável em vez de forçar a marcação.
 | Guardião(ã) da Linha do Tempo | Observador(a) fixo(a) num século específico, com a incumbência de garantir que certos eventos ocorram exatamente como deveriam. |
 | Técnico(a) de Extração | Especialista focado(a) em resgatar pessoas do passado milissegundos antes de suas mortes registradas. |
 | Fixer | Profissional cuja única função é apagar rastros materiais (celulares, roupas modernas) deixados acidentalmente no passado. |
+
+**FC Militar**
+
+| Profissão | Descrição |
+| --- | --- |
+| Mecânico(a) de Exoesqueleto | Quem mantém a armadura pesada de pé entre uma missão e outra. |
+| Paramédico(a) de Combate | Socorrista que trabalha sob fogo, com o que couber na mochila. |
+| Operador(a) de Radar | Vigia de turno que lê no ruído da tela o que ainda não apareceu. |
+| Cozinheiro(a) de Rancho | Alimenta o pelotão inteiro e ouve tudo o que se fala na fila. |
+| Sapador(a) | Abre caminho e desarma o que foi deixado para trás para matar. |
+| Piloto de Transporte de Tropa | Leva gente para a zona de pouso e tenta trazer todo mundo de volta. |
+| Intendente | Controla munição, ração e peça de reposição — e decide quem recebe primeiro. |
+| Instrutor(a) de Recrutas | Transforma civil em soldado no prazo curto que a guerra permite. |
+| Correspondente de Guerra | Acompanha a tropa para contar o que acontece, sob censura do comando. |
+| Capelão(ã) Militar | Escuta confissão antes do combate e enterra quem não voltou. |
+
+**FC Climática**
+
+| Profissão | Descrição |
+| --- | --- |
+| Hidrólogo(a) | Mede o que resta de água doce e diz a verdade que ninguém quer ouvir. |
+| Engenheiro(a) de Diques | Levanta e remenda a barreira que segura o mar fora da cidade. |
+| Agrônomo(a) de Cultivo Resistente | Procura a semente que ainda germina no clima que chegou. |
+| Brigadista Florestal | Enfrenta o fogo em temporada que já não tem começo nem fim. |
+| Piloto de Drone de Semeadura | Replanta encosta inteira do ar, onde ninguém consegue subir a pé. |
+| Perito(a) em Seguro Climático | Calcula o preço do desastre e decide o que a apólice ainda cobre. |
+| Coletor(a) de Água de Neblina | Tira do ar úmido o que a chuva parou de trazer. |
+| Guarda de Reservatório | Vigia o que virou a coisa mais valiosa da região. |
+| Meteorologista de Emergência | Decide a hora de mandar uma cidade inteira sair de casa. |
+| Mediador(a) de Reassentamento | Negocia para onde vai quem perdeu o lugar onde morava. |
+
+**Primeiro Contato**
+
+| Profissão | Descrição |
+| --- | --- |
+| Radioastrônomo(a) | Passa a carreira ouvindo o céu e um dia escuta resposta. |
+| Analista de Sinais | Separa o que é ruído do que tem intenção dentro. |
+| Tradutor(a) Simultâneo(a) | Verte em tempo real uma fala que ninguém garante ter entendido. |
+| Chefe de Protocolo | Decide quem cumprimenta quem primeiro, quando não há precedente nenhum. |
+| Assessor(a) de Imprensa | Escolhe o que o público sabe e a que horas fica sabendo. |
+| Bioeticista | Pergunta o que é permitido fazer com o visitante — e com quem o recebe. |
+| Operador(a) de Antena | Aponta o prato e mantém o enlace de pé no turno da madrugada. |
+| Psicólogo(a) de Crise | Cuida de quem viu primeiro e não conseguiu voltar a dormir. |
+| Documentarista | Registra tudo, porque isso vai ser a memória da espécie. |
+| Segurança de Perímetro | Mantém a curiosidade humana do lado de fora da cerca. |
+
+**Biopunk**
+
+| Profissão | Descrição |
+| --- | --- |
+| Biotécnico(a) de Bancada | Executa o protocolo que outra pessoa desenhou e assina o resultado. |
+| Cultivador(a) de Órgãos | Cria tecido humano sob encomenda e conhece o prazo de cada peça. |
+| Perito(a) em Patente Genética | Prova em juízo de quem é a sequência que está dentro de alguém. |
+| Veterinário(a) de Híbridos | Atende o que a medicina humana e a animal recusam por não saber classificar. |
+| Fiscal de Biossegurança | Lacra laboratório e assina o auto que fecha o lugar. |
+| Corretor(a) de Genoma | Aproxima quem tem a sequência rara de quem paga por ela. |
+| Enfermeiro(a) de Clínica Ilegal | Cuida do pós-operatório que nenhum hospital vai registrar. |
+| Analista de Sequenciamento | Lê o genoma inteiro e percebe o que foi acrescentado nele. |
+| Zelador(a) de Biotério | Alimenta e limpa a criação do laboratório, e vê o que ninguém anota. |
+| Entregador(a) de Material Refrigerado | Transporta a caixa fria sem perguntar o que tem dentro. |
 
 ### Características — 30
 
@@ -299,7 +359,7 @@ colapsaria tudo numa linha só.
 | `{fato}` | o fato sorteado, sozinho, sem alteração |
 
 O "Um(a)" que abre as duas linhas de personagem está escrito no molde, não nas
-profissões: as 60 abrem todas com o mesmo artigo indefinido, então não há o que
+profissões: as 100 abrem todas com o mesmo artigo indefinido, então não há o que
 sortear ali, e o `nome` guardado fica idêntico ao que aparece na premissa e no
 guia. É a diferença em relação ao local, que carrega o artigo dentro de
 `cenarios.singular` porque varia entre "um" e "uma".
@@ -343,7 +403,7 @@ considerado e recusado pela autora, por picotar a leitura.
 - **Filtro por subgênero só existe em profissões e locais.** Características,
   personalidades e fatos são universais — não pertencem a subgênero nenhum — e
   entram sempre da lista inteira, mesmo com um subgênero escolhido.
-- **Misturar subgêneros** deixa profissão e local virem de qualquer um dos seis. O
+- **Misturar subgêneros** deixa profissão e local virem de qualquer um dos dez. O
   nome do subgênero no prompt de IA vira a lista dos que apareceram, na ordem
   Personagem A, Personagem B, Local, sem repetir um subgênero usado por mais de
   uma peça.
@@ -358,5 +418,5 @@ locais × 40 fatos — **32.400.000** premissas, cerca de 32 milhões, sem sair 
 subgênero escolhido.
 
 Com "Misturar subgêneros" ligado, profissão e local passam a vir de qualquer um dos
-seis: 60 × 59 × 30 × 30 × 60 × 40 — **7.646.400.000** premissas, cerca de 7,6
+dez: 100 × 99 × 30 × 30 × 100 × 40 — **35.640.000.000** premissas, cerca de 35,6
 bilhões.

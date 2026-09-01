@@ -53,10 +53,24 @@ pede sempre pelo papel.
 | Pós Apocalíptico | `#6ee7a0` | 12,06 | 10,93 | 6,00 | 5,44 |
 | Space Opera | `#ffc300` | 12,12 | 10,98 | 6,03 | 5,46 |
 | Viagem no Tempo | `#ffd66e` | 11,95 | 10,83 | 5,95 | 5,39 |
+| FC Militar | `#c8b47a` | 12,26 | 11,11 | 6,10 | 5,53 |
+| FC Climática | `#ffb03a` | 12,21 | 11,06 | 6,07 | 5,50 |
+| Primeiro Contato | `#ffd66e` | 11,95 | 10,83 | 5,95 | 5,39 |
+| Biopunk | `#6ee7a0` | 12,06 | 10,93 | 6,00 | 5,44 |
 
-**Todas as combinações passam com folga em todos os seis subgêneros** — a menor é
+**Todas as combinações passam com folga em todos os dez subgêneros** — a menor é
 5,34:1, contra o mínimo de 4,5:1. O painel não precisou ser escurecido: o alfa
 segue em 0,8.
+
+**Os quatro subgêneros novos não pediram nova conta.** FC Climática e Biopunk
+repetem, cor por cor, a pior aurora de Distopia e de Pós Apocalíptico —
+`#ffb03a` e `#6ee7a0` já tinham linha nesta tabela, então as razões de
+contraste são as mesmas, copiadas, não recalculadas. Primeiro Contato repete a
+de Viagem no Tempo, `#ffd66e`, pelo mesmo motivo. Só FC Militar (`#c8b47a`) é
+cor inédita, e mesmo assim mais escura que as seis que já existiam — a medição
+usa sempre a cor mais clara do trio de cada aurora, e nenhuma das quatro novas
+chega perto do verde-limão `#a6ff6e` da Invasão Alienígena, que continua sendo
+o pior caso do site nas duas tabelas desta seção.
 
 > **Atualização depois da medição.** As molduras douradas saíram do site por
 > decisão editorial — primeiro dos verbetes do catálogo, depois da interface do
@@ -123,6 +137,20 @@ mais claro que o painel. Foi aqui que a medição encontrou problema.
 | Pós Apocalíptico | 4,49 ✗ | **5,40** | 7,87 | 4,89 | 2,44 | 2,69 |
 | Space Opera | 4,62 | **5,54** | 8,07 | 5,02 | 2,50 | 2,76 |
 | Viagem no Tempo | **4,18** ✗ | **5,07** | 7,39 | 4,59 | 2,29 | 2,52 |
+| FC Militar | 5,32 | **6,25** | 9,10 | 5,66 | 2,82 | 3,11 |
+| FC Climática | 4,99 | **5,92** | 8,63 | 5,37 | 2,67 | 2,95 |
+| Primeiro Contato | **4,18** | **5,07** | 7,39 | 4,59 | 2,29 | 2,52 |
+| Biopunk | 4,49 | **5,40** | 7,87 | 4,89 | 2,44 | 2,69 |
+
+As quatro linhas novas são as mesmas contas de sempre, com a pior cor de cada
+aurora nova — não uma correção refeita. FC Climática, Primeiro Contato e
+Biopunk repetem a cor de Distopia, Viagem no Tempo e Pós Apocalíptico, então os
+números são copiados, não recalculados; a coluna "antes (0,42)" de Primeiro
+Contato reprovaria pelo mesmo motivo que Viagem no Tempo reprovava, mas isso é
+história — a opacidade já está em 0,36 desde antes de este subgênero existir.
+FC Militar é a única cor inédita das quatro, e a mais escura das dez: nenhuma
+delas chega perto de reprovar, porque nenhuma é mais clara que o verde-limão
+`#a6ff6e` da Invasão Alienígena, que segue sendo o pior caso do site.
 
 ### Correção aplicada: aurora de 0,42 para 0,36
 
@@ -138,14 +166,16 @@ caiu para **0,36**. É o valor mais alto que ainda deixa o pior subgênero passa
 Estes dois **continuam reprovados** e a correção não cabia nesta task, porque
 muda o desenho e não só um número:
 
-- `--apagado` sobre o céu: 2,12 a 2,67 — usado no rodapé
+- `--apagado` sobre o céu: 2,12 a 2,82 — usado no rodapé
   ([Base.astro](../src/layouts/Base.astro)), no `blockquote cite`
   ([global.css](../src/styles/global.css)), no "Ver todos →" das páginas de
   subgênero e na legenda e no aviso do gerador.
-- `--violeta` como cor de link sobre o céu: 2,34 a 2,95 — abaixo até do mínimo
-  de 3:1 para elementos grandes.
+- `--violeta` como cor de link sobre o céu: 2,34 a 3,11 — abaixo do mínimo de
+  3:1 para elementos grandes em nove dos dez subgêneros. Só em FC Militar
+  (3,11, a aurora mais escura das dez) o link cruza esse piso, mas segue muito
+  abaixo dos 4,5:1 que texto normal exigiria — não muda a pendência.
 - `--ouro` sobre o céu, **só no subgênero Invasão Alienígena**: 4,27, contra 4,5
-  exigidos. Nos outros cinco subgêneros fica entre 4,59 e 5,37, e dentro do painel
+  exigidos. Nos outros nove subgêneros fica entre 4,59 e 5,66, e dentro do painel
   passa em todos (10,7+). Atinge os estados `:hover` de texto pequeno fora do
   painel — `.lista-subgeneros a`, `.ver-tudo` e `.sumario a`. **Não atinge o
   `h1`**, que é acento mas tem 32px e por isso responde ao mínimo de 3:1.
@@ -158,16 +188,16 @@ muda o desenho e não só um número:
 
   Sobra a pendência só nos estados `:hover`, que são interação e não conteúdo.
 
-O corpo dos verbetes passa sobre o céu em todos os subgêneros — 4,71 a 5,92 para
+O corpo dos verbetes passa sobre o céu em todos os subgêneros — 4,71 a 6,25 para
 `--texto` — e o mesmo vale para os nomes das peças sorteadas no gerador, que
-usam `--texto-forte` (6,86 a 8,63). A barra lateral violeta do `.corpo` fica entre
-2,34 e 2,95, mas é divisória decorativa, não elemento de interface com
+usam `--texto-forte` (6,86 a 9,10). A barra lateral violeta do `.corpo` fica entre
+2,34 e 3,11, mas é divisória decorativa, não elemento de interface com
 significado próprio.
 
 **Títulos dos verbetes: a cor saiu.** Foram `var(--ouro)` por um tempo, para
 distinguir um verbete do outro sem moldura, e chegaram a ser `var(--apoio)` por
 um instante. A autora recusou as duas versões — quer o acento em um lugar só — e
-eles passaram a herdar `--texto-forte`. Sobre o céu isso dá **6,86 a 8,63:1**,
+eles passaram a herdar `--texto-forte`. Sobre o céu isso dá **6,86 a 9,10:1**,
 folga até no critério de texto pequeno, contra os 4,27 do dourado no pior subgênero.
 O que separa um verbete do próximo é o peso do título e a barra lateral do
 `.corpo`, em `--apoio`.
@@ -179,9 +209,10 @@ hierarquia e pode encolher sem reprovar.
 
 **Título da página em `--destaque`.** O `h1` é o único texto de acento que restou
 fora dos preenchimentos. Tem 2em, ou 32px, em peso 900 — texto grande, mínimo
-3:1 —, e o dourado sobre o céu fica entre **4,27 e 5,37:1**. Passa nos seis
-subgêneros, e em cinco deles passaria até no critério de texto pequeno. Encolher o
-`h1` abaixo de 18,66px reprova.
+3:1 —, e o dourado sobre o céu fica entre **4,27 e 5,66:1**. Passa nos dez
+subgêneros, e em nove deles passaria até no critério de texto pequeno — só a
+Invasão Alienígena, no piso de 4,27, fica de fora desse segundo critério.
+Encolher o `h1` abaixo de 18,66px reprova.
 
 **Títulos de seção das páginas de subgênero: pastilha preenchida.** Os três `h2` de
 [`/subgeneros/[subgenero]/`](../src/pages/subgeneros/%5Bsubgenero%5D.astro) — Arquétipos,
@@ -198,7 +229,7 @@ A sombra deslocada de 4px em `--apoio` põe a segunda cor de acento na peça sem
 carregar texto, e por isso não responde a mínimo de contraste.
 
 **Títulos dentro de `.bloco`: texto em `--destaque`, não pastilha.** São dois
-lugares, medidos juntos porque a situação é a mesma: os seis `h2` de
+lugares, medidos juntos porque a situação é a mesma: os dez `h2` de
 [`/guia-de-personagens/`](../src/pages/guia-de-personagens.astro), um por subgênero,
 e o "Crie enredos com sua IA favorita" do
 [gerador](../src/pages/gerador.astro). Os dois ficam dentro de um `.bloco`, onde
@@ -206,7 +237,7 @@ o acento mede **6,78:1** no escuro e **4,59:1** no claro — folga até no crit�
 de texto pequeno, e o `h2` tem 24px. Por isso aqui a cor pôde ir
 na letra em vez do preenchimento: o problema que criou a pastilha nas páginas de
 subgênero era o `h2` claro se confundir com o que vem logo abaixo dele — os títulos
-de verbete lá, os sessenta termos do `<dl>` no guia, o texto do prompt no
+de verbete lá, os cem termos do `<dl>` no guia, o texto do prompt no
 gerador. O `.bloco` já dá o
 contraste que o céu não daria — direto sobre o céu o número cairia para 4,27 no
 pior subgênero, ainda acima dos 3:1 de texto grande, mas sem esta folga.
@@ -235,7 +266,7 @@ vêm logo abaixo, e os dois passariam a competir.
 irmão dele, dentro de um `.titulo-linha`. Dentro da pastilha ele ficaria em
 `--apagado` sobre `--destaque`: **2,01:1** no escuro e **1,09:1** no claro, e é
 texto pequeno — a mesma reprovação do roxo-sobre-amarelo, em pior grau. Fora
-dela ele continua sobre o céu, com os mesmos 2,12 a 2,67 da pendência registrada
+dela ele continua sobre o céu, com os mesmos 2,12 a 2,82 da pendência registrada
 acima; a mudança não melhora nem piora esse número.
 
 **Cadeado do gerador.** Usa `--texto` no estado destravado (4,71 no pior subgênero)
