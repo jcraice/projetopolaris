@@ -424,7 +424,7 @@ const raiz = base.endsWith('/') ? base : base + '/';
 
     prompt.textContent = montarPrompt(modeloDoPrompt, {
       subgenero,
-      // O "Um(a)" vem escrito aqui e no MOLDE, e não da lista, porque as 60
+      // O "Um(a)" vem escrito aqui e no MOLDE, e não da lista, porque as 100
       // profissões abrem com o mesmo artigo — ver o comentário em moldes.ts.
       personagemA: `Um(a) ${sorteio.personagemA.profissao.nome} que ${sorteio.personagemA.caracteristica}`,
       personagemB: `Um(a) ${sorteio.personagemB.profissao.nome} que é ${sorteio.personagemB.personalidade}`,

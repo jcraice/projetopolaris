@@ -14,7 +14,7 @@ interface Props {
 
 const { tipo, atual } = Astro.props;
 
-/* Só os seis subgêneros completos: o pool dos 10 Arquétipos Comuns tem
+/* Só os dez subgêneros completos: o pool dos 10 Arquétipos Comuns tem
    completo: false e não é destino de troca — a mesma regra que o mantém fora
    de /subgeneros/. Mas a página /arquetipos/comuns/ recebe a fileira assim
    mesmo, com nenhuma pílula marcada: ela é a única das quatro rotas
@@ -28,7 +28,7 @@ const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : `${base}/`;
 ---
 {/* O subgênero aberto fica na fileira, marcado, em vez de ser omitido: assim a
-    fileira é a mesma nas seis páginas — não muda de largura nem de ordem a cada
+    fileira é a mesma nas dez páginas — não muda de largura nem de ordem a cada
     troca — e ainda diz onde a pessoa está. É o que o rótulo "Trocar de
     subgênero" promete; "Outros subgêneros" pediria a lista sem ele.
 

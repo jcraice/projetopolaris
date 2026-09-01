@@ -63,7 +63,7 @@ const pilares = [
   <section aria-labelledby="subgeneros-titulo">
     <h2 id="subgeneros-titulo">Os subgêneros</h2>
     {/* Mesmo mecanismo do menu da navegação: nasce escondido, só aparece por
-        JavaScript, e sem script a lista dos seis fica visível como antes. */}
+        JavaScript, e sem script a lista dos dez fica visível como antes. */}
     <button
       type="button"
       class="abrir-subgeneros"
@@ -190,13 +190,17 @@ const pilares = [
     border-color: var(--apoio);
   }
 
-  /* Os seis retângulos de subgênero viram uma lista que abre em tela estreita.
+  /* Os dez retângulos de subgênero viram uma lista que abre em tela estreita.
 
-     O ponto de quebra é o mesmo 1079px da navegação, e não por simetria: os
-     seis nomes somam cerca de 1060px com o espaço entre eles — "Invasão
-     Alienígena" e "Pós Apocalíptico" são largos — então é por volta daí que
-     eles passariam para uma segunda linha. Recolher antes disso é o que evita
-     vê-los quebrados no caminho até o celular. */
+     O ponto de quebra é o mesmo 1079px da navegação. Quando só havia seis
+     subgêneros, a coincidência não era por simetria: os seis nomes somavam
+     cerca de 1060px com o espaço entre eles — "Invasão Alienígena" e "Pós
+     Apocalíptico" são largos —, então era por volta daí que eles passariam
+     para uma segunda linha. Com dez subgêneros a soma passou a superar em
+     muito os 1079px — o ponto de quebra deixou de calibrar a largura exata da
+     lista e passou a valer só por herdar o mesmo da navegação. Recolher em
+     tela estreita continua evitando pílulas espremidas no caminho até o
+     celular. */
   .abrir-subgeneros {
     display: none;
     align-items: center;

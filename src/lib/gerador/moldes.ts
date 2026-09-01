@@ -8,7 +8,7 @@ import type { Travas } from './tipos';
    bloco de quatro linhas, não um parágrafo corrido, e é por isso que o
    parágrafo da premissa em gerador.astro precisa de `white-space: pre-wrap`.
 
-   O "Um(a)" está aqui e não na lista de profissões: as 60 abrem com o mesmo
+   O "Um(a)" está aqui e não na lista de profissões: as 100 abrem com o mesmo
    artigo, então não há o que sortear, e o nome guardado fica idêntico ao que
    aparece no guia e na premissa. É a diferença em relação ao local, que carrega o
    artigo dentro de `cenarios.singular` porque varia entre "um" e "uma".
