@@ -4,4 +4,4 @@ subgenero: biopunk
 ordem: 7
 ---
 
-O experimento genético que sai do controle e ameaça tudo ao redor.
+Um protocolo genético escapa do prédio antes que alguém perceba a falha.

@@ -350,7 +350,7 @@ colapsaria tudo numa linha só.
 
 | Marcador | O que entra no lugar |
 | --- | --- |
-| `{subgenero}` | o nome do subgênero (ou dos subgêneros, unidos por " + " com "Misturar subgêneros"), com a inicial abaixada |
+| `{subgenero}` | o nome do subgênero (ou dos subgêneros, unidos por " + " com "Misturar subgêneros"), com a inicial abaixada — exceto a sigla, que fica como está ("FC Militar" vira "FC militar") |
 | `{profissaoA}` | o `nome` da profissão do Personagem A, como está na lista — sem abaixar inicial, para não estragar siglas ("Engenheiro(a) de IA") |
 | `{caracteristica}` | o traço do Personagem A, já com verbo embutido: "é cego(a) de um olho" |
 | `{profissaoB}` | o `nome` da profissão do Personagem B, como está na lista |

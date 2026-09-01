@@ -4,4 +4,4 @@ subgenero: biopunk
 ordem: 2
 ---
 
-Uma doença criada em laboratório, escapada do controle de quem a projetou.
+Sintomas mudam a cada surto e nenhuma vacina antiga continua funcionando.

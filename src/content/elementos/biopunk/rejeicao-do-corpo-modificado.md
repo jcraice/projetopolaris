@@ -4,4 +4,4 @@ subgenero: biopunk
 ordem: 5
 ---
 
-A rejeição do corpo contra o órgão ou tecido nele implantado.
+Vizinhos, família e emprego fecham a porta a quem alterou o corpo.

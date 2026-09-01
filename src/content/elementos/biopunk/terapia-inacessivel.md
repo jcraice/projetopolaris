@@ -4,4 +4,4 @@ subgenero: biopunk
 ordem: 9
 ---
 
-A terapia genética existe, mas fica fora do alcance de quem precisa.
+A cura existe, mas o preço deixa de fora quem mais precisa.

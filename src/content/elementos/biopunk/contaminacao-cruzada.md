@@ -4,4 +4,4 @@ subgenero: biopunk
 ordem: 10
 ---
 
-Material genético que escapa do laboratório e se mistura a outras espécies.
+Genes de espécies diferentes se misturam ao acaso, sem controle do resultado.

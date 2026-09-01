@@ -172,10 +172,14 @@ que hoje só o arquétipo felino recebe. Aparência de verbete se muda ali, uma 
 não página por página.
 
 **O verbete ilustrado** é o mesmo Cartão com um desenho ao lado do texto. Hoje
-são oito: o arquétipo felino dos **seis** subgêneros — Parceiro de Sombra, Infiltrado
-Silencioso, Guardião Invisível, Vigia dos Suprimentos, Observador Espacial e
-Batedor das Eras — mais Estações e Bases Espaciais e Sucessão dinástica
-contestada, os dois do Space Opera que não são arquétipo.
+são oito: o arquétipo felino dos **seis subgêneros que já existiam quando o
+desenho entrou** — Cyberpunk, Distopia, Invasão Alienígena, Pós Apocalíptico,
+Space Opera e Viagem no Tempo, com Parceiro de Sombra, Infiltrado Silencioso,
+Guardião Invisível, Vigia dos Suprimentos, Observador Espacial e Batedor das
+Eras — mais Estações e Bases Espaciais e Sucessão dinástica contestada, os dois
+do Space Opera que não são arquétipo. Os quatro subgêneros que entraram depois
+— FC Militar, FC Climática, Primeiro Contato e Biopunk — também têm arquétipo
+felino, mas sem par de desenho: nenhum dos quatro ganhou ilustração.
 
 **A ilustração fecha a página, sempre no último verbete da lista** — decisão da
 autora. Nos arquétipos esse último é o felino, que já vinha destacado; nos
@@ -247,19 +251,32 @@ Invasão × Campos de refugiados, Humano Aumentado × Implantes cibernéticos):
 elas são o que a grade de duas dimensões existe para fazer.
 
 O tamanho do acervo (hoje 120 arquétipos — 10 por subgênero mais o felino, e mais 10
-comuns —, 100 cenários, 100 elementos) está escrito por extenso em
-seis lugares que nenhum teste confere: [README.md](README.md),
-[sobre.md](src/content/paginas/sobre.md), o comentário sobre os cenários em
-[gerador.astro](src/pages/gerador.astro), o `nome` de
+comuns —, 100 cenários, 100 elementos) está escrito por extenso em vários
+lugares que nenhum teste confere — e a lista que costumava viver aqui já
+provou que enumerar por nome não segura: tinha seis itens antes desta branch,
+e a revisão final achou mais seis que ninguém tinha acrescentado —
+[Aurora.astro](src/components/Aurora.astro),
+[TrocarDeSubgenero.astro](src/components/TrocarDeSubgenero.astro),
+[moldes.ts](src/lib/gerador/moldes.ts), [prompt.ts](src/lib/gerador/prompt.ts),
+[guia-de-personagens.astro](src/pages/guia-de-personagens.astro) e
+[index.astro](src/pages/index.astro) —, ao lado dos seis originais:
+[README.md](README.md), [sobre.md](src/content/paginas/sobre.md), o comentário
+sobre os cenários em [gerador.astro](src/pages/gerador.astro), o `nome` de
 [comuns.md](src/content/subgeneros/comuns.md), os dois comentários de
-[subgeneros/[subgenero].astro](src/pages/subgeneros/[subgenero].astro) (o pool comuns e
-a posição do felino) e
-[docs/atributos-do-gerador.md](docs/atributos-do-gerador.md), que lista o acervo
-verbete a verbete. Entrada nova em `src/content/` desatualiza os seis em
-silêncio — os de `subgeneros/` já tinham ficado para trás uma vez. Eram sete até a
-premissa virar personagens: o rótulo "Incluir os 10 arquétipos comuns" saiu do
-formulário do gerador junto com a caixa, porque arquétipos deixaram de entrar
-no sorteio — não sobrou rótulo para desatualizar no lugar dele.
+[subgeneros/[subgenero].astro](src/pages/subgeneros/[subgenero].astro) (o pool
+comuns e a posição do felino) e
+[docs/atributos-do-gerador.md](docs/atributos-do-gerador.md), que lista o
+acervo verbete a verbete. Doze lugares hoje — mas o número em si já mentiu
+uma vez, então não é ele que segura a garantia: antes de mudar o tamanho do
+acervo, rode `grep -rn` pelos números atuais ("120 arquétipos", "100
+cenários", "100 elementos", "dez subgêneros") em `src/`, `docs/` e
+`README.md`, e trate esta lista como ponto de partida, não como inventário
+fechado. Entrada nova em `src/content/` desatualiza tudo isso em silêncio —
+os de `subgeneros/` já tinham ficado para trás uma vez, e agora os outros seis
+também. Eram sete lugares até a premissa virar personagens: o rótulo "Incluir
+os 10 arquétipos comuns" saiu do formulário do gerador junto com a caixa,
+porque arquétipos deixaram de entrar no sorteio — não sobrou rótulo para
+desatualizar no lugar dele.
 
 **Prosa não mora em componente.** Os textos da home, das páginas de índice, de
 Sobre, de Estilos e do 404 vêm da coleção `paginas` (`src/content/paginas/*.md`),
@@ -421,7 +438,10 @@ alguém.
 **Concordância gramatical** encolheu para uma função:
 [redacao.ts](src/lib/gerador/redacao.ts) resolve a contração de preposição
 (`contrair`, `em`+`uma` → `numa`) — é o único ponto de concordância que sobrou.
-O gênero não precisa mais de heurística: as profissões, características e
+Ao lado dela, no mesmo arquivo, `abaixarNome` resolve outro ajuste de texto que
+não é concordância: a inicial de `{subgenero}` vai minúscula na premissa
+("space opera"), exceto a sigla, que fica como está ("FC Militar" vira "FC
+militar", não "fC militar"). O gênero não precisa mais de heurística: as profissões, características e
 personalidades carregam o "(a)" dentro do próprio texto ("Executivo(a)
 Corporativo(a)", "egocêntrico(a)"), porque a premissa nunca mais se refere a
 ninguém por pronome — o antigo `{pronome}` não existe. `numeroDe` e `generoDe`

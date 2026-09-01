@@ -66,9 +66,12 @@ segue em 0,8.
 repetem, cor por cor, a pior aurora de Distopia e de Pós Apocalíptico —
 `#ffb03a` e `#6ee7a0` já tinham linha nesta tabela, então as razões de
 contraste são as mesmas, copiadas, não recalculadas. Primeiro Contato repete a
-de Viagem no Tempo, `#ffd66e`, pelo mesmo motivo. Só FC Militar (`#c8b47a`) é
-cor inédita, e mesmo assim mais escura que as seis que já existiam — a medição
-usa sempre a cor mais clara do trio de cada aurora, e nenhuma das quatro novas
+de Viagem no Tempo, `#ffd66e`, pelo mesmo motivo. Só FC Militar tem a pior cor
+que ainda não tinha linha nesta tabela — mas `#c8b47a` não é cor inédita do
+site: é a terceira cor da aurora do Pós Apocalíptico desde sempre, só nunca
+tinha sido a mais clara do trio a que pertence. Em FC Militar ela é, e é por
+isso que estreia aqui — mais escura, ainda, que as seis que já existiam — a
+medição usa sempre a cor mais clara do trio de cada aurora, e nenhuma das quatro novas
 chega perto do verde-limão `#a6ff6e` da Invasão Alienígena, que continua sendo
 o pior caso do site nas duas tabelas desta seção.
 
@@ -148,9 +151,12 @@ Biopunk repetem a cor de Distopia, Viagem no Tempo e Pós Apocalíptico, então 
 números são copiados, não recalculados; a coluna "antes (0,42)" de Primeiro
 Contato reprovaria pelo mesmo motivo que Viagem no Tempo reprovava, mas isso é
 história — a opacidade já está em 0,36 desde antes de este subgênero existir.
-FC Militar é a única cor inédita das quatro, e a mais escura das dez: nenhuma
-delas chega perto de reprovar, porque nenhuma é mais clara que o verde-limão
-`#a6ff6e` da Invasão Alienígena, que segue sendo o pior caso do site.
+FC Militar é a única das quatro cujo pior caso não tinha linha nesta tabela
+antes — `#c8b47a` não é cor nova do site, é a terceira cor da aurora do Pós
+Apocalíptico desde sempre, só nunca tinha sido a mais clara de um trio —, e
+mesmo assim é a mais escura das dez: nenhuma delas chega perto de reprovar,
+porque nenhuma é mais clara que o verde-limão `#a6ff6e` da Invasão Alienígena,
+que segue sendo o pior caso do site.
 
 ### Correção aplicada: aurora de 0,42 para 0,36
 

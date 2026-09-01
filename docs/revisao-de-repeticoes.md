@@ -212,3 +212,72 @@ duas dimensões funcionando. Ficam como estão:
   Alienígena é sobre o que mata (armamento e defesas que superam as humanas).
   Trocar um subgênero pelo outro trocaria o tom da história inteira, então os
   dois ficam.
+
+### Novo × novo, entre os quatro subgêneros
+
+As seções anteriores cruzam sempre um subgênero novo contra os seis originais.
+Ninguém tinha cruzado os quatro novos entre si — feito aqui, depois do fato,
+porque só a revisão final olhou o acervo inteiro de uma vez.
+
+- **Bancos de sementes** (`cen` FC Climática) × **Bancos genéticos
+  corporativos** (`cen` Biopunk) × **Sementes e bancos genéticos disputados**
+  (`elem` Pós Apocalíptico) — três verbetes sobre cofre de material biológico,
+  e os dois cenários chegam a abrir o corpo com a mesma dupla "Cofres...
+  guardam". Ficam como estão: o que separa os três não é o objeto guardado, é
+  quem guarda e por quê. O banco de sementes é reserva pública contra a
+  extinção, o banco genético é ativo privado que uma corporação já patenteou,
+  e o elemento do Pós Apocalíptico não é um lugar — é a disputa por eles
+  depois que nem Estado nem corporação sobraram para proteger nenhum dos
+  dois. A coincidência de abertura ("Cofres... guardam") é estilística, não
+  conceitual, mas fica registrada para não se repetir uma quarta vez.
+- **Segredo militar guardado da própria tropa** (`elem` FC Militar) ×
+  **Negacionismo institucional** (`elem` FC Climática) × **Vazamento de
+  informação** (`elem` Primeiro Contato) — os três giram em torno de uma
+  instituição e o que ela faz com a verdade, mas por verbos opostos: o
+  primeiro é o comando escondendo informação da própria tropa (segredo para
+  dentro), o segundo é a recusa oficial em admitir um fato já provado
+  (negação), o terceiro é o segredo que escapa contra a vontade de quem o
+  guardava (vazamento). Esconder, negar e deixar vazar não são o mesmo gesto,
+  e cada um pertence à crise que o subgênero já é sobre. Ficam como estão.
+- **Mercado negro de material genético** (`elem` Biopunk) × **Corpos e órgãos
+  como mercadoria** (`elem` Cyberpunk) — sobreposição real, mas sem linha
+  própria nesta planilha até agora. Fica como está pelo mesmo critério de
+  Refugiado da Invasão × Campos de refugiados: Cyberpunk trata qualquer corpo
+  como peça de venda (o quê, em qualquer canto do subgênero), Biopunk é o
+  mercado específico de material genético — genes, não o corpo inteiro — que
+  só existe porque a manipulação genética é o motor daquele subgênero.
+
+**Ecos de título mais leves**, sem sobreposição de sentido — registrados para
+não serem confundidos com repetição real caso apareçam de novo numa busca:
+
+- **Seis cenários com "nave" no título** (não cinco — a contagem inicial da
+  revisão deixou passar um): Cemitérios de naves e Naves de desembarque (FC
+  Militar), Destroços de nave abatida e Naves-mãe orbitais (Invasão
+  Alienígena), Naves-embaixada (Primeiro Contato) e Naves e Frotas Nômades
+  (Space Opera) — cada um é um tipo de lugar diferente (necrópole, porão de
+  tropa, destroço, base orbital, embaixada móvel, frota errante); o eco é só
+  a palavra.
+- **Quatro arquétipos "Guardião"**: Guardião do Saber Ancestral (FC
+  Climática), Guardião Invisível (o felino de Invasão Alienígena), Guardião
+  do Conhecimento Perdido (Pós Apocalíptico) e Guardião do Sinal (Primeiro
+  Contato) — quatro papéis distintos (sabedoria ancestral, o gato que
+  observa, conhecimento tecnológico perdido, o sinal alienígena), unidos só
+  pelo substantivo.
+- **Fazendas de tecido** (Biopunk) × **Fazendas verticais sob cúpula** (FC
+  Climática) — cultivo de órgão humano × cultivo de alimento sob clima
+  hostil; o eco é agrícola, não temático.
+- **Zonas de contenção biológica** (Biopunk) × **Zonas desmilitarizadas** (FC
+  Militar) — perímetro que contém uma praga × faixa que separa dois
+  exércitos.
+- **Centros de comando blindados** (FC Militar) × **Centros de decifração**
+  (Primeiro Contato) — sala de guerra × sala de linguistas.
+- **Bases avançadas em planeta hostil** (FC Militar) × **Bases militares em
+  prontidão** (Primeiro Contato) — posto isolado já sob ataque × instalação
+  esperando um encontro que ainda pode não virar guerra.
+
+**Vizinhança visual, não textual.** A aurora do Biopunk (`#6ee7a0`, `#ff2d92`,
+`#7c3aed`) divide dois dos três hexadecimais com a do Cyberpunk (`#ff2d92`,
+`#7c3aed`, `#00e5ff`) — só o terceiro tom muda (verde no Biopunk, ciano no
+Cyberpunk). Não é repetição de texto e não afeta o critério quem/onde/o quê,
+mas ninguém tinha registrado que dois dos dez subgêneros compartilham dois
+terços da própria paleta.

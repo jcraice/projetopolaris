@@ -4,4 +4,4 @@ subgenero: biopunk
 ordem: 4
 ---
 
-A melhoria genética reservada a quem tem dinheiro para pagar por ela.
+Pagar bem decide quem sai do corpo que nasceu, e quem fica.

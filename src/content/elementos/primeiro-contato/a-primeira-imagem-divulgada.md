@@ -4,4 +4,4 @@ subgenero: primeiro-contato
 ordem: 10
 ---
 
-O primeiro registro divulgado que molda como o mundo inteiro reage.
+Uma imagem solta ao público decide sozinha o tom da reação mundial.
