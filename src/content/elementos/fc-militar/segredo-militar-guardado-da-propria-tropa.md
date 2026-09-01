@@ -4,4 +4,4 @@ subgenero: fc-militar
 ordem: 2
 ---
 
-A informação que o comando esconde até da própria tropa.
+O comando esconde certas informações até da própria tropa.

@@ -4,4 +4,4 @@ subgenero: fc-militar
 ordem: 1
 ---
 
-O tiro que vem do próprio lado e mata um aliado.
+Um tiro do próprio lado mata quem deveria estar a salvo.

@@ -10,4 +10,4 @@ aberturaCenarios: "Nesse subgênero, os cenários fixam o lugar de cada função
 aberturaElementos: "Nesse subgênero, os elementos narrativos pressionam quem está na linha de combate. Fogo amigo, perdas aceitáveis e trauma de combate mostram que a guerra também vem de dentro — o tiro do próprio lado, a vida que vira número, a marca que fica depois — e decidem o preço de cada farda vestida."
 ---
 
-Conflitos armados em escala interestelar, marcados pela disciplina da cadeia de comando, o peso do treinamento sob fogo e o custo humano da guerra, que testa soldados, oficiais e sobreviventes movidos por dever, sobrevivência ou desilusão.
+Conflitos armados em escala interestelar, regidos pela disciplina da cadeia de comando, cobram um alto custo humano de soldados movidos por dever, sobrevivência ou desilusão.

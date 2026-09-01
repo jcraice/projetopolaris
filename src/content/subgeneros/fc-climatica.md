@@ -10,4 +10,4 @@ aberturaCenarios: "Nesse subgênero, os cenários registram como a paisagem já 
 aberturaElementos: "Nesse subgênero, os elementos narrativos são as pressões que o clima já não deixa ignorar. Escassez de água potável, negacionismo institucional e migração em massa mostram que a crise chega primeiro como falta, depois como negação e por fim como deslocamento — e é nessa ordem que ela decide quem uma história vai seguir."
 ---
 
-Sociedades pressionadas pelo colapso climático, entre enchentes, secas e migrações forçadas, enquanto ciência, poder corporativo e organização comunitária disputam o controle do pouco que resta de terra habitável e água limpa.
+Sociedades pressionadas pelo colapso climático, entre enchentes, secas e migrações, veem ciência, poder e comunidades disputarem o que resta de terra habitável e água limpa.

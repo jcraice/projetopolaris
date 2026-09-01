@@ -4,4 +4,4 @@ subgenero: primeiro-contato
 ordem: 2
 ---
 
-O conjunto de regras oficiais que determina como reagir ao encontro alienígena.
+Regras oficiais determinam como reagir ao primeiro encontro alienígena.

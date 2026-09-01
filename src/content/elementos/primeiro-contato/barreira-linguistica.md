@@ -4,4 +4,4 @@ subgenero: primeiro-contato
 ordem: 1
 ---
 
-A diferença entre duas linguagens que nenhum dicionário universal consegue traduzir sozinho.
+Nenhum dicionário universal traduz sozinho a diferença entre duas linguagens tão distintas.

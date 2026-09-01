@@ -4,4 +4,4 @@ subgenero: biopunk
 ordem: 6
 ---
 
-A rede clandestina que compra e vende genes e tecido sem licença.
+Genes e tecido trocam de mãos sem licença nem pergunta.

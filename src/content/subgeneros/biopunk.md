@@ -10,4 +10,4 @@ aberturaCenarios: "Nesse subgênero, os cenários mostram onde a vida é manipul
 aberturaElementos: "Nesse subgênero, os elementos narrativos são as pressões que decidem quem é dono da vida. Patente sobre o vivo, rejeição do corpo modificado e mercado negro de material genético mostram que a propriedade, o próprio corpo e a lei entram em conflito sem esperar que um personagem apareça."
 ---
 
-União de biotecnologia de ponta e decadência social, em que corporações patenteiam o próprio código genético, o corpo humano é reescrito por implante ou mutação e um mercado negro de genes prospera à margem da lei.
+União de biotecnologia e decadência social: corporações patenteiam genes, corpos reescritos por implante ou mutação e um mercado negro os revende à margem da lei.

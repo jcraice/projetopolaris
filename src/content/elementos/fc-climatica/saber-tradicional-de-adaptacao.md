@@ -4,4 +4,4 @@ subgenero: fc-climatica
 ordem: 8
 ---
 
-O conhecimento herdado de gerações que já enfrentaram secas e cheias antes.
+Gerações que já enfrentaram secas e cheias antes deixam esse conhecimento.

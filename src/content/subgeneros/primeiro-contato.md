@@ -10,4 +10,4 @@ aberturaCenarios: "Nesse subgênero, os cenários decidem quanto controle a huma
 aberturaElementos: "Nesse subgênero, os elementos narrativos são as pressões que decidem se um contato inspira confiança ou desconfiança. Silêncio de rádio, exigência de prova extraordinária e vazamento de informação mostram que a dúvida chega antes de qualquer resposta alienígena — e o que uma pessoa faz com ela pesa tanto quanto o próprio sinal recebido."
 ---
 
-Primeiro encontro entre a humanidade e uma espécie alienígena, marcado pela tentativa de decifrar uma linguagem desconhecida e pela disputa entre abrir contato, negociar limites ou isolar a Terra por completo.
+Primeiro encontro entre humanidade e espécie alienígena, que tenta decifrar uma língua desconhecida e se divide entre abrir contato, negociar limites ou isolar a Terra.

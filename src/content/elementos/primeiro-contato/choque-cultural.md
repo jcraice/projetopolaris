@@ -4,4 +4,4 @@ subgenero: primeiro-contato
 ordem: 4
 ---
 
-O desnorteio diante de costumes e valores que não fazem sentido algum.
+Costumes e valores que não fazem sentido algum causam desnorteio total.

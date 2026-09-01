@@ -4,4 +4,4 @@ subgenero: primeiro-contato
 ordem: 9
 ---
 
-O segredo oficial que escapa do controle e chega ao público.
+Um segredo oficial escapa do controle e chega ao público.
