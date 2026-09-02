@@ -22,8 +22,16 @@ const raiz = base.endsWith('/') ? base : base + '/';
     e o subgênero escolhido no gerador decide de quais dez os dois personagens saem.
   </p>
 
+  {/* Mesmo padrão do sumário de /subgeneros/[subgenero]/: são cem termos em dez
+      blocos, e sem os atalhos chegar ao último é rolar a página inteira. */}
+  <nav class="sumario" aria-label="Sumário do guia">
+    {subgeneros.map((subgenero) => (
+      <a href={`#${subgenero.id}`}>{subgenero.data.nome}</a>
+    ))}
+  </nav>
+
   {subgeneros.map((subgenero) => (
-    <section class="bloco">
+    <section class="bloco" id={subgenero.id}>
       <h2>{subgenero.data.nome}</h2>
       <dl class="profissoes">
         {PROFISSOES.filter((p) => p.subgenero === subgenero.id).map((profissao) => (
@@ -43,11 +51,39 @@ const raiz = base.endsWith('/') ? base : base + '/';
   /* <dl> porque é exatamente isto: uma lista de termos e suas definições. O
      <div> em volta de cada par existe para o grid tratar o par como uma unidade
      — sem ele, dt e dd viram itens soltos e desalinham. */
+  /* Duas colunas: cada profissão é um nome e uma linha, e em coluna única elas
+     ocupavam um terço da largura e deixavam o resto vazio, com as cem
+     empilhadas descendo sem fim. `auto-fit` com mínimo de 320px devolve a
+     coluna única no celular sem precisar de consulta de mídia. */
   .profissoes {
     margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px 40px;
+  }
+
+  /* Os mesmos 96px do scroll-margin-top do Cartão e das seções de
+     /subgeneros/[subgenero]/: sem isto o título do bloco para debaixo da barra
+     fixa quando o sumário salta para ele. */
+  .bloco {
+    scroll-margin-top: 96px;
+  }
+
+  .sumario {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-block: 20px 32px;
+  }
+
+  .sumario a {
+    color: var(--texto);
+    text-decoration: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    border-bottom: 2px solid var(--apoio);
+    padding-bottom: 2px;
   }
 
   .profissao {
