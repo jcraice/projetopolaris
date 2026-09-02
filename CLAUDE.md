@@ -227,16 +227,28 @@ páginas de catálogo. É o único arquivo de `src/lib/` sem teste ao lado, e de
 propósito: `import.meta.glob` é do Vite e só existe dentro do build.
 
 O par de arquivos sai de [scripts/gerar-ilustracao.py](scripts/gerar-ilustracao.py),
-que recorta o papel branco quando o original vem com fundo (os primeiros
-chegaram já recortados, os gatos dos outros cinco subgêneros não — sem esse passo o
-desenho apareceria dentro de um retângulo branco no tema escuro), corta o
-original na caixa do desenho, encaixa numa **caixa** de 560px de
-lado e inverte o traço para a versão do tema escuro — preservando o que é
+que troca o branco por transparência onde ele for papel, corta o original na
+caixa do desenho, encaixa numa **caixa** de 560px de lado e inverte o traço
+para a versão do tema escuro — preservando o que é
 colorido, que é pigmento escolhido e não traço. Caixa e não largura fixa porque
 os desenhos têm formatos muito diferentes: igualados pela largura, o trono da
 Sucessão dinástica contestada ficaria com quase o dobro da altura do gato e
 abriria um vão enorme ao lado de um verbete de duas linhas. O Cartão lê a largura do
 próprio arquivo e mostra na metade — a caixa de 280px na tela.
+
+**O papel se decide por pixel, e isso custou uma correção.** Os originais
+chegam de três jeitos: já recortados, com o traço sobre nada; inteiros opacos,
+como o desenho sai do programa da autora, traço escuro sobre papel branco
+chapado; e híbridos, com o lado de fora recortado mas o miolo das formas
+preenchido de branco opaco. O script decidia pelo alfa do arquivo — "tem
+transparência, então já veio recortado, pule o passo" —, e os quatro gatos dos
+subgêneros novos, que são do terceiro tipo, saíram com o miolo preto chapado no
+tema escuro: o papel de dentro sobrevivia ao passo pulado e a inversão o pintava
+de preto. Hoje quem manda é o pixel, com duas ressalvas que existem para não
+mexer em desenho já publicado: só pixel inteiramente opaco entra na conta (alfa
+parcial é borda antisserrilhada), e num original que já veio recortado a
+conversão alcança só o que passa de `LIMITE_PAPEL`, senão o cinza opaco do traço
+viraria preto translúcido e a linha clarearia no tema escuro.
 
 Os originais em tamanho cheio ficam em `src/assets/ilustracoes/original/`,
 versionados, porque sem eles não há como refazer nada. É script de uso ocasional

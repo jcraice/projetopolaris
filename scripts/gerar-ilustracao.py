@@ -21,6 +21,10 @@ from PIL import Image
 
 CAIXA = 560    # o dobro do lado da caixa de exibição no verbete, para tela retina
 MARGEM = 0.02  # folga em volta do desenho, em fração do lado maior
+# A partir de quão claro um pixel opaco conta como papel, num desenho que já
+# chegou com o lado de fora recortado. Alto de propósito: entre papel e traço
+# de lápis fraco, o erro barato é deixar o traço em paz.
+LIMITE_PAPEL = 230
 
 
 def eh_cor_escolhida(r: int, g: int, b: int) -> bool:
@@ -36,13 +40,31 @@ def eh_cor_escolhida(r: int, g: int, b: int) -> bool:
 
 
 def recortar_do_papel(imagem: Image.Image) -> Image.Image:
-    """Troca o fundo branco por transparência, quando o original vem com fundo.
+    """Troca o branco por transparência, onde ele for papel.
 
-    Os primeiros desenhos chegaram já recortados, com o traço sobre nada; os
-    seguintes vieram como o desenho sai do programa da autora, traço escuro
-    sobre papel branco chapado. Se o alfa entrar aqui todo opaco, é o segundo
-    caso — e sem este passo o desenho apareceria dentro de um retângulo branco
-    no tema escuro.
+    Os desenhos chegam de três jeitos. Uns já vêm recortados, com o traço sobre
+    nada. Outros vêm como saem do programa da autora, traço escuro sobre papel
+    branco chapado — e sem este passo apareceriam dentro de um retângulo branco
+    no tema escuro. E outros vêm pela metade: o lado de fora recortado, mas o
+    miolo das formas preenchido de branco opaco.
+
+    O terceiro caso é o que obriga a decidir por pixel. A versão anterior
+    desta função pulava tudo quando o arquivo trazia qualquer transparência,
+    concluindo que já viera recortado; nos híbridos o papel de dentro
+    sobrevivia, e a inversão do tema escuro o transformava em preto chapado
+    dentro do gato. Agora o que manda é o pixel: opaco e claro é papel, venha
+    de onde vier.
+
+    Só pixel **inteiramente opaco** passa por aqui. Pixel que já tem alfa
+    parcial é borda antisserrilhada de um traço já recortado, e mexer nela
+    devolveria opacidade cheia a uma borda que devia ser suave.
+
+    E no híbrido a conversão alcança só o que é claro o bastante para ser
+    papel. Num desenho que chega inteiro opaco não há como distinguir papel de
+    traço pelo alfa, e a conta da distância até o branco resolve os dois de uma
+    vez; num que já vem recortado, o miolo opaco que sobrou é traço, e passá-lo
+    pela mesma conta trocaria cinza opaco por preto translúcido — o que clareia
+    a linha no tema escuro e mexeria em desenho já publicado.
 
     O que vira alfa é a distância até o branco: quanto mais escuro o pixel,
     mais opaco ele fica, e o traço volta a ser preto puro. É a conta inversa da
@@ -51,15 +73,16 @@ def recortar_do_papel(imagem: Image.Image) -> Image.Image:
     inclusive. Cor escolhida não passa por isso: ela fica opaca e com o
     pigmento intacto, senão o laranja clarearia junto com o papel.
     """
-    if imagem.getchannel('A').getextrema()[0] < 255:
-        return imagem
+    inteira_opaca = imagem.getchannel('A').getextrema()[0] == 255
 
     saida = imagem.copy()
     px = saida.load()
     for y in range(saida.height):
         for x in range(saida.width):
-            r, g, b, _ = px[x, y]
-            if eh_cor_escolhida(r, g, b):
+            r, g, b, a = px[x, y]
+            if a != 255 or eh_cor_escolhida(r, g, b):
+                continue
+            if not inteira_opaca and max(r, g, b) < LIMITE_PAPEL:
                 continue
             px[x, y] = (0, 0, 0, 255 - max(r, g, b))
     return saida
