@@ -175,14 +175,12 @@ que hoje só o arquétipo felino recebe. Aparência de verbete se muda ali, uma 
 não página por página.
 
 **O verbete ilustrado** é o mesmo Cartão com um desenho ao lado do texto. Hoje
-são oito: o arquétipo felino dos **seis subgêneros que já existiam quando o
-desenho entrou** — Cyberpunk, Distopia, Invasão Alienígena, Pós Apocalíptico,
-Space Opera e Viagem no Tempo, com Parceiro de Sombra, Infiltrado Silencioso,
-Guardião Invisível, Vigia dos Suprimentos, Observador Espacial e Batedor das
-Eras — mais Estações e Bases Espaciais e Sucessão dinástica contestada, os dois
-do Space Opera que não são arquétipo. Os quatro subgêneros que entraram depois
-— FC Militar, FC Climática, Primeiro Contato e Biopunk — também têm arquétipo
-felino, mas sem par de desenho: nenhum dos quatro ganhou ilustração.
+são doze: **o arquétipo felino dos dez subgêneros**, mais Estações e Bases
+Espaciais e Sucessão dinástica contestada, os dois do Space Opera que não são
+arquétipo. Os quatro últimos gatos — Mascote de Trincheira, Gato das Marés,
+Guardião do Sinal e Felino Modificado — chegaram depois dos verbetes, e por um
+tempo os subgêneros novos tiveram felino sem desenho: o par de campos é
+opcional justamente para permitir isso.
 
 **A ilustração fecha a página, sempre no último verbete da lista** — decisão da
 autora. Nos arquétipos esse último é o felino, que já vinha destacado; nos
