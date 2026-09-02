@@ -26,8 +26,5 @@ const cenarios = (await getCollection('cenarios', (c) => c.data.subgenero === su
       </Cartao>
     ))}
   </div>
-  {subgenero.data.citacao && (
-    <blockquote>{subgenero.data.citacao}<cite>{subgenero.data.citacaoAutor}</cite></blockquote>
-  )}
   <TrocarDeSubgenero tipo="cenarios" atual={subgenero.id} />
 </Base>

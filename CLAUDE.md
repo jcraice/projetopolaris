@@ -147,10 +147,13 @@ testados fora do Astro. Regras do esquema que não são óbvias:
   arquétipos), e por isso `esquemaSubgenero` é `.strict()`: os nomes são
   parecidos o suficiente para um `aberturaCenários` com acento ser descartado em
   silêncio pelo Zod, e a página abrir sem parágrafo sem ninguém reclamar.
-- `subgeneros.citacao` e `citacaoAutor` são a epígrafe do subgênero, repetida no
-  `<blockquote>` das quatro páginas daquele subgênero (os três catálogos e
-  `/subgeneros/`). Vem do frontmatter, não do corpo, justamente por aparecer em
-  quatro lugares. A `citacao` de `paginas/home.md` é outra coisa e não tem autor.
+- `subgeneros.citacao` e `citacaoAutor` são a epígrafe do subgênero, e ela
+  aparece numa página só: `/arquetipos/[subgenero]/`. Já esteve nas quatro —
+  os três catálogos e `/subgeneros/` —, e a autora tirou das outras três: a
+  mesma frase quatro vezes no mesmo subgênero virava refrão, não epígrafe. Os
+  campos continuam no frontmatter, e não no corpo, porque quem os lê é a página
+  e não o texto do subgênero. A `citacao` de `paginas/home.md` é outra coisa e
+  não tem autor.
 
 O campo `ordem` define a posição nos índices — a ordenação é sempre explícita,
 nunca alfabética por acidente.
@@ -304,8 +307,9 @@ outras três filtram, senão gerariam `/cenarios/comuns/` e afins vazias.
 "Uniformizar" as quatro apaga a página dos 10 comuns.
 
 **As três páginas de catálogo fecham com a fileira de subgêneros**
-([TrocarDeSubgenero.astro](src/components/TrocarDeSubgenero.astro)), depois da
-epígrafe: sem ela, trocar de subgênero obrigava a subir na barra e voltar ao
+([TrocarDeSubgenero.astro](src/components/TrocarDeSubgenero.astro)) — em
+`/arquetipos/`, depois da epígrafe; nas outras duas, logo depois do último
+verbete: sem ela, trocar de subgênero obrigava a subir na barra e voltar ao
 índice. A fileira leva ao **mesmo tipo** em outro subgênero — de Arquétipos
 Cyberpunk para Arquétipos Distopia, não para `/subgeneros/cyberpunk/` —, e são
 links de verdade, sem JavaScript. Três coisas nela não são óbvias:

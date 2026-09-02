@@ -30,8 +30,5 @@ const elementos = (await getCollection('elementos', (e) => e.data.subgenero === 
       </Cartao>
     ))}
   </div>
-  {subgenero.data.citacao && (
-    <blockquote>{subgenero.data.citacao}<cite>{subgenero.data.citacaoAutor}</cite></blockquote>
-  )}
   <TrocarDeSubgenero tipo="elementos" atual={subgenero.id} />
 </Base>

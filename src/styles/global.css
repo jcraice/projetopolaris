@@ -300,6 +300,17 @@ a {
    título, parágrafo. O último seletor existe por causa do arquétipo felino,
    que vem embrulhado numa <section> própria e por isso não é ele mesmo o
    último filho do bloco. */
+/* Um bloco não afasta o irmão seguinte, só tem preenchimento interno — e duas
+   caixas do mesmo fundo encostadas leem como uma só, com um vinco estranho onde
+   os cantos arredondados se encontram. Acontece em Estilos & Combinações (dois
+   blocos), no guia de personagens (dez) e no gerador (premissa e prompt).
+
+   Irmão geral e não adjacente: no gerador existe um <template> entre os dois
+   blocos, e ele é irmão para o CSS mesmo sem desenhar nada na tela. */
+.bloco ~ .bloco {
+  margin-block-start: 24px;
+}
+
 .bloco > :first-child {
   margin-block-start: 0;
 }

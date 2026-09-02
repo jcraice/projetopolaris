@@ -40,13 +40,6 @@ const raiz = base.endsWith('/') ? base : base + '/';
 </Base>
 
 <style>
-  /* .bloco não dá espaço entre um irmão e o seguinte, só o preenchimento
-     interno — são dez seções em sequência, e sem isto as dez caixas, todas
-     do mesmo fundo, se encostariam e leriam como uma só. */
-  .bloco + .bloco {
-    margin-block-start: 24px;
-  }
-
   /* <dl> porque é exatamente isto: uma lista de termos e suas definições. O
      <div> em volta de cada par existe para o grid tratar o par como uma unidade
      — sem ele, dt e dd viram itens soltos e desalinham. */
