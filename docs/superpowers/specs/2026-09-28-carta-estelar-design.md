@@ -145,8 +145,8 @@ Mesma estrutura, mesmos links, mesmo "Mais" e mesma busca. Muda:
    dois raios — subgênero novo entra no mapa sem ninguém desenhar nada.
 3. **O mapa substitui a fileira de subgêneros** da home. No celular (até 640px)
    os nomes não cabem legíveis dentro do mapa: ele fica só com as estrelas, sem
-   rótulos e fora da árvore de acessibilidade, e a fileira de pílulas volta
-   logo abaixo dele. O botão "Escolher um subgênero" que recolhe a fileira sai:
+   rótulos, e a fileira de pílulas volta logo abaixo dele. As estrelas continuam
+   links (com o nome do subgênero em `aria-label`), porque continuam tocáveis. O botão "Escolher um subgênero" que recolhe a fileira sai:
    no celular ela aparece aberta.
 4. **Os três caminhos** (Arquétipos, Cenários, Elementos Narrativos) continuam,
    deixam de ser cartões com moldura laranja e viram três colunas separadas por
