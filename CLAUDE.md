@@ -175,9 +175,14 @@ que hoje só o arquétipo felino recebe. Aparência de verbete se muda ali, uma 
 não página por página.
 
 **O verbete ilustrado** é o mesmo Cartão com um desenho ao lado do texto. Hoje
-são doze: **o arquétipo felino dos dez subgêneros**, mais Estações e Bases
-Espaciais e Sucessão dinástica contestada, os dois do Space Opera que não são
-arquétipo. Os quatro últimos gatos — Mascote de Trincheira, Gato das Marés,
+são dez: **o arquétipo felino de cada subgênero**, e só ele. Estações e Bases
+Espaciais e Sucessão dinástica contestada, do Space Opera, também tiveram
+desenho (uma sonda e um trono), e a autora os tirou do ar: ilustração ficou
+sendo coisa de arquétipo. Os originais continuam em
+`src/assets/ilustracoes/original/` e as cópias de tema foram apagadas — voltar
+com eles é rodar o script de novo e devolver os dois campos ao frontmatter. As
+páginas de cenários e elementos seguem aptas a receber desenho; o esquema e o
+código não mudaram. Os quatro últimos gatos — Mascote de Trincheira, Gato das Marés,
 Guardião do Sinal e Felino Modificado — chegaram depois dos verbetes, e por um
 tempo os subgêneros novos tiveram felino sem desenho: o par de campos é
 opcional justamente para permitir isso.
@@ -190,7 +195,8 @@ página — o código só desenha quem declarar `ilustracao`.
 Como o lugar é a última posição e não um verbete em particular, **a lista é que
 se ajusta ao desenho**: Estações e Bases Espaciais e Sucessão dinástica
 contestada foram deslocados para o fim porque casavam melhor com a sonda e com o
-trono do que os que estavam lá. Deslocados, não trocados — o item vai para o fim
+trono do que os que estavam lá — e continuam no fim depois que os desenhos
+saíram, porque a ordem da lista não foi desfeita junto. Deslocados, não trocados — o item vai para o fim
 e os demais fecham fila mantendo a ordem entre si, que é o que preserva a
 sequência da autora. **Reordenar cenário ou elemento mexe em `/subgeneros/`**, que
 mostra os três primeiros de cada tipo: essas duas mudanças tiraram Estações e
