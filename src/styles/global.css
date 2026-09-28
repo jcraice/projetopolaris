@@ -4,53 +4,46 @@
 :root {
   color-scheme: dark;
 
-  /* Os dois acentos fixos do tema escuro, com os nomes que o documento de
-     design usa. Nenhum componente deve consumir estes dois direto: eles são a
-     origem dos papéis logo abaixo, e no tema claro nem sequer são as cores em
-     uso. */
-  --ouro: #ffc300;
-  --violeta: #b07cff;
-
   /* Os papéis. É por aqui que todo componente pede cor de acento, porque só o
-     papel sobrevive à troca de tema — no claro a paleta é outra e "ouro"
-     guardaria um laranja, que é exatamente a confusão que --tinta causava antes
-     de virar --fundo.
+     papel sobrevive à troca de tema — no claro a paleta é outra.
 
-     --destaque  o que chama o olho: título da página, botão principal,
-                 etiqueta, pilares da home, cadeado travado. Título de verbete
-                 não entra: já foi daqui e voltou para --texto-forte.
+     --destaque  o que chama o olho, e pouca coisa: a estrela e o rótulo de
+                 cima do título, a numeração dos verbetes, o botão principal,
+                 a etiqueta, as peças sorteadas e o cadeado travado. É o
+                 laranja da estrela do ícone, (240, 108, 48). O título da
+                 página não entra desde a Carta Estelar: ele é --texto-forte,
+                 e o laranja subiu para o .rotulo acima dele.
      --apoio     a interface em volta: links, botões secundários, contorno de
-                 foco, barra lateral dos verbetes, retângulos de subgênero */
-  --destaque: var(--ouro);
-  --apoio: var(--violeta);
+                 foco, pílulas de subgênero, traço da página aberta na barra.
+                 É o azul-estrela das linhas do mapa, par escuro do azul-tinta
+                 do tema claro. Já foi um violeta, que saiu com a aurora. */
+  --destaque: #f06c30;
+  --apoio: #9db4e0;
 
-  --fundo: #0b0b0e;
-  --texto-forte: #ffffff;
-  --texto: #d5d5df;
-  --apagado: #8e8e9c;
-  --painel: rgba(11, 11, 14, 0.8);
+  /* Azul-noite liso. Até a Carta Estelar havia aqui um quase-preto com a
+     aurora do subgênero girando por cima; as duas coisas saíram juntas, e com
+     elas a conta de contraste em três camadas. Ver docs/verificacao-visual.md. */
+  --fundo: #0a1020;
+  --texto-forte: #f2f5fa;
+  --texto: #d3dbe8;
+  --apagado: #8390a8;
+  --painel: rgba(10, 16, 32, 0.8);
 
-  /* A superfície dos painéis que abrem por cima da página — hoje só o submenu
-     "Mais". Precisa ser opaca: aquele menu abre bem em cima do h1, e véu
-     translúcido deixa o título passar por trás dos links. O --painel não serve
-     nem como atalho: no escuro ele é a mesma cor de --fundo a 80%, ou seja,
-     não clarearia nada e ainda traria o título de volta.
+  /* Anéis e raios do mapa da home. Decoração, não texto: não precisa de
+     contraste mínimo, só de ficar abaixo das estrelas. */
+  --grade: #243150;
 
-     Mas opaca não quer dizer preta. Em --fundo puro o painel virava a coisa
-     mais escura da tela — mais escura que a barra, que a aurora tinge —, e foi
-     essa mancha que a autora recusou. Os 14% de --apoio são a mesma receita de
-     --bloco, o fundo dos blocos do gerador: o painel fica parente de uma
-     superfície que o site já tem, em vez de inventar uma. */
+  /* A superfície dos painéis que abrem por cima da página — o submenu "Mais".
+     Precisa ser opaca: aquele menu abre bem em cima do h1, e véu translúcido
+     deixa o título passar por trás dos links. Opaca mas não --fundo puro, que
+     deixaria o painel igual à página: 14% de --apoio, a mesma família do
+     --bloco. */
   --flutuante: color-mix(in srgb, var(--apoio) 14%, var(--fundo));
-  --borda-suave: rgba(255, 255, 255, 0.16);
+  --borda-suave: rgba(223, 230, 242, 0.14);
 
-  /* Fundo dos dois blocos do gerador. É --apoio misturado a 20% no fundo da
-     página e aplicado a 45% — ou seja, escurece o céu em vez de clarear.
-     A tentativa óbvia (o violeta puro a 8% por cima) derruba o corpo de texto
-     para 4,45:1 no subgênero Invasão Alienígena, porque o violeta é mais claro que
-     o céu: a cor que deveria dar destaque tirava legibilidade. Assim o texto
-     sobe de 4,71 para 6,90. */
-  --bloco: rgba(44, 34, 62, 0.45);
+  /* Fundo da premissa e do prompt no gerador: um azul-noite um pouco mais
+     claro que a página. Texto a 12,41:1 e laranja a 5,68:1. */
+  --bloco: #111a30;
 
   /* A coluna de conteúdo. O recuo é os mesmos 20px de sempre e, quando a tela
      passa de 1320px (1280 da coluna + as duas margens), vira o que sobrar
@@ -76,7 +69,8 @@
 }
 
 /* O claro não é o escuro clareado: é outra paleta, escolhida pela autora
-   depois de ver a primeira tentativa. Dourado e violeta ficaram só no escuro.
+   depois de ver a primeira tentativa, e mantida na Carta Estelar: o
+   laranja-tijolo e o azul-tinta já combinavam com a carta náutica.
 
    O destaque foi um ciano profundo até a autora ver os dois juntos e recusar o
    par: com o apoio já sendo azul-tinta, a página tinha dois azuis e nenhuma cor
@@ -94,33 +88,33 @@
   color-scheme: light;
   --destaque: #b34700;
   --apoio: #1b2a4a;
-  --fundo: #f5f7f9;
-  --texto-forte: #14181f;
+  /* Papel de carta: um cinza-azulado bem claro. O laranja cai de 5,12 para
+     4,95:1 com ele e continua acima dos 4,5. */
+  --fundo: #f1f3f7;
+  --texto-forte: #121a2b;
   --texto: #2f3540;
-  --apagado: #5b6472;
-  --painel: rgba(20, 24, 31, 0.05);
+  --apagado: #56627a;
+  --painel: rgba(18, 26, 43, 0.05);
+  --grade: #c6cedc;
   /* No claro o problema é o oposto: o fundo já é quase branco, e sem tom
      próprio o painel sem moldura se confundia com a página atrás dele. 8% do
      azul-tinta bastam para separá-lo sem traço nenhum. */
   --flutuante: color-mix(in srgb, var(--apoio) 8%, var(--fundo));
-  --borda-suave: rgba(20, 24, 31, 0.18);
-  /* Sem céu para escurecer, aqui basta um véu de --apoio quase transparente
-     sobre o branco: o corpo de texto fica em 10,28:1 e o destaque em 4,94:1. */
-  --bloco: rgba(27, 42, 74, 0.06);
+  --borda-suave: rgba(18, 26, 43, 0.16);
+  /* O valor mais justo do site: o laranja sobre este bloco dá 4,56:1, para um
+     mínimo de 4,5. Escurecer o bloco reprova as peças sorteadas do gerador. */
+  --bloco: #e6eaf1;
 }
 
-/* No escuro os botões são de contorno: o traço de --apoio brilha sobre o céu e o
-   preenchimento estragaria isso. Sobre fundo claro o mesmo contorno fica
-   apagado, então aqui eles são preenchidos — --apoio nos secundários,
-   --destaque no principal, os dois com o texto na cor do fundo da página.
-
-   A sombra deslocada sai junto: é um recurso de pôster que funciona sobre o
-   céu escuro e pesa no claro, onde o tema é liso por escolha. */
+/* No escuro os botões são de contorno: o traço de --apoio acende sobre o
+   azul-noite e o preenchimento estragaria isso. Sobre fundo claro o mesmo
+   contorno fica apagado, então aqui eles são preenchidos — --apoio nos
+   secundários, --destaque no principal, os dois com o texto na cor do fundo
+   da página. */
 :root[data-tema='claro'] .botao {
   background: var(--apoio);
   border-color: var(--apoio);
   color: var(--fundo);
-  box-shadow: none;
 }
 
 /* Precisa vir depois e com a mesma especificidade da regra acima: o
@@ -172,11 +166,12 @@ body {
      body vira contêiner de rolagem próprio (o outro eixo computa para auto), e
      a barra do topo, que é sticky, passaria a se fixar em relação ao body em
      vez da tela — ou seja, subiria embora ao rolar. O hidden continua no
-     <html>, cujo overflow é propagado para a viewport, e é lá que o transbordo
-     da aurora é clipado. */
+     <html>, cujo overflow é propagado para a viewport, e é lá que qualquer
+     transbordo lateral é clipado. */
   background: var(--fundo);
   color: var(--texto);
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--fonte-texto);
+  line-height: 1.6;
   /* dvh, não vh: no celular, 100vh conta a barra de endereço como se ela nunca
      existisse, e a página pula quando a barra recolhe. 100dvh acompanha a
      altura que de fato sobra.
@@ -186,28 +181,37 @@ body {
      existia no código-fonte e sumia do CSS publicado. O suporte a dvh é
      universal desde 2022 (Safari 15.4, Chrome 108, Firefox 101) e o que se
      perde antes disso é só o piso de altura numa página mais curta que a
-     tela, com a aurora fixa cobrindo o fundo de qualquer jeito. */
+     tela. */
   min-height: 100dvh;
 }
 
+/* Fraunces nos títulos, em peso médio e caixa normal. Os títulos eram de
+   pôster (900, caixa alta, entrelinha 0,95); a Carta Estelar troca o grito
+   pela serifa de atlas. */
 h1, h2, h3 {
   color: var(--texto-forte);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  text-transform: uppercase;
-  line-height: 0.95;
+  font-family: var(--fonte-titulo);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  text-wrap: balance;
 }
 
-/* O título da página em --destaque, e só ele: era o único lugar onde as páginas
-   de índice e a de Sobre não tinham acento nenhum. Vem depois do trio acima para
-   sobrescrever o --texto-forte, e não junto, porque h2 e h3 continuam claros.
-
-   Contraste: h1 é 2em, ou 32px, em peso 900 — texto grande para o WCAG, cujo
-   mínimo é 3:1. O dourado sobre o céu fica em 4,27:1 no pior subgênero e o laranja do
-   tema claro em 5,12:1. Encolher o h1 abaixo de 18,66px reprovaria; ver
-   docs/verificacao-visual.md. */
 h1 {
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  margin-block: 0 16px;
+}
+
+/* A linha acima do título da página. É ela, e não o h1, que carrega o
+   laranja desde a Carta Estelar: 6,22:1 no escuro e 4,95:1 no claro, acima
+   dos 4,5 de texto pequeno. */
+.rotulo {
+  font-family: var(--fonte-rotulo);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--destaque);
+  margin-block: 0 12px;
 }
 
 a {
@@ -218,7 +222,8 @@ a {
   display: inline-block;
   background: var(--destaque);
   color: var(--fundo);
-  font-weight: 900;
+  font-family: var(--fonte-rotulo);
+  font-weight: 500;
   font-size: 0.7rem;
   letter-spacing: 0.16em;
   padding: 4px 8px;
@@ -230,19 +235,18 @@ a {
   border: 2px solid var(--apoio);
   color: var(--apoio);
   background: transparent;
-  font-weight: 800;
-  text-transform: uppercase;
-  padding: 8px 14px;
+  font-family: var(--fonte-texto);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 9px 16px;
   cursor: pointer;
-  box-shadow: 3px 3px 0 color-mix(in srgb, var(--apoio) 28%, transparent);
-  border-radius: var(--raio);
+  border-radius: 3px;
 }
 
 .botao--principal {
   background: var(--destaque);
   border-color: var(--destaque);
   color: var(--fundo);
-  box-shadow: 3px 3px 0 color-mix(in srgb, var(--destaque) 30%, transparent);
 }
 
 .botao:focus-visible, a:focus-visible {
@@ -263,13 +267,15 @@ a {
 
 .lista-subgeneros a {
   display: inline-block;
-  border: 2px solid var(--apoio);
-  padding: 8px 14px;
-  font-weight: 800;
-  text-transform: uppercase;
+  border: 1px solid var(--apoio);
+  padding: 6px 14px;
+  font-family: var(--fonte-rotulo);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
   text-decoration: none;
   color: var(--texto);
-  border-radius: var(--raio);
+  border-radius: 99px;
 }
 
 .lista-subgeneros a:hover {
@@ -278,13 +284,12 @@ a {
 }
 
 /* A pílula do subgênero em que a pessoa está, quando a fileira aparece dentro de
-   uma página de subgênero (TrocarDeSubgenero.astro). É a mesma superfície com que a
-   barra do topo marca a página aberta, para não inventar tom novo para dizer
-   "você está aqui" — 11,37:1 no escuro, a medição do submenu em
-   docs/verificacao-visual.md. Nos índices e na home nenhuma pílula é a atual,
-   e a regra não pega. */
+   uma página de subgênero (TrocarDeSubgenero.astro): preenchida de --apoio, a
+   letra na cor do fundo — 9,06:1 no escuro. Nos índices e na home nenhuma
+   pílula é a atual, e a regra não pega. */
 .lista-subgeneros a[aria-current='page'] {
-  background: var(--flutuante);
+  background: var(--apoio);
+  color: var(--fundo);
 }
 
 /* Agrupa sem emoldurar: cor quase transparente e espaço interno, nenhum traço.
@@ -292,7 +297,7 @@ a {
 .bloco {
   background: var(--bloco);
   padding: 20px;
-  border-radius: var(--raio);
+  border-radius: 4px;
 }
 
 /* As margens do primeiro e do último filho somariam ao espaço interno do bloco
@@ -333,6 +338,8 @@ blockquote {
   border-left: 3px solid var(--destaque);
   padding-left: 14px;
   margin-inline-start: 0;
+  font-family: var(--fonte-titulo);
+  font-size: 1.2rem;
   font-style: italic;
   color: var(--texto-forte);
 }
