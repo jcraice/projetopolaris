@@ -1,0 +1,128 @@
+---
+import { ALTURA_MAPA, CENTRO, LARGURA_MAPA, posicoesDoMapa } from '../lib/mapa';
+
+interface Props {
+  /* Na ordem do acervo: é ela que decide onde cada estrela cai. */
+  subgeneros: { nome: string; href: string }[];
+}
+
+const { subgeneros } = Astro.props;
+const estrelas = posicoesDoMapa(subgeneros.length);
+const rota = [...estrelas, estrelas[0]].filter(Boolean).map((e) => `${e.x.toFixed(1)},${e.y.toFixed(1)}`).join(' ');
+
+/* A grade é a de uma carta celeste polar: anéis de declinação em volta da
+   Polaris e quatro meridianos cruzando o centro. */
+const aneis = [50, 100, 140];
+const raios = [0, 45, 90, 135].map((graus) => {
+  const r = (graus * Math.PI) / 180;
+  const alcance = 140;
+  return {
+    x1: CENTRO.x - alcance * Math.sin(r),
+    y1: CENTRO.y - alcance * Math.cos(r),
+    x2: CENTRO.x + alcance * Math.sin(r),
+    y2: CENTRO.y + alcance * Math.cos(r),
+  };
+});
+
+/* A estrela de quatro pontas do ícone da aba, centrada na Polaris. */
+const { x: cx, y: cy } = CENTRO;
+const polaris = `M${cx} ${cy - 16} L${cx + 3.2} ${cy - 3.2} L${cx + 16} ${cy} L${cx + 3.2} ${cy + 3.2} L${cx} ${cy + 16} L${cx - 3.2} ${cy + 3.2} L${cx - 16} ${cy} L${cx - 3.2} ${cy - 3.2}Z`;
+---
+<svg class="mapa" viewBox={`0 0 ${LARGURA_MAPA} ${ALTURA_MAPA}`} role="group" aria-label="Mapa dos subgêneros">
+  <g aria-hidden="true">
+    {aneis.map((r) => <circle class="mapa__anel" cx={cx} cy={cy} r={r} />)}
+    {raios.map((l) => <line class="mapa__raio" x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} />)}
+    <polyline class="mapa__rota" points={rota} />
+    <path class="mapa__polaris" d={polaris} />
+    <text class="mapa__polaris-rotulo" x={cx} y={cy + 30} text-anchor="middle">α UMi · Polaris</text>
+  </g>
+  {subgeneros.map((s, i) => {
+    const e = estrelas[i];
+    return (
+      <a href={s.href} aria-label={s.nome} class="mapa__destino">
+        <circle class="mapa__alvo" cx={e.x} cy={e.y} r="12" />
+        <circle class="mapa__estrela" cx={e.x} cy={e.y} r="3" />
+        <text x={e.rotuloX} y={e.rotuloY} text-anchor={e.ancora} aria-hidden="true">{s.nome}</text>
+      </a>
+    );
+  })}
+</svg>
+
+<style>
+  .mapa {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .mapa__anel {
+    fill: none;
+    stroke: var(--grade);
+  }
+
+  .mapa__raio {
+    stroke: var(--grade);
+    stroke-dasharray: 2 4;
+  }
+
+  .mapa__rota {
+    fill: none;
+    stroke: var(--apagado);
+    stroke-width: 0.8;
+    opacity: 0.6;
+  }
+
+  .mapa__polaris {
+    fill: var(--destaque);
+  }
+
+  .mapa text {
+    font-family: var(--fonte-rotulo);
+    font-size: 9.5px;
+    fill: var(--apagado);
+  }
+
+  .mapa__polaris-rotulo {
+    fill: var(--destaque) !important;
+  }
+
+  .mapa__estrela {
+    fill: var(--texto-forte);
+  }
+
+  /* Transparente: existe para o dedo ter onde acertar, que uma estrela de 3
+     de raio não daria. */
+  .mapa__alvo {
+    fill: transparent;
+  }
+
+  .mapa__destino:hover .mapa__estrela,
+  .mapa__destino:focus-visible .mapa__estrela {
+    fill: var(--destaque);
+  }
+
+  .mapa__destino:hover text,
+  .mapa__destino:focus-visible text {
+    fill: var(--destaque);
+  }
+
+  .mapa__destino:focus-visible {
+    outline: 2px solid var(--apoio);
+    outline-offset: 2px;
+  }
+
+  /* No celular o mapa inteiro encolhe para a largura da tela e os nomes
+     ficariam com uns 7px: saem, e a fileira de pílulas da home aparece embaixo
+     no lugar deles. As estrelas continuam links — o nome vai no aria-label —,
+     um pouco maiores para o toque. */
+  @media (max-width: 640px) {
+    .mapa text:not(.mapa__polaris-rotulo) {
+      display: none;
+    }
+
+    .mapa__estrela {
+      r: 4;
+    }
+  }
+</style>
