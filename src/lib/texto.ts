@@ -11,3 +11,14 @@ export function paraAncora(nome: string): string {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 }
+
+/** "01 / 11": a posição do verbete na lista da página, não o campo `ordem`
+ *  — os dois coincidem hoje, mas o que a pessoa vê é a lista. */
+export function numeracao(posicao: number, total: number): string {
+  return `${String(posicao).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+}
+
+/** "11 arquétipos", "1 cenário". Só o português do acervo, sem Intl. */
+export function contagem(n: number, singular: string, plural: string): string {
+  return `${n} ${n === 1 ? singular : plural}`;
+}
