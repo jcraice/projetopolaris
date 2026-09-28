@@ -2,7 +2,6 @@
 nome: "FC Militar"
 ordem: 7
 completo: true
-aurora: ["#2f6b4f", "#c8b47a", "#ff5f45"]
 citacao: "A violência, a força nua, resolveu mais questões na história do que qualquer outro fator."
 citacaoAutor: "Robert A. Heinlein"
 aberturaArquetipos: "Nesse subgênero, os arquétipos vivem dentro da cadeia de comando. O Recruta em Combate, o Comandante Estratégico e o Desertor em Fuga mostram que obedecer, planejar e romper com uma ordem pesam tanto quanto qualquer arma — e decidem quem sobrevive ao combate e quem carrega a guerra depois dele."

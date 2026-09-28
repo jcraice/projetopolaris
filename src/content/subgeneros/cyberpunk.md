@@ -2,7 +2,6 @@
 nome: "Cyberpunk"
 ordem: 3
 completo: true
-aurora: ["#ff2d92", "#7c3aed", "#00e5ff"]
 citacao: "O céu sobre o porto tinha a cor de uma TV sintonizada em canal morto."
 citacaoAutor: "William Gibson"
 aberturaArquetipos: "Nesse subgênero, os arquétipos vivem entre conspirações e aprimoramentos. O Hacker/Console Cowboy, a IA Emergente e o Humano Aumentado mostram que cada ação ressoa na cidade e que habilidade, coragem e adaptabilidade são essenciais para sobreviver em um mundo dominado por tecnologia e poder corporativo."

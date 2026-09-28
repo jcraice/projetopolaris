@@ -16,7 +16,7 @@ const elementos = (await getCollection('elementos', (e) => e.data.subgenero === 
   (a, b) => a.data.ordem - b.data.ordem,
 );
 ---
-<Base titulo={`Elementos ${subgenero.data.nome}`} aurora={subgenero.data.aurora}>
+<Base titulo={`Elementos ${subgenero.data.nome}`}>
   <h1>Elementos {subgenero.data.nome}</h1>
   {/* Aqui morava `subgenero.body`, a descrição geral do subgênero — a mesma que
       abre /subgeneros/. Saiu quando a autora escreveu uma abertura própria para

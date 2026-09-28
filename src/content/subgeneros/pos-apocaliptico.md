@@ -2,7 +2,6 @@
 nome: "Pós Apocalíptico"
 ordem: 4
 completo: true
-aurora: ["#6ee7a0", "#2f6b4f", "#c8b47a"]
 citacao: "Quando não há mais humanidade, ser o monstro é a nova norma."
 citacaoAutor: "Richard Matheson"
 aberturaArquetipos: "Nesse subgênero, os arquétipos vivem entre ruínas e incerteza. O Sobrevivente Solitário, o Curandeiro da Comunidade e a Criança das Ruínas mostram que cada escolha molda a sobrevivência e que coragem, engenhosidade e cuidado são essenciais para reconstruir um mundo devastado."

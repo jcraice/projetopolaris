@@ -39,7 +39,7 @@ const elementos = (await getCollection('elementos', (e) => e.data.subgenero === 
 const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : `${base}/`;
 ---
-<Base titulo={`Subgênero ${subgenero.data.nome}`} aurora={subgenero.data.aurora}>
+<Base titulo={`Subgênero ${subgenero.data.nome}`}>
   <h1>{subgenero.data.nome}</h1>
   <p class="abertura">{subgenero.body}</p>
 

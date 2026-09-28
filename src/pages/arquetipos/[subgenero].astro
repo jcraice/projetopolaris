@@ -17,7 +17,7 @@ const fichas = (await getCollection('arquetipos', (a) => a.data.subgenero === su
 const comuns = fichas.filter((f) => !f.data.felino);
 const felino = fichas.find((f) => f.data.felino);
 ---
-<Base titulo={`Arquétipos ${subgenero.data.nome}`} aurora={subgenero.data.aurora}>
+<Base titulo={`Arquétipos ${subgenero.data.nome}`}>
   <h1>Arquétipos {subgenero.data.nome}</h1>
   {subgenero.data.aberturaArquetipos && <p class="abertura">{subgenero.data.aberturaArquetipos}</p>}
   <div class="bloco">

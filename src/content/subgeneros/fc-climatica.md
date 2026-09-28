@@ -2,7 +2,6 @@
 nome: "FC Climática"
 ordem: 8
 completo: true
-aurora: ["#ffb03a", "#1c5e8f", "#c8b47a"]
 citacao: "A crise climática é também uma crise da cultura, e portanto da imaginação."
 citacaoAutor: "Amitav Ghosh"
 aberturaArquetipos: "Nesse subgênero, os arquétipos vivem sob o colapso climático e a disputa por recursos que ele provoca. O Cientista Dissidente, o Executivo Poluidor e o Organizador da Adaptação Local mostram que alertar, lucrar e reconstruir são escolhas que nascem do mesmo desastre, e que quem cada um decide proteger — a verdade, o lucro ou a comunidade — é o que separa cúmplice de resistência nessa crise."

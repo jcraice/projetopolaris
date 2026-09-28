@@ -2,27 +2,31 @@ import { describe, expect, it } from 'vitest';
 import { esquemaArquetipo, esquemaCenario, esquemaElemento, esquemaSubgenero } from './schemas';
 
 describe('esquemaSubgenero', () => {
-  it('exige aurora quando o subgênero é completo', () => {
+  it('aceita subgênero completo sem campo de cor', () => {
     const r = esquemaSubgenero.safeParse({ nome: 'Cyberpunk', ordem: 3, completo: true });
-    expect(r.success).toBe(false);
+    expect(r.success).toBe(true);
   });
 
-  it('dispensa aurora quando o subgênero não é completo', () => {
+  it('aceita o pool que não é subgênero completo', () => {
     const r = esquemaSubgenero.safeParse({
-      nome: '10 Arquétipos Comuns', ordem: 7, completo: false,
+      nome: '10 Arquétipos Comuns', ordem: 11, completo: false,
     });
     expect(r.success).toBe(true);
   });
 
   it('assume completo verdadeiro por padrão', () => {
     const r = esquemaSubgenero.parse({
-      nome: 'Cyberpunk', ordem: 3, aurora: ['#ff2d92', '#7c3aed', '#00e5ff'],
+      nome: 'Cyberpunk', ordem: 3,
     });
     expect(r.completo).toBe(true);
   });
 
-  it('recusa quando completo e aurora são omitidos', () => {
-    const r = esquemaSubgenero.safeParse({ nome: 'Cyberpunk', ordem: 3 });
+  /* A aurora saiu na Carta Estelar. Com o esquema .strict(), um arquivo que
+     ainda traga o campo quebra o build em vez de carregar cor que ninguém lê. */
+  it('recusa o campo aurora, que saiu do site', () => {
+    const r = esquemaSubgenero.safeParse({
+      nome: 'Cyberpunk', ordem: 3, aurora: ['#ff2d92', '#7c3aed', '#00e5ff'],
+    });
     expect(r.success).toBe(false);
   });
 
@@ -31,7 +35,7 @@ describe('esquemaSubgenero', () => {
   // os três parágrafos.
   it('aceita as três aberturas, e cada uma é opcional', () => {
     const comAberturas = esquemaSubgenero.safeParse({
-      nome: 'Cyberpunk', ordem: 3, aurora: ['#ff2d92', '#7c3aed', '#00e5ff'],
+      nome: 'Cyberpunk', ordem: 3,
       aberturaArquetipos: 'Nesse subgênero, os arquétipos vivem entre conspirações e aprimoramentos.',
       aberturaCenarios: 'Nesse subgênero, os cenários empilham neon sobre ruína.',
       aberturaElementos: 'Nesse subgênero, os elementos narrativos tratam de quem controla o dado.',
@@ -39,7 +43,7 @@ describe('esquemaSubgenero', () => {
     expect(comAberturas.success).toBe(true);
 
     const semAbertura = esquemaSubgenero.safeParse({
-      nome: 'Cyberpunk', ordem: 3, aurora: ['#ff2d92', '#7c3aed', '#00e5ff'],
+      nome: 'Cyberpunk', ordem: 3,
     });
     expect(semAbertura.success).toBe(true);
   });
@@ -50,7 +54,7 @@ describe('esquemaSubgenero', () => {
      nenhum sem que build ou teste reclamassem. */
   it('recusa campo desconhecido em vez de descartá-lo calado', () => {
     const r = esquemaSubgenero.safeParse({
-      nome: 'Cyberpunk', ordem: 3, aurora: ['#ff2d92', '#7c3aed', '#00e5ff'],
+      nome: 'Cyberpunk', ordem: 3,
       aberturaCenários: 'Com acento, que não é o nome do campo.',
     });
     expect(r.success).toBe(false);

@@ -1,7 +1,5 @@
 import { z } from 'astro/zod';
 
-const cor = z.string().regex(/^#[0-9a-fA-F]{6}$/, 'cor deve ser hexadecimal de 6 dígitos');
-
 /* As três aberturas são os parágrafos que abrem as páginas de catálogo daquele
    subgênero — um por tipo, porque cada um fala do que está na lista abaixo dele.
    Todas opcionais: `comuns` só tem arquétipos, e nada impede um subgênero de entrar
@@ -15,18 +13,13 @@ export const esquemaSubgenero = z
     nome: z.string().min(1),
     ordem: z.number().int().nonnegative(),
     completo: z.boolean().default(true),
-    aurora: z.tuple([cor, cor, cor]).optional(),
     citacao: z.string().optional(),
     citacaoAutor: z.string().optional(),
     aberturaArquetipos: z.string().optional(),
     aberturaCenarios: z.string().optional(),
     aberturaElementos: z.string().optional(),
   })
-  .strict()
-  .refine((d) => !d.completo || d.aurora !== undefined, {
-    message: 'subgênero completo precisa de aurora',
-    path: ['aurora'],
-  });
+  .strict();
 
 /* O nome vem sem artigo ("IA Emergente", "Duplo do Protagonista") porque é assim que ele
    aparece no catálogo, e o artigo mora num campo próprio. Já foi embutido no

@@ -2,7 +2,6 @@
 nome: "Viagem no Tempo"
 ordem: 6
 completo: true
-aurora: ["#b07cff", "#3b2f8f", "#ffd66e"]
 citacao: "Perdi um braço na minha última viagem para casa. Meu braço esquerdo."
 citacaoAutor: "Octavia E. Butler"
 aberturaArquetipos: "Nesse subgênero, os arquétipos vivem em conflito com o próprio tempo. O Viajante Acidental, o Desertor da Patrulha, o Inventor da Máquina do Tempo e a Vítima do Paradoxo mostram que cada ação ecoa através das eras e que o tempo é tanto uma arma quanto uma responsabilidade."

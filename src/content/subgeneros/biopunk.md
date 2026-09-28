@@ -2,7 +2,6 @@
 nome: "Biopunk"
 ordem: 10
 completo: true
-aurora: ["#6ee7a0", "#ff2d92", "#7c3aed"]
 citacao: "Você é meu criador, mas eu sou seu senhor."
 citacaoAutor: "Mary Shelley"
 aberturaArquetipos: "Nesse subgênero, os arquétipos vivem a disputa pelo controle da vida em nível genético. O Bio-hacker Rebelde ataca o monopólio genético das corporações, o Executor de Patentes o defende à força, e o Híbrido Rejeitado carrega na própria carne o resultado desse embate: a posse de um corpo que nenhum dos três consegue reivindicar sozinho."

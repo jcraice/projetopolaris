@@ -2,7 +2,6 @@
 nome: "Space Opera"
 ordem: 1
 completo: true
-aurora: ["#ffc300", "#ff7a45", "#b07cff"]
 citacao: "O espaço não é um lugar vazio; é um lugar cheio de histórias esperando para serem contadas."
 citacaoAutor: "Becky Chambers"
 aberturaArquetipos: "Nesse subgênero, os arquétipos orbitam entre grandiosas batalhas e intrigas dinásticas. O Comandante Carismático, a Figura Política/Diplomata e o Recruta em Formação mostram que decisões pessoais podem mover impérios inteiros e que coragem, lealdade e ambição são essenciais para sobreviver em um universo de rotas estelares, alianças fluídas e segredos ancestrais."
