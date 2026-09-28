@@ -1,13 +1,14 @@
 ---
 import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import MapaEstelar from '../components/MapaEstelar.astro';
 
 const pagina = await getEntry('paginas', 'home');
 if (!pagina) throw new Error("página 'home' não encontrada em src/content/paginas");
 
-// A home depende dos três: subtítulo abaixo do título, chamada dentro do card
-// do gerador, citação no fim. Falhar alto aqui é melhor que uma página com um
-// buraco silencioso onde deveria haver frase.
+// A home depende dos três: subtítulo abaixo do título, chamada do gerador,
+// citação no fim. Falhar alto aqui é melhor que uma página com um buraco
+// silencioso onde deveria haver frase.
 for (const campo of ['subtitulo', 'chamadaGerador', 'citacao'] as const) {
   if (!pagina.data[campo]) {
     throw new Error(`campo '${campo}' ausente em src/content/paginas/home.md`);
@@ -23,9 +24,19 @@ const subgeneros = (await getCollection('subgeneros', (s) => s.data.completo)).s
 const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : `${base}/`;
 
+// O título de home.md é "Projeto Polaris: Arquétipos da Ficção Científica".
+// A barra do topo já diz Polaris, então a página mostra o que vem depois dos
+// dois-pontos, com as duas últimas palavras em itálico laranja — o recorte é
+// daqui e não do Markdown, para a autora não ter de escrever marcação no
+// título.
+const [, depoisDosDoisPontos = pagina.data.titulo] = pagina.data.titulo.split(': ');
+const palavras = depoisDosDoisPontos.split(' ');
+const realce = palavras.slice(-2).join(' ');
+const inicio = palavras.slice(0, -2).join(' ');
+
 // As descrições são resumos das aberturas de src/content/paginas/{arquetipos,
-// cenarios,elementos}.md — curtas o bastante para caber num cartão, e escritas
-// para dizer o que cada pilar é a quem chega pela primeira vez.
+// cenarios,elementos}.md — curtas o bastante para caber numa coluna, e escritas
+// para dizer o que cada caminho é a quem chega pela primeira vez.
 const pilares = [
   {
     titulo: 'Arquétipos',
@@ -43,13 +54,30 @@ const pilares = [
     href: `${raiz}elementos`,
   },
 ];
+
+const destinos = subgeneros.map((m) => ({ nome: m.data.nome, href: `${raiz}subgeneros/${m.id}/` }));
 ---
 <Base titulo="Início">
-  <h1>{pagina.data.titulo}</h1>
-  <p class="subtitulo">{pagina.data.subtitulo}</p>
-  <div class="conteudo">
-    <Content />
+  <div class="abertura-home">
+    <div class="abertura-home__texto">
+      {/* As coordenadas reais da Polaris (época J2000). */}
+      <p class="rotulo">AR 02h 31m 49s · DEC +89° 15′ 51″</p>
+      <h1>{inicio} <em>{realce}</em></h1>
+      <p class="subtitulo">{pagina.data.subtitulo}</p>
+      <a class="botao botao--principal" href={`${raiz}gerador`}>Gerar uma premissa</a>
+    </div>
+    <MapaEstelar subgeneros={destinos} />
   </div>
+
+  {/* A fileira de subgêneros só aparece no celular, onde o mapa perde os
+      nomes. Acima disso é o mapa que leva aos subgêneros. */}
+  <nav class="subgeneros-celular" aria-label="Subgêneros">
+    <ul class="lista-subgeneros">
+      {destinos.map((d) => (
+        <li><a href={d.href}>{d.nome}</a></li>
+      ))}
+    </ul>
+  </nav>
 
   <div class="pilares">
     {pilares.map((p) => (
@@ -60,28 +88,9 @@ const pilares = [
     ))}
   </div>
 
-  <section aria-labelledby="subgeneros-titulo">
-    <h2 id="subgeneros-titulo">Os subgêneros</h2>
-    {/* Mesmo mecanismo do menu da navegação: nasce escondido, só aparece por
-        JavaScript, e sem script a lista dos dez fica visível como antes. */}
-    <button
-      type="button"
-      class="abrir-subgeneros"
-      id="abrir-subgeneros"
-      hidden
-      aria-expanded="false"
-      aria-controls="lista-de-subgeneros"
-    >
-      Escolher um subgênero
-    </button>
-    <ul class="lista-subgeneros" id="lista-de-subgeneros">
-      {subgeneros.map((m) => (
-        <li>
-          <a href={`${raiz}subgeneros/${m.id}/`}>{m.data.nome}</a>
-        </li>
-      ))}
-    </ul>
-  </section>
+  <div class="conteudo">
+    <Content />
+  </div>
 
   <section class="cta-gerador" aria-labelledby="gerador-titulo">
     <h2 id="gerador-titulo">Gerador de Combinações</h2>
@@ -93,31 +102,80 @@ const pilares = [
 </Base>
 
 <style>
-  /* Depois que os cards perderam o <section> que os embrulhava, sobrou um só
-     intervalo governado por regra e o resto caiu na margem padrão do navegador.
-     Estas quatro combinações são as fronteiras de verdade da página. */
-  .conteudo + .pilares,
-  .pilares + section,
-  section + section,
-  section + blockquote {
-    margin-block-start: 40px;
+  .abertura-home {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 40px;
+    align-items: center;
+    padding-block: 24px 16px;
   }
 
-  /* 1.2rem e não menos, pela mesma razão dos títulos de verbete: sobre o céu o
-     --destaque fica em 4,27:1 no pior subgênero, abaixo dos 4,5 que texto pequeno
-     exige, mas a partir de 18,66px em negrito o WCAG trata como texto grande e
-     o mínimo cai para 3:1. 1.2rem dá 19,2px. Encolher aqui reprova o contraste. */
+  /* Texto grande: 6,22:1 no escuro e 4,95:1 no claro. */
+  h1 em {
+    font-style: italic;
+    color: var(--destaque);
+  }
+
   .subtitulo {
     margin-block: 0 24px;
+    color: var(--apagado);
+    font-size: 1.05rem;
+    max-width: 42ch;
+  }
+
+  .subgeneros-celular {
+    display: none;
+  }
+
+  .pilares,
+  .conteudo,
+  .cta-gerador,
+  blockquote {
+    margin-block-start: 48px;
+  }
+
+  /* Os três caminhos em colunas de atlas: sem moldura nem fundo, separados por
+     linha fina. Eram cartões com contorno em --destaque até a Carta
+     Estelar. */
+  .pilares {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--borda-suave);
+  }
+
+  .pilar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px 24px 20px 0;
+    text-decoration: none;
+    color: var(--texto);
+  }
+
+  .pilar + .pilar {
+    padding-left: 24px;
+    border-left: 1px solid var(--borda-suave);
+  }
+
+  .pilar h2 {
+    margin: 0;
+    font-size: 1.35rem;
+  }
+
+  .pilar p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--apagado);
+  }
+
+  .pilar:hover h2 {
     color: var(--destaque);
-    font-weight: 800;
-    font-size: 1.2rem;
   }
 
   /* O corpo vem de render() do Markdown e não recebe o atributo de escopo do
      Astro, então o alcance tem que vir do contêiner. */
   .conteudo :global(p) {
-    line-height: 1.55;
+    max-width: 75ch;
   }
 
   /* O emoji de cada item já é o marcador; o disco do navegador em cima dele
@@ -130,162 +188,46 @@ const pilares = [
     gap: 10px;
   }
 
-  .pilares {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .pilar {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    min-width: 220px;
-    flex: 1 1 220px;
-    background: var(--painel);
-    border: 2px solid var(--destaque);
-    padding: 16px;
-    text-decoration: none;
-    border-radius: var(--raio);
-  }
-
-  /* Virou h2 para não pular nível de título (h1 direto para h3 sem h2 no meio) —
-     o tamanho fica preso em 1.17rem, que era o que um h3 já renderizava, para a
-     mudança de nível não mudar a aparência da home. */
-  .pilar h2 {
-    margin: 0;
-    color: var(--texto);
-    font-size: 1.17rem;
-  }
-
-  .pilar p {
-    margin: 0;
-    font-size: 0.9rem;
-    line-height: 1.45;
-    color: var(--texto);
-  }
-
-  .pilar:hover h2 {
-    color: var(--destaque);
-  }
-
-  /* No claro o pilar é preenchido com --destaque, que já era a cor da borda
-     dele, e o hover inverte para --apoio. Título e descrição ficam na cor do
-     fundo da página nos dois estados: 5,12:1 sobre o laranja e 13,24:1 sobre o
-     azul-tinta. */
-  :global(html[data-tema='claro']) .pilar {
-    background: var(--destaque);
-    border-color: var(--destaque);
-  }
-
-  :global(html[data-tema='claro']) .pilar h2,
-  :global(html[data-tema='claro']) .pilar p,
-  :global(html[data-tema='claro']) .pilar:hover h2 {
-    color: var(--fundo);
-  }
-
-  :global(html[data-tema='claro']) .pilar:hover {
-    background: var(--apoio);
-    border-color: var(--apoio);
-  }
-
-  /* Os dez retângulos de subgênero viram uma lista que abre em tela estreita.
-
-     O ponto de quebra é o mesmo 1079px da navegação. Quando só havia seis
-     subgêneros, a coincidência não era por simetria: os seis nomes somavam
-     cerca de 1060px com o espaço entre eles — "Invasão Alienígena" e "Pós
-     Apocalíptico" são largos —, então era por volta daí que eles passariam
-     para uma segunda linha. Com dez subgêneros a soma passou a superar em
-     muito os 1079px — o ponto de quebra deixou de calibrar a largura exata da
-     lista e passou a valer só por herdar o mesmo da navegação. Recolher em
-     tela estreita continua evitando pílulas espremidas no caminho até o
-     celular. */
-  .abrir-subgeneros {
-    display: none;
-    align-items: center;
-    gap: 8px;
-    border: 2px solid var(--apoio);
-    background: transparent;
-    /* Mesmo par dos retângulos que este botão abre: traço de --apoio, rótulo em
-       --texto. Escrever o rótulo em --apoio, como fazem os outros botões,
-       daria 2,34:1 sobre o céu — o traço pode ser discreto, o rótulo não. */
-    color: var(--texto);
-    font-family: inherit;
-    font-weight: 800;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 10px 14px;
-    cursor: pointer;
-    border-radius: var(--raio);
-  }
-
-  :global(html[data-tema='claro']) .abrir-subgeneros {
-    background: var(--apoio);
-    color: var(--fundo);
-  }
-
-  .abrir-subgeneros::after {
-    content: '▾';
-  }
-
-  .abrir-subgeneros[aria-expanded='true']::after {
-    content: '▴';
-  }
-
-  .abrir-subgeneros:focus-visible {
-    outline: 3px solid var(--apoio);
-    outline-offset: 3px;
-  }
-
-  .abrir-subgeneros[hidden] {
-    display: none;
-  }
-
-  @media (max-width: 1079px) {
-    .abrir-subgeneros:not([hidden]) {
-      display: inline-flex;
-    }
-
-    .abrir-subgeneros:not([hidden]) ~ .lista-subgeneros {
-      display: none;
-    }
-
-    .abrir-subgeneros[aria-expanded='true'] ~ .lista-subgeneros {
-      display: flex;
-      flex-direction: column;
-      margin-top: 12px;
-    }
-  }
-
-  /* Era uma seção com barra lateral. Virou card, com o mesmo par de contorno e
-     painel dos três pilares acima, para a home ler como uma sequência de cards.
-
-     Não recebe o preenchimento que o .pilar ganha no tema claro: o botão
-     principal dentro dele também é --destaque, e um sobre o outro sumiria. */
   .cta-gerador {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
-    background: var(--painel);
-    border: 2px solid var(--destaque);
-    border-radius: var(--raio);
-    padding: 16px;
+    padding-top: 32px;
+    border-top: 1px solid var(--borda-suave);
   }
 
-  .cta-gerador h2 {
+  .cta-gerador h2,
+  .cta-gerador p {
     margin: 0;
   }
 
   .cta-gerador p {
-    margin: 0;
+    max-width: 70ch;
+  }
+
+  @media (max-width: 640px) {
+    .abertura-home {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .subgeneros-celular {
+      display: block;
+    }
+
+    .pilares {
+      grid-template-columns: 1fr;
+    }
+
+    .pilar,
+    .pilar + .pilar {
+      padding: 16px 0;
+      border-left: 0;
+    }
+
+    .pilar + .pilar {
+      border-top: 1px solid var(--borda-suave);
+    }
   }
 </style>
-
-<script>
-  import { ligarExpansivel } from '../lib/expansivel';
-
-  ligarExpansivel(document.getElementById('abrir-subgeneros'));
-</script>
