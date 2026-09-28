@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import { PROFISSOES } from '../lib/gerador';
+import { contagem } from '../lib/texto';
 
 /* Guia do gerador, não um quinto catálogo. Por isso a página não entra no Nav,
    não tem rota por subgênero e não aparece na busca — o índice da busca é montado a
@@ -15,6 +16,7 @@ const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : base + '/';
 ---
 <Base titulo="Guia de personagens">
+  <p class="rotulo">Gerador · {contagem(PROFISSOES.length, 'profissão', 'profissões')}</p>
   <h1>Guia de personagens</h1>
 
   <p class="abertura">
@@ -79,10 +81,11 @@ const raiz = base.endsWith('/') ? base : base + '/';
   .sumario a {
     color: var(--texto);
     text-decoration: none;
-    font-weight: 800;
+    font-family: var(--fonte-rotulo);
     text-transform: uppercase;
-    font-size: 0.8rem;
-    border-bottom: 2px solid var(--apoio);
+    letter-spacing: 0.04em;
+    font-size: 0.78rem;
+    border-bottom: 1px solid var(--apoio);
     padding-bottom: 2px;
   }
 
@@ -94,9 +97,10 @@ const raiz = base.endsWith('/') ? base : base + '/';
 
   /* O nome do subgênero em acento, por escolha da autora: são dez seções seguidas,
      todas do mesmo fundo, e sem cor o h2 ficava igual aos cem termos
-     abaixo dele. Contraste sobre --bloco: 6,78:1 no escuro e 4,59:1 no claro
-     (docs/verificacao-visual.md) — passa até no critério de texto pequeno, e
-     este h2 tem 24px. */
+     abaixo dele. Contraste sobre --bloco: 5,68:1 no escuro e 4,56:1 no claro
+     (docs/verificacao-visual.md) — passa até no critério de texto pequeno.
+     Continua laranja na Carta Estelar, que guarda o acento para poucas peças,
+     porque foi pedido dela para esta página. */
   h2 {
     color: var(--destaque);
   }
@@ -104,8 +108,9 @@ const raiz = base.endsWith('/') ? base : base + '/';
   /* Mesmo peso e cor do título de verbete do catálogo: quem separa um termo do
      seguinte é o espaço, não moldura nem cor de acento. */
   dt {
-    font-weight: 800;
-    font-size: 1.1rem;
+    font-family: var(--fonte-titulo);
+    font-weight: 500;
+    font-size: 1.2rem;
     color: var(--texto-forte);
   }
 

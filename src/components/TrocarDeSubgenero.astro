@@ -53,15 +53,16 @@ const raiz = base.endsWith('/') ? base : `${base}/`;
     margin-block-start: 48px;
   }
 
-  /* Rótulo de fileira, não título de seção: a pastilha preenchida dos <h2> de
-     /subgeneros/ chamaria mais atenção que o último verbete logo acima. Fica no
-     --texto-forte que global.css já dá aos títulos — --apagado seria o tom
-     natural para uma legenda, mas sobre o céu ele está entre 2,12 e 2,67:1,
-     que é a pendência aberta em docs/verificacao-visual.md. Não somar caso
-     novo a ela. */
+  /* Rótulo de fileira, não título de seção: na letra dos rótulos, pequeno e
+     em --apagado (5,88:1 no escuro, 5,52:1 no claro), para não chamar mais
+     atenção que o último verbete logo acima. */
   h2 {
-    font-size: 0.8rem;
-    letter-spacing: 0.06em;
+    font-family: var(--fonte-rotulo);
+    font-weight: 400;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--apagado);
     margin-block-end: 16px;
   }
 </style>

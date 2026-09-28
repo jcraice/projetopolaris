@@ -64,7 +64,7 @@ const VALOR: Record<string, (sorteio: Sorteio, subgenero: string) => string> = {
 const MARCADOR = /(\{[^}]+\})/;
 
 /* A premissa dividida em linhas e trechos, para a página saber onde cada peça
-   começa e termina — sem isso não há como pintar de amarelo só o que foi
+   começa e termina — sem isso não há como pintar de --destaque só o que foi
    sorteado, nem pôr o cadeado na linha certa.
 
    As linhas em branco do molde entram como linhas de trechos vazios, e não são

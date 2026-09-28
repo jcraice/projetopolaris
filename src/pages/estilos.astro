@@ -7,6 +7,7 @@ if (!pagina) throw new Error("página 'estilos' não encontrada em src/content/p
 const { Content } = await render(pagina);
 ---
 <Base titulo={pagina.data.titulo}>
+  <p class="rotulo">Projeto Polaris</p>
   <h1>{pagina.data.titulo}</h1>
   <div class="conteudo">
     <Content />

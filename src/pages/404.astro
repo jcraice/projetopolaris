@@ -8,8 +8,7 @@ const { Content } = await render(pagina);
 
 /* Os destinos são os mesmos da navegação, e de propósito: quem cai aqui perdeu
    o rumo, e a saída mais útil é a lista que ele já veria no topo de qualquer
-   outra página. Sem a aurora de subgênero nenhum — esta página não é de um subgênero,
-   então cai no AURORA_PADRAO como a home e o gerador.
+   outra página.
 
    Os endereços passam por BASE_URL porque em produção o site vive numa subpasta,
    e um `/arquetipos/` cru levaria para fora dele. Vale ainda mais aqui: o
@@ -27,7 +26,7 @@ const destinos = [
 ];
 ---
 <Base titulo={pagina.data.titulo}>
-  <p class="etiqueta">{pagina.data.subtitulo}</p>
+  <p class="rotulo">{pagina.data.subtitulo}</p>
   <h1>{pagina.data.titulo}</h1>
   <Content />
 

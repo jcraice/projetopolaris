@@ -43,6 +43,7 @@ const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : base + '/';
 ---
 <Base titulo="Gerador">
+  <p class="rotulo">Gerador · premissa em quatro linhas</p>
   <h1>Gerador de combinações</h1>
 
   <form id="opcoes">
@@ -142,14 +143,14 @@ const raiz = base.endsWith('/') ? base : base + '/';
     flex-wrap: wrap;
     align-items: center;
     gap: 18px;
-    border: 2px solid var(--borda-suave);
+    border: 1px solid var(--borda-suave);
     padding: 14px 18px;
     margin: 0 0 24px;
   }
 
   legend {
     padding: 0 6px;
-    font-weight: 900;
+    font-family: var(--fonte-rotulo);
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -160,13 +161,13 @@ const raiz = base.endsWith('/') ? base : base + '/';
     display: flex;
     align-items: center;
     gap: 8px;
-    font-weight: 600;
+    font-weight: 500;
   }
 
   #opcoes select {
     background: var(--fundo);
     color: var(--texto);
-    border: 2px solid var(--borda-suave);
+    border: 1px solid var(--borda-suave);
     padding: 6px 10px;
     font-family: inherit;
     /* 1rem pelo mesmo motivo do campo de busca: abaixo de 16px o Safari do
@@ -201,8 +202,9 @@ const raiz = base.endsWith('/') ? base : base + '/';
     background: transparent;
     cursor: pointer;
     /* --texto, e não --apagado: o cadeado é elemento de interface e precisa de
-       3:1 sobre o fundo. Direto sobre o céu o apagado fica em 2,1 no pior
-       subgênero, e --destaque, do estado travado, em 4,3. */
+       3:1 sobre o bloco da premissa, e --texto dá folga larga nos dois temas;
+       o --destaque do estado travado fica em 5,68:1 no escuro e 4,56:1 no
+       claro. */
     color: var(--texto);
     transition: color 0.15s ease;
     border-radius: var(--raio);
@@ -243,7 +245,7 @@ const raiz = base.endsWith('/') ? base : base + '/';
   .premissa {
     margin: 0;
     min-height: 1.6em;
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     line-height: 1.7;
     color: var(--texto-forte);
     white-space: pre-wrap;
@@ -251,19 +253,19 @@ const raiz = base.endsWith('/') ? base : base + '/';
 
   /* O que o sorteio trouxe, destacado dentro da própria frase — é isto que
      tomou o lugar da pilha de cartas que ficava acima da premissa repetindo o
-     que ela já dizia. --destaque nos dois temas: o amarelo no escuro e o laranja
-     no claro. Sobre o fundo do bloco dá 6,78:1 no pior subgênero escuro e 4,59:1 no
-     claro; acima dos 4,5:1 que texto comum exige, com folga pequena no claro —
-     mais um motivo para o --destaque do tema claro não poder clarear.
+     que ela já dizia. --destaque nos dois temas. Sobre o fundo do bloco dá
+     5,68:1 no escuro e 4,56:1 no claro; acima dos 4,5:1 que texto comum exige,
+     com folga pequena no claro — mais um motivo para o --destaque do tema claro
+     não poder clarear, nem o --bloco escurecer.
 
      `:global()` porque estes spans nascem do JavaScript, em montarPremissa(), e
      por isso não recebem o atributo de escopo que o Astro põe na marcação
-     escrita no arquivo. Sem ele a regra é descartada em silêncio e o amarelo
+     escrita no arquivo. Sem ele a regra é descartada em silêncio e o laranja
      simplesmente não aparece — o mesmo cuidado que o HTML vindo de render()
      exige. O `.premissa` na frente mantém o escopo: quem é global é só o filho. */
   .premissa :global(.sorteado) {
     color: var(--destaque);
-    font-weight: 700;
+    font-weight: 600;
   }
 
   /* O título do bloco do prompt em acento, por escolha da autora — é o único
