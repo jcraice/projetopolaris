@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { esquemaArquetipo, esquemaCenario, esquemaElemento, esquemaSubgenero } from './schemas';
+import { esquemaArquetipo, esquemaCenario, esquemaElemento, esquemaPagina, esquemaSubgenero } from './schemas';
 
 describe('esquemaSubgenero', () => {
   it('aceita subgênero completo sem campo de cor', () => {
@@ -147,5 +147,25 @@ describe('esquemaCenario', () => {
       titulo: 'Ruínas Antigas', singular: 'ruína antiga', subgenero: 'space-opera', ordem: 4,
     });
     expect(ruim.success).toBe(false);
+  });
+});
+
+describe('esquemaPagina', () => {
+  // O "Como usar" da home: cada passo tem um título curto e a frase da
+  // autora. A página põe um ícone por posição, então a ordem importa.
+  it('aceita os passos do Como usar', () => {
+    const r = esquemaPagina.safeParse({
+      titulo: 'Início',
+      comoUsar: [{ titulo: 'Explore', texto: 'Explore os arquétipos.' }],
+    });
+    expect(r.success).toBe(true);
+  });
+
+  it('recusa passo sem texto', () => {
+    const r = esquemaPagina.safeParse({
+      titulo: 'Início',
+      comoUsar: [{ titulo: 'Explore' }],
+    });
+    expect(r.success).toBe(false);
   });
 });

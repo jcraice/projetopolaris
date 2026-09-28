@@ -1,7 +1,9 @@
 ---
 import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import IconeDaCarta from '../components/IconeDaCarta.astro';
 import MapaEstelar from '../components/MapaEstelar.astro';
+import { contagem } from '../lib/texto';
 
 const pagina = await getEntry('paginas', 'home');
 if (!pagina) throw new Error("página 'home' não encontrada em src/content/paginas");
@@ -15,7 +17,24 @@ for (const campo of ['subtitulo', 'chamadaGerador', 'citacao'] as const) {
   }
 }
 
+// Um ícone por posição: o Como usar tem de ter exatamente os quatro passos que
+// os desenhos acompanham. Passo a mais ficaria sem ícone, e a falta de um
+// deixaria o desenho de outro passo no lugar errado.
+const ICONES = ['bussola', 'carta', 'constelacao', 'estrela'] as const;
+const comoUsar = pagina.data.comoUsar ?? [];
+if (comoUsar.length !== ICONES.length) {
+  throw new Error(`src/content/paginas/home.md precisa de ${ICONES.length} passos em comoUsar, tem ${comoUsar.length}`);
+}
+
 const { Content } = await render(pagina);
+
+// O tamanho do acervo contado das coleções, e não escrito à mão: é o número
+// que mais envelhece em silêncio no site (ver CLAUDE.md).
+const [arquetipos, cenarios, elementos] = await Promise.all([
+  getCollection('arquetipos'),
+  getCollection('cenarios'),
+  getCollection('elementos'),
+]);
 
 const subgeneros = (await getCollection('subgeneros', (s) => s.data.completo)).sort(
   (a, b) => a.data.ordem - b.data.ordem,
@@ -55,6 +74,16 @@ const pilares = [
   },
 ];
 
+const acervo = [
+  contagem(subgeneros.length, 'subgênero', 'subgêneros'),
+  contagem(arquetipos.length, 'arquétipo', 'arquétipos'),
+  contagem(cenarios.length, 'cenário', 'cenários'),
+  contagem(elementos.length, 'elemento', 'elementos'),
+].map((texto) => {
+  const [numero, ...resto] = texto.split(' ');
+  return { numero, rotulo: resto.join(' ') };
+});
+
 const destinos = subgeneros.map((m) => ({ nome: m.data.nome, href: `${raiz}subgeneros/${m.id}/` }));
 ---
 <Base titulo="Início">
@@ -88,9 +117,37 @@ const destinos = subgeneros.map((m) => ({ nome: m.data.nome, href: `${raiz}subge
     ))}
   </div>
 
-  <div class="conteudo">
-    <Content />
-  </div>
+  {/* A apresentação é a legenda da carta: letra grande, com o tamanho do
+      acervo numa coluna ao lado. */}
+  <section class="sobre" aria-labelledby="sobre-titulo">
+    <h2 class="rotulo" id="sobre-titulo">Sobre o acervo</h2>
+    <div class="sobre__grade">
+      <div class="conteudo">
+        <Content />
+      </div>
+      <dl class="acervo">
+        {acervo.map((a) => (
+          <div>
+            <dt>{a.rotulo}</dt>
+            <dd>{a.numero}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="como-usar" aria-labelledby="como-usar-titulo">
+    <h2 class="rotulo" id="como-usar-titulo">Como usar</h2>
+    <ul class="passos">
+      {comoUsar.map((passo, i) => (
+        <li class="passo">
+          <IconeDaCarta nome={ICONES[i]} />
+          <h3>{passo.titulo}</h3>
+          <p>{passo.texto}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
 
   <section class="cta-gerador" aria-labelledby="gerador-titulo">
     <h2 id="gerador-titulo">Gerador de Combinações</h2>
@@ -128,7 +185,8 @@ const destinos = subgeneros.map((m) => ({ nome: m.data.nome, href: `${raiz}subge
   }
 
   .pilares,
-  .conteudo,
+  .sobre,
+  .como-usar,
   .cta-gerador,
   blockquote {
     margin-block-start: 48px;
@@ -172,20 +230,93 @@ const destinos = subgeneros.map((m) => ({ nome: m.data.nome, href: `${raiz}subge
     color: var(--destaque);
   }
 
-  /* O corpo vem de render() do Markdown e não recebe o atributo de escopo do
-     Astro, então o alcance tem que vir do contêiner. */
-  .conteudo :global(p) {
-    max-width: 75ch;
+  /* A legenda da carta: a apresentação em Fraunces grande. O corpo vem de
+     render() do Markdown e não recebe o atributo de escopo do Astro, então o
+     alcance tem que vir do contêiner. */
+  .sobre__grade {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 48px;
+    align-items: start;
   }
 
-  /* O emoji de cada item já é o marcador; o disco do navegador em cima dele
-     ficaria marcador duplicado. */
-  .conteudo :global(ul) {
+  .conteudo :global(p) {
+    margin: 0;
+    font-family: var(--fonte-titulo);
+    font-size: clamp(1.25rem, 2.2vw, 1.55rem);
+    line-height: 1.45;
+    color: var(--texto-forte);
+  }
+
+  /* Texto grande: 6,22:1 no escuro e 4,95:1 no claro. */
+  .conteudo :global(em) {
+    color: var(--destaque);
+  }
+
+  /* O número em cima e o nome embaixo, embora o <dt> venha antes no HTML:
+     quem lê em voz alta ouve "subgêneros: 10", e o olho vê o número primeiro. */
+  .acervo {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+    padding-left: 24px;
+    border-left: 1px solid var(--borda-suave);
+  }
+
+  .acervo div {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2px;
+  }
+
+  .acervo dd {
+    margin: 0;
+    font-family: var(--fonte-titulo);
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--texto-forte);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .acervo dt {
+    font-family: var(--fonte-rotulo);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--apagado);
+  }
+
+  /* Os quatro passos repetem as colunas com linha fina dos três caminhos lá
+     em cima, cada um com o seu ícone. */
+  .passos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     list-style: none;
-    padding-left: 0;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--borda-suave);
+  }
+
+  .passo {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding: 20px 20px 4px 0;
+  }
+
+  .passo + .passo {
+    padding-left: 20px;
+    border-left: 1px solid var(--borda-suave);
+  }
+
+  .passo h3 {
+    margin: 0;
+    font-size: 1.15rem;
+  }
+
+  .passo p {
+    margin: 0;
+    font-size: 0.92rem;
   }
 
   .cta-gerador {
@@ -206,7 +337,49 @@ const destinos = subgeneros.map((m) => ({ nome: m.data.nome, href: `${raiz}subge
     max-width: 70ch;
   }
 
+  @media (max-width: 900px) {
+    .sobre__grade {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .acervo {
+      grid-template-columns: repeat(4, auto);
+      justify-content: start;
+      gap: 24px;
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .passos {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .passo:nth-child(3) {
+      padding-left: 0;
+      border-left: 0;
+    }
+  }
+
   @media (max-width: 640px) {
+    .acervo {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .passos {
+      grid-template-columns: 1fr;
+    }
+
+    .passo,
+    .passo + .passo {
+      padding: 16px 0;
+      border-left: 0;
+    }
+
+    .passo + .passo {
+      border-top: 1px solid var(--borda-suave);
+    }
+
     .abertura-home {
       grid-template-columns: 1fr;
       gap: 24px;

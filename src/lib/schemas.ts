@@ -96,5 +96,9 @@ export const esquemaPagina = z
     subtitulo: z.string().optional(),
     chamadaGerador: z.string().optional(),
     citacao: z.string().optional(),
+    /* Os passos do "Como usar" da home, na ordem em que aparecem. A página
+       desenha um ícone por posição (bússola, carta, constelação, estrela), por
+       isso é lista e não prosa corrida no corpo. */
+    comoUsar: z.array(z.object({ titulo: z.string().min(1), texto: z.string().min(1) })).optional(),
   })
   .strict();

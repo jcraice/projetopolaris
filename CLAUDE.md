@@ -328,9 +328,14 @@ desatualizar no lugar dele.
 Sobre, de Estilos e do 404 vêm da coleção `paginas` (`src/content/paginas/*.md`),
 buscados com `getEntry` — e a página estoura o build com mensagem explícita se a
 entrada sumir, em vez de renderizar vazio. `home.md` é o caso mais completo: o
-corpo traz a apresentação e a lista "Como usar", e três campos de frontmatter
-(`subtitulo`, `chamadaGerador`, `citacao`) trazem as frases que a página encaixa
-fora do texto corrido. Nada de copiar prosa autoral para dentro de um `.astro`.
+corpo traz só a apresentação (a "legenda da carta", em Fraunces grande, com o
+tamanho do acervo ao lado, contado das coleções), e o frontmatter traz as
+frases que a página encaixa fora do texto corrido — `subtitulo`,
+`chamadaGerador`, `citacao` — e o `comoUsar`, os quatro passos com título e
+texto. São exatamente quatro porque a página desenha um ícone por posição
+([IconeDaCarta.astro](src/components/IconeDaCarta.astro): bússola, carta,
+constelação, estrela) e estoura o build com outra quantidade. Nada de copiar
+prosa autoral para dentro de um `.astro`.
 
 As páginas de índice de arquétipos, cenários e elementos têm duas entradas cada:
 `<pagina>.md` traz a abertura, que fica acima da lista de subgêneros, e
