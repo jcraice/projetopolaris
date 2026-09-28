@@ -31,6 +31,16 @@ python -m pip install Pillow
 python scripts/gerar-ilustracao.py src/assets/ilustracoes/original/<nome>.png
 ```
 
+O ícone da aba segue a mesma lógica, com script próprio: o original fica em
+`src/assets/favicon/` e as saídas vão para `public/` (`favicon.svg`, com uma
+versão para aba clara e outra para aba escura, mais `favicon.ico` e
+`apple-touch-icon.png`). Quem escolhe entre as duas versões é o tema do
+navegador, não o botão de tema do site — o ícone mora na aba, fora da página.
+
+```bash
+python scripts/gerar-favicon.py src/assets/favicon/original.png
+```
+
 Depois de adicionar ou editar Markdown em `src/content/`, `npm run build` é o
 que confirma que o frontmatter passa na validação Zod — não existe comando de
 lint separado para conteúdo.
