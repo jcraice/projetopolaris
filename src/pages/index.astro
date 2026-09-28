@@ -149,13 +149,24 @@ const destinos = subgeneros.map((m) => ({ nome: m.data.nome, href: `${raiz}subge
     </ul>
   </section>
 
+  {/* O gerador e a citação fecham a home no mesmo esquema das duas seções de
+      cima: rótulo em cima, frase em Fraunces grande. O gerador repete a grade
+      da apresentação, com o botão na coluna estreita onde lá ficam os
+      números. */}
   <section class="cta-gerador" aria-labelledby="gerador-titulo">
-    <h2 id="gerador-titulo">Gerador de Combinações</h2>
-    <p>{pagina.data.chamadaGerador}</p>
-    <a class="botao botao--principal" href={`${raiz}gerador`}>Ir para o Gerador</a>
+    <h2 class="rotulo" id="gerador-titulo">Gerador de combinações</h2>
+    <div class="cta-gerador__grade">
+      <p class="frase">{pagina.data.chamadaGerador}</p>
+      <div class="cta-gerador__acao">
+        <a class="botao botao--principal" href={`${raiz}gerador`}>Ir para o Gerador</a>
+      </div>
+    </div>
   </section>
 
-  <blockquote>{pagina.data.citacao}</blockquote>
+  <section class="citacao" aria-labelledby="citacao-titulo">
+    <h2 class="rotulo" id="citacao-titulo">Citação</h2>
+    <blockquote class="frase">{pagina.data.citacao}</blockquote>
+  </section>
 </Base>
 
 <style>
@@ -188,7 +199,7 @@ const destinos = subgeneros.map((m) => ({ nome: m.data.nome, href: `${raiz}subge
   .sobre,
   .como-usar,
   .cta-gerador,
-  blockquote {
+  .citacao {
     margin-block-start: 48px;
   }
 
@@ -233,14 +244,16 @@ const destinos = subgeneros.map((m) => ({ nome: m.data.nome, href: `${raiz}subge
   /* A legenda da carta: a apresentação em Fraunces grande. O corpo vem de
      render() do Markdown e não recebe o atributo de escopo do Astro, então o
      alcance tem que vir do contêiner. */
-  .sobre__grade {
+  .sobre__grade,
+  .cta-gerador__grade {
     display: grid;
     grid-template-columns: 1.6fr 1fr;
     gap: 48px;
     align-items: start;
   }
 
-  .conteudo :global(p) {
+  .conteudo :global(p),
+  .frase {
     margin: 0;
     font-family: var(--fonte-titulo);
     font-size: clamp(1.25rem, 2.2vw, 1.55rem);
@@ -319,25 +332,29 @@ const destinos = subgeneros.map((m) => ({ nome: m.data.nome, href: `${raiz}subge
     font-size: 0.92rem;
   }
 
-  .cta-gerador {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    padding-top: 32px;
-    border-top: 1px solid var(--borda-suave);
+  /* A coluna do botão tem a mesma linha fina à esquerda que a dos números
+     do acervo, para as duas grades lerem como a mesma peça. */
+  .cta-gerador__acao {
+    padding-left: 24px;
+    border-left: 1px solid var(--borda-suave);
   }
 
-  .cta-gerador h2,
-  .cta-gerador p {
-    margin: 0;
-  }
-
-  .cta-gerador p {
-    max-width: 70ch;
+  /* A citação é a frase grande, em itálico, sem o filete laranja que o
+     blockquote tem no resto do site: aqui o rótulo em cima já a separa. */
+  .citacao blockquote {
+    font-style: italic;
+    border-left: 0;
+    padding-left: 0;
+    max-width: 60ch;
   }
 
   @media (max-width: 900px) {
+    .cta-gerador__acao {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .cta-gerador__grade,
     .sobre__grade {
       grid-template-columns: 1fr;
       gap: 24px;
