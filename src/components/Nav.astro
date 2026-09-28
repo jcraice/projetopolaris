@@ -1,5 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import Busca from './Busca.astro';
+import capaceteClaro from '../assets/capacete-tema-claro.png';
+import capaceteEscuro from '../assets/capacete-tema-escuro.png';
 import { ehPaginaAtual } from '../lib/navegacao';
 
 const base = import.meta.env.BASE_URL;
@@ -27,7 +30,15 @@ const linksDeMais = [
 const maisEhAtual = linksDeMais.some((link) => ehPaginaAtual(caminho, link.href));
 ---
 <header class="nav">
-  <a class="nav__marca" href={base}>POLARIS</a>
+  <a class="nav__marca" href={base}>
+    {/* O capacete do ícone da aba, nas duas versões: a troca é pela classe de
+        tema, como nas ilustrações, porque o tema é o atributo que o botão
+        escreve e não a preferência do sistema. Decorativo, com alt vazio: o
+        nome do link é POLARIS. */}
+    <Image class="nav__capacete nav__capacete--escuro" src={capaceteEscuro} alt="" width={28} height={28} />
+    <Image class="nav__capacete nav__capacete--claro" src={capaceteClaro} alt="" width={28} height={28} />
+    POLARIS
+  </a>
   {/* Nasce escondido e só aparece por JavaScript — ver ligarExpansivel. Sem
       script, este botão não existe e os links ficam sempre visíveis. */}
   <button
@@ -127,7 +138,7 @@ const maisEhAtual = linksDeMais.some((link) => ehPaginaAtual(caminho, link.href)
      texto que passa por baixo de uma barra fixa: ele apareceria atrás dos
      links. Aqui a barra é opaca, e o backdrop-filter sai junto porque não tem
      mais o que borrar — deixa de custar uma recomposição por quadro de
-     rolagem, o mesmo raciocínio que tirou a aurora inteira do tema claro.
+     rolagem.
 
      Contraste: --painel não muda de valor, e esta superfície já está medida em
      docs/verificacao-visual.md, na coluna "sobre o fundo #f5f7f9" da tabela do
@@ -138,11 +149,33 @@ const maisEhAtual = linksDeMais.some((link) => ehPaginaAtual(caminho, link.href)
   }
 
   .nav__marca {
-    font-weight: 900;
-    font-size: 1.3rem;
-    letter-spacing: 0.08em;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--fonte-rotulo);
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
     color: var(--texto-forte);
     text-decoration: none;
+  }
+
+  /* Sem `display` no seletor das duas: quem decide qual aparece são as regras
+     de tema logo abaixo, e uma declaração aqui venceria por especificidade. */
+  .nav__capacete--escuro {
+    display: block;
+  }
+
+  .nav__capacete--claro {
+    display: none;
+  }
+
+  :global(html[data-tema='claro']) .nav__capacete--escuro {
+    display: none;
+  }
+
+  :global(html[data-tema='claro']) .nav__capacete--claro {
+    display: block;
   }
 
   .nav__links {
@@ -165,10 +198,8 @@ const maisEhAtual = linksDeMais.some((link) => ehPaginaAtual(caminho, link.href)
   .nav__links a {
     color: var(--texto);
     text-decoration: none;
-    font-weight: 700;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-weight: 500;
+    font-size: 0.92rem;
     /* Sem padding estes links eram texto nu de ~16px de altura, os menores
        alvos de toque do site. Com 8px em cima e embaixo passam de 30px, acima
        dos 24px que o WCAG 2.2 AA pede em "Target Size (Minimum)". O padding
@@ -181,25 +212,18 @@ const maisEhAtual = linksDeMais.some((link) => ehPaginaAtual(caminho, link.href)
     color: var(--destaque);
   }
 
-  /* A página aberta fica pintada com --flutuante, a mesma superfície do painel
-     do "Mais": marcar onde a pessoa está não introduz nenhum tom novo na
-     barra, é a cor de fundo que ela já tinha.
-
-     O recuo lateral cresce de 4 para 10px e a margem negativa devolve os 6px,
-     então a caixa de fora do link continua do mesmo tamanho e nada na fileira
-     se desloca ao trocar de página — o mesmo arranjo do botão aberto. O que a
-     pintura ganha são 6px dos 12 de intervalo de cada lado; os outros 6
-     continuam de barra, separando o link pintado dos vizinhos.
+  /* A página aberta ganha um traço de 2px em --apoio embaixo do nome, e a
+     letra sobe para --texto-forte. Até a Carta Estelar ela era pintada com
+     --flutuante; o traço é a marca de régua da carta, e não muda o tamanho de
+     nada na fileira ao trocar de página.
 
      Quem manda aqui é o aria-current, não uma classe: a mesma marca que o
      leitor de tela anuncia é a que o olho vê, sem um segundo estado para
      divergir dela. */
   .nav__links a[aria-current='page'],
   .nav__mais-botao--atual {
-    background: var(--flutuante);
-    border-radius: var(--raio);
-    padding-inline: 10px;
-    margin-inline: -6px;
+    color: var(--texto-forte);
+    box-shadow: inset 0 -2px 0 var(--apoio);
   }
 
   .nav__mais {
@@ -230,10 +254,8 @@ const maisEhAtual = linksDeMais.some((link) => ehPaginaAtual(caminho, link.href)
     background: transparent;
     color: var(--texto);
     font-family: inherit;
-    font-weight: 700;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-weight: 500;
+    font-size: 0.92rem;
     cursor: pointer;
     border-radius: var(--raio);
   }
@@ -278,7 +300,7 @@ const maisEhAtual = linksDeMais.some((link) => ehPaginaAtual(caminho, link.href)
      Ele não flutua e não tem moldura: encosta na linha da barra, com os cantos
      de cima retos, e o botão acende no mesmo fundo — os dois leem como uma
      peça só pendurada na barra. A moldura de 2px em --destaque que havia aqui
-     foi recusada pela autora: uma caixinha boiando com contorno amarelo era a
+     foi recusada pela autora: uma caixinha boiando com contorno colorido era a
      coisa mais chamativa da tela, para um menu de três páginas que se visita
      uma vez.
 
@@ -324,15 +346,11 @@ const maisEhAtual = linksDeMais.some((link) => ehPaginaAtual(caminho, link.href)
     background: color-mix(in srgb, var(--apoio) 25%, transparent);
   }
 
-  /* Dentro do painel aberto a pintura da barra não serve: o painel já é
-     --flutuante, e o link atual sumiria de violeta sobre violeta. Aqui ele usa
-     a mesma camada do item sob o cursor, que é a única superfície mais alta
-     que o painel tem. Os recuos voltam aos do painel — os -6px da barra o
-     fariam vazar pelas laterais. */
+  /* Dentro do painel aberto vale o mesmo traço da barra; a caixa do link é a
+     do painel, então o traço corre por baixo do item inteiro. */
   .nav__mais-botao:not([hidden]) ~ .nav__submenu a[aria-current='page'] {
-    background: color-mix(in srgb, var(--apoio) 25%, transparent);
-    margin-inline: 0;
-    padding-inline: 10px;
+    color: var(--texto-forte);
+    box-shadow: inset 0 -2px 0 var(--apoio);
   }
 
   @keyframes submenu-surgir {
@@ -408,7 +426,11 @@ const maisEhAtual = linksDeMais.some((link) => ehPaginaAtual(caminho, link.href)
 
      A busca entra no menu junto com os links. Ela sozinha pede 180px, e marca
      mais busca mais dois ícones não cabem na largura de um celular: mantê-la
-     fora obrigaria a segunda linha a voltar em tela estreita. */
+     fora obrigaria a segunda linha a voltar em tela estreita.
+
+     Remedido na Carta Estelar, com o capacete na marca e as letras novas: a
+     920px a fileira ainda cabe numa linha e a busca continua acima do mínimo
+     dela, então o ponto de quebra ficou onde estava. */
   @media (max-width: 919px) {
     .nav__abrir:not([hidden]) {
       display: flex;

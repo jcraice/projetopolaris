@@ -15,6 +15,9 @@ Saídas, todas em public/:
 - apple-touch-icon.png: o desenho sobre o papel creme, opaco, porque o iOS
   pinta de preto o que for transparente na tela inicial.
 
+E em src/assets/, o capacete da barra do topo: capacete-tema-claro.png e
+capacete-tema-escuro.png.
+
 O papel vira transparência lendo cada pixel como uma das duas tintas do desenho
 (TINTAS) misturada ao creme, e o script guarda a tinta e quanto dela havia. Assim
 a borda suavizada do traço e a da estrela saem translúcidas na cor certa, em
@@ -32,6 +35,7 @@ from PIL import Image
 
 RAIZ = Path(__file__).resolve().parent.parent
 PUBLICO = RAIZ / 'public'
+ASSETS = RAIZ / 'src' / 'assets'
 
 # As duas tintas do desenho, medidas no original: o preto do capacete (que não
 # é preto puro) e o laranja da estrela. Desenho novo com outra cor pede outra
@@ -126,7 +130,15 @@ def main(caminho: str) -> None:
     toque.alpha_composite(desenho, (20, 20))
     toque.convert('RGB').save(PUBLICO / 'apple-touch-icon.png', optimize=True)
 
-    print('favicon.svg, favicon.ico e apple-touch-icon.png gerados em public/')
+    # O capacete da barra do topo, nas duas versões, em 64px: 32 na tela com
+    # densidade 2. Vão para src/assets porque a barra os puxa pelo <Image> do
+    # Astro, e a troca entre eles é pela classe de tema, como nas ilustrações.
+    ASSETS.mkdir(exist_ok=True)
+    claro.resize((64, 64), Image.LANCZOS).save(ASSETS / 'capacete-tema-claro.png', optimize=True)
+    escuro.resize((64, 64), Image.LANCZOS).save(ASSETS / 'capacete-tema-escuro.png', optimize=True)
+
+    print('favicon.svg, favicon.ico e apple-touch-icon.png gerados em public/, '
+          'e o capacete da barra em src/assets/')
 
 
 if __name__ == '__main__':
