@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import { contagem } from '../../lib/texto';
 
 const pagina = await getEntry('paginas', 'arquetipos');
 if (!pagina) throw new Error("página 'arquetipos' não encontrada em src/content/paginas");
@@ -16,6 +17,7 @@ const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : `${base}/`;
 ---
 <Base titulo={pagina.data.titulo}>
+  <p class="rotulo">Catálogo · {contagem(subgeneros.filter((s) => s.data.completo).length, 'subgênero', 'subgêneros')}</p>
   <h1>{pagina.data.titulo}</h1>
   <Content />
   <ul class="lista-subgeneros">

@@ -4,7 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Cartao from '../../components/Cartao.astro';
 import TrocarDeSubgenero from '../../components/TrocarDeSubgenero.astro';
 import { ilustracaoDe } from '../../lib/ilustracoes';
-import { paraAncora } from '../../lib/texto';
+import { contagem, numeracao, paraAncora } from '../../lib/texto';
 
 export async function getStaticPaths() {
   const subgeneros = await getCollection('subgeneros', (s) => s.data.completo);
@@ -17,11 +17,12 @@ const cenarios = (await getCollection('cenarios', (c) => c.data.subgenero === su
 );
 ---
 <Base titulo={`Cenários ${subgenero.data.nome}`}>
+  <p class="rotulo">{subgenero.data.nome} · {contagem(cenarios.length, 'cenário', 'cenários')}</p>
   <h1>Cenários {subgenero.data.nome}</h1>
   {subgenero.data.aberturaCenarios && <p class="abertura">{subgenero.data.aberturaCenarios}</p>}
-  <div class="bloco">
-    {cenarios.map((c) => (
-      <Cartao titulo={c.data.titulo} ancora={paraAncora(c.data.titulo)} ilustracao={ilustracaoDe(c.data)}>
+  <div class="lista-verbetes">
+    {cenarios.map((c, i) => (
+      <Cartao numero={numeracao(i + 1, cenarios.length)} titulo={c.data.titulo} ancora={paraAncora(c.data.titulo)} ilustracao={ilustracaoDe(c.data)}>
         <p>{c.body}</p>
       </Cartao>
     ))}
