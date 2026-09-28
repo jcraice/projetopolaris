@@ -359,3 +359,18 @@ blockquote cite {
   font-style: normal;
   color: var(--apagado);
 }
+
+/* Some da tela e continua para o leitor de tela: rótulos que a interface já
+   mostra de outro jeito, como o "Subgênero" do seletor em forma de pílula do
+   gerador. A busca tem duas cópias escopadas desta mesma receita. */
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

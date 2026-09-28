@@ -9,6 +9,6 @@ export { PROFISSOES } from './profissoes';
 export { CARACTERISTICAS } from './caracteristicas';
 export { PERSONALIDADES } from './personalidades';
 export { FATOS } from './fatos';
-export { montarPrompt, nomearSubgeneros } from './prompt';
+export { montarPrompt, nomearSubgeneros, trechosDoPrompt } from './prompt';
 export type { Opcoes, Peca, PecaCenario, Pools, Profissao, Sorteio, Travas } from './tipos';
 export type { ValoresDoPrompt } from './prompt';

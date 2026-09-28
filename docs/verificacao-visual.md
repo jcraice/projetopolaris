@@ -46,9 +46,10 @@ Preenchimentos com a letra em `--fundo`: `--destaque` **4,95:1**, `--apoio`
 **12,80:1**.
 
 **O valor mais justo do site é o laranja do claro sobre o `--bloco`: 4,56:1.**
-São as peças sorteadas da premissa, o título do bloco do prompt e os nomes de
+São as peças sorteadas dentro da fita do prompt, no gerador, e os nomes de
 subgênero do guia de personagens. Clarear `--destaque` no claro, ou escurecer
-`--bloco`, reprova os três.
+`--bloco`, reprova os dois. (A premissa deixou de ficar sobre o `--bloco`
+quando virou transmissão: hoje ela fica direto sobre o fundo, a 4,95:1.)
 
 ## O que ficou sem mínimo
 

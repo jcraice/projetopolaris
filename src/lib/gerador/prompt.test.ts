@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { montarPrompt, nomearSubgeneros } from './prompt';
+import { montarPrompt, nomearSubgeneros, trechosDoPrompt } from './prompt';
 import type { Opcoes, Sorteio } from './tipos';
 
 const nomes = {
@@ -82,5 +82,38 @@ describe('montarPrompt', () => {
 
   it('deixa passar colchetes em minúscula, que não são marcadores', () => {
     expect(montarPrompt('texto [ver nota] fim', valores)).toBe('texto [ver nota] fim');
+  });
+});
+
+describe('trechosDoPrompt', () => {
+  const valores = {
+    subgenero: 'Space Opera',
+    personagemA: 'Um(a) Contrabandista que é cego(a) de um olho',
+    personagemB: 'Um(a) Reescritor(a) Histórico(a) que é egocêntrico(a)',
+    local: 'Ruínas Antigas',
+    fato: 'um personagem está de luto',
+  };
+
+  // É o que a página usa para pintar de laranja só o que foi sorteado, dentro
+  // do texto fixo da autora.
+  it('separa o texto fixo das peças sorteadas', () => {
+    expect(trechosDoPrompt('Onde: [LOCAL]. Fato: [FATO]', valores)).toEqual([
+      { texto: 'Onde: ', sorteado: false },
+      { texto: 'Ruínas Antigas', sorteado: true },
+      { texto: '. Fato: ', sorteado: false },
+      { texto: 'um personagem está de luto', sorteado: true },
+    ]);
+  });
+
+  // A garantia que importa: o que a tela mostra e o que "Copiar prompt" leva
+  // são a mesma montagem, sem duas implementações que possam desalinhar.
+  it('junta de volta exatamente no texto de montarPrompt', () => {
+    const modelo = 'M: [SUBGENERO]\nA: [PERSONAGEM A]\nB: [PERSONAGEM B]\nL: [LOCAL] F: [FATO] [ver nota]';
+    const juntos = trechosDoPrompt(modelo, valores).map((t) => t.texto).join('');
+    expect(juntos).toBe(montarPrompt(modelo, valores));
+  });
+
+  it('lança em marcador desconhecido, como montarPrompt', () => {
+    expect(() => trechosDoPrompt('[PERSONAGEM C]', valores)).toThrow(/marcador desconhecido/i);
   });
 });

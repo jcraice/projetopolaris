@@ -46,16 +46,20 @@ const raiz = base.endsWith('/') ? base : base + '/';
   <p class="rotulo">Gerador · premissa em quatro linhas</p>
   <h1>Gerador de combinações</h1>
 
+  {/* O seletor continua sendo um <select> de verdade, vestido de pílula: é o
+      que funciona com teclado, leitor de tela e a roda de opções do celular.
+      A legenda e o rótulo "Subgênero" saem da tela mas ficam para o leitor de
+      tela — a pílula já mostra o subgênero escolhido. */}
   <form id="opcoes">
     <fieldset>
-      <legend>Opções do sorteio</legend>
-      <label for="opcoes-subgenero">
-        Subgênero
+      <legend class="visualmente-oculto">Opções do sorteio</legend>
+      <label class="seletor" for="opcoes-subgenero">
+        <span class="visualmente-oculto">Subgênero</span>
         <select id="opcoes-subgenero" name="subgenero">
           {subgeneros.map((m) => <option value={m.id}>{m.data.nome}</option>)}
         </select>
       </label>
-      <label><input type="checkbox" name="misturarSubgeneros" /> Misturar subgêneros</label>
+      <label class="misturar"><input type="checkbox" name="misturarSubgeneros" /> Misturar subgêneros</label>
     </fieldset>
   </form>
 
@@ -71,7 +75,16 @@ const raiz = base.endsWith('/') ? base : base + '/';
       mostra. O nome sobrevive em aria-label — apagar o <h2> tirava também o
       rótulo que o leitor de tela usa para anunciar a região, e aí o bloco
       chegaria como uma seção sem nome. */}
-  <section class="bloco bloco-premissa" aria-label="Premissa gerada">
+  {/* A premissa chega como uma transmissão recebida pelo rádio da nave, por
+      escolha da autora entre sete maquetes. O cabeçalho e o "fim da
+      transmissão" são cenografia: ficam fora da árvore de acessibilidade, e o
+      nome do subgênero que o cabeçalho repete já está na primeira linha da
+      premissa. */}
+  <div class="cabecalho-transmissao" aria-hidden="true">
+    <span>Transmissão recebida · <span id="subgenero-transmissao"></span><span class="sinal" aria-hidden="true"><i></i><i></i><i></i><i></i></span></span>
+    <span>Frequência Polaris · 02h 31m</span>
+  </div>
+  <section class="transmissao" aria-label="Premissa gerada">
     {/* aria-live no parágrafo, e não na seção inteira: na seção, cada clique
         em Gerar faria o leitor de tela reler também o rótulo. Os quatro cadeados
         moram dentro da região viva, e o custo é que a releitura pode incluir os
@@ -80,12 +93,12 @@ const raiz = base.endsWith('/') ? base : base + '/';
         deixar quem não enxerga sem saber que a premissa mudou. */}
     <p id="premissa" class="premissa" aria-live="polite"></p>
   </section>
+  <p class="fim-da-transmissao" aria-hidden="true">— Fim da transmissão —</p>
   <div class="acoes">
     <button type="button" class="botao botao--principal" id="sortear">Gerar</button>
-    {/* Rótulo visível curto, nome acessível completo: são dois botões de copiar
-        na página, e "Copiar" sozinho não diria a um leitor de tela qual dos dois
-        é. O aria-label começa pelo texto visível, como o WCAG 2.5.3 pede. */}
-    <button type="button" class="botao" id="copiar-premissa" aria-label="Copiar premissa">Copiar</button>
+    {/* O nome inteiro na tela, e não só "Copiar": são dois botões de copiar na
+        página, e cada um diz o que leva. */}
+    <button type="button" class="botao" id="copiar-premissa">Copiar premissa</button>
     <span class="aviso" id="aviso-premissa" role="status"></span>
   </div>
 
@@ -111,13 +124,22 @@ const raiz = base.endsWith('/') ? base : base + '/';
     </button>
   </template>
 
-  <section class="bloco bloco-prompt" aria-labelledby="prompt-titulo">
-    <h2 id="prompt-titulo">Crie enredos com sua IA favorita</h2>
+  {/* O prompt é a fita de um teletipo: impresso em letra de máquina, com os
+      furos na margem e as peças sorteadas em --destaque dentro do texto da
+      autora. Sempre à vista — a autora recusou esconder o prompt atrás de uma
+      aba. */}
+  <section class="prompt" aria-labelledby="prompt-titulo">
+    <div class="prompt__cabeca">
+      <h2 id="prompt-titulo">Crie enredos com sua IA favorita</h2>
+      <span class="cabecalho-transmissao" aria-hidden="true"><span>Pronto para colar<span class="sinal sinal--saida" aria-hidden="true"><i></i><i></i><i></i><i></i></span></span></span>
+    </div>
     {/* Sem aria-live, ao contrário da premissa: é um bloco de várias linhas que
         repete as peças já anunciadas acima, e relê-lo a cada clique em Gerar
         tornaria a página impraticável com leitor de tela. Quem quiser o texto
         chega nele navegando. */}
-    <p id="prompt" class="prompt__texto"></p>
+    <div class="fita">
+      <p id="prompt" class="prompt__texto"></p>
+    </div>
   </section>
   <div class="acoes">
     <button type="button" class="botao" id="copiar-prompt">Copiar prompt</button>
@@ -142,44 +164,117 @@ const raiz = base.endsWith('/') ? base : base + '/';
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 18px;
-    border: 1px solid var(--borda-suave);
-    padding: 14px 18px;
-    margin: 0 0 24px;
+    gap: 12px 20px;
+    border: 0;
+    padding: 0;
+    margin: 8px 0 32px;
   }
 
-  legend {
-    padding: 0 6px;
-    font-family: var(--fonte-rotulo);
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--apagado);
+  /* A pílula: o mesmo desenho das pílulas de subgênero preenchidas. A seta é
+     um ::after do rótulo, e não uma imagem de fundo do <select>, porque imagem
+     de fundo não aceita token de cor e ficaria certa num tema só. */
+  .seletor {
+    position: relative;
+    display: inline-flex;
   }
 
-  #opcoes label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 500;
+  .seletor::after {
+    content: '▾';
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--fundo);
+    pointer-events: none;
+    font-size: 0.8rem;
   }
 
   #opcoes select {
-    background: var(--fundo);
-    color: var(--texto);
-    border: 1px solid var(--borda-suave);
-    padding: 6px 10px;
-    font-family: inherit;
+    appearance: none;
+    background: var(--apoio);
+    color: var(--fundo);
+    border: 1px solid var(--apoio);
+    border-radius: 99px;
+    padding: 6px 34px 6px 16px;
+    font-family: var(--fonte-rotulo);
+    font-weight: 500;
     /* 1rem pelo mesmo motivo do campo de busca: abaixo de 16px o Safari do
        iPhone amplia a página ao abrir o seletor. */
     font-size: 1rem;
-    border-radius: var(--raio);
+    cursor: pointer;
+  }
+
+  /* A lista aberta é desenhada pelo sistema, com as cores de cada opção
+     herdadas do <select>: sem isto ela sairia com a letra da cor do fundo. */
+  #opcoes option {
+    background: var(--fundo);
+    color: var(--texto);
+  }
+
+  .misturar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
 
   #opcoes select:focus-visible,
   #opcoes input:focus-visible {
     outline: 3px solid var(--apoio);
     outline-offset: 3px;
+  }
+
+  /* A linha de cabeçalho da transmissão, e também o selo "Pronto para colar"
+     do prompt: letra de máquina miúda em --apagado, com as barras de sinal. */
+  .cabecalho-transmissao {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px 16px;
+    flex-wrap: wrap;
+    font-family: var(--fonte-rotulo);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--apagado);
+    margin-block-end: 20px;
+  }
+
+  .sinal {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 3px;
+    margin-inline-start: 8px;
+    vertical-align: -1px;
+  }
+
+  .sinal i {
+    display: block;
+    width: 3px;
+    background: var(--destaque);
+  }
+
+  .sinal i:nth-child(1) { height: 4px; }
+  .sinal i:nth-child(2) { height: 7px; }
+  .sinal i:nth-child(3) { height: 10px; }
+  .sinal i:nth-child(4) { height: 13px; }
+
+  .sinal--saida i {
+    background: var(--apoio);
+  }
+
+  /* A mensagem recebida: a barra laranja à esquerda é o que a separa da
+     página, no lugar da caixa com fundo que a premissa tinha. */
+  .transmissao {
+    border-left: 2px solid var(--destaque);
+    padding: 4px 0 4px 22px;
+  }
+
+  .fim-da-transmissao {
+    margin: 16px 0 0;
+    font-family: var(--fonte-rotulo);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--apagado);
   }
 
   /* O cadeado vive dentro do texto da premissa, no fim da linha que trava.
@@ -245,47 +340,90 @@ const raiz = base.endsWith('/') ? base : base + '/';
   .premissa {
     margin: 0;
     min-height: 1.6em;
-    font-size: 1.2rem;
-    line-height: 1.7;
+    font-family: var(--fonte-titulo);
+    font-size: clamp(1.2rem, 2.3vw, 1.5rem);
+    line-height: 1.6;
     color: var(--texto-forte);
     white-space: pre-wrap;
   }
 
   /* O que o sorteio trouxe, destacado dentro da própria frase — é isto que
      tomou o lugar da pilha de cartas que ficava acima da premissa repetindo o
-     que ela já dizia. --destaque nos dois temas. Sobre o fundo do bloco dá
-     5,68:1 no escuro e 4,56:1 no claro; acima dos 4,5:1 que texto comum exige,
-     com folga pequena no claro — mais um motivo para o --destaque do tema claro
-     não poder clarear, nem o --bloco escurecer.
+     que ela já dizia. --destaque nos dois temas: na premissa fica direto
+     sobre o fundo (6,22:1 no escuro, 4,95:1 no claro); na fita do prompt fica
+     sobre o --bloco (5,68:1 e 4,56:1), o valor mais justo do site — mais um
+     motivo para o --destaque do tema claro não poder clarear, nem o --bloco
+     escurecer.
 
      `:global()` porque estes spans nascem do JavaScript, em montarPremissa(), e
      por isso não recebem o atributo de escopo que o Astro põe na marcação
      escrita no arquivo. Sem ele a regra é descartada em silêncio e o laranja
      simplesmente não aparece — o mesmo cuidado que o HTML vindo de render()
      exige. O `.premissa` na frente mantém o escopo: quem é global é só o filho. */
-  .premissa :global(.sorteado) {
+  .premissa :global(.sorteado),
+  .prompt__texto :global(.sorteado) {
     color: var(--destaque);
-    font-weight: 600;
   }
 
-  /* O título do bloco do prompt em acento, por escolha da autora — é o único
-     título de seção da página, e sem cor ele se perdia entre a premissa acima e
-     o texto do prompt logo abaixo. Sobre --bloco o acento mede 5,68:1 no escuro
-     e 4,56:1 no claro (docs/verificacao-visual.md): passa até no critério de
-     texto pequeno, e este h2 tem 24px. */
-  .bloco-prompt h2 {
-    color: var(--destaque);
+  .premissa :global(.sorteado) {
+    font-weight: 500;
+  }
+
+  .prompt {
+    margin-block-start: 48px;
+  }
+
+  .prompt__cabeca {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px 16px;
+    flex-wrap: wrap;
+    margin-block-end: 16px;
+  }
+
+  /* Em --texto-forte, como na maquete que a autora escolheu. Até a fita ele
+     era --destaque, pedido dela para o título não se perder entre a premissa
+     e o prompt; o selo "Pronto para colar" e a fita fazem esse papel agora. */
+  .prompt__cabeca h2 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  .prompt__cabeca .cabecalho-transmissao {
+    margin: 0;
+  }
+
+  /* Os furos da fita são um gradiente radial na cor do fundo da página,
+     repetido na vertical sobre a margem esquerda do bloco. */
+  .fita {
+    position: relative;
+    background: var(--bloco);
+    padding: 26px 30px 26px 46px;
+    border-radius: 2px;
+  }
+
+  .fita::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 16px;
+    bottom: 16px;
+    width: 8px;
+    background: radial-gradient(circle, var(--fundo) 2.6px, transparent 3px) 0 0 / 8px 16px repeat-y;
   }
 
   /* pre-wrap, e não <pre>: as quebras de linha do prompt-ia.md fazem parte do
      texto que vai para a IA — é o que põe cada uma das quatro peças na própria
      linha, a forma que aguenta título começado por artigo ("A busca por
-     autenticidade") — e precisam aparecer na tela igual. Mas isto é texto para
-     ler, não código: nada de fonte monoespaçada nem moldura. */
+     autenticidade") — e precisam aparecer na tela igual. A letra de máquina é
+     a do teletipo. */
   .prompt__texto {
     margin: 0;
     white-space: pre-wrap;
-    line-height: 1.5;
+    font-family: var(--fonte-rotulo);
+    font-size: 0.86rem;
+    line-height: 1.75;
   }
 
   /* O botão de cada bloco fica fora da caixa cinza, logo abaixo dela, e não
@@ -304,10 +442,9 @@ const raiz = base.endsWith('/') ? base : base + '/';
   .acoes {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     align-items: center;
     gap: 8px 12px;
-    margin: 16px 0 32px;
+    margin: 20px 0 0;
   }
 
   .acoes .aviso {
@@ -320,7 +457,6 @@ const raiz = base.endsWith('/') ? base : base + '/';
      mensagem aparece. */
   .aviso {
     min-height: 1.2em;
-    text-align: center;
     color: var(--apagado);
     font-size: 0.85rem;
   }
@@ -330,10 +466,25 @@ const raiz = base.endsWith('/') ? base : base + '/';
       transition: none;
     }
   }
+
+  @media (max-width: 640px) {
+    .transmissao {
+      padding-left: 16px;
+    }
+
+    .fita {
+      padding: 22px 18px 22px 38px;
+    }
+
+    .fita::before {
+      left: 12px;
+    }
+  }
 </style>
 
 <script>
-  import { montarPrompt, nomearSubgeneros, partes, sortear, redigir, MOLDE, PROFISSOES } from '../lib/gerador';
+  import { montarPrompt, nomearSubgeneros, partes, sortear, redigir, trechosDoPrompt, MOLDE, PROFISSOES } from '../lib/gerador';
+  import type { ValoresDoPrompt } from '../lib/gerador';
   import type { Opcoes, PecaCenario, Pools, Sorteio, Travas } from '../lib/gerador';
 
   const locais: PecaCenario[] = JSON.parse(document.getElementById('locais')!.textContent!);
@@ -349,6 +500,11 @@ const raiz = base.endsWith('/') ? base : base + '/';
   const form = document.getElementById('opcoes') as HTMLFormElement;
   const premissa = document.getElementById('premissa')!;
   const prompt = document.getElementById('prompt')!;
+  const subgeneroDaTransmissao = document.getElementById('subgenero-transmissao')!;
+
+  // Os valores do último sorteio, guardados para "Copiar prompt" montar o
+  // mesmo texto que a tela mostra.
+  let valoresDoPrompt: ValoresDoPrompt | null = null;
 
   const travas: Travas = { personagemA: false, personagemB: false, local: false, fato: false };
 
@@ -424,7 +580,9 @@ const raiz = base.endsWith('/') ? base : base + '/';
       .filter((trecho) => trecho.sorteado);
     valores.forEach((trecho, i) => { sorteados[i].textContent = trecho.texto; });
 
-    prompt.textContent = montarPrompt(modeloDoPrompt, {
+    subgeneroDaTransmissao.textContent = subgenero;
+
+    valoresDoPrompt = {
       subgenero,
       // O "Um(a)" vem escrito aqui e no MOLDE, e não da lista, porque as 100
       // profissões abrem com o mesmo artigo — ver o comentário em moldes.ts.
@@ -432,7 +590,20 @@ const raiz = base.endsWith('/') ? base : base + '/';
       personagemB: `Um(a) ${sorteio.personagemB.profissao.nome} que é ${sorteio.personagemB.personalidade}`,
       local: sorteio.local.nome,
       fato: sorteio.fato,
-    });
+    };
+
+    /* O prompt é refeito inteiro a cada rolagem, ao contrário da premissa: não
+       há botão nenhum dentro dele para perder o foco. Os spans sorteados levam
+       a mesma classe da premissa, e a mesma regra :global() os pinta. */
+    prompt.replaceChildren(
+      ...trechosDoPrompt(modeloDoPrompt, valoresDoPrompt).map((trecho) => {
+        if (!trecho.sorteado) return document.createTextNode(trecho.texto);
+        const span = document.createElement('span');
+        span.className = 'sorteado';
+        span.textContent = trecho.texto;
+        return span;
+      }),
+    );
   }
 
   function rolar() {
@@ -470,7 +641,8 @@ const raiz = base.endsWith('/') ? base : base + '/';
   });
 
   document.getElementById('copiar-prompt')!.addEventListener('click', () => {
-    copiar(prompt.textContent ?? '', avisoDoPrompt, 'Prompt copiado.');
+    const texto = valoresDoPrompt ? montarPrompt(modeloDoPrompt, valoresDoPrompt) : '';
+    copiar(texto, avisoDoPrompt, 'Prompt copiado.');
   });
 
   /* Um ouvinte no contêiner, e não um por botão: os cadeados só existem depois

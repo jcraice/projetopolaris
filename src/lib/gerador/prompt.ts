@@ -1,3 +1,4 @@
+import type { Trecho } from './redacao';
 import type { Opcoes, Sorteio } from './tipos';
 
 export function nomearSubgeneros(
@@ -47,19 +48,41 @@ const MARCADORES: Record<string, keyof ValoresDoPrompt> = {
    colchetes no prompt-ia.md sem que a montagem pare de funcionar. */
 const MARCADOR_QUE_SOBROU = /\[\p{Lu}[\p{Lu} ]*\]/u;
 
+/* O prompt em trechos, com as peças sorteadas marcadas — a irmã de partes()
+   para o prompt. A página precisa dela para pintar de --destaque só o que o
+   sorteio trouxe, dentro do texto fixo da autora, e montarPrompt() é a junção
+   destes mesmos trechos: o que a tela mostra e o que "Copiar prompt" leva não
+   têm como divergir. */
+export function trechosDoPrompt(modelo: string, valores: ValoresDoPrompt): Trecho[] {
+  const trechos: Trecho[] = [];
+  const marcadores = new RegExp(
+    Object.keys(MARCADORES).map((m) => m.replace(/[[\]]/g, '\\$&')).join('|'),
+    'g',
+  );
+
+  let inicio = 0;
+  const fixo = (texto: string) => {
+    if (!texto) return;
+    /* Falhar alto em vez de devolver o texto pela metade: um marcador escrito
+       errado no prompt-ia.md vira teste vermelho, e não um prompt que chega na
+       IA com "[ARQUETIPO]" cru no meio. */
+    const sobrou = texto.match(MARCADOR_QUE_SOBROU);
+    if (sobrou) {
+      throw new Error(`marcador desconhecido no modelo do prompt: ${sobrou[0]}`);
+    }
+    trechos.push({ texto, sorteado: false });
+  };
+
+  for (const achado of modelo.matchAll(marcadores)) {
+    fixo(modelo.slice(inicio, achado.index));
+    trechos.push({ texto: valores[MARCADORES[achado[0]]], sorteado: true });
+    inicio = achado.index + achado[0].length;
+  }
+  fixo(modelo.slice(inicio));
+
+  return trechos;
+}
+
 export function montarPrompt(modelo: string, valores: ValoresDoPrompt): string {
-  let texto = modelo;
-  for (const [marcador, chave] of Object.entries(MARCADORES)) {
-    texto = texto.split(marcador).join(valores[chave]);
-  }
-
-  /* Falhar alto em vez de devolver o texto pela metade: um marcador escrito
-     errado no prompt-ia.md vira teste vermelho, e não um prompt que chega na IA
-     com "[ARQUETIPO]" cru no meio. */
-  const sobrou = texto.match(MARCADOR_QUE_SOBROU);
-  if (sobrou) {
-    throw new Error(`marcador desconhecido no modelo do prompt: ${sobrou[0]}`);
-  }
-
-  return texto;
+  return trechosDoPrompt(modelo, valores).map((t) => t.texto).join('');
 }

@@ -93,9 +93,9 @@ Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md]
   olhos e mais nada: o tema claro já teve um ciano no `--destaque` e foi recusado
   justamente por somar um segundo tom frio ao azul-tinta. O laranja fica na
   estrela do mapa, no `.rotulo` acima do título, na numeração dos verbetes, no
-  botão principal, na etiqueta do felino, nas peças sorteadas e no cadeado
-  travado — e em dois títulos que a autora pediu em laranja (o do bloco do
-  prompt no gerador e os subgêneros do guia de personagens). **O `h1` não é
+  botão principal, na etiqueta do felino, nas peças sorteadas (na premissa e
+  dentro do prompt) e no cadeado travado — e nos subgêneros do guia de
+  personagens, que a autora pediu em laranja. **O `h1` não é
   acento** desde a Carta Estelar: é `--texto-forte`, e o laranja subiu para a
   linha de rótulo acima dele. Título de **verbete** também não — herda
   `--texto-forte`; já foi dourado e já foi violeta, os dois recusados. Não
@@ -487,6 +487,23 @@ frontmatter de `gerador.astro` chama a função uma vez com valores de descarte
 só para isso acontecer em `npm run build`, e não em produção no navegador de
 alguém.
 
+**`trechosDoPrompt()` é para o prompt o que `partes()` é para a premissa**: o
+mesmo texto em trechos, com as peças sorteadas marcadas, para a página
+pintá-las de `--destaque` dentro da fita. `montarPrompt()` é só a junção
+desses trechos, então o que a tela mostra e o que "Copiar prompt" leva não
+têm como divergir.
+
+**A página do gerador é uma transmissão** (escolha da autora entre sete
+maquetes, setembro de 2026): cabeçalho "Transmissão recebida · [subgênero]"
+com barras de sinal, a premissa em Fraunces com uma barra de `--destaque` à
+esquerda, "Fim da transmissão", e embaixo o prompt como a **fita de um
+teletipo** — letra de máquina sobre `--bloco`, com furos na margem feitos por
+um gradiente na cor do fundo. O prompt fica **sempre à vista**: a autora
+recusou uma versão com abas porque escondia o prompt. O cabeçalho e o "fim da
+transmissão" são cenografia e ficam em `aria-hidden`. O seletor de subgênero
+continua um `<select>` de verdade, vestido de pílula; a seta é um `::after` do
+rótulo, porque imagem de fundo não aceita token de cor.
+
 **Concordância gramatical** encolheu para uma função:
 [redacao.ts](src/lib/gerador/redacao.ts) resolve a contração de preposição
 (`contrair`, `em`+`uma` → `numa`) — é o único ponto de concordância que sobrou.
@@ -562,7 +579,7 @@ própria página. A única coisa que o site guarda no navegador é a chave
 
 Além dos tokens, `global.css` guarda o punhado de classes que mais de uma página
 usa — `.bloco`, `.etiqueta`, `.botao` (com `.botao--principal`),
-`.lista-subgeneros`, `.lista-verbetes`, `.rotulo`, `.abertura`, `.autor`. Antes de escrever regra nova num
+`.lista-subgeneros`, `.lista-verbetes`, `.rotulo`, `.visualmente-oculto`, `.abertura`, `.autor`. Antes de escrever regra nova num
 `<style>` escopado, conferir se uma delas já faz o trabalho: `.lista-subgeneros`
 só foi parar ali depois de ter sido copiada em quatro páginas. Classe que vale
 para uma página só continua escopada.
