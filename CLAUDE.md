@@ -41,6 +41,10 @@ navegador, não o botão de tema do site — o ícone mora na aba, fora da pági
 python scripts/gerar-favicon.py src/assets/favicon/original.png
 ```
 
+O mesmo script gera o capacete da barra do topo, em `src/assets/`
+(`capacete-tema-claro.png` e `capacete-tema-escuro.png`), trocados pela classe
+de tema como as ilustrações.
+
 Depois de adicionar ou editar Markdown em `src/content/`, `npm run build` é o
 que confirma que o frontmatter passa na validação Zod — não existe comando de
 lint separado para conteúdo.
@@ -66,30 +70,44 @@ Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md]
   no `<head>` de [Base.astro](src/layouts/Base.astro) antes da primeira pintura.
   Toda cor vem de token em `:root` — nunca escrever cor literal em componente,
   senão ela só funciona num dos dois temas.
+- **O visual é a Carta Estelar** (setembro de 2026,
+  [spec](docs/superpowers/specs/2026-09-28-carta-estelar-design.md)): o site como
+  um mapa do céu com a Polaris no centro. Fundo azul-noite liso no escuro,
+  papel de carta no claro, títulos em Fraunces, texto em IBM Plex Sans e
+  rótulos em IBM Plex Mono. O site anterior está na etiqueta git
+  `antes-da-carta-estelar`, guardada a pedido da autora para poder voltar.
+- **As letras vêm da API de fontes do Astro** (`fonts` em
+  [astro.config.ts](astro.config.ts), `<Font />` em `Base.astro`), provedor
+  Fontsource: os arquivos são baixados **no build** e publicados junto do
+  site, então `npm run build` precisa de rede. Nunca apontar para
+  `fonts.googleapis.com` no HTML — seria dependência de runtime. As três
+  chegam como `--fonte-titulo`, `--fonte-texto` e `--fonte-rotulo`.
 - **Cor de acento sempre por papel, nunca por nome de cor.** `--destaque` é o
-  que chama o olho (título da página, botão principal, etiqueta, pilares,
-  cadeado travado) e `--apoio` é a interface em volta
-  (links, botões secundários, foco, barra lateral dos verbetes, retângulos de
-  subgênero). `--ouro` e `--violeta` existem só como origem dos dois no tema escuro —
-  componente nenhum deve consumi-los direto, porque no claro a paleta é outra
-  (laranja-tijolo `#b34700` e azul-tinta `#1b2a4a`, sem relação com dourado e
-  violeta).
+  que chama o olho — o laranja da estrela do ícone, `#f06c30` no escuro — e
+  `--apoio` é a interface em volta — o azul-estrela `#9db4e0` das linhas do
+  mapa: links, botões secundários, foco, pílulas de subgênero, traço da página
+  aberta na barra. No claro os dois são o laranja-tijolo `#b34700` e o
+  azul-tinta `#1b2a4a`. Não há mais token de cor nomeada (`--ouro` e
+  `--violeta` saíram com a paleta antiga).
 - **Acento com parcimônia, por escolha da autora.** Uma cor quente que salta aos
   olhos e mais nada: o tema claro já teve um ciano no `--destaque` e foi recusado
-  justamente por somar um segundo tom frio ao azul-tinta. Título de **verbete**
-  não é acento — herda `--texto-forte` (branco no escuro, quase preto no claro),
-  e quem separa um do outro é a barra lateral em `--apoio`. Já foi dourado e já
-  foi violeta; os dois foram recusados. Não repintar.
-- A "aurora" muda de cor por subgênero e **não existe no tema claro**, onde o
-  fundo é liso.
-- **Mexeu em cor, tamanho de fonte ou opacidade da aurora?** Refaça as contas de
+  justamente por somar um segundo tom frio ao azul-tinta. O laranja fica na
+  estrela do mapa, no `.rotulo` acima do título, na numeração dos verbetes, no
+  botão principal, na etiqueta do felino, nas peças sorteadas e no cadeado
+  travado — e em dois títulos que a autora pediu em laranja (o do bloco do
+  prompt no gerador e os subgêneros do guia de personagens). **O `h1` não é
+  acento** desde a Carta Estelar: é `--texto-forte`, e o laranja subiu para a
+  linha de rótulo acima dele. Título de **verbete** também não — herda
+  `--texto-forte`; já foi dourado e já foi violeta, os dois recusados. Não
+  repintar.
+- **Não existe mais aurora** nem cor por subgênero: saiu por decisão da autora
+  na Carta Estelar, com o campo `aurora` do esquema. O subgênero se reconhece
+  pelo nome e, na home, pela posição no mapa.
+- **Mexeu em cor ou tamanho de fonte?** Refaça as contas de
   [docs/verificacao-visual.md](docs/verificacao-visual.md) e atualize o
-  documento. Vários valores estão no limite: o `--destaque` do tema claro não
-  pode clarear (`#b34700` dá 5,12:1 e é preenchimento com letra na cor do fundo,
-  que exige 4,5), e a aurora só pode ir até 0,37 (hoje está em 0,36, em
-  [Aurora.astro](src/components/Aurora.astro)). O `h1` em `--destaque` passa por
-  ser texto grande — 4,27:1 no pior subgênero contra os 3:1 exigidos —, então
-  encolhê-lo abaixo de 18,66px reprova.
+  documento. O valor no limite é o laranja do tema claro sobre `--bloco`:
+  **4,56:1**, para um mínimo de 4,5. Clarear `--destaque` no claro, ou
+  escurecer `--bloco`, reprova as peças sorteadas do gerador.
 - **`prefers-reduced-motion` respeitado** por qualquer animação.
 - **Tudo em português do Brasil**: identificadores, nomes de arquivo, interface,
   comentários e mensagens de commit (imperativo — "Adiciona busca global").
@@ -131,7 +149,6 @@ testados fora do Astro. Regras do esquema que não são óbvias:
   ligada; a caixa saiu do formulário junto com os arquétipos, que deixaram de
   entrar no sorteio — o pool continua vivo só no catálogo, em
   `/arquetipos/comuns/`.
-- `subgenero` com `completo: true` exige `aurora` (trio de cores hex).
 - `arquetipos.felino: true` marca o arquétipo bônus, renderizado à parte com
   etiqueta própria. Ele aparece na página de catálogo à parte e fica de fora da
   amostra de `/subgeneros/`. Chegou a **entrar** no sorteio do gerador — decisão da
@@ -283,8 +300,8 @@ O tamanho do acervo (hoje 120 arquétipos — 10 por subgênero mais o felino, e
 comuns —, 100 cenários, 100 elementos) está escrito por extenso em vários
 lugares que nenhum teste confere — e a lista que costumava viver aqui já
 provou que enumerar por nome não segura: tinha seis itens antes desta branch,
-e a revisão final achou mais seis que ninguém tinha acrescentado —
-[Aurora.astro](src/components/Aurora.astro),
+e a revisão final achou mais seis que ninguém tinha acrescentado — um deles,
+o componente da aurora, saiu depois com ela —
 [TrocarDeSubgenero.astro](src/components/TrocarDeSubgenero.astro),
 [moldes.ts](src/lib/gerador/moldes.ts), [prompt.ts](src/lib/gerador/prompt.ts),
 [guia-de-personagens.astro](src/pages/guia-de-personagens.astro) e
@@ -351,9 +368,9 @@ links de verdade, sem JavaScript. Três coisas nela não são óbvias:
   link da página atual na barra do topo, em vez de ser omitido: assim a fileira
   não muda de largura nem de ordem a cada troca. É o que o rótulo "Trocar de
   subgênero" promete; "Outros subgêneros" pediria a lista sem ele. No claro a marca é a
-  fileira ao contrário — a pílula vazada entre as preenchidas —, porque repetir
-  o fundo `--flutuante` do escuro deixaria a letra em `--fundo`, quase branca
-  sobre superfície quase branca.
+  fileira ao contrário — a pílula vazada entre as preenchidas —, porque no
+  claro as outras já são preenchidas de `--apoio`. No escuro é o oposto: as
+  outras são contornadas e a aberta vem preenchida de `--apoio`.
 - A fileira lista **só os dez subgêneros** (`completo: true`), mas aparece também em
   `/arquetipos/comuns/`, sem nenhuma pílula marcada. Não é descuido: o pool dos
   comuns não é destino de troca, e aquela página é justamente a que ficaria sem
@@ -513,8 +530,9 @@ Mexer no que está na barra pede refazer a conta de largura que está comentada
 no `@media` de [Nav.astro](src/components/Nav.astro): o ponto de quebra sai
 dessa soma, não de uma medida de tablet.
 
-**A página aberta fica pintada na barra**, em `--flutuante` — a mesma superfície
-do painel do "Mais", para marcar onde a pessoa está sem inventar tom novo. Quem
+**A página aberta ganha um traço na barra**: 2px de `--apoio` embaixo do nome,
+com a letra em `--texto-forte`. Até a Carta Estelar ela era pintada com
+`--flutuante`. Quem
 decide é `ehPaginaAtual()` ([navegacao.ts](src/lib/navegacao.ts)), que compara
 por **prefixo**: `/arquetipos/cyberpunk/` mantém "Arquétipos" aceso, senão a
 marca apagaria justo nas páginas de catálogo. A função não serve para a raiz do
@@ -528,8 +546,7 @@ para divergir dela — o mesmo princípio do `aria-expanded` dos três expansív
 As duas exceções são o botão "Mais", que ganha a classe
 `nav__mais-botao--atual` quando a página aberta é uma das três de dentro dele
 (fechado, o menu esconderia a única marca), e o link atual **dentro** do painel
-aberto, que troca `--flutuante` pela camada do item sob o cursor — sobre o
-painel, que já é `--flutuante`, ele sumiria de violeta sobre violeta.
+aberto, que leva o mesmo traço.
 
 ### Estilo nas páginas
 
@@ -540,7 +557,7 @@ própria página. A única coisa que o site guarda no navegador é a chave
 
 Além dos tokens, `global.css` guarda o punhado de classes que mais de uma página
 usa — `.bloco`, `.etiqueta`, `.botao` (com `.botao--principal`),
-`.lista-subgeneros`, `.abertura`, `.autor`. Antes de escrever regra nova num
+`.lista-subgeneros`, `.lista-verbetes`, `.rotulo`, `.abertura`, `.autor`. Antes de escrever regra nova num
 `<style>` escopado, conferir se uma delas já faz o trabalho: `.lista-subgeneros`
 só foi parar ali depois de ter sido copiada em quatro páginas. Classe que vale
 para uma página só continua escopada.
@@ -562,9 +579,20 @@ Foi o que aconteceu com `.sorteado`, os `<span>` que `montarPremissa()` cria em
 [gerador.astro](src/pages/gerador.astro): a correção foi
 `.premissa :global(.sorteado)`.
 
-A aurora recebe o trio de cores do subgênero por prop de `Base` e o converte em
-`conic-gradient` por `gradienteConico()` ([aurora.ts](src/lib/aurora.ts)), que
-cai no `AURORA_PADRAO` quando a página não é de subgênero.
+**A home abre com o mapa estelar** ([MapaEstelar.astro](src/components/MapaEstelar.astro)):
+um SVG desenhado no build, com a Polaris no centro e cada subgênero completo
+como uma estrela que é link para `/subgeneros/<id>/`. A posição sai de
+`posicoesDoMapa()` ([mapa.ts](src/lib/mapa.ts)), que só precisa da quantidade —
+a ordem do acervo gira em volta do centro alternando dois raios —, então
+subgênero novo entra no mapa sem ninguém desenhar nada. Abaixo de 640px os
+nomes somem do mapa (ficariam com uns 7px) e a fileira de pílulas aparece
+embaixo dele, só no celular. O mapa fica **só na home**, por decisão da
+autora.
+
+Os verbetes levam numeração "01 / 11" em `--destaque` (`numeracao()`, em
+[texto.ts](src/lib/texto.ts)), que conta a posição na lista da página, não o
+campo `ordem`. A amostra de `/subgeneros/` não é numerada. Entre um verbete e o
+próximo há uma linha fina; a barra lateral em `--apoio` saiu na Carta Estelar.
 
 **A barra do topo é `position: sticky`** ([Nav.astro](src/components/Nav.astro)),
 e isso cria duas amarras que o CSS não consegue impor sozinho:
@@ -575,7 +603,7 @@ e isso cria duas amarras que o CSS não consegue impor sozinho:
   [subgeneros/[subgenero].astro](src/pages/subgeneros/[subgenero].astro) — e os dois
   mudam juntos. Quem chega às âncoras é a busca, então errar aqui quebra a
   busca, não a página.
-- A escada de `z-index` é curta e proposital: aurora em `-1`, Nav em `10`, e em
+- A escada de `z-index` é curta e proposital: Nav em `10`, e em
   `20` as duas coisas que abrem por cima da página — a lista de resultados da
   busca e o submenu do "Mais". As duas moram dentro do Nav, e o empate não
   importa porque estão em pontas opostas da fileira. O `10` do Nav vinha do
@@ -596,9 +624,8 @@ e isso cria duas amarras que o CSS não consegue impor sozinho:
   justo em cima do `h1`, e com `--painel` o título aparecia atrás dos links.
   `backdrop-filter` não resolve texto sobre texto. E no escuro `--painel` é a
   mesma cor de `--fundo` a 80%, então nem serve de atalho para clarear painel
-  nenhum. Opaco também não quer dizer `--fundo` puro: aí o painel virava a
-  coisa mais escura da tela, mais escura que a própria barra, que a aurora
-  tinge — foi recusado. `--flutuante` é `--apoio` misturado ao fundo (14% no
+  nenhum. Opaco também não quer dizer `--fundo` puro: aí o painel ficava da
+  cor da página e sumia contra ela — foi recusado. `--flutuante` é `--apoio` misturado ao fundo (14% no
   escuro, 8% no claro), a mesma receita de `--bloco`. A lista da busca é a
   exceção que continua em `--painel` com desfoque: ela abre sobre texto
   corrido, não sobre o título.

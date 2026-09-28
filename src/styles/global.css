@@ -241,6 +241,10 @@ a {
   padding: 9px 16px;
   cursor: pointer;
   border-radius: 3px;
+  /* O botão principal da home e o da chamada do gerador são <a>, e sem isto
+     herdariam o sublinhado de link. */
+  text-decoration: none;
+  display: inline-block;
 }
 
 .botao--principal {

@@ -77,10 +77,17 @@ const polaris = `M${cx} ${cy - 16} L${cx + 3.2} ${cy - 3.2} L${cx + 16} ${cy} L$
     fill: var(--destaque);
   }
 
+  /* O contorno na cor do fundo, pintado por baixo da letra, abre um vão onde
+     a rota e os anéis cruzam um nome — sem ele "Space Opera" ficava riscado
+     pela linha que liga as estrelas. */
   .mapa text {
     font-family: var(--fonte-rotulo);
     font-size: 9.5px;
     fill: var(--apagado);
+    paint-order: stroke;
+    stroke: var(--fundo);
+    stroke-width: 4px;
+    stroke-linejoin: round;
   }
 
   .mapa__polaris-rotulo {
