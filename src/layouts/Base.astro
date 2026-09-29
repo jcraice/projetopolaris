@@ -3,20 +3,52 @@ import { Font } from 'astro:assets';
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 
+import { resumir } from '../lib/texto';
+
 interface Props {
   titulo: string;
+  /* O resumo que o Google mostra embaixo do título e que aparece na prévia de
+     link compartilhado. Obrigatório de propósito: página sem descrição deixa
+     o Google escolher um trecho qualquer dela. Sai sempre de texto da autora —
+     a abertura da página, a do subgênero — e passa por resumir(). */
+  descricao: string;
+  /* O <title> inteiro, quando "{titulo} · Projeto Polaris" não serve. Só a
+     home usa: o título dela já traz o nome do site. */
+  tituloCompleto?: string;
+  /* Tira a página da busca. Só a 404. */
+  semIndice?: boolean;
 }
-const { titulo } = Astro.props;
+const { titulo, descricao, tituloCompleto, semIndice = false } = Astro.props;
 const base = import.meta.env.BASE_URL.endsWith('/')
   ? import.meta.env.BASE_URL
   : import.meta.env.BASE_URL + '/';
+const tituloAba = tituloCompleto ?? `${titulo} · Projeto Polaris`;
+const resumo = resumir(descricao);
+if (!resumo) throw new Error(`a página '${titulo}' chegou sem descrição para a busca`);
+/* O endereço oficial da página, que o Google usa para não contar a mesma
+   página duas vezes (com e sem barra no fim, por exemplo). */
+const canonico = new URL(Astro.url.pathname, Astro.site).href;
+const imagem = new URL(`${base}apple-touch-icon.png`, Astro.site).href;
 ---
 <!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{titulo} · Projeto Polaris</title>
+    <title>{tituloAba}</title>
+    <meta name="description" content={resumo} />
+    {semIndice ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonico} />}
+    <link rel="sitemap" href={`${base}sitemap-index.xml`} />
+    {/* A prévia do link quando alguém o cola numa conversa ou rede social. */}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Projeto Polaris" />
+    <meta property="og:title" content={tituloAba} />
+    <meta property="og:description" content={resumo} />
+    <meta property="og:url" content={canonico} />
+    <meta property="og:image" content={imagem} />
+    <meta name="twitter:card" content="summary" />
+    <slot name="cabeca" />
     {/* Os três saem de scripts/gerar-favicon.py. O .ico vem antes e com
         `sizes` para o navegador que entende SVG preferir o .svg, que troca de
         versão conforme a aba seja clara ou escura. */}

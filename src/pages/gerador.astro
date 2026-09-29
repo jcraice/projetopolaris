@@ -3,6 +3,10 @@ import { getCollection, getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import { montarPrompt } from '../lib/gerador';
 
+/* Só o título da aba e o resumo para a busca: a página não tem prosa própria. */
+const metadados = await getEntry('paginas', 'gerador');
+if (!metadados) throw new Error("página 'gerador' não encontrada em src/content/paginas");
+
 const subgeneros = (await getCollection('subgeneros', (s) => s.data.completo))
   .sort((a, b) => a.data.ordem - b.data.ordem);
 
@@ -42,7 +46,7 @@ const locais = (await getCollection('cenarios')).map((c) => ({
 const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : base + '/';
 ---
-<Base titulo="Gerador">
+<Base titulo={metadados.data.titulo} descricao={metadados.data.descricao ?? ''}>
   <p class="rotulo">Gerador · premissa em quatro linhas</p>
   <h1>Gerador de combinações</h1>
 

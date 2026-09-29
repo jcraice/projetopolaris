@@ -34,7 +34,7 @@ const destinos = subgeneros.map((s) => ({
   marca: s.data.completo ? undefined : '✦',
 }));
 ---
-<Base titulo={pagina.data.titulo}>
+<Base titulo="Arquétipos de ficção científica por subgênero" descricao={pagina.body ?? ''}>
   <p class="rotulo">Catálogo · {contagem(subgeneros.filter((s) => s.data.completo).length, 'subgênero', 'subgêneros')}</p>
   <h1>{pagina.data.titulo}</h1>
   <Content />

@@ -1,8 +1,12 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import { PROFISSOES } from '../lib/gerador';
 import { contagem } from '../lib/texto';
+
+/* Só o título da aba e o resumo para a busca: a página não tem prosa própria. */
+const metadados = await getEntry('paginas', 'guia-de-personagens');
+if (!metadados) throw new Error("página 'guia-de-personagens' não encontrada em src/content/paginas");
 
 /* Guia do gerador, não um quinto catálogo. Por isso a página não entra no Nav,
    não tem rota por subgênero e não aparece na busca — o índice da busca é montado a
@@ -15,7 +19,7 @@ const subgeneros = (await getCollection('subgeneros', (s) => s.data.completo))
 const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : base + '/';
 ---
-<Base titulo="Guia de personagens">
+<Base titulo={metadados.data.titulo} descricao={metadados.data.descricao ?? ''}>
   <p class="rotulo">Gerador · {contagem(PROFISSOES.length, 'profissão', 'profissões')}</p>
   <h1>Guia de personagens</h1>
 

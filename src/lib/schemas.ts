@@ -128,6 +128,10 @@ export const esquemaPagina = z
        Fraunces grande, e `fraseDestaque` é o trecho dela pintado de
        --destaque — a página estoura o build se o trecho não estiver na frase. */
     frase: z.string().optional(),
+    /* O resumo para a busca, só nas páginas que não têm texto de onde tirá-lo
+       (o Gerador e o Guia de personagens). As outras resumem a própria
+       abertura. */
+    descricao: z.string().optional(),
     fraseDestaque: z.string().optional(),
     assinatura: z.string().optional(),
     /* As três portas do fim da Sobre, uma por público. `destino` é caminho

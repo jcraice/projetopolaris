@@ -16,7 +16,7 @@ const cenarios = (await getCollection('cenarios', (c) => c.data.subgenero === su
   (a, b) => a.data.ordem - b.data.ordem,
 );
 ---
-<Base titulo={`Cenários ${subgenero.data.nome}`}>
+<Base titulo={`Cenários de ${subgenero.data.nome} na ficção científica`} descricao={subgenero.data.aberturaCenarios ?? subgenero.body ?? ''}>
   <p class="rotulo">{subgenero.data.nome} · {contagem(cenarios.length, 'cenário', 'cenários')}</p>
   <h1>Cenários {subgenero.data.nome}</h1>
   {subgenero.data.aberturaCenarios && <p class="abertura">{subgenero.data.aberturaCenarios}</p>}

@@ -23,7 +23,7 @@ const subgeneros = (await getCollection('subgeneros', (s) => s.data.completo))
 
 const [hard, soft] = eixo.polos;
 ---
-<Base titulo={pagina.data.titulo}>
+<Base titulo="Estilos e combinações de subgêneros de ficção científica" descricao={pagina.body ?? ''}>
   <p class="rotulo">Projeto Polaris</p>
   <h1>{pagina.data.titulo}</h1>
   <div class="abertura">

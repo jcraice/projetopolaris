@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { contagem, numeracao, paraAncora } from './texto';
+import { contagem, numeracao, paraAncora, resumir } from './texto';
 
 describe('paraAncora', () => {
   it('remove acentos e junta com hífen', () => {
@@ -29,5 +29,25 @@ describe('contagem', () => {
     expect(contagem(1, 'arquétipo', 'arquétipos')).toBe('1 arquétipo');
     expect(contagem(11, 'arquétipo', 'arquétipos')).toBe('11 arquétipos');
     expect(contagem(0, 'cenário', 'cenários')).toBe('0 cenários');
+  });
+});
+
+describe('resumir', () => {
+  it('devolve o texto inteiro quando ele cabe', () => {
+    expect(resumir('Um ponto de partida.', 160)).toBe('Um ponto de partida.');
+  });
+
+  it('corta na última palavra inteira e fecha com reticências', () => {
+    expect(resumir('Arquétipos são sementes do enredo', 20)).toBe('Arquétipos são…');
+  });
+
+  it('tira a marcação de Markdown e junta as linhas', () => {
+    expect(resumir('Um *ponto de partida*\npara o [Gerador](/gerador/).', 160)).toBe(
+      'Um ponto de partida para o Gerador.',
+    );
+  });
+
+  it('não deixa vírgula nem espaço antes das reticências', () => {
+    expect(resumir('Cenários, arquétipos e elementos', 11)).toBe('Cenários…');
   });
 });

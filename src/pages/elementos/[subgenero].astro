@@ -16,7 +16,7 @@ const elementos = (await getCollection('elementos', (e) => e.data.subgenero === 
   (a, b) => a.data.ordem - b.data.ordem,
 );
 ---
-<Base titulo={`Elementos ${subgenero.data.nome}`}>
+<Base titulo={`Elementos narrativos de ${subgenero.data.nome} na ficção científica`} descricao={subgenero.data.aberturaElementos ?? subgenero.body ?? ''}>
   <p class="rotulo">{subgenero.data.nome} · {contagem(elementos.length, 'elemento', 'elementos')}</p>
   <h1>Elementos {subgenero.data.nome}</h1>
   {/* Aqui morava `subgenero.body`, a descrição geral do subgênero — a mesma que

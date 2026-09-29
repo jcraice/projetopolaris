@@ -25,7 +25,7 @@ const destinos = [
   { titulo: 'Sobre', href: `${raiz}sobre/` },
 ];
 ---
-<Base titulo={pagina.data.titulo}>
+<Base titulo={pagina.data.titulo} descricao={pagina.body ?? ''} semIndice>
   <p class="rotulo">{pagina.data.subtitulo}</p>
   <h1>{pagina.data.titulo}</h1>
   <Content />

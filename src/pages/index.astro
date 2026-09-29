@@ -85,8 +85,26 @@ const acervo = [
 });
 
 const destinos = subgeneros.map((m) => ({ nome: m.data.nome, href: `${raiz}subgeneros/${m.id}/` }));
+
+/* A ficha do site para o Google, em JSON-LD: nome, endereço, idioma. */
+const fichaDoSite = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Projeto Polaris',
+  alternateName: pagina.data.titulo,
+  url: new URL(import.meta.env.BASE_URL.replace(/\/?$/, '/'), Astro.site).href,
+  description: pagina.body?.trim(),
+  inLanguage: 'pt-BR',
+});
 ---
-<Base titulo="Início">
+<Base titulo="Início" tituloCompleto={pagina.data.titulo} descricao={pagina.body ?? ''}>
+  {/* Para o Google: o nome do site, o endereço e o idioma, no formato que ele
+      lê sem adivinhar. Vai só na home, que é a página que representa o site. */}
+  <script
+    slot="cabeca"
+    type="application/ld+json"
+    set:html={fichaDoSite}
+  />
   <div class="abertura-home">
     <div class="abertura-home__texto">
       {/* As coordenadas reais da Polaris (época J2000). */}

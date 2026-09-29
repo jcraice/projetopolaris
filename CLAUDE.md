@@ -748,6 +748,36 @@ site inteiro por unified/remark — caro pelo lado errado, para consertar um
 run` e `npm run check` antes do build e publica no GitHub Pages a partir de
 `main` — os dois precisam passar localmente antes de empurrar.
 
+### Busca no Google
+
+Setembro de 2026, a pedido da autora
+([spec](docs/superpowers/specs/2026-09-29-busca-no-google-design.md)). Quatro
+peças, todas em [Base.astro](src/layouts/Base.astro) ou no build:
+
+- **`descricao` é obrigatória em `<Base>`** e o build estoura se ela chegar
+  vazia. Sai sempre de texto que já existe — a abertura da página (`pagina.body`),
+  a do subgênero (`aberturaArquetipos`/`Cenarios`/`Elementos`), o corpo do
+  subgênero em `/subgeneros/`, a `frase` da Sobre — e passa por `resumir()`
+  ([texto.ts](src/lib/texto.ts)), que tira o Markdown e corta em 160
+  caracteres na última palavra inteira. Só o Gerador e o Guia de personagens,
+  sem prosa própria, têm entrada em `paginas` (`gerador.md`,
+  `guia-de-personagens.md`) só com `titulo` e `descricao`. Página nova passa
+  descrição, senão `npm run check` reclama.
+- **O `<title>` é mais descritivo que o `h1`**: "Arquétipos de Cyberpunk na
+  ficção científica", "Cenários de ficção científica por subgênero". A busca
+  lê o título da aba, e "Arquétipos Cyberpunk" não tinha "ficção científica".
+  A home usa o `titulo` de `home.md` inteiro (`tituloCompleto`). O `h1` das
+  páginas não mudou.
+- **Endereço canônico e prévia de compartilhamento** (`og:*`) em toda página;
+  a 404 leva `noindex` no lugar do canônico. A home tem ainda uma ficha
+  JSON-LD `WebSite` (nome, endereço, idioma).
+- **Mapa do site** por `@astrojs/sitemap` ([astro.config.ts](astro.config.ts)),
+  que gera `sitemap-index.xml` na base, sem a 404. É dependência de build: não
+  chega ao navegador de quem visita. **Não há `robots.txt` e não adianta
+  criar**: o site mora em `jcraice.github.io/projetopolaris/`, e o Google só lê
+  o `robots.txt` da raiz do domínio. O mapa se entrega pelo Google Search
+  Console, na conta da autora.
+
 ### Migração do Notion
 
 [scripts/migracao/](scripts/migracao/) é um script Python de uso único que gerou
