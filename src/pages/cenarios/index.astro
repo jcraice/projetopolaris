@@ -1,6 +1,8 @@
 ---
 import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import PainelDePartidas from '../../components/PainelDePartidas.astro';
+import CartaoDeEmbarque from '../../components/CartaoDeEmbarque.astro';
 import { contagem } from '../../lib/texto';
 
 const pagina = await getEntry('paginas', 'cenarios');
@@ -9,25 +11,30 @@ const { Content } = await render(pagina);
 
 const comoUsar = await getEntry('paginas', 'cenarios-como-usar');
 if (!comoUsar) throw new Error("página 'cenarios-como-usar' não encontrada em src/content/paginas");
-const { Content: ComoUsar } = await render(comoUsar);
+if (!comoUsar.data.comoUsar) throw new Error("paginas/cenarios-como-usar.md precisa dos passos em 'comoUsar'");
 
-const subgeneros = (await getCollection('subgeneros', (s) => s.data.completo)).sort(
-  (a, b) => a.data.ordem - b.data.ordem,
-);
+const subgeneros = (await getCollection('subgeneros', (s) => s.data.completo)).sort((a, b) => a.data.ordem - b.data.ordem);
+const verbetes = await getCollection('cenarios');
 
 const base = import.meta.env.BASE_URL;
 const raiz = base.endsWith('/') ? base : `${base}/`;
+
+/* As escalas do painel são os três primeiros verbetes de cada subgênero, pela
+   ordem da autora — os mesmos que abrem a página do subgênero. */
+const destinos = subgeneros.map((s) => ({
+  nome: s.data.nome,
+  href: `${raiz}cenarios/${s.id}/`,
+  escalas: verbetes
+    .filter((v) => v.data.subgenero === s.id)
+    .sort((a, b) => a.data.ordem - b.data.ordem)
+    .slice(0, 3)
+    .map((v) => v.data.titulo),
+}));
 ---
 <Base titulo={pagina.data.titulo}>
   <p class="rotulo">Catálogo · {contagem(subgeneros.filter((s) => s.data.completo).length, 'subgênero', 'subgêneros')}</p>
   <h1>{pagina.data.titulo}</h1>
   <Content />
-  <ul class="lista-subgeneros">
-    {subgeneros.map((s) => (
-      <li>
-        <a href={`${raiz}cenarios/${s.id}/`}>{s.data.nome}</a>
-      </li>
-    ))}
-  </ul>
-  <ComoUsar />
+  <PainelDePartidas destinos={destinos} />
+  <CartaoDeEmbarque titulo={comoUsar.data.titulo} catalogo={pagina.data.titulo} passos={comoUsar.data.comoUsar} />
 </Base>

@@ -341,9 +341,27 @@ prosa autoral para dentro de um `.astro`.
 
 As páginas de índice de arquétipos, cenários e elementos têm duas entradas cada:
 `<pagina>.md` traz a abertura, que fica acima da lista de subgêneros, e
-`<pagina>-como-usar.md` traz o bloco "Como usar esta página", que a página
+`<pagina>-como-usar.md` traz o "Como usar esta página?", que a página
 renderiza **depois** da lista. São dois arquivos porque `render()` devolve o
 Markdown inteiro de uma vez, e não há como intercalar a lista no meio dele.
+Desde setembro de 2026 o `-como-usar.md` não tem corpo: os passos moram no
+`comoUsar` do frontmatter (o mesmo campo da home), com o verbo em `titulo`
+("Escolha", "Roube") e o resto da frase em `texto`, e o último passo é o
+"Lembre-se".
+
+O layout das três é um só, dos dois componentes que elas dividem
+([spec](docs/superpowers/specs/2026-09-29-catalogos-painel-design.md)):
+[PainelDePartidas.astro](src/components/PainelDePartidas.astro), a lista de
+subgêneros em que cada linha inteira é um link — número, nome e os três
+primeiros verbetes daquele subgênero pela `ordem`, com uma flecha no canto; no
+celular sobram o nome e a flecha —, e
+[CartaoDeEmbarque.astro](src/components/CartaoDeEmbarque.astro), o "Como usar"
+como um cartão de embarque: os passos viram campos em duas colunas, com o verbo
+em `--destaque`, e o último vai no canhoto depois do picote. Nasceram como
+quadro de partidas e bilhete de porto espacial; a autora tirou o cabeçalho das
+colunas, o botão "Embarcar", a coluna de quantidade, a linha de cabeçalho do
+cartão e o código de barras. Não devolver. Em `/arquetipos/` os 10 comuns
+fecham a lista com uma estrela no lugar do número.
 
 `/sobre/` também: `sobre.md` traz no corpo os três parágrafos da autora, e
 `sobre-contato.md` a linha do e-mail. No frontmatter de `sobre.md` ficam a
@@ -379,7 +397,8 @@ verbete: sem ela, trocar de subgênero obrigava a subir na barra e voltar ao
 Cyberpunk para Arquétipos Distopia, não para `/subgeneros/cyberpunk/` —, e são
 links de verdade, sem JavaScript. Três coisas nela não são óbvias:
 
-- Ela reaproveita `.lista-subgeneros`, a mesma fileira da home e dos índices, e
+- Ela reaproveita `.lista-subgeneros`, a mesma fileira da home (os índices a
+  usavam até ganharem o painel de subgêneros), e
   a única regra nova é a da pílula do subgênero aberto. Essa regra mora em
   [global.css](src/styles/global.css), junto do resto da classe e não escopada
   no componente: metade das regras de uma classe num arquivo e metade no outro

@@ -1,0 +1,157 @@
+---
+/* O "Como usar esta página?" das três páginas de índice, como um cartão de
+   embarque: os passos viram campos, com o verbo como nome do campo, e o último
+   — o "Lembre-se" — vai no canhoto, depois do picote. Já teve uma linha de
+   cabeçalho ("Cartão de embarque · Projeto Polaris") e um código de barras
+   no canhoto; a autora tirou os dois. */
+interface Props {
+  titulo: string;
+  catalogo: string;
+  passos: { titulo: string; texto: string }[];
+}
+
+const { titulo, catalogo, passos } = Astro.props;
+if (passos.length < 2) throw new Error(`o Como usar de ${catalogo} precisa de pelo menos dois passos em comoUsar`);
+const campos = passos.slice(0, -1);
+const lembrete = passos[passos.length - 1];
+const numero = (i: number) => String(i + 1).padStart(2, '0');
+---
+<section class="como" aria-labelledby="como-titulo">
+  <h2 id="como-titulo">{titulo}</h2>
+  <div class="cartao">
+    <div class="cartao__principal">
+      <dl class="cartao__campos">
+        {campos.map((p, i) => (
+          <div>
+            <dt>{numero(i)} · {p.titulo}</dt>
+            <dd>{p.texto}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+    <div class="cartao__canhoto">
+      <p class="cartao__rotulo">{lembrete.titulo}</p>
+      <p class="cartao__lembrete">{lembrete.texto}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .como {
+    margin-block-start: 56px;
+  }
+
+  .como h2 {
+    margin-block-end: 18px;
+  }
+
+  .cartao {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    background: var(--bloco);
+    border-radius: 12px;
+  }
+
+  .cartao__principal {
+    padding: 22px 26px;
+  }
+
+
+  .cartao__campos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 28px;
+    margin: 0;
+  }
+
+  dt,
+  .cartao__rotulo {
+    font-family: var(--fonte-rotulo);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--destaque);
+  }
+
+  dd {
+    margin: 4px 0 0;
+    font-size: 0.95rem;
+  }
+
+  /* O picote: a borda tracejada e os dois semicírculos são da cor da página,
+     como se o cartão tivesse sido furado. */
+  .cartao__canhoto {
+    position: relative;
+    display: grid;
+    align-content: center;
+    padding: 22px 24px;
+    border-left: 2px dashed var(--fundo);
+  }
+
+  .cartao__canhoto::before,
+  .cartao__canhoto::after {
+    content: '';
+    position: absolute;
+    left: -12px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--fundo);
+  }
+
+  .cartao__canhoto::before {
+    top: -11px;
+  }
+
+  .cartao__canhoto::after {
+    bottom: -11px;
+  }
+
+  .cartao__rotulo {
+    margin: 0 0 8px;
+  }
+
+  .cartao__lembrete {
+    font-family: var(--fonte-titulo);
+    font-size: 1.3rem;
+    line-height: 1.3;
+    color: var(--texto-forte);
+    margin: 0;
+  }
+
+
+  /* No celular o canhoto desce para baixo dos campos, e o picote vira
+     horizontal. */
+  @media (max-width: 760px) {
+    .cartao {
+      grid-template-columns: 1fr;
+    }
+
+    .cartao__canhoto {
+      border-left: 0;
+      border-top: 2px dashed var(--fundo);
+    }
+
+    .cartao__canhoto::before,
+    .cartao__canhoto::after {
+      top: -12px;
+      bottom: auto;
+    }
+
+    .cartao__canhoto::before {
+      left: -11px;
+    }
+
+    .cartao__canhoto::after {
+      left: auto;
+      right: -11px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .cartao__campos {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

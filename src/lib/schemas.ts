@@ -98,9 +98,12 @@ export const esquemaPagina = z
     subtitulo: z.string().optional(),
     chamadaGerador: z.string().optional(),
     citacao: z.string().optional(),
-    /* Os passos do "Como usar" da home, na ordem em que aparecem. A página
-       desenha um ícone por posição (bússola, carta, constelação, estrela), por
-       isso é lista e não prosa corrida no corpo. */
+    /* Os passos de um "Como usar", na ordem em que aparecem. Na home são
+       quatro e a página desenha um ícone por posição (bússola, carta,
+       constelação, estrela). Nos índices de arquétipos, cenários e elementos
+       são seis, o verbo em `titulo` e o resto da frase em `texto`, e o último
+       vai no canhoto do cartão de embarque. Por isso é lista e não prosa
+       corrida no corpo. */
     comoUsar: z.array(z.object({ titulo: z.string().min(1), texto: z.string().min(1) })).optional(),
     /* Os campos abaixo servem só à página de estilos. As duas aberturas ficam
        acima de cada seção; o corpo do Markdown não serve porque render() o

@@ -1,0 +1,117 @@
+---
+/* A lista de subgêneros das três páginas de índice — arquétipos, cenários e
+   elementos. Nasceu como o quadro de partidas de um porto espacial e ficou
+   só com o essencial, por pedido da autora: sem cabeçalho de colunas e sem
+   botão, e a linha inteira — número, subgênero e os três primeiros verbetes —
+   é um link só. No celular sobra só o nome do subgênero. */
+interface Props {
+  destinos: { nome: string; href: string; escalas: string[]; marca?: string }[];
+}
+
+const { destinos } = Astro.props;
+const numero = (i: number) => String(i + 1).padStart(2, '0');
+---
+<ol class="painel">
+  {destinos.map((d, i) => (
+    <li>
+      <a href={d.href}>
+        <span class="painel__num" aria-hidden="true">{d.marca ?? numero(i)}</span>
+        <span class="painel__destino">{d.nome}</span>
+        <span class="painel__escalas">
+          {d.escalas.map((e) => <span>{e}</span>)}
+        </span>
+        <span class="painel__seta" aria-hidden="true">→</span>
+      </a>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .painel {
+    list-style: none;
+    margin: 24px 0 0;
+    padding: 0;
+    border-top: 1px solid var(--borda-suave);
+  }
+
+  a {
+    display: grid;
+    grid-template-columns: 56px minmax(180px, 0.35fr) minmax(0, 1fr) auto;
+    gap: 16px;
+    align-items: baseline;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--borda-suave);
+    color: var(--texto);
+    text-decoration: none;
+  }
+
+  .painel__num {
+    font-family: var(--fonte-rotulo);
+    font-size: 0.8rem;
+    color: var(--destaque);
+  }
+
+  .painel__destino {
+    font-family: var(--fonte-titulo);
+    font-size: 1.25rem;
+    color: var(--texto-forte);
+    transition: color 0.2s;
+  }
+
+  .painel__escalas {
+    font-size: 0.9rem;
+  }
+
+  .painel__escalas span:not(:last-child)::after {
+    content: ' · ';
+    color: var(--apagado);
+  }
+
+  /* A seta é a mesma da chamada "→" do resto do site, na cor dos links. */
+  .painel__seta {
+    font-family: var(--fonte-rotulo);
+    font-size: 1.1rem;
+    color: var(--apoio);
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  a:hover .painel__destino,
+  a:focus-visible .painel__destino,
+  a:hover .painel__seta,
+  a:focus-visible .painel__seta {
+    color: var(--destaque);
+  }
+
+  a:hover .painel__seta,
+  a:focus-visible .painel__seta {
+    transform: translateX(4px);
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--apoio);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 640px) {
+    a {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .painel__num,
+    .painel__escalas {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .painel__destino,
+    .painel__seta {
+      transition: none;
+    }
+
+    a:hover .painel__seta,
+    a:focus-visible .painel__seta {
+      transform: none;
+    }
+  }
+</style>
