@@ -39,6 +39,9 @@ const imagem = new URL(`${base}apple-touch-icon.png`, Astro.site).href;
     <meta name="description" content={resumo} />
     {semIndice ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonico} />}
     <link rel="sitemap" href={`${base}sitemap-index.xml`} />
+    {/* A prova de que o site é da autora, para o Google Search Console. Sair
+        daqui desfaz a verificação. */}
+    <meta name="google-site-verification" content="zZDIu2yqRc80LDWfuEJj10aaMLWlvxcbmbWcKt3W6AM" />
     {/* A prévia do link quando alguém o cola numa conversa ou rede social. */}
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
