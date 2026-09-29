@@ -343,6 +343,13 @@ As páginas de índice de arquétipos, cenários e elementos têm duas entradas 
 renderiza **depois** da lista. São dois arquivos porque `render()` devolve o
 Markdown inteiro de uma vez, e não há como intercalar a lista no meio dele.
 
+`/estilos/` segue o mesmo desenho: `estilos.md` traz no corpo a abertura, e
+`estilos-fechamento.md` o fechamento em itálico. O que fica entre os dois vai
+no frontmatter de `estilos.md`: `aberturaEstilos`, a régua `eixo` (Hard SF e
+Soft SF, exatamente dois `polos`), as `lentes` (Afrofuturismo, FC Feminista),
+`aberturaCombinacoes` e as `combinacoes`, cada uma com os **ids** de dois
+subgêneros (`a`, `b`) e o `texto`. Id que não exista estoura o build.
+
 `/subgeneros/[subgenero]/` é porta de entrada, não catálogo: mostra três itens de
 cada tipo e manda para a página completa (e deixa o arquétipo felino de fora da
 amostra). Listar tudo ali esvazia o "Ver todos".
@@ -592,8 +599,8 @@ recuo sai errado sem avisar.
 
 O HTML que sai de `render()` de uma entrada Markdown **não** recebe o atributo de
 escopo do Astro — estilizá-lo pede um contêiner escopado e `:global()` dentro
-dele (`.conteudo :global(h2)`), como em
-[estilos.astro](src/pages/estilos.astro). Sem isso a regra é descartada em
+dele (`.conteudo :global(p)`), como em
+[index.astro](src/pages/index.astro). Sem isso a regra é descartada em
 silêncio, o que parece um seletor errado e não é. A mesma armadilha vale para
 nó criado por JavaScript em runtime, dentro de um `<script>` — ele também não
 carrega o atributo de escopo, mesmo morando dentro de um contêiner escopado.
@@ -608,8 +615,22 @@ como uma estrela que é link para `/subgeneros/<id>/`. A posição sai de
 a ordem do acervo gira em volta do centro alternando dois raios —, então
 subgênero novo entra no mapa sem ninguém desenhar nada. Abaixo de 640px os
 nomes somem do mapa (ficariam com uns 7px) e a fileira de pílulas aparece
-embaixo dele, só no celular. O mapa fica **só na home**, por decisão da
-autora.
+embaixo dele, só no celular.
+
+O mapa ficou só na home até setembro de 2026, quando a autora aprovou uma
+segunda versão dele em `/estilos/`
+([RotasNaCarta.astro](src/components/RotasNaCarta.astro)): as mesmas estrelas,
+no mesmo lugar, sem os links, e com as seis combinações da página traçadas como
+linhas pontilhadas retas. Os **pares foram escolhidos pelo desenho**, não o
+contrário: cada subgênero liga ao que está quatro posições adiante na ordem do
+acervo, o que dá doze cruzamentos em todas as direções e passa pelos dez
+subgêneros. Trocar um par em `estilos.md`, ou mudar a `ordem` de um subgênero,
+redesenha as linhas. Os cruzamentos (marcados com um ponto em `--apoio`) e o
+lugar do número de cada linha saem de `cruzamentos()` e
+`posicoesDosNumeros()`, em [mapa.ts](src/lib/mapa.ts): o número procura, ao
+longo da própria reta, o ponto mais longe de estrela, cruzamento e outro
+número. Na primeira maquete ele ficava no meio da linha, e dois números caíam
+um em cima do outro. Passar o mouse numa combinação da lista acende a linha dela.
 
 Os verbetes levam numeração "01 / 11" em `--destaque` (`numeracao()`, em
 [texto.ts](src/lib/texto.ts)), que conta a posição na lista da página, não o

@@ -89,6 +89,8 @@ export const esquemaElemento = z.object({
    e aberturaArquetipos. `.strict()` porque um `z.object` comum descarta chave
    desconhecida em silêncio: sem isso, um `subtitlo:` digitado errado em
    `home.md` sumiria sem erro nenhum em vez de estourar o build. */
+const estiloDaPagina = z.object({ nome: z.string().min(1), texto: z.string().min(1) }).strict();
+
 export const esquemaPagina = z
   .object({
     titulo: z.string().min(1),
@@ -100,5 +102,24 @@ export const esquemaPagina = z
        desenha um ícone por posição (bússola, carta, constelação, estrela), por
        isso é lista e não prosa corrida no corpo. */
     comoUsar: z.array(z.object({ titulo: z.string().min(1), texto: z.string().min(1) })).optional(),
+    /* Os campos abaixo servem só à página de estilos. As duas aberturas ficam
+       acima de cada seção; o corpo do Markdown não serve porque render() o
+       devolve inteiro, sem como intercalar o mapa no meio. */
+    aberturaEstilos: z.string().optional(),
+    aberturaCombinacoes: z.string().optional(),
+    /* Hard SF e Soft SF são as duas pontas de uma régua: exatamente dois polos,
+       porque a página desenha uma linha com um de cada lado. */
+    eixo: z
+      .object({ rotulo: z.string().min(1), polos: z.tuple([estiloDaPagina, estiloDaPagina]) })
+      .strict()
+      .optional(),
+    lentes: z.array(estiloDaPagina).optional(),
+    /* `a` e `b` são ids de subgênero, não nomes: o nome vem da coleção, e a
+       página estoura o build se um id não existir. A posição de cada um no
+       mapa sai da ordem do acervo, então a escolha dos pares é que decide o
+       desenho das linhas. */
+    combinacoes: z
+      .array(z.object({ a: z.string().min(1), b: z.string().min(1), texto: z.string().min(1) }).strict())
+      .optional(),
   })
   .strict();

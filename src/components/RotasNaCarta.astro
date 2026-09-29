@@ -1,0 +1,233 @@
+---
+import {
+  ALTURA_MAPA,
+  CENTRO,
+  LARGURA_MAPA,
+  cruzamentos,
+  posicoesDoMapa,
+  posicoesDosNumeros,
+  type Linha,
+} from '../lib/mapa';
+
+interface Props {
+  /* Os dez subgêneros na ordem do acervo — a mesma do mapa da home, para as
+     estrelas caírem no mesmo lugar nas duas páginas. */
+  subgeneros: { id: string; nome: string }[];
+  combinacoes: { a: string; b: string; texto: string }[];
+}
+
+const { subgeneros, combinacoes } = Astro.props;
+const estrelas = posicoesDoMapa(subgeneros.length);
+
+function indice(id: string): number {
+  const i = subgeneros.findIndex((s) => s.id === id);
+  if (i < 0) throw new Error(`combinação em paginas/estilos.md cita um subgênero que não existe: '${id}'`);
+  return i;
+}
+
+const rotas = combinacoes.map((c) => ({ ...c, ia: indice(c.a), ib: indice(c.b) }));
+const linhas: Linha[] = rotas.map((r) => [estrelas[r.ia], estrelas[r.ib]]);
+const pontos = cruzamentos(linhas);
+const numeros = posicoesDosNumeros(linhas, [...estrelas, CENTRO, ...pontos]);
+
+/* Só os dois anéis em que as estrelas estão: a grade inteira da home, com os
+   meridianos, brigava com as linhas das combinações. */
+const aneis = [...new Set(estrelas.map((e) => Math.round(Math.hypot(e.x - CENTRO.x, e.y - CENTRO.y))))];
+
+const { x: cx, y: cy } = CENTRO;
+const polaris = `M${cx} ${cy - 8} L${cx + 2} ${cy - 2} L${cx + 8} ${cy} L${cx + 2} ${cy + 2} L${cx} ${cy + 8} L${cx - 2} ${cy + 2} L${cx - 8} ${cy} L${cx - 2} ${cy - 2}Z`;
+---
+<div class="rotas" data-rotas>
+  <div class="rotas__carta">
+    <svg viewBox={`0 0 ${LARGURA_MAPA} ${ALTURA_MAPA}`} aria-hidden="true">
+      {aneis.map((r) => <circle class="rotas__anel" cx={cx} cy={cy} r={r} />)}
+      {linhas.map(([p, q], i) => (
+        <line class="rotas__linha" data-rota={i} x1={p.x} y1={p.y} x2={q.x} y2={q.y} />
+      ))}
+      {pontos.map((p) => <circle class="rotas__cruzamento" cx={p.x} cy={p.y} r="2" />)}
+      {numeros.map((n, i) => (
+        <g class="rotas__numero" data-rota={i}>
+          <circle cx={n.x} cy={n.y} r="8" />
+          <text x={n.x} y={n.y + 3.5} text-anchor="middle">{i + 1}</text>
+        </g>
+      ))}
+      <path class="rotas__polaris" d={polaris} />
+      {estrelas.map((e, i) => (
+        <g>
+          <circle class="rotas__estrela" cx={e.x} cy={e.y} r="3.5" />
+          <text class="rotas__nome" x={e.rotuloX} y={e.rotuloY} text-anchor={e.ancora}>{subgeneros[i].nome}</text>
+        </g>
+      ))}
+    </svg>
+  </div>
+  <ol class="rotas__lista">
+    {rotas.map((r, i) => (
+      <li data-rota={i}>
+        <span class="rotas__n" aria-hidden="true">{i + 1}</span>
+        <div>
+          <h3>{subgeneros[r.ia].nome} + {subgeneros[r.ib].nome}</h3>
+          <p>{r.texto}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<script>
+  /* Passar o mouse numa combinação acende a linha dela e apaga as outras. É
+     enfeite: sem JavaScript o mapa e a lista já dizem tudo. */
+  for (const rotas of document.querySelectorAll<HTMLElement>('[data-rotas]')) {
+    const acender = (i: string | null) => {
+      rotas.classList.toggle('rotas--focando', i !== null);
+      for (const el of rotas.querySelectorAll<SVGElement>('svg [data-rota]')) {
+        el.classList.toggle('rotas--acesa', el.dataset.rota === i);
+      }
+    };
+    for (const li of rotas.querySelectorAll<HTMLElement>('li[data-rota]')) {
+      li.addEventListener('mouseenter', () => acender(li.dataset.rota ?? null));
+      li.addEventListener('mouseleave', () => acender(null));
+    }
+  }
+</script>
+
+<style>
+  .rotas {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 40px;
+    align-items: start;
+  }
+
+  /* O mapa acompanha a leitura da lista. 96px é a altura da barra do topo, o
+     mesmo número do scroll-margin-top dos verbetes. */
+  .rotas__carta {
+    position: sticky;
+    top: 96px;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .rotas__anel {
+    fill: none;
+    stroke: var(--grade);
+  }
+
+  .rotas__linha {
+    stroke: var(--destaque);
+    stroke-width: 1.3;
+    stroke-dasharray: 4 3;
+    transition: opacity 0.2s;
+  }
+
+  .rotas__cruzamento {
+    fill: var(--apoio);
+    transition: opacity 0.2s;
+  }
+
+  .rotas__numero {
+    transition: opacity 0.2s;
+  }
+
+  .rotas__numero circle {
+    fill: var(--fundo);
+    stroke: var(--destaque);
+  }
+
+  .rotas__numero text {
+    font-family: var(--fonte-rotulo);
+    font-size: 9.5px;
+    fill: var(--destaque);
+  }
+
+  .rotas__polaris {
+    fill: var(--destaque);
+  }
+
+  .rotas__estrela {
+    fill: var(--texto-forte);
+  }
+
+  /* O contorno na cor do fundo abre um vão onde uma linha passa por um nome,
+     como no mapa da home. */
+  .rotas__nome {
+    font-family: var(--fonte-rotulo);
+    font-size: 9.5px;
+    fill: var(--texto);
+    paint-order: stroke;
+    stroke: var(--fundo);
+    stroke-width: 4px;
+    stroke-linejoin: round;
+  }
+
+  .rotas--focando .rotas__linha:not(.rotas--acesa),
+  .rotas--focando .rotas__numero:not(.rotas--acesa),
+  .rotas--focando .rotas__cruzamento {
+    opacity: 0.18;
+  }
+
+  .rotas__linha.rotas--acesa {
+    stroke-width: 2.4;
+    stroke-dasharray: none;
+  }
+
+  .rotas__lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 20px;
+  }
+
+  .rotas__lista li {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .rotas__n {
+    font-family: var(--fonte-rotulo);
+    font-size: 0.8rem;
+    color: var(--destaque);
+    padding-top: 4px;
+  }
+
+  .rotas__lista h3 {
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  .rotas__lista p {
+    margin: 4px 0 0;
+  }
+
+  @media (max-width: 760px) {
+    .rotas {
+      grid-template-columns: 1fr;
+    }
+
+    .rotas__carta {
+      position: static;
+    }
+  }
+
+  /* No celular os nomes ficariam com uns 7px: saem, como no mapa da home. A
+     lista embaixo diz de quem é cada linha. */
+  @media (max-width: 640px) {
+    .rotas__nome {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rotas__linha,
+    .rotas__cruzamento,
+    .rotas__numero {
+      transition: none;
+    }
+  }
+</style>

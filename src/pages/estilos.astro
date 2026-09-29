@@ -1,28 +1,175 @@
 ---
-import { getEntry, render } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import RotasNaCarta from '../components/RotasNaCarta.astro';
 
 const pagina = await getEntry('paginas', 'estilos');
 if (!pagina) throw new Error("página 'estilos' não encontrada em src/content/paginas");
 const { Content } = await render(pagina);
+
+const fechamento = await getEntry('paginas', 'estilos-fechamento');
+if (!fechamento) throw new Error("página 'estilos-fechamento' não encontrada em src/content/paginas");
+const { Content: Fechamento } = await render(fechamento);
+
+const { aberturaEstilos, aberturaCombinacoes, eixo, lentes, combinacoes } = pagina.data;
+if (!eixo || !lentes || !combinacoes) {
+  throw new Error("paginas/estilos.md precisa de 'eixo', 'lentes' e 'combinacoes' no frontmatter");
+}
+
+/* Os dez subgêneros na ordem do acervo, a mesma do mapa da home. */
+const subgeneros = (await getCollection('subgeneros', (s) => s.data.completo))
+  .sort((a, b) => a.data.ordem - b.data.ordem)
+  .map((s) => ({ id: s.id, nome: s.data.nome }));
+
+const [hard, soft] = eixo.polos;
 ---
 <Base titulo={pagina.data.titulo}>
   <p class="rotulo">Projeto Polaris</p>
   <h1>{pagina.data.titulo}</h1>
-  <div class="conteudo">
+  <div class="abertura">
     <Content />
+  </div>
+
+  <section class="secao">
+    <h2>Estilos</h2>
+    {aberturaEstilos && <p class="secao__abertura">{aberturaEstilos}</p>}
+
+    <p class="secao__rotulo">{eixo.rotulo}</p>
+    <div class="eixo">
+      <div>
+        <h3>{hard.nome}</h3>
+        <p>{hard.texto}</p>
+      </div>
+      <div class="eixo__linha" aria-hidden="true"></div>
+      <div class="eixo__direita">
+        <h3>{soft.nome}</h3>
+        <p>{soft.texto}</p>
+      </div>
+    </div>
+
+    <ul class="lentes">
+      {lentes.map((l) => (
+        <li>
+          <p class="secao__rotulo">Lente</p>
+          <h3>{l.nome}</h3>
+          <p>{l.texto}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="secao">
+    <h2>Combinações Entre Subgêneros</h2>
+    {aberturaCombinacoes && <p class="secao__abertura">{aberturaCombinacoes}</p>}
+    <RotasNaCarta subgeneros={subgeneros} combinacoes={combinacoes} />
+  </section>
+
+  <div class="fechamento">
+    <Fechamento />
   </div>
 </Base>
 
 <style>
-  /* O HTML vem de render() do Markdown e não recebe o atributo de escopo do
-     Astro, então o alcance tem que ser dado pelo contêiner: a classe .conteudo
-     é escopada, e :global() alcança o que está dentro dela. */
-  .conteudo :global(h2) {
-    color: var(--destaque);
+  .secao {
+    margin-block-start: 56px;
   }
 
-  .conteudo :global(p) {
-    line-height: 1.55;
+  .secao h2 {
+    margin-block-end: 8px;
+  }
+
+  .secao__abertura {
+    color: var(--apagado);
+    margin-block: 0 28px;
+  }
+
+  .secao__rotulo {
+    font-family: var(--fonte-rotulo);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--apagado);
+    margin: 0;
+  }
+
+  .secao h3 {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  .secao h3 + p {
+    margin: 4px 0 0;
+  }
+
+  /* Hard SF e Soft SF nas duas pontas de uma régua: a linha do meio tem uma
+     estrela em cada ponta. */
+  .eixo {
+    display: grid;
+    grid-template-columns: 1fr minmax(40px, 0.6fr) 1fr;
+    gap: 16px;
+    align-items: start;
+    margin-block-start: 10px;
+  }
+
+  .eixo__linha {
+    position: relative;
+    height: 1px;
+    margin-top: 16px;
+    background: var(--grade);
+  }
+
+  .eixo__linha::before,
+  .eixo__linha::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--apoio);
+  }
+
+  .eixo__linha::before {
+    left: 0;
+  }
+
+  .eixo__linha::after {
+    right: 0;
+  }
+
+  .eixo__direita {
+    text-align: right;
+  }
+
+  .lentes {
+    list-style: none;
+    padding: 0;
+    margin: 32px 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px 32px;
+  }
+
+  .lentes li {
+    border-left: 1px solid var(--apoio);
+    padding-left: 14px;
+  }
+
+  .fechamento {
+    margin-block-start: 56px;
+  }
+
+  @media (max-width: 760px) {
+    .eixo {
+      grid-template-columns: 1fr;
+    }
+
+    .eixo__linha {
+      display: none;
+    }
+
+    .eixo__direita {
+      text-align: left;
+    }
   }
 </style>

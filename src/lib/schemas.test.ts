@@ -168,4 +168,22 @@ describe('esquemaPagina', () => {
     });
     expect(r.success).toBe(false);
   });
+
+  // A régua da página de estilos tem uma ponta de cada lado: nem mais, nem menos.
+  it('recusa eixo de estilos com três polos', () => {
+    const polo = { nome: 'Hard SF', texto: 'Foca na precisão científica.' };
+    const r = esquemaPagina.safeParse({
+      titulo: 'Estilos',
+      eixo: { rotulo: 'Do rigor ao social', polos: [polo, polo, polo] },
+    });
+    expect(r.success).toBe(false);
+  });
+
+  it('aceita combinação entre dois subgêneros', () => {
+    const r = esquemaPagina.safeParse({
+      titulo: 'Estilos',
+      combinacoes: [{ a: 'cyberpunk', b: 'fc-militar', texto: 'Soldados com implantes alugados.' }],
+    });
+    expect(r.success).toBe(true);
+  });
 });
