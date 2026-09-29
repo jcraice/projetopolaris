@@ -96,7 +96,8 @@ Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md]
   botão principal, na etiqueta do felino, nas peças sorteadas (na premissa e
   dentro do prompt) e no cadeado travado — e nos subgêneros do guia de
   personagens, que a autora pediu em laranja, e nos títulos das três portas
-  da Sobre (Autores, Mestres de RPG, Artistas), também a pedido dela. **O `h1` não é
+  da Sobre (Autores, Mestres de RPG, Artistas) e nos dois títulos de seção de
+  Estilos & Combinações, também a pedido dela. **O `h1` não é
   acento** desde a Carta Estelar: é `--texto-forte`, e o laranja subiu para a
   linha de rótulo acima dele. Título de **verbete** também não — herda
   `--texto-forte`; já foi dourado e já foi violeta, os dois recusados. Não
