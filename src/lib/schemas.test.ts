@@ -179,6 +179,19 @@ describe('esquemaPagina', () => {
     expect(r.success).toBe(false);
   });
 
+  // O destino da porta é caminho cru, e a página põe a base na frente:
+  // endereço de fora ou caminho sem barra sairia quebrado em produção.
+  it('recusa porta da Sobre com destino sem barra', () => {
+    const r = esquemaPagina.safeParse({
+      titulo: 'Sobre',
+      portas: {
+        rotulo: 'Por onde começar',
+        itens: [{ rotulo: 'Se você escreve', titulo: 'Autores', texto: 'Sorteie.', destino: 'gerador/', destinoNome: 'Gerador' }],
+      },
+    });
+    expect(r.success).toBe(false);
+  });
+
   it('aceita combinação entre dois subgêneros', () => {
     const r = esquemaPagina.safeParse({
       titulo: 'Estilos',

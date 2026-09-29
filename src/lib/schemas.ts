@@ -121,5 +121,31 @@ export const esquemaPagina = z
     combinacoes: z
       .array(z.object({ a: z.string().min(1), b: z.string().min(1), texto: z.string().min(1) }).strict())
       .optional(),
+    /* Os campos abaixo servem só à página Sobre. `frase` abre a página em
+       Fraunces grande, e `fraseDestaque` é o trecho dela pintado de
+       --destaque — a página estoura o build se o trecho não estiver na frase. */
+    frase: z.string().optional(),
+    fraseDestaque: z.string().optional(),
+    assinatura: z.string().optional(),
+    /* As três portas do fim da Sobre, uma por público. `destino` é caminho
+       cru, começando por barra, como link de Markdown: a página prefixa a
+       base, porque frontmatter não passa pelo plugin que conserta links. */
+    portas: z
+      .object({
+        rotulo: z.string().min(1),
+        itens: z.array(
+          z
+            .object({
+              rotulo: z.string().min(1),
+              titulo: z.string().min(1),
+              texto: z.string().min(1),
+              destino: z.string().regex(/^\/[^/]/, 'destino começa com uma barra só, como /gerador/'),
+              destinoNome: z.string().min(1),
+            })
+            .strict(),
+        ),
+      })
+      .strict()
+      .optional(),
   })
   .strict();

@@ -95,7 +95,8 @@ Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md]
   estrela do mapa, no `.rotulo` acima do título, na numeração dos verbetes, no
   botão principal, na etiqueta do felino, nas peças sorteadas (na premissa e
   dentro do prompt) e no cadeado travado — e nos subgêneros do guia de
-  personagens, que a autora pediu em laranja. **O `h1` não é
+  personagens, que a autora pediu em laranja, e nos títulos das três portas
+  da Sobre (Autores, Mestres de RPG, Artistas), também a pedido dela. **O `h1` não é
   acento** desde a Carta Estelar: é `--texto-forte`, e o laranja subiu para a
   linha de rótulo acima dele. Título de **verbete** também não — herda
   `--texto-forte`; já foi dourado e já foi violeta, os dois recusados. Não
@@ -342,6 +343,14 @@ As páginas de índice de arquétipos, cenários e elementos têm duas entradas 
 `<pagina>-como-usar.md` traz o bloco "Como usar esta página", que a página
 renderiza **depois** da lista. São dois arquivos porque `render()` devolve o
 Markdown inteiro de uma vez, e não há como intercalar a lista no meio dele.
+
+`/sobre/` também: `sobre.md` traz no corpo os três parágrafos da autora, e
+`sobre-contato.md` a linha do e-mail. No frontmatter de `sobre.md` ficam a
+`frase` que abre a página em Fraunces, o `fraseDestaque` (o trecho dela pintado
+de `--destaque`, que precisa estar dentro da frase, senão o build estoura), a
+`assinatura` e as `portas`: uma por público, cada uma com `destino` em caminho
+cru (`/gerador/`) que a página prefixa com a base — frontmatter não passa pelo
+plugin que conserta link de Markdown.
 
 `/estilos/` segue o mesmo desenho: `estilos.md` traz no corpo a abertura, e
 `estilos-fechamento.md` o fechamento em itálico. O que fica entre os dois vai

@@ -5,9 +5,216 @@ import Base from '../layouts/Base.astro';
 const pagina = await getEntry('paginas', 'sobre');
 if (!pagina) throw new Error("página 'sobre' não encontrada em src/content/paginas");
 const { Content } = await render(pagina);
+
+const contato = await getEntry('paginas', 'sobre-contato');
+if (!contato) throw new Error("página 'sobre-contato' não encontrada em src/content/paginas");
+const { Content: Contato } = await render(contato);
+
+const { frase, fraseDestaque, assinatura, portas } = pagina.data;
+if (!frase || !fraseDestaque || !assinatura || !portas) {
+  throw new Error("paginas/sobre.md precisa de 'frase', 'fraseDestaque', 'assinatura' e 'portas' no frontmatter");
+}
+const corte = frase.indexOf(fraseDestaque);
+if (corte < 0) throw new Error(`paginas/sobre.md: fraseDestaque '${fraseDestaque}' não está dentro da frase`);
+const antes = frase.slice(0, corte);
+const depois = frase.slice(corte + fraseDestaque.length);
+
+const base = import.meta.env.BASE_URL;
+const raiz = base.endsWith('/') ? base : `${base}/`;
+
+/* A estrela de quatro pontas do ícone, a mesma Polaris do mapa da home. */
+const polaris = 'M0,-24 L5,-5 L24,0 L5,5 L0,24 L-5,5 L-24,0 L-5,-5Z';
 ---
 <Base titulo={pagina.data.titulo}>
   <p class="rotulo">Projeto Polaris</p>
   <h1>{pagina.data.titulo}</h1>
-  <Content />
+
+  <div class="partida">
+    <svg viewBox="-60 -60 120 120" aria-hidden="true">
+      <circle class="partida__anel" r="56" />
+      <circle class="partida__anel partida__anel--tracejado" r="36" />
+      <line class="partida__anel partida__anel--tracejado" x1="-56" y1="0" x2="56" y2="0" />
+      <line class="partida__anel partida__anel--tracejado" x1="0" y1="-56" x2="0" y2="56" />
+      <path class="partida__estrela" d={polaris} />
+    </svg>
+    <p class="partida__frase">{antes}<em>{fraseDestaque}</em>{depois}</p>
+  </div>
+
+  <div class="texto">
+    <Content />
+  </div>
+
+  <section class="portas" aria-labelledby="portas-titulo">
+    <h2 id="portas-titulo" class="portas__rotulo">{portas.rotulo}</h2>
+    <ul>
+      {portas.itens.map((p) => (
+        <li>
+          <a href={`${raiz}${p.destino.slice(1)}`}>
+            <span class="portas__quem">{p.rotulo}</span>
+            <h3>{p.titulo}</h3>
+            <span>{p.texto}</span>
+            <span class="portas__destino">→ {p.destinoNome}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <div class="assinatura">
+    <p class="assinatura__nome">{assinatura}</p>
+    <div class="assinatura__contato">
+      <Contato />
+    </div>
+  </div>
 </Base>
+
+<style>
+  .partida {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 32px;
+    align-items: center;
+    margin-block: 8px 40px;
+  }
+
+  .partida svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .partida__anel {
+    fill: none;
+    stroke: var(--grade);
+  }
+
+  .partida__anel--tracejado {
+    stroke-dasharray: 2 4;
+  }
+
+  .partida__estrela {
+    fill: var(--destaque);
+  }
+
+  /* A estrela pisca devagar — só para quem não pediu menos movimento. */
+  @media (prefers-reduced-motion: no-preference) {
+    .partida__estrela {
+      animation: pisca 4s ease-in-out infinite;
+    }
+
+    @keyframes pisca {
+      50% {
+        opacity: 0.45;
+      }
+    }
+  }
+
+  .partida__frase {
+    font-family: var(--fonte-titulo);
+    font-size: clamp(1.375rem, 2.8vw, 1.875rem);
+    line-height: 1.25;
+    color: var(--texto-forte);
+    margin: 0;
+  }
+
+  .partida__frase em {
+    color: var(--destaque);
+  }
+
+  .texto :global(p) {
+    font-size: 1.0625rem;
+  }
+
+  .portas {
+    margin-block-start: 40px;
+  }
+
+  .portas__rotulo {
+    font-family: var(--fonte-rotulo);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--apagado);
+    margin: 0 0 16px;
+  }
+
+  .portas ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .portas a {
+    display: grid;
+    gap: 6px;
+    height: 100%;
+    padding: 18px 20px;
+    border: 1px solid var(--borda-suave);
+    border-radius: var(--raio);
+    color: var(--texto);
+    text-decoration: none;
+  }
+
+  .portas a:hover,
+  .portas a:focus-visible {
+    border-color: var(--apoio);
+  }
+
+  .portas__quem {
+    font-family: var(--fonte-rotulo);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--apagado);
+  }
+
+  /* Laranja a pedido da autora, como os subgêneros do guia de personagens. */
+  .portas h3 {
+    font-size: 1.25rem;
+    color: var(--destaque);
+    margin: 0;
+  }
+
+  .portas__destino {
+    font-family: var(--fonte-rotulo);
+    font-size: 0.8rem;
+    color: var(--apoio);
+  }
+
+  .assinatura {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 16px;
+    margin-block-start: 40px;
+    padding-block-start: 20px;
+    border-top: 1px solid var(--borda-suave);
+  }
+
+  .assinatura__nome {
+    font-family: var(--fonte-titulo);
+    font-style: italic;
+    font-size: 1.875rem;
+    color: var(--texto-forte);
+    margin: 0;
+  }
+
+  .assinatura__contato :global(p) {
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .partida {
+      grid-template-columns: 1fr;
+    }
+
+    .partida svg {
+      max-width: 110px;
+    }
+  }
+</style>
