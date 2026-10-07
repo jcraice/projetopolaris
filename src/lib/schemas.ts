@@ -154,5 +154,17 @@ export const esquemaPagina = z
       })
       .strict()
       .optional(),
+    /* A doação por Pix, no fim da Sobre. A chave mora no frontmatter, não no
+       componente, pelo mesmo motivo da prosa: é dado da autora, e trocar de
+       chave não deveria pedir mexer em página. */
+    apoio: z
+      .object({
+        rotulo: z.string().min(1),
+        texto: z.string().min(1),
+        tipoChave: z.string().min(1),
+        chave: z.string().min(1),
+      })
+      .strict()
+      .optional(),
   })
   .strict();

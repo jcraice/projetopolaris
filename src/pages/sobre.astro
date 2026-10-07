@@ -10,9 +10,9 @@ const contato = await getEntry('paginas', 'sobre-contato');
 if (!contato) throw new Error("página 'sobre-contato' não encontrada em src/content/paginas");
 const { Content: Contato } = await render(contato);
 
-const { frase, fraseDestaque, assinatura, portas } = pagina.data;
-if (!frase || !fraseDestaque || !assinatura || !portas) {
-  throw new Error("paginas/sobre.md precisa de 'frase', 'fraseDestaque', 'assinatura' e 'portas' no frontmatter");
+const { frase, fraseDestaque, assinatura, portas, apoio } = pagina.data;
+if (!frase || !fraseDestaque || !assinatura || !portas || !apoio) {
+  throw new Error("paginas/sobre.md precisa de 'frase', 'fraseDestaque', 'assinatura', 'portas' e 'apoio' no frontmatter");
 }
 const corte = frase.indexOf(fraseDestaque);
 if (corte < 0) throw new Error(`paginas/sobre.md: fraseDestaque '${fraseDestaque}' não está dentro da frase`);
@@ -60,6 +60,21 @@ const polaris = 'M0,-24 L5,-5 L24,0 L5,5 L0,24 L-5,5 L-24,0 L-5,-5Z';
     </ul>
   </section>
 
+  <section class="apoio" aria-labelledby="apoio-titulo">
+    <h2 id="apoio-titulo" class="portas__rotulo">{apoio.rotulo}</h2>
+    <p class="apoio__texto">{apoio.texto}</p>
+    <div class="apoio__pix">
+      <span class="portas__quem">{apoio.tipoChave}</span>
+      <code class="apoio__chave" id="chave-pix">{apoio.chave}</code>
+      {/* Nasce escondido: sem JavaScript não há como copiar, e a chave
+          continua ali para ser selecionada à mão. */}
+      <div class="apoio__acoes">
+        <button type="button" class="botao" id="copiar-chave" hidden>Copiar chave</button>
+        <span class="apoio__aviso" id="aviso-chave" role="status"></span>
+      </div>
+    </div>
+  </section>
+
   <div class="assinatura">
     <p class="assinatura__nome">{assinatura}</p>
     <div class="assinatura__contato">
@@ -67,6 +82,22 @@ const polaris = 'M0,-24 L5,-5 L24,0 L5,5 L0,24 L-5,5 L-24,0 L-5,-5Z';
     </div>
   </div>
 </Base>
+
+<script>
+  const botao = document.getElementById('copiar-chave')!;
+  const aviso = document.getElementById('aviso-chave')!;
+  const chave = document.getElementById('chave-pix')!.textContent ?? '';
+  botao.hidden = false;
+  botao.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(chave.trim());
+      aviso.textContent = 'Chave copiada.';
+    } catch {
+      aviso.textContent = 'Não foi possível copiar automaticamente.';
+    }
+    setTimeout(() => { aviso.textContent = ''; }, 2000);
+  });
+</script>
 
 <style>
   .partida {
@@ -183,6 +214,48 @@ const polaris = 'M0,-24 L5,-5 L24,0 L5,5 L0,24 L-5,5 L-24,0 L-5,-5Z';
     font-family: var(--fonte-rotulo);
     font-size: 0.8rem;
     color: var(--apoio);
+  }
+
+  .apoio {
+    margin-block-start: 40px;
+  }
+
+  .apoio__texto {
+    font-size: 1.0625rem;
+    max-width: 60ch;
+    margin: 0 0 16px;
+  }
+
+  .apoio__pix {
+    display: grid;
+    gap: 8px;
+    justify-items: start;
+    padding: 18px 20px;
+    background: var(--bloco);
+    border-radius: var(--raio);
+  }
+
+  /* A chave inteira numa linha só quando cabe; no celular ela quebra em
+     qualquer ponto em vez de empurrar a página para o lado. */
+  .apoio__chave {
+    font-family: var(--fonte-rotulo);
+    font-size: 1rem;
+    color: var(--texto-forte);
+    overflow-wrap: anywhere;
+    user-select: all;
+  }
+
+  .apoio__acoes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-block-start: 4px;
+  }
+
+  .apoio__aviso {
+    color: var(--apagado);
+    font-size: 0.85rem;
   }
 
   .assinatura {

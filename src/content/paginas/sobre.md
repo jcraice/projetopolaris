@@ -22,6 +22,11 @@ portas:
       texto: "Encontre quem desenhar entre os arquétipos."
       destino: "/arquetipos/"
       destinoNome: "Arquétipos"
+apoio:
+  rotulo: "Apoie o projeto"
+  texto: "O Projeto Polaris é gratuito e sem anúncios. Se ele te ajudou a sair da página em branco, uma doação por Pix de qualquer valor ajuda o acervo a crescer."
+  tipoChave: "Chave Pix aleatória"
+  chave: "c1dd6298-e368-42b1-8082-34c4a694a25d"
 ---
 
 Cresci com a cabeça nas estrelas, viciada em ficção científica desde que li Admirável Mundo Novo. Sempre quis escrever minhas próprias histórias, mas travava na hora de sair do zero. O Projeto Polaris nasceu dessa trava: um jeito de ter sempre à mão um ponto de partida para personagens, cenários e tramas.
