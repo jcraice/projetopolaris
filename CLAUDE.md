@@ -63,7 +63,8 @@ Vêm do plano de implementação ([docs/superpowers/plans/2026-07-27-polaris.md]
   TypeScript puro dentro de `<script>` das páginas Astro.
 - **Sem dependências de runtime no cliente.** O navegador não carrega
   biblioteca nenhuma; o único `fetch` em tempo de execução é o da busca, que
-  pega `indice-busca.json` gerado no build.
+  pega `indice-busca.json` gerado no build — e o do mural de recordes do Miau
+  Orbital, a exceção explicada em "Miau Orbital", mais abaixo.
 - **Node ≥ 22.12** (exigência do Astro 7). TypeScript estrito.
 - **Dois temas.** O escuro é o padrão e o único que existe sem JavaScript;
   o claro entra por `data-tema="claro"` na raiz, escrito por um script embutido
@@ -566,6 +567,39 @@ esquecimento: é a decisão que impede as profissões de virarem um segundo
 catálogo de "quem", competindo com os arquétipos — ver
 [docs/revisao-de-repeticoes.md](docs/revisao-de-repeticoes.md). O único caminho
 até a página é o link no fim de `gerador.astro`.
+
+### Miau Orbital
+
+O jogo da autora, em `/miau-orbital/`, no menu "Mais" (novembro de 2026). Ela
+o faz no claude.ai e ele chega como um `index.html` inteiro; o original da
+versão no ar fica em
+[docs/miau-orbital/original.html](docs/miau-orbital/original.html). Entrou no
+site quase como veio, e por isso é o lugar do site que **não segue** as regras
+acima — por decisão dela, não por descuido:
+
+- **Paleta própria, sempre escura.** "Deixe ele como está": o jogo é uma
+  janela de espaço roxo dentro da página, nos dois temas do site. As cores
+  dele moram em `.miau`, não em `:root`, e não passam pela conta de
+  `docs/verificacao-visual.md`. Não repintar com os tokens do site.
+- **JavaScript, nomes em inglês.**
+  [src/scripts/miau-orbital.js](src/scripts/miau-orbital.js) é o script do
+  original com os ajustes listados no topo dele. Manter o resto igual é o
+  que permite comparar a versão nova com `original.html` e levar só o que
+  mudou. Versão nova do jogo: trocar `original.html`, comparar e repassar as
+  mudanças para a página e o script.
+- **Estilo `is:global` preso em `.miau`**, porque o script cria parte da
+  marcação em runtime.
+- **Letras próprias** (Lilita One e Nunito), pela mesma API de fontes, só
+  nesta página. O tabuleiro escreve com elas lendo a variável CSS, porque o
+  build dá à fonte um nome com código.
+- **O mural de recordes fala com o Supabase em runtime.** Endereço e chave
+  `anon public` ficam em `MURAL`, no topo de
+  [miau-orbital.astro](src/pages/miau-orbital.astro); vazios, o mural fica no
+  navegador de cada pessoa. A tabela e as regras dela (ler e acrescentar sim,
+  editar e apagar só pelo painel) estão em
+  [docs/miau-orbital/recordes-supabase.sql](docs/miau-orbital/recordes-supabase.sql).
+  O filtro de apelidos roda no navegador e pode ser contornado: apelido
+  ofensivo ou pontuação falsa se apagam no painel do Supabase.
 
 ### Interatividade sem framework
 

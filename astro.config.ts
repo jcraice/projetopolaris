@@ -48,5 +48,25 @@ export default defineConfig({
       styles: ['normal'],
       fallbacks: ['ui-monospace', 'monospace'],
     },
+    /* As duas letras do Miau Orbital, o jogo da autora. Só a página dele as
+       carrega (src/pages/miau-orbital.astro), e ela as usa também para
+       escrever no tabuleiro, por isso o nome com código que o build dá às
+       fontes é lido da variável, não escrito à mão. */
+    {
+      provider: fontProviders.fontsource(),
+      name: 'Lilita One',
+      cssVariable: '--fonte-jogo-titulo',
+      weights: [400],
+      styles: ['normal'],
+      fallbacks: ['Arial Rounded MT Bold', 'system-ui', 'sans-serif'],
+    },
+    {
+      provider: fontProviders.fontsource(),
+      name: 'Nunito',
+      cssVariable: '--fonte-jogo-texto',
+      weights: [600, 700, 800],
+      styles: ['normal'],
+      fallbacks: ['system-ui', 'sans-serif'],
+    },
   ],
 });

@@ -1,0 +1,210 @@
+---
+import { Font } from 'astro:assets';
+import { getEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import neon from '../assets/miau-orbital/neon.png';
+import astro from '../assets/miau-orbital/astro.png';
+import zorp from '../assets/miau-orbital/zorp.png';
+
+/* Miau Orbital, o jogo da autora. Veio pronto do claude.ai como um index.html
+   só (o original está em docs/miau-orbital/original.html) e entrou no site
+   quase como veio: a marcação abaixo é a dele, o estilo é o dele preso dentro
+   de .miau, e o script é src/scripts/miau-orbital.js. Versão nova do jogo
+   chega do mesmo jeito — comparar com o original diz o que mudou.
+
+   Três exceções às regras do site, todas decididas pela autora em novembro de
+   2026:
+   - o jogo tem a paleta própria (espaço roxo, sempre escuro) e não usa os
+     tokens de :root — "deixe ele como está". Os dois temas do site valem em
+     volta dele, não dentro;
+   - as letras dele (Lilita One e Nunito) chegam pela mesma API de fontes do
+     site, mas só nesta página;
+   - o mural de recordes fala com o Supabase em tempo de execução, o único
+     fetch do site além do índice da busca. A receita da tabela está em
+     docs/miau-orbital/recordes-supabase.sql. */
+const metadados = await getEntry('paginas', 'miau-orbital');
+if (!metadados) throw new Error("página 'miau-orbital' não encontrada em src/content/paginas");
+
+/* O mural compartilhado. Os dois valores saem do painel do Supabase, em
+   Project Settings → API: o "Project URL" e a chave "anon public". A chave é
+   pública de propósito — as regras da tabela só deixam ler e acrescentar
+   recordes; editar e apagar, só pelo painel. Vazios, o mural fica no
+   navegador de cada pessoa. */
+const MURAL = { url: '', chave: '' };
+
+const arte = JSON.stringify({ neon: neon.src, astro: astro.src, zorp: zorp.src });
+---
+<Base titulo={metadados.data.titulo} descricao={metadados.data.descricao ?? ''}>
+  <Fragment slot="cabeca">
+    <Font cssVariable="--fonte-jogo-titulo" preload />
+    <Font cssVariable="--fonte-jogo-texto" preload />
+  </Fragment>
+<div class="miau" data-arte={arte} data-mural-url={MURAL.url} data-mural-chave={MURAL.chave}>
+<div class="wrap">
+  <header class="hud">
+    <div class="brand"><h1>Miau Orbital</h1><span id="lvl">Fase 1 · Cinturão de Asteroides</span></div>
+    <div class="stats">
+      <div class="stat"><span class="lab">Novelos</span><span class="val" id="balls">10</span></div>
+      <div class="stat"><span class="lab">Mult.</span><span class="val" id="mult">×1</span></div>
+      <div class="stat"><span class="lab">Pontos</span><span class="val" id="score">0</span></div>
+    </div>
+    <div class="meter">
+      <div class="bar" aria-hidden="true">
+        <div class="fill" id="fill"></div>
+        <div class="tick" style="left:40%"><b>×2</b></div>
+        <div class="tick" style="left:60%"><b>×3</b></div>
+        <div class="tick" style="left:76%"><b>×5</b></div>
+        <div class="tick" style="left:88%"><b>×10</b></div>
+      </div>
+      <span class="ocount">Planetas <strong id="ohit">0</strong> de <span id="otot">25</span></span>
+    </div>
+  </header>
+  <div class="stage">
+    <canvas id="game" tabindex="0" aria-label="Tabuleiro do jogo. Mire com o mouse ou as setas, dispare com clique ou espaço."></canvas>
+    <div class="overlay" id="overlay">
+      <div class="panel">
+        <p class="eyebrow" id="ovEyebrow">Como jogar</p>
+        <h2 id="ovTitle">Miau Orbital</h2>
+        <p id="ovText">Mire com o mouse (ou arraste o dedo) e solte para lançar o novelo. Acerte todos os planetas laranja para passar de nível. Novelo que cai na caixa volta para você.</p>
+        <div class="legend" id="legend">
+          <span class="dot" style="background:var(--sun)"></span><span>Planeta laranja: 100 pts, obrigatório</span>
+          <span class="dot" style="background:var(--moon)"></span><span>Lua: 10 pts</span>
+          <span class="dot" style="background:var(--catnip)"></span><span>Erva-de-gato: ativa o poder do seu gato</span>
+          <span class="dot" style="background:var(--plasma)"></span><span>Cometa: 500 pts e dobra a jogada; muda de lugar a cada tiro</span>
+          <span class="x2">×2</span><span>2 ervas-de-gato no mesmo lançamento</span>
+          <span class="x2">×2</span><span>Constelação: 2 alvos seguidos e distantes, entre laranjas, ervas e cometa</span>
+          <span class="x2">×2</span><span>Chuva de planetas: 5 laranjas no mesmo lançamento</span>
+          <span class="x2 plus">+1</span><span>Novelo extra ao fazer 5 mil, 15 mil e 40 mil pontos num só lançamento</span>
+        </div>
+        <div id="chooser">
+          <p class="pick">Escolha seu gato</p>
+          <div class="cats" id="cats"></div>
+        </div>
+        <div id="records" class="records" hidden>
+          <form id="recForm" class="recform" autocomplete="off">
+            <p class="recsum" id="recSum"></p>
+            <label for="recName">Seu nome no mural</label>
+            <div class="recrow"><input id="recName" maxlength="16" placeholder="Seu nome" required><button type="submit" id="recSave">Salvar recorde</button></div>
+            <p class="recerr" id="recErr" hidden>Esse nome não pode ir para o mural. Escolha outro, por favor.</p>
+          </form>
+          <p class="recdone" id="recDone" hidden></p>
+          <div class="board">
+            <p class="boardtitle">Mural de recordes</p>
+            <ol id="recList" class="reclist"></ol>
+            <p id="recEmpty" class="recempty" hidden>Ainda não há recordes. O primeiro pode ser o seu.</p>
+            <p id="recNote" class="recnote"></p>
+          </div>
+        </div>
+        <div class="ovbtns"><button id="ovBtn" hidden>Começar</button><button id="ovBtn2" class="ghost" hidden></button></div>
+      </div>
+    </div>
+  </div>
+  <div class="tools">
+    <button id="recs">Recordes</button>
+    <button id="swap">Trocar gato</button>
+    <button id="mute">Som: ligado</button>
+    <button id="restart">Reiniciar fase</button>
+  </div>
+  <p class="hint">Setas ajustam a mira · Espaço dispara</p>
+</div>
+</div>
+</Base>
+
+<style is:global>
+/* is:global porque o script cria parte da marcação (os três gatos, as linhas
+   do mural), e nó criado em runtime não carrega o atributo de escopo do Astro.
+   Cada regra começa por .miau no lugar disso. */
+.miau{
+  --void:#0b0a1a; --nebula:#1b1838; --hull:#2c2756; --star:#f3f0ff; --dust:#a6a2cc;
+  --sun:#ff9a3c; --catnip:#7ee36b; --plasma:#e07bff; --ice:#6fc8ff;
+  --moon:#eeeaf7; --wool:#3f8cff; --wooldark:#1d4fae; --shell:#f3eee6; --shelldark:#cfc6b8;
+  --eye:#e6f25a; --yarn:#ff7aa8; --yarndark:#c94a7a; --box:#c99a5e; --boxdark:#8f6a3c; --fur:#07060d; --rim:#4c4688;
+  --font-display:var(--fonte-jogo-titulo);
+  --font-body:var(--fonte-jogo-texto);
+  color-scheme:dark;
+  /* O que no original era o <body>: o jogo vira uma janela escura dentro da
+     página, nos dois temas do site. */
+  background:var(--void); color:var(--star); font-family:var(--font-body); line-height:normal;
+  border-radius:18px; padding:16px;
+  display:flex; flex-direction:column; align-items:center;
+}
+.miau .wrap{width:min(100%,1180px,max(320px,calc((100dvh - 300px) * 1.5))); display:flex; flex-direction:column; gap:10px}
+.miau .hud{display:grid; grid-template-columns:1fr auto; gap:8px 16px; align-items:end}
+.miau .brand h1{font-family:var(--font-display); font-weight:400; font-size:1.7rem; line-height:1; margin:0; letter-spacing:.01em; color:var(--star)}
+.miau .brand span{font-size:.85rem; color:var(--dust); font-weight:600}
+.miau .stats{display:flex; gap:18px; justify-content:flex-end}
+.miau .stat{display:flex; flex-direction:column; align-items:flex-end; min-width:0}
+.miau .lab{font-size:.68rem; text-transform:uppercase; letter-spacing:.09em; color:var(--dust); font-weight:800}
+.miau .val{font-family:var(--font-display); font-size:1.35rem; line-height:1.1; font-variant-numeric:tabular-nums}
+.miau #mult{color:var(--sun)}
+.miau #balls.low{color:var(--sun)}
+.miau #balls.last{animation:miau-piscar 1s ease-in-out infinite}
+@keyframes miau-piscar{50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){ .miau #balls.last{animation:none} }
+.miau .meter{grid-column:1 / -1; display:flex; align-items:center; gap:12px}
+.miau .bar{position:relative; flex:1; height:10px; border-radius:5px; background:var(--nebula)}
+.miau .fill{position:absolute; inset:0 auto 0 0; width:0; border-radius:5px; background:var(--sun); transition:width .25s ease}
+.miau .tick{position:absolute; top:-3px; bottom:-3px; width:2px; background:var(--void)}
+.miau .tick b{position:absolute; top:15px; left:50%; transform:translateX(-50%); font-size:.65rem; color:var(--dust); font-weight:800}
+.miau .ocount{font-size:.8rem; color:var(--dust); font-weight:800; white-space:nowrap; font-variant-numeric:tabular-nums}
+.miau .ocount strong{color:var(--sun)}
+.miau .stage{position:relative; margin-top:10px}
+.miau #game{display:block; width:100%; aspect-ratio:3/2; max-width:100%; border-radius:14px; touch-action:none; cursor:crosshair; background:var(--nebula); box-shadow:0 0 0 1px var(--hull)}
+.miau .tools{display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap}
+.miau button{font:800 .8rem var(--font-body); color:var(--star); background:var(--hull); border:0; border-radius:8px; padding:.5em .9em; cursor:pointer}
+.miau button:hover{background:var(--nebula); box-shadow:inset 0 0 0 1px var(--dust)}
+.miau button:focus-visible, .miau #game:focus-visible{outline:2px solid var(--ice); outline-offset:2px}
+.miau .overlay{position:absolute; inset:0; display:flex; background:rgba(11,10,26,.66); border-radius:14px; padding:12px; overflow:auto}
+.miau .panel{background:var(--void); border:1px solid var(--hull); border-radius:14px; padding:20px 22px; max-width:760px; margin:auto; display:flex; flex-direction:column; gap:10px; text-align:left}
+.miau .eyebrow{margin:0; font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--sun); font-weight:800}
+.miau .panel h2{margin:0; color:var(--star); font-family:var(--font-display); font-weight:400; font-size:2rem; line-height:1.05; text-wrap:balance}
+.miau .panel p{margin:0; line-height:1.5; color:var(--dust)}
+.miau .legend{display:grid; grid-template-columns:auto 1fr auto 1fr; gap:5px 10px; font-size:.82rem; color:var(--dust); align-items:center}
+.miau .dot{width:12px; height:12px; border-radius:50%; justify-self:center}
+.miau .x2.plus{background:var(--wool); color:var(--star)}
+.miau .x2{font:800 .7rem var(--font-body); color:var(--void); background:var(--eye); border-radius:4px; padding:1px 4px; justify-self:center}
+.miau #ovBtn{align-self:flex-start; background:var(--sun); color:var(--void); font-size:.95rem; padding:.65em 1.3em}
+.miau #ovBtn:hover{background:var(--star); box-shadow:none}
+.miau .ovbtns{display:flex; gap:8px; flex-wrap:wrap}
+.miau .ovbtns .ghost{font-size:.95rem; padding:.65em 1.3em}
+.miau .records{display:grid; grid-template-columns:1fr 1fr; gap:14px 22px; align-items:start}
+.miau .recform{display:flex; flex-direction:column; gap:6px; min-width:0}
+.miau .recform label{font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--dust); font-weight:800}
+.miau .recsum{font-family:var(--font-display); font-size:1.25rem; color:var(--star) !important; margin:0}
+.miau .recrow{display:flex; gap:8px}
+.miau .recrow input{flex:1; min-width:0; font:700 1rem var(--font-body); color:var(--star); background:var(--nebula); border:1px solid var(--hull); border-radius:8px; padding:.55em .7em}
+.miau .recrow input:focus-visible{outline:2px solid var(--ice); outline-offset:1px}
+.miau .recrow button{background:var(--wool); color:var(--star)}
+.miau .recdone{font-weight:800; color:var(--catnip) !important}
+.miau .board{min-width:0}
+.miau .boardtitle{font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--sun) !important; font-weight:800; margin:0 0 6px !important}
+.miau .reclist{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px; font-size:.85rem}
+.miau .reclist li{display:grid; grid-template-columns:2.2em 1fr auto 6.5em; gap:8px; padding:4px 8px; border-radius:6px; color:var(--dust); font-variant-numeric:tabular-nums}
+.miau .reclist li:nth-child(odd){background:var(--nebula)}
+.miau .reclist li.me{box-shadow:inset 0 0 0 1px var(--sun); color:var(--star)}
+.miau .reclist .nm{color:var(--star); font-weight:800; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.miau .reclist .pt{text-align:right; font-weight:800; color:var(--star)}
+.miau .reclist .ph{font-size:.78rem}
+.miau .recempty{font-size:.85rem}
+.miau .recnote{font-size:.72rem; margin-top:6px !important}
+.miau .recerr{font-size:.8rem; font-weight:800; color:var(--yarn) !important}
+.miau .recrow button:disabled{opacity:.6; cursor:wait}
+.miau [hidden]{display:none !important}
+@media (max-width:700px){ .miau .records{grid-template-columns:1fr} }
+.miau .pick{font-family:var(--font-display); font-size:1.15rem; margin:6px 0 0; color:var(--star)}
+.miau .cats{display:grid; grid-template-columns:repeat(3,1fr); gap:8px}
+.miau .cat{display:flex; flex-direction:column; align-items:center; gap:4px; text-align:center; padding:10px 8px 12px; background:var(--nebula); border-radius:12px; box-shadow:inset 0 0 0 2px var(--hull); min-width:0}
+.miau .cat:hover{box-shadow:inset 0 0 0 2px var(--sun); background:var(--nebula)}
+.miau .cat.sel{box-shadow:inset 0 0 0 2px var(--sun)}
+.miau .cat img{width:76px; height:76px; object-fit:contain}
+.miau .cat .nm{font-family:var(--font-display); font-weight:400; font-size:1.05rem; color:var(--star)}
+.miau .cat .pw{font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--catnip)}
+.miau .cat .ds{font-weight:600; font-size:.76rem; line-height:1.35; color:var(--dust)}
+.miau .hint{font-size:.75rem; color:var(--dust); text-align:center; margin:8px 0 0}
+@media (max-width:700px){ .miau .legend{grid-template-columns:auto 1fr} }
+@media (max-width:520px){ .miau .hud{grid-template-columns:1fr} .miau .stats, .miau .tools{justify-content:flex-start} .miau .stat{align-items:flex-start} .miau .cats{grid-template-columns:1fr} .miau .cat{flex-direction:row; text-align:left} .miau .cat img{flex:none; width:60px; height:60px} }
+</style>
+
+<script>
+  import '../scripts/miau-orbital.js';
+</script>
