@@ -766,8 +766,9 @@ autora não tem como consultar `import.meta.env`, então quem conserta é
 já montado de todo Markdown e prefixa a base em todo `href` que começa por uma
 barra só. `mailto:`, protocolo, `//outro.site`, âncora e caminho relativo
 passam intactos. Um
-`[Gerador](/gerador/)` no Markdown é o jeito certo — e é o único link interno de
-conteúdo hoje, em [sobre.md](src/content/paginas/sobre.md). Sem o plugin ele
+`[Gerador](/gerador/)` no Markdown é o jeito certo — e os únicos links internos
+de conteúdo hoje estão em [sobre.md](src/content/paginas/sobre.md): o do
+Gerador e o do Miau Orbital. Sem o plugin ele
 funcionaria no `npm run dev` e daria 404 no ar, que é o pior jeito de quebrar:
 por isso o teste do plugin é o que segura essa garantia, não o build.
 

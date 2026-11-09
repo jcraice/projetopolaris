@@ -34,3 +34,5 @@ Cresci com a cabeça nas estrelas, viciada em ficção científica desde que li 
 Hoje o site reúne 10 subgêneros de ficção científica, cada um com 10 arquétipos — mais um felino bônus, só porque sim — além de cenários e elementos narrativos, cada um com nome e descrição detalhada. No [Gerador](/gerador/) você sorteia dois personagens, um cenário inicial e um fato importante dentro do subgênero escolhido (dá pra misturar subgêneros também), e ainda copia um prompt pronto pra montar o enredo com a IA que preferir. Se alguma profissão sorteada for estranha, tem o guia de personagens pra consultar.
 
 É para quem trava na página em branco: autores, mestres de RPG, artistas. Em vez de partir do nada, você pega uma peça pronta e adapta ao seu estilo.
+
+E, de extra, só por diversão: o [Miau Orbital](/miau-orbital/), um joguinho de gatos pretos lançando novelos de lã pelo espaço.
