@@ -9,7 +9,9 @@
      data-* do contêiner .miau, montados pela página no build;
    - as cores se leem do contêiner, não de :root, onde moram as do site;
    - o texto desenhado no tabuleiro usa as letras servidas pelo site (FD e FB),
-     porque o build dá a elas um nome com código e "Lilita One" não existe. */
+     porque o build dá a elas um nome com código e "Lilita One" não existe;
+   - o gato do novelo duplo se chama Astro, não Major Ronrom (pedido da
+     autora, novembro de 2026). */
 (() => {
 const raiz = document.querySelector('.miau');
 if (!(raiz instanceof HTMLElement)) return;
@@ -29,7 +31,7 @@ const fmt = n => n.toLocaleString('pt-BR');
 
 const CATS = [
   { id: 'neon', name: 'Neon', power: 'Mira longa', desc: 'O visor calcula a trajetória do novelo nos próximos 3 lançamentos.' },
-  { id: 'astro', name: 'Major Ronrom', power: 'Novelo duplo', desc: 'O novelo se divide em dois, que seguem para lados opostos.' },
+  { id: 'astro', name: 'Astro', power: 'Novelo duplo', desc: 'O novelo se divide em dois, que seguem para lados opostos.' },
   { id: 'zorp', name: 'Zorp', power: 'Explosão', desc: 'A erva explode e acende os pinos em volta dela.' },
 ];
 let catId = 'neon';

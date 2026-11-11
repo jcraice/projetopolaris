@@ -35,4 +35,4 @@ Hoje o site reúne 10 subgêneros de ficção científica, cada um com 10 arqué
 
 É para quem trava na página em branco: autores, mestres de RPG, artistas. Em vez de partir do nada, você pega uma peça pronta e adapta ao seu estilo.
 
-E, de extra, só por diversão: o [Miau Orbital](/miau-orbital/), um joguinho de gatos pretos lançando novelos de lã pelo espaço.
+E, de extra, só por diversão: o [Miau Orbital](/miau-orbital/), um joguinho que eu fiz, com gatos pretos lançando novelos de lã pelo espaço.
